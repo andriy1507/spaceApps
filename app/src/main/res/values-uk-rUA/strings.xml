@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="default_notification_channel_id">spaceApps</string>
+    <string name="search">Пошук</string>
+    <string name="longitude_label">Довгота:</string>
+    <string name="latitude_label">Широта:</string>
+    <string name="altitude_label">Висота:</string>
+    <string name="altitude_value">%.0f м над р. м.</string>
+    <string name="accuracy_label">Точність:</string>
+    <string name="distance_meters">%.0f м</string>
+    <string name="north">Пн</string>
+    <string name="south">Пд</string>
+    <string name="west">Зх</string>
+    <string name="east">Сх</string>
+    <string name="location_unavailable">Місцезнаходження недоступне</string>
+</resources>

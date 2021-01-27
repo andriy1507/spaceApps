@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="default_notification_channel_id">spaceApps</string>
+    <string name="search">Search</string>
+    <string name="longitude_label">Longitude:</string>
+    <string name="latitude_label">Latitude:</string>
+    <string name="degree_value" translatable="false">%.5f\u00B0</string>
+    <string name="temperature_value" translatable="false">%.0f\u00B0</string>
+    <string name="altitude_label">Altitude:</string>
+    <string name="altitude_value">%.0f m over sea level</string>
+    <string name="accuracy_label">Accuracy:</string>
+    <string name="distance_meters">%.0f m</string>
+    <string name="north">N</string>
+    <string name="south">S</string>
+    <string name="west">W</string>
+    <string name="east">E</string>
+    <string name="location_unavailable">Location unavailable</string>
+</resources>
