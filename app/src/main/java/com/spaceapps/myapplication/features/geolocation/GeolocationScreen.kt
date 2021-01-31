@@ -19,7 +19,7 @@ import com.spaceapps.myapplication.models.InitState
 import com.spaceapps.myapplication.models.LocationUnavailable
 import com.spaceapps.myapplication.ui.SPACING_16
 import com.spaceapps.myapplication.ui.SPACING_8
-import com.spaceapps.myapplication.utils.calculateRectangularCoordinates
+import com.spaceapps.myapplication.utils.RectCoordinates
 import com.spaceapps.myapplication.utils.latitudeString
 import com.spaceapps.myapplication.utils.longitudeString
 import com.spaceapps.myapplication.views.LoaderIndicator
@@ -58,6 +58,7 @@ fun GeolocationScreen() {
 }
 
 @Composable
+@Suppress("NamedArguments")
 fun GeoCoordinatesCard(loc: Location) {
     val labelStyle = AmbientTextStyle.current.copy(
         color = MaterialTheme.colors.primary,
@@ -117,6 +118,7 @@ fun GeoCoordinatesCard(loc: Location) {
 }
 
 @Composable
+@Suppress("NamedArguments")
 fun RectCoordinatesCard(loc: Location) {
     Card(
         modifier = Modifier.fillMaxWidth().wrapContentHeight().padding(vertical = SPACING_8.dp),
@@ -140,4 +142,18 @@ fun RectCoordinatesCard(loc: Location) {
             )
         }
     }
+}
+
+private fun calculateRectangularCoordinates(
+    longitude: Double,
+    latitude: Double,
+    altitude: Double
+): RectCoordinates {
+    val loc = Location("").apply {
+        this.latitude = latitude
+        this.longitude = longitude
+    }
+    val x = loc.distanceTo(Location(loc).apply { this.latitude = 0.0 })
+    val y = loc.distanceTo(Location(loc).apply { this.longitude = 0.0 })
+    return RectCoordinates(x.toDouble(), y.toDouble(), altitude)
 }

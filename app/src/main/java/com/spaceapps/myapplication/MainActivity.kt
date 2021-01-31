@@ -33,17 +33,17 @@ class MainActivity : AppCompatActivity() {
         setupEdgeToEdge()
         setTheme(R.style.Theme_MyApplication_NoActionBar)
         setContent { MainActivityScreen() }
-        lifecycleScope.launchWhenCreated { observeAuthState() }
+//        lifecycleScope.launchWhenCreated { observeAuthState() }
         lifecycleScope.launchWhenResumed { initNavigation() }
     }
 
-    private fun observeAuthState() {
-    }
+//    private fun observeAuthState() {
+//    }
 
-    private fun unauthorize() = lifecycleScope.launch {
-        authTokenStorage.removeTokens()
-        restart()
-    }
+//    private fun unauthorize() = lifecycleScope.launch {
+//        authTokenStorage.removeTokens()
+//        restart()
+//    }
 
     private fun restart() {
         finish()

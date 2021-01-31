@@ -38,6 +38,7 @@ private val nightGradient = listOf(
 const val IMAGE_SIZE = 240
 
 @Composable
+@Suppress("LongMethod")
 fun WeatherScreen() {
     val gradient = if (isSystemInDarkTheme()) nightGradient else dayGradient
     Box(

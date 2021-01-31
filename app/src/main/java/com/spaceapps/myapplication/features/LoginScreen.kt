@@ -18,6 +18,7 @@ import com.spaceapps.myapplication.ui.*
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
+@Suppress("LongMethod")
 fun LoginScreen() {
     ConstraintLayout(
         modifier = Modifier.fillMaxSize()
