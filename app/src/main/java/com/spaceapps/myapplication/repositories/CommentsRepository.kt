@@ -16,9 +16,7 @@ class CommentsRepository @Inject constructor(
     fun getCommentsForPost(postId: Long) = dao.getCommentsByPostId(postId)
 
     suspend fun getComments(postId: Long) {
-        api.getComments(postId).let { response ->
-            dao.saveAll(*response.map { mapper.remoteToDomain(it) }.toTypedArray())
-        }
+        dao.saveAll(*api.getComments(postId).map { mapper.remoteToDomain(it) }.toTypedArray())
     }
 
     suspend fun createComment(postId: Long, text: String) {
