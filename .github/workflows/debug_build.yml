@@ -74,7 +74,7 @@ jobs:
       - name: run detekt check
         run: ./gradlew detektDebug
   test:
-    needs: [lint_check, ktlint_check]
+    needs: [lint_check, ktlint_check, detekt_check]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -87,7 +87,7 @@ jobs:
       - name: Run test
         run: ./gradlew testDebugUnitTest
   build:
-    needs: [ktlint_job, lint_job, detekt_job]
+    needs: [test]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
