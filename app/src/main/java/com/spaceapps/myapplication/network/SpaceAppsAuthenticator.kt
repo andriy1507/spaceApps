@@ -14,9 +14,9 @@ class SpaceAppsAuthenticator @Inject constructor(
     private val authApi: Lazy<AuthorizationApi>,
     private val authTokenStorage: AuthTokenStorage
 ) : Authenticator {
-    override fun authenticate(route: Route?, response: Response): Request? {
+    override fun authenticate(route: Route?, response: Response): Request? = runBlocking {
         val authToken = getAuthToken()
-        return if (authToken == null) {
+        return@runBlocking if (authToken == null) {
             authTokenStorage.removeTokens()
             null
         } else {
@@ -26,12 +26,12 @@ class SpaceAppsAuthenticator @Inject constructor(
         }
     }
 
-    private fun getAuthToken(): String? = runBlocking {
-        request { authApi.get().refreshToken(authTokenStorage.refreshToken.orEmpty()) }
+    private suspend fun getAuthToken(): String?  {
+        request { authApi.get().refreshToken(authTokenStorage.getRefreshToken().orEmpty()) }
             .onSuccess {
                 authTokenStorage.storeTokens(it.authToken, it.refreshToken)
-                return@runBlocking it.authToken
+                return it.authToken
             }
-        return@runBlocking null
+        return null
     }
 }

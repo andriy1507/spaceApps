@@ -15,13 +15,13 @@ class AuthRepository @Inject constructor(
         api.login(email, password).also {
             storage.storeTokens(it.authToken, it.refreshToken)
         }
-        storage.fcmToken?.let { api.sendFcmToken(it) }
+        storage.getFcmToken()?.let { api.sendFcmToken(it) }
     }
 
     suspend fun register(email: String, password: String) {
         api.register(email, password).also {
             storage.storeTokens(it.authToken, it.refreshToken)
         }
-        storage.fcmToken?.let { api.sendFcmToken(it) }
+        storage.getFcmToken()?.let { api.sendFcmToken(it) }
     }
 }

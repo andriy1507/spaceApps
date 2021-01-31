@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.spaceapps.myapplication.ui.MyApplicationTheme
+import com.spaceapps.myapplication.ui.*
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -34,8 +35,8 @@ fun LoginScreen() {
         ) = createRefs()
         OutlinedTextField(
             modifier = Modifier.constrainAs(loginField) {
-                bottom.linkTo(passwordField.top, 16.dp)
-            }.fillMaxWidth().padding(horizontal = 24.dp),
+                bottom.linkTo(passwordField.top, SPACING_16.dp)
+            }.fillMaxWidth().padding(horizontal = SPACING_24.dp),
             value = "",
             onValueChange = {}
         )
@@ -43,16 +44,16 @@ fun LoginScreen() {
             modifier = Modifier.constrainAs(passwordField) {
                 top.linkTo(parent.top)
                 bottom.linkTo(parent.bottom)
-            }.fillMaxWidth().padding(horizontal = 24.dp),
+            }.fillMaxWidth().padding(horizontal = SPACING_24.dp),
             value = "",
             onValueChange = {}
         )
         AnimatedVisibility(
             modifier = Modifier.constrainAs(confirmField) {
-                top.linkTo(passwordField.bottom, 16.dp)
+                top.linkTo(passwordField.bottom, SPACING_16.dp)
             }.fillMaxWidth()
                 .wrapContentHeight()
-                .padding(horizontal = 24.dp),
+                .padding(horizontal = SPACING_24.dp),
             visible = true
         ) {
             OutlinedTextField(
@@ -63,16 +64,16 @@ fun LoginScreen() {
         }
         OutlinedButton(
             modifier = Modifier.constrainAs(mainButton) {
-                top.linkTo(confirmField.bottom, 16.dp)
-            }.fillMaxWidth().padding(horizontal = 24.dp),
+                top.linkTo(confirmField.bottom, SPACING_16.dp)
+            }.fillMaxWidth().padding(horizontal = SPACING_24.dp),
             onClick = {}
         ) {
             Text(text = "Login")
         }
         Box(
-            modifier = Modifier.size(8.dp).background(
+            modifier = Modifier.size(SPACING_8.dp).background(
                 color = MaterialTheme.colors.primaryVariant,
-                shape = RoundedCornerShape(4.dp)
+                shape = RoundedCornerShape(SPACING_4.dp)
             ).constrainAs(dot) {
                 start.linkTo(vertCenter)
                 end.linkTo(vertCenter)
@@ -84,7 +85,7 @@ fun LoginScreen() {
         )
         Text(
             modifier = Modifier.constrainAs(stateButton) {
-                bottom.linkTo(parent.bottom, 8.dp)
+                bottom.linkTo(parent.bottom, SPACING_8.dp)
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
             },
@@ -92,16 +93,16 @@ fun LoginScreen() {
         )
         Text(
             modifier = Modifier.constrainAs(termsLabel) {
-                bottom.linkTo(stateButton.top, 8.dp)
-                end.linkTo(dot.start, 4.dp)
+                bottom.linkTo(stateButton.top, SPACING_8.dp)
+                end.linkTo(dot.start, SPACING_4.dp)
             },
             text = "Terms of Use"
         )
         Text(
             modifier = Modifier.constrainAs(policyLabel) {
 
-                bottom.linkTo(stateButton.top, 8.dp)
-                start.linkTo(dot.end, 4.dp)
+                bottom.linkTo(stateButton.top, SPACING_8.dp)
+                start.linkTo(dot.end, SPACING_4.dp)
             },
             text = "Privacy Policy"
         )

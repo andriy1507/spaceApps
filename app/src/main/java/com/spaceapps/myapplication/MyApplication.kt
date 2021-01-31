@@ -1,9 +1,11 @@
 package com.spaceapps.myapplication
 
 import android.app.Application
+import android.content.Context
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import com.facebook.stetho.Stetho
+import com.github.venom.Venom
 import com.spaceapps.myapplication.repositories.AuthRepository
 import com.spaceapps.myapplication.utils.request
 import dagger.hilt.android.HiltAndroidApp
@@ -26,6 +28,9 @@ class MyApplication : Application(), Configuration.Provider {
         super.onCreate()
         Timber.plant(Timber.DebugTree())
         Stetho.initializeWithDefaults(this)
+        val venom = Venom.createInstance(this)
+        venom.initialize()
+        venom.start()
 
         CoroutineScope(Dispatchers.IO).launch {
             request { auth.login("test@mail.com", "123456") }

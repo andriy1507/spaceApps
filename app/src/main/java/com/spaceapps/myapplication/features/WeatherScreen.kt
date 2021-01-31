@@ -21,7 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.spaceapps.myapplication.R
-import com.spaceapps.myapplication.ui.MyApplicationTheme
+import com.spaceapps.myapplication.ui.*
 
 val dayGradient = listOf(
     Color(0xff4287f5),
@@ -34,6 +34,8 @@ private val nightGradient = listOf(
     Color(0xff0f152e),
     Color(0xFF1B2453)
 )
+
+const val IMAGE_SIZE = 240
 
 @Composable
 fun WeatherScreen() {
@@ -63,37 +65,37 @@ fun WeatherScreen() {
                 text = "Khmelnytskyi, UA",
                 color = MaterialTheme.colors.onPrimary,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
-                    .padding(top = 36.dp),
+                    .padding(top = SPACING_36.dp),
                 style = AmbientTextStyle.current.copy(
-                    fontSize = 24.sp,
+                    fontSize = FONT_24.sp,
                     fontWeight = FontWeight.Bold
                 )
             )
             Image(
                 imageVector = vectorResource(R.drawable.ic_launcher_foreground),
                 modifier = Modifier
-                    .width(240.dp)
-                    .height(240.dp)
+                    .width(IMAGE_SIZE.dp)
+                    .height(IMAGE_SIZE.dp)
                     .align(Alignment.CenterHorizontally)
-                    .padding(top = 24.dp)
+                    .padding(top = SPACING_24.dp)
             )
             Column(modifier = Modifier.fillMaxWidth().wrapContentHeight()) {
                 Text(
                     text = stringResource(R.string.temperature_value, 22f),
                     color = Color.White,
-                    fontSize = 48.sp,
+                    fontSize = SPACING_48.sp,
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
                 Text(
                     text = "Rainy",
                     color = Color.White,
-                    fontSize = 20.sp,
+                    fontSize = FONT_20.sp,
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
                 Text(
                     text = "22 km/h",
                     color = Color.White,
-                    fontSize = 18.sp,
+                    fontSize = FONT_18.sp,
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
             }
@@ -116,7 +118,7 @@ fun DayWeather() {
     ) {
         Image(
             imageVector = vectorResource(R.drawable.ic_launcher_foreground),
-            modifier = Modifier.size(48.dp)
+            modifier = Modifier.size(SPACING_48.dp)
         )
         Text(
             text = "TUE",
