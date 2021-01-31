@@ -2,8 +2,7 @@ name: Build debug APK
 
 on:
   pull_request:
-    branches:
-      - dev
+    branches: [dev]
 
 jobs:
   ktlint_check:
@@ -20,7 +19,8 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
       - name: Run ktlint
         run: ./gradlew ktlintDebugCheck --continue
   lint_check:
@@ -38,7 +38,8 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
       - name: run lint check
         run: ./gradlew lintDebug
   test:
