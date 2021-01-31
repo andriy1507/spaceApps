@@ -1,4 +1,4 @@
-name: Super-Linter
+name: Build debug APK
 
 on:
   pull_request:
