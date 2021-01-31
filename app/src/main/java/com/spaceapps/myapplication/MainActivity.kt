@@ -3,7 +3,9 @@ package com.spaceapps.myapplication
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.setContent
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.FragmentContainerView
@@ -60,6 +62,7 @@ class MainActivity : AppCompatActivity() {
 
     @Composable
     fun MainActivityScreen() = AndroidView(
+        modifier = Modifier.testTag("navHostFragment"),
         viewBlock = {
             FragmentContainerView(it).apply { id = R.id.navHostFragment }
         }

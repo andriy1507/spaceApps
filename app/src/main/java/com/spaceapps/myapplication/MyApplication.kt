@@ -30,10 +30,6 @@ class MyApplication : Application(), Configuration.Provider {
         val venom = Venom.createInstance(this)
         venom.initialize()
         venom.start()
-
-        CoroutineScope(Dispatchers.IO).launch {
-            request { auth.login("test@mail.com", "123456") }
-        }
     }
 
     override fun getWorkManagerConfiguration() =
