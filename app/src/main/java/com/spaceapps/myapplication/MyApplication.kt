@@ -6,11 +6,7 @@ import androidx.work.Configuration
 import com.facebook.stetho.Stetho
 import com.github.venom.Venom
 import com.spaceapps.myapplication.repositories.AuthRepository
-import com.spaceapps.myapplication.utils.request
 import dagger.hilt.android.HiltAndroidApp
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
