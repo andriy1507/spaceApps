@@ -1,4 +1,4 @@
-name: Build debug APK
+name: Android Ddebug CI
 
 on:
   pull_request:
@@ -53,7 +53,6 @@ jobs:
 #  Detekt Check
   detekt_check:
     runs-on: ubuntu-20.04
-    continue-on-error: true
     steps:
       - name: Checkout
         uses: actions/checkout@v2
