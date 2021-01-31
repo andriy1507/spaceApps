@@ -17,7 +17,6 @@ import androidx.navigation.fragment.NavHostFragment
 import com.spaceapps.myapplication.local.AuthTokenStorage
 import com.spaceapps.myapplication.utils.NavDispatcher
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
