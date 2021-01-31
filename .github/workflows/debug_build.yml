@@ -18,7 +18,7 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew assembleDebug
       - name: Create artifact
-          uses: actions/upload-artifact@v2
-          with:
-            name: debug-apk
-            path: app/build/outputs/apk/debug/app-debug.apk
+        uses: actions/upload-artifact@v2
+        with:
+          name: debug-apk
+          path: app/build/outputs/apk/debug/app-debug.apk
