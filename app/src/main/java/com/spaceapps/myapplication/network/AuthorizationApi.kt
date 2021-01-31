@@ -22,5 +22,4 @@ interface AuthorizationApi {
 
     @GET("/authorization/refresh-token")
     suspend fun refreshToken(@Query("refresh_token") token: String): AuthTokenResponse
-
 }

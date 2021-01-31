@@ -5,18 +5,14 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import com.spaceapps.myapplication.INIT_PAGE_NUMBER
-import com.spaceapps.myapplication.local.PostsDao
 import com.spaceapps.myapplication.models.PostEntity
-import com.spaceapps.myapplication.models.PostResponse
 import com.spaceapps.myapplication.repositories.PostsRepository
-import com.spaceapps.myapplication.utils.EntityMapper
 import com.spaceapps.myapplication.utils.Error
 import com.spaceapps.myapplication.utils.Success
 import com.spaceapps.myapplication.utils.request
-import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)
-class PostsRemoteMediator (
+class PostsRemoteMediator(
     private val repository: PostsRepository
 ) : RemoteMediator<Int, PostEntity>() {
     override suspend fun load(

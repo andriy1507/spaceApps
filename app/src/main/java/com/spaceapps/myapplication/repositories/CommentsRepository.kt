@@ -24,5 +24,4 @@ class CommentsRepository @Inject constructor(
     suspend fun createComment(postId: Long, text: String) {
         api.addComment(postId, text)
     }
-
 }

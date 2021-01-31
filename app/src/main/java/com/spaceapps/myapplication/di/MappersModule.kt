@@ -21,5 +21,4 @@ interface MappersModule {
 
     @Binds
     fun bindCommentMapper(impl: CommentEntityMapper): EntityMapper<CommentResponse, CommentEntity>
-
 }
