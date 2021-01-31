@@ -1,11 +1,11 @@
 package com.spaceapps.myapplication
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.view.WindowCompat
 import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
@@ -14,44 +14,33 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.spaceapps.myapplication.local.AuthTokenStorage
 import com.spaceapps.myapplication.utils.NavDispatcher
-import com.spaceapps.myapplication.utils.observeKey
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(
-//    R.layout.activity_main
-) {
-
-    @Inject
-    lateinit var sp: SharedPreferences
+class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var authTokenStorage: AuthTokenStorage
+
 
     private var navController: NavController? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setupEdgeToEdge()
+        setTheme(R.style.Theme_MyApplication_NoActionBar)
         setContent { MainActivityScreen() }
-//        val fragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
-//        if (fragment is NavHostFragment) {
-//            navController = fragment.navController
-//        }
         lifecycleScope.launchWhenCreated { observeAuthState() }
         lifecycleScope.launchWhenResumed { initNavigation() }
     }
 
-    private suspend fun observeAuthState() {
-        sp.observeKey(AuthTokenStorage.AUTH_TOKEN).collect {
-            when (it) {
-                "" -> unauthorize()
-            }
-        }
+    private fun observeAuthState() {
+
     }
 
-    private fun unauthorize() {
+    private fun unauthorize() = lifecycleScope.launch {
         authTokenStorage.removeTokens()
         restart()
     }
@@ -67,15 +56,17 @@ class MainActivity : AppCompatActivity(
         }
     }
 
+    private fun setupEdgeToEdge() {
+        WindowCompat.setDecorFitsSystemWindows(window, true)
+    }
+
     @Composable
-    fun MainActivityScreen() = AndroidView({
-        FragmentContainerView(it).apply {
-            id = R.id.nav_host_fragment
-        }
+    fun MainActivityScreen() = AndroidView(viewBlock = {
+        FragmentContainerView(it).apply { id = R.id.navHostFragment }
     }) {
         val navHostFragment = NavHostFragment()
         supportFragmentManager.beginTransaction()
-            .add(R.id.nav_host_fragment, navHostFragment)
+            .add(R.id.navHostFragment, navHostFragment)
             .commit()
         navHostFragment.lifecycle.addObserver(object : DefaultLifecycleObserver {
             override fun onCreate(owner: LifecycleOwner) {

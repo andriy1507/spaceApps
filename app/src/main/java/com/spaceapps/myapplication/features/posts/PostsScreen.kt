@@ -24,6 +24,8 @@ import com.spaceapps.myapplication.ui.MyApplicationTheme
 import dev.chrisbanes.accompanist.insets.statusBarsPadding
 import org.joda.time.LocalDateTime
 
+const val POST_ITEM_HEIGHT = 150
+
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun PostsScreen() {
@@ -72,7 +74,7 @@ fun PostItemView(post: PostEntity) {
     Text(
         text = post.toString(), modifier = Modifier
             .fillMaxWidth()
-            .height(150.dp)
+            .height(POST_ITEM_HEIGHT.dp)
     )
 }
 

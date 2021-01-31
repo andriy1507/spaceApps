@@ -18,6 +18,9 @@ import com.google.firebase.messaging.RemoteMessage
 import com.spaceapps.myapplication.local.AuthTokenStorage
 import com.spaceapps.myapplication.workers.FirebaseTokenWorker
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import javax.inject.Inject
@@ -44,12 +47,14 @@ class FcmService : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         Timber.tag("FCM Token").d(token)
-        authTokenStorage.storeFcmToken(token)
-        if (authTokenStorage.authToken != null) {
-            val request = OneTimeWorkRequestBuilder<FirebaseTokenWorker>()
-                .setInputData(FirebaseTokenWorker.buildData(token))
-                .build()
-            WorkManager.getInstance(this).enqueue(request)
+        CoroutineScope(Dispatchers.Default).launch {
+            authTokenStorage.storeFcmToken(token)
+            if (authTokenStorage.getAuthToken() != null) {
+                val request = OneTimeWorkRequestBuilder<FirebaseTokenWorker>()
+                    .setInputData(FirebaseTokenWorker.buildData(token))
+                    .build()
+                WorkManager.getInstance(this@FcmService).enqueue(request)
+            }
         }
     }
 
