@@ -1,4 +1,4 @@
-name: Android Ddebug CI
+name: Android Debug CI
 
 on:
   pull_request:
