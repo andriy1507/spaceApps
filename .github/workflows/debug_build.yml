@@ -42,6 +42,25 @@ jobs:
         run: chmod +x ./gradlew
       - name: run lint check
         run: ./gradlew lintDebug
+  detekt_job:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Restore Cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+      - name: run detekt check
+        run: ./gradlew detektDebug
   test:
     needs: [lint_check, ktlint_check]
     runs-on: ubuntu-latest
