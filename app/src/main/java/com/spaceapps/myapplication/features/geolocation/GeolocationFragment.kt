@@ -36,6 +36,3 @@ class GeolocationFragment : ComposableFragment() {
 
     private fun requestPermission() = permissionRequest.launch(ACCESS_FINE_LOCATION)
 }
-
-
-

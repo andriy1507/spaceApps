@@ -1,7 +1,6 @@
 package com.spaceapps.myapplication.local
 
 import androidx.lifecycle.LiveData
-import androidx.paging.DataSource
 import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
@@ -26,5 +25,4 @@ interface PostsDao {
 
     @Query("DELETE FROM PostEntity")
     fun clearAll()
-
 }

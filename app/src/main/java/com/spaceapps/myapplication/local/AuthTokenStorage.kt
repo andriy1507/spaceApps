@@ -31,5 +31,4 @@ class AuthTokenStorage @Inject constructor(private val dataStore: DataStore<Pref
     suspend fun storeFcmToken(token: String) = dataStore.edit { it[FCM_TOKEN] = token }
 
     suspend fun removeTokens() = dataStore.edit { it.clear() }
-
 }

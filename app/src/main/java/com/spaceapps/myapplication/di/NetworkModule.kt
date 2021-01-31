@@ -43,7 +43,6 @@ object NetworkModule {
         addInterceptor(logger)
     }.build()
 
-
     @Provides
     @Singleton
     fun provideRetrofit(

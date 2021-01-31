@@ -24,7 +24,6 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var authTokenStorage: AuthTokenStorage
 
-
     private var navController: NavController? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,7 +36,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun observeAuthState() {
-
     }
 
     private fun unauthorize() = lifecycleScope.launch {
@@ -61,9 +59,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     @Composable
-    fun MainActivityScreen() = AndroidView(viewBlock = {
-        FragmentContainerView(it).apply { id = R.id.navHostFragment }
-    }) {
+    fun MainActivityScreen() = AndroidView(
+        viewBlock = {
+            FragmentContainerView(it).apply { id = R.id.navHostFragment }
+        }
+    ) {
         val navHostFragment = NavHostFragment()
         supportFragmentManager.beginTransaction()
             .add(R.id.navHostFragment, navHostFragment)

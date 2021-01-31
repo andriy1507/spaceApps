@@ -52,13 +52,10 @@ fun WeatherScreen() {
             val selectedTab = mutableStateOf(0)
             TabRow(selectedTabIndex = selectedTab.value) {
                 Tab(selected = selectedTab.value == 0, onClick = { selectedTab.value = 0 }) {
-
                 }
                 Tab(selected = selectedTab.value == 1, onClick = { selectedTab.value = 1 }) {
-
                 }
                 Tab(selected = selectedTab.value == 2, onClick = { selectedTab.value = 2 }) {
-
                 }
             }
             Text(

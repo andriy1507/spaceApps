@@ -1,8 +1,6 @@
 package com.spaceapps.myapplication
 
-import com.spaceapps.myapplication.models.PushNotification
-import com.squareup.moshi.Moshi
-import org.junit.Assert.assertEquals
+import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 
 /**
@@ -14,13 +12,7 @@ class ExampleUnitTest {
 
     @Test
     fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
-    }
-
-    @Test
-    fun moshiEnumTest() {
-        val notification = "{\"type\": \"1\"}"
-        val res = Moshi.Builder().build().adapter(PushNotification::class.java).fromJson(notification)
-        assert(res?.type == PushNotification.PushNotificationType.MESSAGE)
+        val actual = 4
+        assertThat(actual).isEqualTo(2 + 2)
     }
 }

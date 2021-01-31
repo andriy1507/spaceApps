@@ -54,5 +54,4 @@ class PaginationViewModel @ViewModelInject constructor(
     }
 
     private fun sendRequestFailed() = Unit
-
 }

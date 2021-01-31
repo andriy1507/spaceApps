@@ -26,7 +26,7 @@ class SpaceAppsAuthenticator @Inject constructor(
         }
     }
 
-    private suspend fun getAuthToken(): String?  {
+    private suspend fun getAuthToken(): String? {
         request { authApi.get().refreshToken(authTokenStorage.getRefreshToken().orEmpty()) }
             .onSuccess {
                 authTokenStorage.storeTokens(it.authToken, it.refreshToken)

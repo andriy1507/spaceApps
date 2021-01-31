@@ -28,7 +28,6 @@ sealed class NetworkResponse<out T> {
 
     inline infix fun onRequestError(action: (HttpException) -> Unit) =
         onError { if (it is HttpException) action(it) }
-
 }
 
 class Success<T>(val data: T) : NetworkResponse<T>()
