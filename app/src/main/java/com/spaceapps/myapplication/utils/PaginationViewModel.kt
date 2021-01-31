@@ -1,10 +1,11 @@
 package com.spaceapps.myapplication.utils
 
-import androidx.hilt.Assisted
-import androidx.hilt.lifecycle.ViewModelInject
+import android.nfc.tech.MifareUltralight.PAGE_SIZE
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.spaceapps.myapplication.network.PostsApi
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 /**
  * This is sample class for pagination.
@@ -13,8 +14,9 @@ import com.spaceapps.myapplication.network.PostsApi
  * recommended way for pagination implementation.
  * */
 
-class PaginationViewModel @ViewModelInject constructor(
-    @Assisted val savedStateHandle: SavedStateHandle,
+@HiltViewModel
+class PaginationViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val postsApi: PostsApi
 ) : ViewModel() {
 
@@ -26,7 +28,6 @@ class PaginationViewModel @ViewModelInject constructor(
 
     private var isFetchAllowed = true
     private var isMoreDataAvailable = true
-    private val PAGE_SIZE = 2
     private var page = 0
 
     fun fetchData() = async {

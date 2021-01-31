@@ -3,7 +3,9 @@ package com.spaceapps.myapplication
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.setContent
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.FragmentContainerView
@@ -15,7 +17,6 @@ import androidx.navigation.fragment.NavHostFragment
 import com.spaceapps.myapplication.local.AuthTokenStorage
 import com.spaceapps.myapplication.utils.NavDispatcher
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -31,17 +32,17 @@ class MainActivity : AppCompatActivity() {
         setupEdgeToEdge()
         setTheme(R.style.Theme_MyApplication_NoActionBar)
         setContent { MainActivityScreen() }
-        lifecycleScope.launchWhenCreated { observeAuthState() }
+//        lifecycleScope.launchWhenCreated { observeAuthState() }
         lifecycleScope.launchWhenResumed { initNavigation() }
     }
 
-    private fun observeAuthState() {
-    }
+//    private fun observeAuthState() {
+//    }
 
-    private fun unauthorize() = lifecycleScope.launch {
-        authTokenStorage.removeTokens()
-        restart()
-    }
+//    private fun unauthorize() = lifecycleScope.launch {
+//        authTokenStorage.removeTokens()
+//        restart()
+//    }
 
     private fun restart() {
         finish()
@@ -60,6 +61,7 @@ class MainActivity : AppCompatActivity() {
 
     @Composable
     fun MainActivityScreen() = AndroidView(
+        modifier = Modifier.testTag("navHostFragment"),
         viewBlock = {
             FragmentContainerView(it).apply { id = R.id.navHostFragment }
         }

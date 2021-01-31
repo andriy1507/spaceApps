@@ -13,5 +13,5 @@ interface CommentsDao {
     fun getCommentsByPostId(postId: Long): LiveData<List<CommentEntity>>
 
     @Insert
-    fun saveAll(vararg comments: CommentEntity)
+    fun saveAll(comments: Collection<CommentEntity>)
 }
