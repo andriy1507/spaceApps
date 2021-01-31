@@ -116,8 +116,12 @@ jobs:
 #          gcloud firebase test android run --type instrumentation --use-orchestrator --app app/build/outputs/apk/debug/app-debug.apk --test app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk --device model=Pixel2,version=30,locale=en,orientation=portrait
 #  Build artifact
   build:
-#    needs: [test, android_test]
-    needs: [lint_check, ktlint_check, detekt_check, test]
+    needs:
+      - lint_check
+      - ktlint_check
+      - detekt_check
+#      - android_test
+#      - test
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout
