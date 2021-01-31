@@ -121,7 +121,7 @@ jobs:
       - lint_check
       - ktlint_check
       - detekt_check
-      - android_test
+#      - android_test
       - test
     runs-on: ubuntu-20.04
     steps:
