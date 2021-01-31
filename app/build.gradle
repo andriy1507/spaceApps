@@ -50,6 +50,9 @@ android {
         kotlinCompilerExtensionVersion compose_version
         kotlinCompilerVersion "1.4.21"
     }
+    lintOptions {
+        abortOnError false
+    }
 }
 ktlint {
     verbose = true

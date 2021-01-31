@@ -53,5 +53,4 @@ interface PostsApi {
 //
 //    @DELETE("/posts/comment/{postId}")
 //    suspend fun deleteComment()
-
 }

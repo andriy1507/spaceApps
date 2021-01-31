@@ -17,7 +17,6 @@ import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.viewModel
 import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.items
 import com.spaceapps.myapplication.features.dayGradient
 import com.spaceapps.myapplication.models.PostEntity
 import com.spaceapps.myapplication.ui.MyApplicationTheme
@@ -72,12 +71,12 @@ fun PostsScreen() {
 @Composable
 fun PostItemView(post: PostEntity) {
     Text(
-        text = post.toString(), modifier = Modifier
+        text = post.toString(),
+        modifier = Modifier
             .fillMaxWidth()
             .height(POST_ITEM_HEIGHT.dp)
     )
 }
-
 
 @Preview
 @Composable

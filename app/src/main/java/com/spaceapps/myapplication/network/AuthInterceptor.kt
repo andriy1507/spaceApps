@@ -12,7 +12,7 @@ const val AUTH_HEADER_PREFIX = "Bearer "
 class AuthInterceptor @Inject constructor(
     private val authTokenStorage: AuthTokenStorage
 ) : Interceptor {
-    override fun intercept(chain: Interceptor.Chain): Response = runBlocking{
+    override fun intercept(chain: Interceptor.Chain): Response = runBlocking {
         val builder = chain.request().newBuilder()
         authTokenStorage.getAuthToken()?.let {
             builder.header(AUTH_HEADER, AUTH_HEADER_PREFIX + it)

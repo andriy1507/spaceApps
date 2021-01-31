@@ -17,7 +17,6 @@ import com.spaceapps.myapplication.network.PostsRemoteMediator
 import com.spaceapps.myapplication.repositories.PostsRepository
 import com.spaceapps.myapplication.utils.async
 import com.spaceapps.myapplication.utils.request
-import dagger.assisted.Assisted
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -100,5 +99,4 @@ class PostsViewModel @Inject constructor(
 //    private suspend fun sendPostsLoading() = events.emit(PostsLoading)
 //
 //    private suspend fun sendRequestFailed() = events.emit(PostsRequestFailed)
-
 }

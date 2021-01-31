@@ -14,7 +14,6 @@ import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
 import com.spaceapps.myapplication.models.GeolocationEvent
 import com.spaceapps.myapplication.models.LocationAvailable
 import com.spaceapps.myapplication.models.LocationUnavailable
-import dagger.assisted.Assisted
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -41,15 +40,19 @@ class GeolocationViewModel @Inject constructor(
         val enabled = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) manager?.isLocationEnabled
         else manager?.isProviderEnabled(LocationManager.GPS_PROVIDER)
         if (enabled != true) events.postValue(LocationUnavailable)
-        locationClient.requestLocationUpdates(request, object : LocationCallback() {
-            override fun onLocationResult(result: LocationResult) {
-                lastLocation.postValue(result.lastLocation)
-            }
+        locationClient.requestLocationUpdates(
+            request,
+            object : LocationCallback() {
+                override fun onLocationResult(result: LocationResult) {
+                    lastLocation.postValue(result.lastLocation)
+                }
 
-            override fun onLocationAvailability(availability: LocationAvailability) {
-                if (availability.isLocationAvailable) events.postValue(LocationAvailable)
-                else events.postValue(LocationUnavailable)
-            }
-        }, Looper.getMainLooper())
+                override fun onLocationAvailability(availability: LocationAvailability) {
+                    if (availability.isLocationAvailable) events.postValue(LocationAvailable)
+                    else events.postValue(LocationUnavailable)
+                }
+            },
+            Looper.getMainLooper()
+        )
     }
 }

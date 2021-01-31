@@ -17,5 +17,4 @@ class RoomTypeConverters {
     fun stringToLocalDateTime(string: String): LocalDateTime {
         return moshiConverter.jsonToDateTime(string)
     }
-
 }

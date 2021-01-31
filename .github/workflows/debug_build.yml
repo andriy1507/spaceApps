@@ -25,7 +25,7 @@ jobs:
           java-version: 11
       - name: Make gradlew executable
         run: chmod +x ./gradlew
-      - name: Run ktlint
+      - name: Run ktlint check
         run: ./gradlew ktlintDebugCheck --continue
   lint_check:
     runs-on: ubuntu-latest
@@ -48,7 +48,7 @@ jobs:
           java-version: 11
       - name: Make gradlew executable
         run: chmod +x ./gradlew
-      - name: run lint check
+      - name: Run lint check
         run: ./gradlew lintDebug
   detekt_check:
     runs-on: ubuntu-latest
@@ -71,7 +71,7 @@ jobs:
           java-version: 11
       - name: Make gradlew executable
         run: chmod +x ./gradlew
-      - name: run detekt check
+      - name: Run detekt check
         run: ./gradlew detektDebug
   test:
     needs: [lint_check, ktlint_check, detekt_check]

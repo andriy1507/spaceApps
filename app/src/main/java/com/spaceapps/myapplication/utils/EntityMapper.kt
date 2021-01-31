@@ -12,7 +12,6 @@ interface EntityMapper<R, E> {
     fun remoteToDomain(e: R): E
 
     fun domainToRemote(d: E): R
-
 }
 
 @Singleton
