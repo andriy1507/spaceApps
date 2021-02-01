@@ -17,7 +17,7 @@ class SpaceAppsAuthenticator @Inject constructor(
     override fun authenticate(route: Route?, response: Response): Request? = runBlocking {
         val authToken = getAuthToken()
         return@runBlocking if (authToken == null) {
-            authTokenStorage.removeTokens()
+            authTokenStorage.clear()
             null
         } else {
             response.request.newBuilder()

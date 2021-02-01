@@ -15,6 +15,8 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.spaceapps.myapplication.R
+import com.spaceapps.myapplication.ui.ACTION_BAR_SIZE
+import com.spaceapps.myapplication.ui.SPACING_48
 import com.spaceapps.myapplication.views.GeolocationAnim.State.Final
 import com.spaceapps.myapplication.views.GeolocationAnim.State.Init
 import com.spaceapps.myapplication.views.GeolocationAnim.definition
@@ -30,7 +32,7 @@ fun PulseRecordIcon() {
     )
     val iconAlpha = transition[pulseProp]
     Image(
-        modifier = Modifier.size(48.dp),
+        modifier = Modifier.size(SPACING_48.dp),
         alpha = iconAlpha,
         colorFilter = ColorFilter.tint(MaterialTheme.colors.primary),
         imageVector = vectorResource(R.drawable.ic_recording)
@@ -50,7 +52,7 @@ fun LoaderIndicator(
     val rotation = bgAnim[rotationProp]
     Icon(
         imageVector = vectorResource(id = R.drawable.ic_loading),
-        modifier = modifier.fillMaxSize().rotate(rotation).size(56.dp),
+        modifier = modifier.fillMaxSize().rotate(rotation).size(ACTION_BAR_SIZE.dp),
         tint = color
     )
 }

@@ -31,7 +31,7 @@ class PostsRepository @Inject constructor(
             size = size,
             sort = sorting
         ).also { response ->
-            dao.saveAll(*response.content.map(mapper::remoteToDomain).toTypedArray())
+            dao.saveAll(response.content.map(mapper::remoteToDomain))
         }
     }
 

@@ -58,6 +58,7 @@ fun GeolocationScreen() {
 }
 
 @Composable
+@Suppress("NamedArguments")
 fun GeoCoordinatesCard(loc: Location) {
     val labelStyle = AmbientTextStyle.current.copy(
         color = MaterialTheme.colors.primary,
@@ -68,7 +69,7 @@ fun GeoCoordinatesCard(loc: Location) {
             .padding(vertical = SPACING_8.dp),
         backgroundColor = MaterialTheme.colors.surface,
         shape = RoundedCornerShape(SPACING_16.dp),
-        elevation = 8.dp
+        elevation = SPACING_8.dp
     ) {
         Row {
 
@@ -117,6 +118,7 @@ fun GeoCoordinatesCard(loc: Location) {
 }
 
 @Composable
+@Suppress("NamedArguments")
 fun RectCoordinatesCard(loc: Location) {
     Card(
         modifier = Modifier.fillMaxWidth().wrapContentHeight().padding(vertical = SPACING_8.dp),

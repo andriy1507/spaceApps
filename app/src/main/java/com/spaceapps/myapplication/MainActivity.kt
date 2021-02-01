@@ -15,6 +15,8 @@ import androidx.navigation.fragment.NavHostFragment
 import com.spaceapps.myapplication.local.AuthTokenStorage
 import com.spaceapps.myapplication.utils.NavDispatcher
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -36,10 +38,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun observeAuthState() {
+        authTokenStorage.authTokenFlow.onEach { token ->
+            when (token) {
+                "" -> unauthorize()
+                else -> Unit
+            }
+        }.launchIn(lifecycleScope)
     }
 
     private fun unauthorize() = lifecycleScope.launch {
-        authTokenStorage.removeTokens()
+        authTokenStorage.clear()
         restart()
     }
 

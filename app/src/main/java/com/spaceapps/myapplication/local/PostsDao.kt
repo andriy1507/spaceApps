@@ -21,7 +21,7 @@ interface PostsDao {
     fun save(entity: PostEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun saveAll(vararg entity: PostEntity)
+    fun saveAll(entity: Collection<PostEntity>)
 
     @Query("DELETE FROM PostEntity")
     fun clearAll()
