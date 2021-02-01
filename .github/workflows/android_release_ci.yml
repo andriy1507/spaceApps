@@ -142,11 +142,11 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
       - name: Checkout Android Keystore
-          uses: actions/checkout@v2
-          with:
-            repository: andriy1507/release-credentials
-            token: ${{ secrets.KEYSTORE_TOKEN }}
-            path: keystore
+        uses: actions/checkout@v2
+        with:
+          repository: andriy1507/release-credentials
+          token: ${{ secrets.KEYSTORE_TOKEN }}
+          path: keystore
       - name: Assemble release apk
         run: ./gradlew assembleRelease
       - name: Upload APK
