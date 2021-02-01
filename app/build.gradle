@@ -25,7 +25,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             buildConfigField "String", "SERVER_URL", "\"https://develop-space-apps-backend.herokuapp.com/\""
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
         }
@@ -33,6 +33,19 @@ android {
             minifyEnabled false
             buildConfigField "String", "SERVER_URL", "\"https://develop-space-apps-backend.herokuapp.com/\""
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+        }
+    }
+    signingConfigs {
+        release {
+            def keyProps = new Properties()
+            def keyPropsFile = rootProject.file('../keystore/keystore.properties')
+            if (keyPropsFile.exists()) {
+                keyProps.load(new FileInputStream(keyPropsFile))
+            }
+            keyAlias keyProps['keyAlias']
+            keyPassword keyProps['keyPassword']
+            storeFile keyProps['storeFile'] ? file(keyProps['storeFile']) : null
+            storePassword keyProps['storePassword']
         }
     }
     compileOptions {
