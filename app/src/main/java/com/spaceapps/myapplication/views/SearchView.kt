@@ -34,7 +34,8 @@ fun SearchView(
         trailingIcon = {
             Icon(
                 imageVector = vectorResource(id = R.drawable.ic_search),
-                tint = MaterialTheme.colors.primary
+                tint = MaterialTheme.colors.primary,
+                contentDescription = null
             )
         },
         onImeActionPerformed = { action, controller ->

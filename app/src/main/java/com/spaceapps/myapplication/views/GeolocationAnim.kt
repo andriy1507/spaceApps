@@ -35,7 +35,8 @@ fun PulseRecordIcon() {
         modifier = Modifier.size(SPACING_48.dp),
         alpha = iconAlpha,
         colorFilter = ColorFilter.tint(MaterialTheme.colors.primary),
-        imageVector = vectorResource(R.drawable.ic_recording)
+        imageVector = vectorResource(R.drawable.ic_recording),
+        contentDescription = null
     )
 }
 
@@ -53,7 +54,8 @@ fun LoaderIndicator(
     Icon(
         imageVector = vectorResource(id = R.drawable.ic_loading),
         modifier = modifier.fillMaxSize().rotate(rotation).size(ACTION_BAR_SIZE.dp),
-        tint = color
+        tint = color,
+        contentDescription = null
     )
 }
 

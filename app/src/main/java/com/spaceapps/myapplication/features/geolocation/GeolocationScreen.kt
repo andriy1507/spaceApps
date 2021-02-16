@@ -46,7 +46,8 @@ fun GeolocationScreen() {
                     Icon(
                         modifier = Modifier.padding(end = SPACING_8.dp),
                         imageVector = vectorResource(R.drawable.ic_location_disabled),
-                        tint = MaterialTheme.colors.error
+                        tint = MaterialTheme.colors.error,
+                        contentDescription = null
                     )
                     Text(
                         text = stringResource(R.string.location_unavailable),
@@ -64,6 +65,7 @@ fun GeoCoordinatesCard(loc: Location) {
         color = MaterialTheme.colors.primary,
         fontWeight = FontWeight.Bold
     )
+
     Card(
         modifier = Modifier.fillMaxWidth().wrapContentHeight()
             .padding(vertical = SPACING_8.dp),
