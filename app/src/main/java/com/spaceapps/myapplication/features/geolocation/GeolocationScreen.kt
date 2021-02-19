@@ -9,11 +9,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.viewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.spaceapps.myapplication.R
 import com.spaceapps.myapplication.models.InitState
 import com.spaceapps.myapplication.models.LocationUnavailable
@@ -22,7 +22,6 @@ import com.spaceapps.myapplication.ui.SPACING_8
 import com.spaceapps.myapplication.utils.calculateRectangularCoordinates
 import com.spaceapps.myapplication.utils.latitudeString
 import com.spaceapps.myapplication.utils.longitudeString
-import com.spaceapps.myapplication.views.LoaderIndicator
 import dev.chrisbanes.accompanist.insets.statusBarsPadding
 
 @Composable
@@ -37,7 +36,7 @@ fun GeolocationScreen() {
     ) {
         val loc = location.value
         if (loc == null) {
-            LoaderIndicator()
+            CircularProgressIndicator()
         } else {
             GeoCoordinatesCard(loc)
             RectCoordinatesCard(loc)
@@ -45,7 +44,7 @@ fun GeolocationScreen() {
                 Row {
                     Icon(
                         modifier = Modifier.padding(end = SPACING_8.dp),
-                        imageVector = vectorResource(R.drawable.ic_location_disabled),
+                        painter = painterResource(id = R.drawable.ic_location_disabled),
                         tint = MaterialTheme.colors.error,
                         contentDescription = null
                     )
@@ -61,7 +60,7 @@ fun GeolocationScreen() {
 @Composable
 @Suppress("NamedArguments")
 fun GeoCoordinatesCard(loc: Location) {
-    val labelStyle = AmbientTextStyle.current.copy(
+    val labelStyle = LocalTextStyle.current.copy(
         color = MaterialTheme.colors.primary,
         fontWeight = FontWeight.Bold
     )
