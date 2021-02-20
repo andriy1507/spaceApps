@@ -17,12 +17,10 @@ object UtilsModule {
 
     @Provides
     @Singleton
-    fun provideMoshi(): Moshi = Moshi.Builder().add(MoshiConverters())
-        .build()
+    fun provideMoshi(): Moshi = Moshi.Builder().add(MoshiConverters()).build()
 
     @Provides
     @Singleton
-    fun provideLocationProviderClient(
-        @ApplicationContext context: Context
-    ) = FusedLocationProviderClient(context)
+    fun provideLocationProviderClient(@ApplicationContext context: Context) =
+        FusedLocationProviderClient(context)
 }
