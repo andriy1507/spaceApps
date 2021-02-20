@@ -26,6 +26,6 @@ object DataStoreModule {
 
     @Provides
     @Singleton
-    fun provideSettingsDataStore(context: Context) =
+    fun provideSettingsDataStore(@ApplicationContext context: Context) =
         context.createDataStore(SETTINGS_DATA_STORE, SettingsSerializer)
 }
