@@ -16,6 +16,7 @@ import coil.request.ImageRequest
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.spaceapps.myapplication.local.AuthTokenStorage
+import com.spaceapps.myapplication.local.SettingsStorage
 import com.spaceapps.myapplication.workers.FirebaseTokenWorker
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -31,6 +32,9 @@ class FcmService : FirebaseMessagingService() {
 
     @Inject
     lateinit var authTokenStorage: AuthTokenStorage
+
+    @Inject
+    lateinit var settingsStorage: SettingsStorage
 
     override fun onCreate() {
         super.onCreate()
@@ -62,14 +66,15 @@ class FcmService : FirebaseMessagingService() {
         it: RemoteMessage.Notification,
         intent: PendingIntent
     ): Notification {
-        return NotificationCompat.Builder(this, getString(R.string.default_notification_channel_id)).apply {
-            setContentTitle(it.title)
-            setContentText(it.body)
-            setSmallIcon(R.drawable.ic_notifications_active)
-            priority = NotificationCompat.PRIORITY_MAX
-            setChannelId(getString(R.string.default_notification_channel_id))
-            setContentIntent(intent)
-        }.build()
+        return NotificationCompat.Builder(this, getString(R.string.default_notification_channel_id))
+            .apply {
+                setContentTitle(it.title)
+                setContentText(it.body)
+                setSmallIcon(R.drawable.ic_notifications_active)
+                priority = NotificationCompat.PRIORITY_MAX
+                setChannelId(getString(R.string.default_notification_channel_id))
+                setContentIntent(intent)
+            }.build()
     }
 
     private fun buildCustomNotification(
@@ -95,6 +100,8 @@ class FcmService : FirebaseMessagingService() {
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
+        val enabled = runBlocking { settingsStorage.getNotificationsEnabled() }
+        if (!enabled) return
         val intent = PendingIntent.getActivity(
             this@FcmService,
             Random.nextInt(),

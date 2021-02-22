@@ -23,7 +23,7 @@ class GeolocationViewModel @Inject constructor(
     private val locationClient: FusedLocationProviderClient
 ) : ViewModel() {
 
-    val lastLocation = MutableLiveData<Location>()
+    val lastLocation = savedStateHandle.getLiveData<Location>("location")
     val events = MutableLiveData<GeolocationEvent>()
 
     @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION)

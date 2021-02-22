@@ -64,7 +64,6 @@ fun GeoCoordinatesCard(loc: Location) {
         color = MaterialTheme.colors.primary,
         fontWeight = FontWeight.Bold
     )
-
     Card(
         modifier = Modifier.fillMaxWidth().wrapContentHeight()
             .padding(vertical = SPACING_8.dp),
