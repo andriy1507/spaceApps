@@ -1,12 +1,10 @@
-import org.jetbrains.kotlin.konan.properties.Properties
-
 val kotlin_version = "1.4.30"
 val compose_version = "1.0.0-alpha12"
 plugins {
     id("com.android.application")
-    id("kotlin-android")
-    id("kotlin-kapt")
-    id("dagger.hilt.android.plugin")
+    kotlin("android")
+    kotlin("kapt")
+//    id("dagger.hilt.android.plugin")
     id("com.google.firebase.crashlytics")
     id("com.google.gms.google-services")
     id("com.google.protobuf") version "0.8.12"
@@ -39,7 +37,7 @@ android {
     }
     buildTypes {
         getByName("release") {
-            minifyEnabled(true)
+            isMinifyEnabled = true
             buildConfigField(
                 "String",
                 "SERVER_URL",
@@ -52,7 +50,7 @@ android {
 //            signingConfig = signingConfigs.release
         }
         getByName("debug") {
-            minifyEnabled(false)
+            isMinifyEnabled = false
             buildConfigField(
                 "String",
                 "SERVER_URL",
@@ -77,30 +75,30 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.0.0-alpha12"
+        kotlinCompilerExtensionVersion = compose_version
     }
     lintOptions {
-//        abortOnError (false)
+        isAbortOnError = false
     }
     testOptions {
         execution = "ANDROIDX_TEST_ORCHESTRATOR"
     }
 }
-ktlint {
-//    verbose = true
-//    android = true
-//    outputToConsole = true
-//    outputColorName = "RED"
-//    ignoreFailures = false
-//    enableExperimentalRules = false
-//    disabledRules = ["no-wildcard-imports", "max-line-length", "import-ordering"]
-//    filter {
-//        exclude("**/generated/**")
-//        include("**/kotlin/**")
-//    }
+configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
+    verbose.set(true)
+    android.set(true)
+    outputToConsole.set(true)
+    outputColorName.set("RED")
+    ignoreFailures.set(false)
+    enableExperimentalRules.set(false)
+    disabledRules.set(setOf("no-wildcard-imports", "max-line-length", "import-ordering"))
+    filter {
+        exclude("**/generated/**")
+        include("**/kotlin/**")
+    }
 }
 detekt {
-//    config = files("$rootDir/.detekt/config.yml")
+    config = files("$rootDir/.detekt/config.yml")
 }
 dependencies {
 //    Kotlin
@@ -124,7 +122,7 @@ dependencies {
     implementation("com.facebook.stetho:stetho:$stetho_version")
     implementation("com.facebook.stetho:stetho-okhttp3:$stetho_version")
 //    OkHttp client
-    val okhttp_version = "4.9.0"
+    val okhttp_version = "5.0.0-alpha.2"
     implementation("com.squareup.okhttp3:logging-interceptor:$okhttp_version")
     implementation("com.squareup.okhttp3:okhttp:$okhttp_version")
 //    Timber logging
@@ -190,10 +188,10 @@ dependencies {
     val datastore_version = "1.0.0-alpha06"
     implementation("androidx.datastore:datastore:$datastore_version")
     implementation("androidx.datastore:datastore-preferences:$datastore_version")
-    implementation("com.google.protobuf:protobuf-javalite:3.14.0")
+    implementation("com.google.protobuf:protobuf-javalite:3.15.1")
 
 //    Testing
-    testImplementation("junit:junit:4.13.1")
+    testImplementation("junit:junit:4.13.2")
     testImplementation("com.google.truth:truth:1.1.2")
 
 //    Assertions
@@ -214,8 +212,8 @@ dependencies {
     androidTestUtil("androidx.test:orchestrator:1.3.0")
 
 //    Hilt testing
-    androidTestImplementation("com.google.dagger:hilt-android-testing:2.31.2-alpha")
-    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.31.2-alpha")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.32-alpha")
+    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.32-alpha")
 //   Assertions
     androidTestImplementation("androidx.test.ext:junit:1.1.2")
     androidTestImplementation("androidx.test.ext:truth:1.3.0")
