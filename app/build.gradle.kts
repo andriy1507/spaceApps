@@ -1,10 +1,13 @@
+import com.google.protobuf.gradle.*
+
 val kotlin_version = "1.4.30"
 val compose_version = "1.0.0-alpha12"
 plugins {
     id("com.android.application")
     kotlin("android")
     kotlin("kapt")
-//    id("dagger.hilt.android.plugin")
+//    kotlin("parcelize")
+    id("dagger.hilt.android.plugin")
     id("com.google.firebase.crashlytics")
     id("com.google.gms.google-services")
     id("com.google.protobuf") version "0.8.12"
@@ -24,8 +27,8 @@ android {
         testInstrumentationRunner = "com.spaceapps.myapplication.runner.SpaceAppsHiltRunner"
         testInstrumentationRunnerArguments(mapOf("clearPackageData" to "true"))
     }
-    signingConfigs {
-        getByName("release") {
+//    signingConfigs {
+//        getByName("release") {
 //            val keyProps = Properties()
 //            val keyPropsFile = rootProject.file("keystore/keystore.properties")
 //            if (keyPropsFile.exists()) keyProps.load(keyPropsFile.inputStream())
@@ -33,8 +36,8 @@ android {
 //            keyPassword = keyProps["keyPassword"]
 //            storeFile = keyProps['storeFile']?.let { file(keyProps['storeFile']) } ?: null
 //            storePassword = keyProps['storePassword']
-        }
-    }
+//        }
+//    }
     buildTypes {
         getByName("release") {
             isMinifyEnabled = true
@@ -227,16 +230,14 @@ dependencies {
 
 // Generates the java Protobuf-lite code for the Protobufs in this project.
 protobuf {
-//    protoc {
-//        artifact = "com.google.protobuf:protoc:3.10.0"
-//    }
-//    generateProtoTasks {
-//        all().each { task ->
-//            task.builtins {
-//                java {
-//                    option("lite")
-//                }
-//            }
-//        }
-//    }
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.10.0"
+    }
+    generateProtoTasks {
+        all().forEach { task ->
+            task.plugins.create("java") {
+                option("lite")
+            }
+        }
+    }
 }
