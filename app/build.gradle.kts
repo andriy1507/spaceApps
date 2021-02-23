@@ -1,4 +1,6 @@
 import com.google.protobuf.gradle.*
+import org.jetbrains.kotlin.konan.properties.propertyString
+import java.util.*
 
 val kotlin_version = "1.4.30"
 val compose_version = "1.0.0-alpha12"
@@ -6,7 +8,6 @@ plugins {
     id("com.android.application")
     kotlin("android")
     kotlin("kapt")
-//    kotlin("parcelize")
     id("dagger.hilt.android.plugin")
     id("com.google.firebase.crashlytics")
     id("com.google.gms.google-services")
@@ -27,17 +28,17 @@ android {
         testInstrumentationRunner = "com.spaceapps.myapplication.runner.SpaceAppsHiltRunner"
         testInstrumentationRunnerArguments(mapOf("clearPackageData" to "true"))
     }
-//    signingConfigs {
-//        getByName("release") {
-//            val keyProps = Properties()
-//            val keyPropsFile = rootProject.file("keystore/keystore.properties")
-//            if (keyPropsFile.exists()) keyProps.load(keyPropsFile.inputStream())
-//            keyAlias = keyProps["keyAlias"]
-//            keyPassword = keyProps["keyPassword"]
-//            storeFile = keyProps['storeFile']?.let { file(keyProps['storeFile']) } ?: null
-//            storePassword = keyProps['storePassword']
-//        }
-//    }
+    signingConfigs {
+        create("release") {
+            val propFile = project.file("keystore/keystore.properties")
+            val keyProps = Properties()
+            keyProps.load(propFile.inputStream())
+            keyAlias = keyProps.propertyString("keyAlias")
+            keyPassword = keyProps.propertyString("keyPassword")
+            storeFile = keyProps.propertyString("storeFile")?.let { file(it) }
+            storePassword = keyProps.propertyString("storePassword")
+        }
+    }
     buildTypes {
         getByName("release") {
             isMinifyEnabled = true
@@ -50,7 +51,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-//            signingConfig = signingConfigs.release
+            signingConfig = signingConfigs.getByName("release")
         }
         getByName("debug") {
             isMinifyEnabled = false
