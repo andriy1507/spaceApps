@@ -1,6 +1,7 @@
 import com.google.protobuf.gradle.*
 import org.jetbrains.kotlin.konan.properties.propertyString
 import java.util.*
+import java.io.File
 
 val kotlinVersion = "1.4.30"
 val composeVersion = "1.0.0-alpha12"
@@ -32,7 +33,7 @@ android {
         create("release") {
             val propFile = rootProject.file("keystore/keystore.properties")
             val keyProps = Properties()
-            keyProps.load(propFile.inputStream())
+            if (propFile.exists()) keyProps.load(propFile.inputStream())
             keyAlias = keyProps.propertyString("keyAlias")
             keyPassword = keyProps.propertyString("keyPassword")
             storeFile = keyProps.propertyString("storeFile")?.let { file(it) }
