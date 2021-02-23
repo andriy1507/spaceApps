@@ -2,8 +2,8 @@ import com.google.protobuf.gradle.*
 import org.jetbrains.kotlin.konan.properties.propertyString
 import java.util.*
 
-val kotlin_version = "1.4.30"
-val compose_version = "1.0.0-alpha12"
+val kotlinVersion = "1.4.30"
+val composeVersion = "1.0.0-alpha12"
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -30,7 +30,7 @@ android {
     }
     signingConfigs {
         create("release") {
-            val propFile = project.file("keystore/keystore.properties")
+            val propFile = rootProject.file("keystore/keystore.properties")
             val keyProps = Properties()
             keyProps.load(propFile.inputStream())
             keyAlias = keyProps.propertyString("keyAlias")
@@ -79,7 +79,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = compose_version
+        kotlinCompilerExtensionVersion = composeVersion
     }
     lintOptions {
         isAbortOnError = false
@@ -106,7 +106,7 @@ detekt {
 }
 dependencies {
 //    Kotlin
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
 //    Accompanist
     val accompanist_version = "0.5.1"
     implementation("dev.chrisbanes.accompanist:accompanist-coil:$accompanist_version")
@@ -158,12 +158,12 @@ dependencies {
     val work_version = "2.5.0"
     implementation("androidx.work:work-runtime-ktx:$work_version")
 //    Jetpack Compose
-    implementation("androidx.compose.ui:ui:$compose_version")
-    implementation("androidx.compose.runtime:runtime-livedata:$compose_version")
-    implementation("androidx.compose.material:material:$compose_version")
-    implementation("androidx.compose.foundation:foundation:$compose_version")
-    implementation("androidx.compose.ui:ui-tooling:$compose_version")
-    runtimeOnly("androidx.compose.animation:animation:$compose_version")
+    implementation("androidx.compose.ui:ui:$composeVersion")
+    implementation("androidx.compose.runtime:runtime-livedata:$composeVersion")
+    implementation("androidx.compose.material:material:$composeVersion")
+    implementation("androidx.compose.foundation:foundation:$composeVersion")
+    implementation("androidx.compose.ui:ui-tooling:$composeVersion")
+    runtimeOnly("androidx.compose.animation:animation:$composeVersion")
 //    Navigation component
     val nav_version = "2.3.3"
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
