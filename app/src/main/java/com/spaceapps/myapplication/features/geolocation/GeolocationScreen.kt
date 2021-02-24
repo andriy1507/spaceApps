@@ -30,7 +30,9 @@ fun GeolocationScreen() {
     val location = viewModel.lastLocation.observeAsState(null)
     val events = viewModel.events.observeAsState(InitState)
     Column(
-        modifier = Modifier.fillMaxSize().background(MaterialTheme.colors.background)
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colors.background)
             .statusBarsPadding()
             .padding(horizontal = SPACING_16.dp)
     ) {
@@ -65,7 +67,9 @@ fun GeoCoordinatesCard(loc: Location) {
         fontWeight = FontWeight.Bold
     )
     Card(
-        modifier = Modifier.fillMaxWidth().wrapContentHeight()
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
             .padding(vertical = SPACING_8.dp),
         backgroundColor = MaterialTheme.colors.surface,
         shape = RoundedCornerShape(SPACING_16.dp),
@@ -73,44 +77,68 @@ fun GeoCoordinatesCard(loc: Location) {
     ) {
         Row {
 
-            Column(modifier = Modifier.weight(1f).padding(start = SPACING_16.dp)) {
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = SPACING_16.dp)
+            ) {
                 Text(
                     text = stringResource(R.string.latitude_label),
                     style = labelStyle,
-                    modifier = Modifier.align(Alignment.Start).padding(vertical = SPACING_8.dp)
+                    modifier = Modifier
+                        .align(Alignment.Start)
+                        .padding(vertical = SPACING_8.dp)
                 )
                 Text(
                     text = latitudeString(loc.latitude),
-                    modifier = Modifier.align(Alignment.Start).padding(bottom = SPACING_8.dp)
+                    modifier = Modifier
+                        .align(Alignment.Start)
+                        .padding(bottom = SPACING_8.dp)
                 )
                 Text(
                     text = stringResource(R.string.longitude_label),
                     style = labelStyle,
-                    modifier = Modifier.align(Alignment.Start).padding(vertical = SPACING_8.dp)
+                    modifier = Modifier
+                        .align(Alignment.Start)
+                        .padding(vertical = SPACING_8.dp)
                 )
                 Text(
                     text = longitudeString(loc.longitude),
-                    modifier = Modifier.align(Alignment.Start).padding(bottom = SPACING_8.dp)
+                    modifier = Modifier
+                        .align(Alignment.Start)
+                        .padding(bottom = SPACING_8.dp)
                 )
             }
-            Column(modifier = Modifier.weight(1f).padding(end = SPACING_16.dp)) {
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(end = SPACING_16.dp)
+            ) {
                 Text(
                     text = stringResource(R.string.altitude_label),
                     style = labelStyle,
-                    modifier = Modifier.align(Alignment.Start).padding(vertical = SPACING_8.dp)
+                    modifier = Modifier
+                        .align(Alignment.Start)
+                        .padding(vertical = SPACING_8.dp)
                 )
                 Text(
                     text = stringResource(R.string.altitude_value, loc.altitude),
-                    modifier = Modifier.align(Alignment.Start).padding(bottom = SPACING_8.dp)
+                    modifier = Modifier
+                        .align(Alignment.Start)
+                        .padding(bottom = SPACING_8.dp)
                 )
                 Text(
                     text = stringResource(R.string.accuracy_label),
                     style = labelStyle,
-                    modifier = Modifier.align(Alignment.Start).padding(vertical = SPACING_8.dp)
+                    modifier = Modifier
+                        .align(Alignment.Start)
+                        .padding(vertical = SPACING_8.dp)
                 )
                 Text(
                     text = stringResource(R.string.distance_meters, loc.accuracy),
-                    modifier = Modifier.align(Alignment.Start).padding(bottom = SPACING_8.dp)
+                    modifier = Modifier
+                        .align(Alignment.Start)
+                        .padding(bottom = SPACING_8.dp)
                 )
             }
         }
@@ -121,24 +149,37 @@ fun GeoCoordinatesCard(loc: Location) {
 @Suppress("NamedArguments")
 fun RectCoordinatesCard(loc: Location) {
     Card(
-        modifier = Modifier.fillMaxWidth().wrapContentHeight().padding(vertical = SPACING_8.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .padding(vertical = SPACING_8.dp),
         backgroundColor = MaterialTheme.colors.surface,
         shape = RoundedCornerShape(SPACING_16.dp),
         elevation = SPACING_8.dp
     ) {
         val rect = calculateRectangularCoordinates(loc.longitude, loc.latitude, loc.altitude)
-        Column(modifier = Modifier.fillMaxWidth(1f).padding(start = SPACING_16.dp)) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(1f)
+                .padding(start = SPACING_16.dp)
+        ) {
             Text(
                 text = "X: ${rect.x}",
-                modifier = Modifier.align(Alignment.Start).padding(vertical = SPACING_8.dp)
+                modifier = Modifier
+                    .align(Alignment.Start)
+                    .padding(vertical = SPACING_8.dp)
             )
             Text(
                 text = "Y: ${rect.y}",
-                modifier = Modifier.align(Alignment.Start).padding(vertical = SPACING_8.dp)
+                modifier = Modifier
+                    .align(Alignment.Start)
+                    .padding(vertical = SPACING_8.dp)
             )
             Text(
                 text = "Z: ${rect.z}",
-                modifier = Modifier.align(Alignment.Start).padding(vertical = SPACING_8.dp)
+                modifier = Modifier
+                    .align(Alignment.Start)
+                    .padding(vertical = SPACING_8.dp)
             )
         }
     }
