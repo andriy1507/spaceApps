@@ -62,10 +62,6 @@ fun GeolocationScreen() {
 @Composable
 @Suppress("NamedArguments")
 fun GeoCoordinatesCard(loc: Location) {
-    val labelStyle = LocalTextStyle.current.copy(
-        color = MaterialTheme.colors.primary,
-        fontWeight = FontWeight.Bold
-    )
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -76,37 +72,26 @@ fun GeoCoordinatesCard(loc: Location) {
         elevation = SPACING_8.dp
     ) {
         Row {
-
             Column(
                 modifier = Modifier
                     .weight(1f)
                     .padding(start = SPACING_16.dp)
             ) {
-                Text(
+                LabelText(
                     text = stringResource(R.string.latitude_label),
-                    style = labelStyle,
-                    modifier = Modifier
-                        .align(Alignment.Start)
-                        .padding(vertical = SPACING_8.dp)
+                    modifier = Modifier.align(Alignment.Start)
                 )
-                Text(
+                ValueText(
                     text = latitudeString(loc.latitude),
-                    modifier = Modifier
-                        .align(Alignment.Start)
-                        .padding(bottom = SPACING_8.dp)
+                    modifier = Modifier.align(Alignment.Start)
                 )
-                Text(
+                LabelText(
                     text = stringResource(R.string.longitude_label),
-                    style = labelStyle,
-                    modifier = Modifier
-                        .align(Alignment.Start)
-                        .padding(vertical = SPACING_8.dp)
+                    modifier = Modifier.align(Alignment.Start)
                 )
-                Text(
+                ValueText(
                     text = longitudeString(loc.longitude),
-                    modifier = Modifier
-                        .align(Alignment.Start)
-                        .padding(bottom = SPACING_8.dp)
+                    modifier = Modifier.align(Alignment.Start)
                 )
             }
             Column(
@@ -114,35 +99,48 @@ fun GeoCoordinatesCard(loc: Location) {
                     .weight(1f)
                     .padding(end = SPACING_16.dp)
             ) {
-                Text(
+                LabelText(
                     text = stringResource(R.string.altitude_label),
-                    style = labelStyle,
                     modifier = Modifier
                         .align(Alignment.Start)
-                        .padding(vertical = SPACING_8.dp)
                 )
-                Text(
+                ValueText(
                     text = stringResource(R.string.altitude_value, loc.altitude),
-                    modifier = Modifier
-                        .align(Alignment.Start)
-                        .padding(bottom = SPACING_8.dp)
+                    modifier = Modifier.align(Alignment.Start)
                 )
-                Text(
-                    text = stringResource(R.string.accuracy_label),
-                    style = labelStyle,
-                    modifier = Modifier
-                        .align(Alignment.Start)
-                        .padding(vertical = SPACING_8.dp)
+                LabelText(
+                    modifier = Modifier.align(Alignment.Start),
+                    text = stringResource(R.string.accuracy_label)
                 )
-                Text(
-                    text = stringResource(R.string.distance_meters, loc.accuracy),
-                    modifier = Modifier
-                        .align(Alignment.Start)
-                        .padding(bottom = SPACING_8.dp)
+                ValueText(
+                    modifier = Modifier.align(Alignment.Start),
+                    text = stringResource(R.string.distance_meters, loc.accuracy)
                 )
             }
         }
     }
+}
+
+@Composable
+fun LabelText(modifier: Modifier = Modifier, text: String) {
+    val labelStyle = LocalTextStyle.current.copy(
+        color = MaterialTheme.colors.primary,
+        fontWeight = FontWeight.Bold
+    )
+    Text(
+        text = text,
+        style = labelStyle,
+        modifier = modifier
+            .padding(vertical = SPACING_8.dp)
+    )
+}
+
+@Composable
+fun ValueText(modifier: Modifier = Modifier, text: String) {
+    Text(
+        text = text,
+        modifier = modifier.padding(bottom = SPACING_8.dp)
+    )
 }
 
 @Composable
