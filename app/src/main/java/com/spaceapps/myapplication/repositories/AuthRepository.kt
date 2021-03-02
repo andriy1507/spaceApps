@@ -11,15 +11,15 @@ class AuthRepository @Inject constructor(
     private val storage: AuthTokenStorage
 ) {
 
-    suspend fun login(email: String, password: String) {
-        api.login(email, password).also {
+    suspend fun signIn(email: String, password: String) {
+        api.signIn(email, password).also {
             storage.storeTokens(it.authToken, it.refreshToken)
         }
         storage.getFcmToken()?.let { api.sendFcmToken(it) }
     }
 
-    suspend fun register(email: String, password: String) {
-        api.register(email, password).also {
+    suspend fun signUp(email: String, password: String) {
+        api.signUp(email, password).also {
             storage.storeTokens(it.authToken, it.refreshToken)
         }
         storage.getFcmToken()?.let { api.sendFcmToken(it) }

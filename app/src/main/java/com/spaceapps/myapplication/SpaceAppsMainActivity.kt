@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class SpaceAppsMainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var authTokenStorage: AuthTokenStorage

@@ -1,13 +1,12 @@
 package com.spaceapps.myapplication
 
 import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
-import android.os.Build
+import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.app.NotificationManagerCompat.IMPORTANCE_HIGH
 import androidx.core.graphics.drawable.toBitmap
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
@@ -28,7 +27,7 @@ import javax.inject.Inject
 import kotlin.random.Random
 
 @AndroidEntryPoint
-class FcmService : FirebaseMessagingService() {
+class SpaceAppsFcmService : FirebaseMessagingService() {
 
     @Inject
     lateinit var authTokenStorage: AuthTokenStorage
@@ -38,15 +37,11 @@ class FcmService : FirebaseMessagingService() {
 
     override fun onCreate() {
         super.onCreate()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                getString(R.string.default_notification_channel_id),
-                getString(R.string.app_name),
-                NotificationManager.IMPORTANCE_HIGH
-            )
-            NotificationManagerCompat.from(this)
-                .createNotificationChannel(channel)
-        }
+        val channel = NotificationChannelCompat.Builder(
+            getString(R.string.default_notification_channel_id),
+            IMPORTANCE_HIGH
+        ).setName(getString(R.string.default_notification_channel_id)).build()
+        NotificationManagerCompat.from(this).createNotificationChannel(channel)
     }
 
     override fun onNewToken(token: String) {
@@ -57,24 +52,9 @@ class FcmService : FirebaseMessagingService() {
                 val request = OneTimeWorkRequestBuilder<FirebaseTokenWorker>()
                     .setInputData(FirebaseTokenWorker.buildData(token))
                     .build()
-                WorkManager.getInstance(this@FcmService).enqueue(request)
+                WorkManager.getInstance(this@SpaceAppsFcmService).enqueue(request)
             }
         }
-    }
-
-    private fun buildFirebaseNotification(
-        it: RemoteMessage.Notification,
-        intent: PendingIntent
-    ): Notification {
-        return NotificationCompat.Builder(this, getString(R.string.default_notification_channel_id))
-            .apply {
-                setContentTitle(it.title)
-                setContentText(it.body)
-                setSmallIcon(R.drawable.ic_notifications_active)
-                priority = NotificationCompat.PRIORITY_MAX
-                setChannelId(getString(R.string.default_notification_channel_id))
-                setContentIntent(intent)
-            }.build()
     }
 
     private fun buildCustomNotification(
@@ -86,10 +66,11 @@ class FcmService : FirebaseMessagingService() {
                 setContentText(message.data["text"])
                 setSmallIcon(R.drawable.ic_notifications_active)
                 message.data["imageUrl"]?.let { imageUrl ->
-                    val request = ImageRequest.Builder(this@FcmService)
+                    val request = ImageRequest.Builder(this@SpaceAppsFcmService)
                         .data(imageUrl)
                         .build()
-                    val image = runBlocking { ImageLoader(this@FcmService).execute(request) }
+                    val image =
+                        runBlocking { ImageLoader(this@SpaceAppsFcmService).execute(request) }
                     setLargeIcon(image.drawable?.toBitmap())
                 }
                 setContentTitle(message.data["title"])
@@ -103,13 +84,12 @@ class FcmService : FirebaseMessagingService() {
         val enabled = runBlocking { settingsStorage.getNotificationsEnabled() }
         if (!enabled) return
         val intent = PendingIntent.getActivity(
-            this@FcmService,
+            this@SpaceAppsFcmService,
             Random.nextInt(),
-            Intent(this, MainActivity::class.java),
+            Intent(this, SpaceAppsMainActivity::class.java),
             PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
         )
-        val notification = message.notification?.let { buildFirebaseNotification(it, intent) }
-            ?: run { buildCustomNotification(message, intent) }
+        val notification = buildCustomNotification(message, intent)
         NotificationManagerCompat.from(this).notify(Random.nextInt(), notification)
     }
 }
