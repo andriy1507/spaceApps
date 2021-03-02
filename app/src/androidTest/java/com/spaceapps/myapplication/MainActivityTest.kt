@@ -19,7 +19,7 @@ class MainActivityTest {
     val hiltTestRule = HiltAndroidRule(this)
 
     @get:Rule(order = 1)
-    val mainActivityRule = ActivityScenarioRule(MainActivity::class.java)
+    val mainActivityRule = ActivityScenarioRule(SpaceAppsMainActivity::class.java)
 
     @Before
     fun setUp() {
