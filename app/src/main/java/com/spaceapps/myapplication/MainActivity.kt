@@ -68,9 +68,7 @@ class MainActivity : AppCompatActivity() {
 
     @Composable
     fun MainActivityScreen() = AndroidView(
-        viewBlock = {
-            FragmentContainerView(it).apply { id = R.id.navHostFragment }
-        }
+        factory = { FragmentContainerView(it).apply { id = R.id.navHostFragment } }
     ) {
         val navHostFragment = NavHostFragment()
         supportFragmentManager.beginTransaction()

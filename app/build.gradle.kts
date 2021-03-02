@@ -1,10 +1,9 @@
 import com.google.protobuf.gradle.*
 import org.jetbrains.kotlin.konan.properties.propertyString
 import java.util.*
-import java.io.File
 
 val kotlinVersion = "1.4.30"
-val composeVersion = "1.0.0-alpha12"
+val composeVersion = "1.0.0-beta01"
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -109,7 +108,7 @@ dependencies {
 //    Kotlin
     implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
 //    Accompanist
-    val accompanist_version = "0.5.1"
+    val accompanist_version = "0.6.0"
     implementation("dev.chrisbanes.accompanist:accompanist-coil:$accompanist_version")
     implementation("dev.chrisbanes.accompanist:accompanist-insets:$accompanist_version")
 //    Coroutines
@@ -144,7 +143,7 @@ dependencies {
     implementation("androidx.fragment:fragment-ktx:1.3.0")
     implementation("com.google.android.material:material:1.3.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha01")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha02")
 
 //    Paging
     val paging_version = "3.0.0-beta01"
