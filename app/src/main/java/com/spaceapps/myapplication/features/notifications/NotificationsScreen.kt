@@ -50,15 +50,17 @@ fun NotificationsScreen() {
             contentPadding = contentPadding,
             verticalArrangement = Arrangement.spacedBy(SPACING_8.dp)
         ) {
-            items(List(15) {
-                Notification(
-                    title = "Notification",
-                    content = LoremIpsum(50).values.joinToString(),
-                    onClick = {
-                        Toast.makeText(context, "Not yet implemented", Toast.LENGTH_SHORT).show()
-                    }
-                )
-            }) {
+            items(
+                List(15) {
+                    Notification(
+                        title = "Notification",
+                        content = LoremIpsum(50).values.joinToString(),
+                        onClick = {
+                            Toast.makeText(context, "Not yet implemented", Toast.LENGTH_SHORT).show()
+                        }
+                    )
+                }
+            ) {
                 NotificationItem(it)
             }
         }
