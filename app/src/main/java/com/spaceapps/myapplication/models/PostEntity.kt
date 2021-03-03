@@ -3,7 +3,7 @@ package com.spaceapps.myapplication.models
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import org.joda.time.LocalDateTime
+import java.time.LocalDateTime
 
 @Entity
 data class PostEntity(
