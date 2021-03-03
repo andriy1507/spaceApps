@@ -1,4 +1,4 @@
-package com.spaceapps.myapplication.features.notification
+package com.spaceapps.myapplication.features.notifications
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -24,6 +24,11 @@ import com.spaceapps.myapplication.ui.SPACING_8
 import com.spaceapps.myapplication.ui.SpaceAppsTheme
 import dev.chrisbanes.accompanist.insets.LocalWindowInsets
 import dev.chrisbanes.accompanist.insets.toPaddingValues
+import kotlin.random.Random
+
+private const val MAX_WORDS = 30
+private const val MIN_WORDS = 10
+private const val NOTIFICATIONS = 15
 
 @Immutable
 data class Notification(
@@ -51,12 +56,18 @@ fun NotificationsScreen() {
             verticalArrangement = Arrangement.spacedBy(SPACING_8.dp)
         ) {
             items(
-                List(15) {
+                List(NOTIFICATIONS) {
                     Notification(
                         title = "Notification",
-                        content = LoremIpsum(50).values.joinToString(),
+                        content = LoremIpsum(
+                            Random.nextInt(
+                                from = MIN_WORDS,
+                                until = MAX_WORDS
+                            )
+                        ).values.joinToString(),
                         onClick = {
-                            Toast.makeText(context, "Not yet implemented", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Not yet implemented", Toast.LENGTH_SHORT)
+                                .show()
                         }
                     )
                 }
