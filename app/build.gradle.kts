@@ -108,7 +108,7 @@ detekt {
 dependencies {
 //    Kotlin
     implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.0.9")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
 //    Accompanist
     val accompanist_version = "0.6.1"
     implementation("dev.chrisbanes.accompanist:accompanist-coil:$accompanist_version")

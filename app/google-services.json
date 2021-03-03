@@ -8,35 +8,6 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:88326699621:android:f75a07721d6aefb0ae248c",
-        "android_client_info": {
-          "package_name": "com.spaceapps.main"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "88326699621-5d5crjgvlihqgtpvq0dkak3lre3olpdp.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCNTcLrD0tChZIfCxxmSHgm_B9xrQtudY4"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "88326699621-5d5crjgvlihqgtpvq0dkak3lre3olpdp.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:88326699621:android:81011d3deb29ff16ae248c",
         "android_client_info": {
           "package_name": "com.spaceapps.myapplication"
@@ -52,13 +23,21 @@
           }
         },
         {
+          "client_id": "88326699621-qokevv6e3endnukmq0lv7sd7sl4rasgu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.spaceapps.myapplication",
+            "certificate_hash": "b2a951a5e96663d97c13a2a7a24903e8a6c804d6"
+          }
+        },
+        {
           "client_id": "88326699621-5d5crjgvlihqgtpvq0dkak3lre3olpdp.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCNTcLrD0tChZIfCxxmSHgm_B9xrQtudY4"
+          "current_key": "AIzaSyB5ukxRYEEFGyRFp3P_CTNqXAdG49puTrI"
         }
       ],
       "services": {
