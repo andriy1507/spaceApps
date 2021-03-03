@@ -67,6 +67,7 @@ android {
         }
     }
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
@@ -107,6 +108,7 @@ detekt {
 dependencies {
 //    Kotlin
     implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.0.9")
 //    Accompanist
     val accompanist_version = "0.6.1"
     implementation("dev.chrisbanes.accompanist:accompanist-coil:$accompanist_version")
@@ -119,8 +121,6 @@ dependencies {
     val retrofit_version = "2.9.0"
     implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
     implementation("com.squareup.retrofit2:converter-moshi:$retrofit_version")
-//    Joda time
-    implementation("joda-time:joda-time:2.10.10")
 //    Stetho
     val stetho_version = "1.5.1"
     implementation("com.facebook.stetho:stetho:$stetho_version")

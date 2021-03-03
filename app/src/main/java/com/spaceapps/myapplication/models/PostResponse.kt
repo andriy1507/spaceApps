@@ -2,7 +2,7 @@ package com.spaceapps.myapplication.models
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import org.joda.time.LocalDateTime
+import java.time.LocalDateTime
 
 @JsonClass(generateAdapter = true)
 data class PostResponse(

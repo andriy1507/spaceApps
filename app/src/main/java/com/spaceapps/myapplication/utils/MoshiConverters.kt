@@ -2,20 +2,18 @@ package com.spaceapps.myapplication.utils
 
 import com.squareup.moshi.FromJson
 import com.squareup.moshi.ToJson
-import org.joda.time.LocalDateTime
-import org.joda.time.format.DateTimeFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class MoshiConverters {
 
-    private val formatter = DateTimeFormat.forPattern("YYYY-MM-dd'T'HH:mm:ss.SSS'Z'")
-
     @FromJson
     fun jsonToDateTime(string: String): LocalDateTime {
-        return LocalDateTime.parse(string, formatter)
+        return LocalDateTime.parse(string, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
     }
 
     @ToJson
     fun dateTimeToJson(localDateTime: LocalDateTime): String {
-        return localDateTime.toString(formatter)
+        return localDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
     }
 }
