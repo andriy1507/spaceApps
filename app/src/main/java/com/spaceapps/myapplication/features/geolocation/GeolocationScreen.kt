@@ -29,7 +29,7 @@ fun GeolocationScreen() {
     val viewModel = viewModel<GeolocationViewModel>()
     val location = viewModel.lastLocation.observeAsState(null)
     val events = viewModel.events.observeAsState(InitState)
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colors.background)
@@ -38,23 +38,25 @@ fun GeolocationScreen() {
     ) {
         val loc = location.value
         if (loc == null) {
-            CircularProgressIndicator()
+            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
         } else {
-            GeoCoordinatesCard(loc)
-            RectCoordinatesCard(loc)
-            if (events.value == LocationUnavailable)
-                Row {
-                    Icon(
-                        modifier = Modifier.padding(end = SPACING_8.dp),
-                        painter = painterResource(id = R.drawable.ic_location_disabled),
-                        tint = MaterialTheme.colors.error,
-                        contentDescription = null
-                    )
-                    Text(
-                        text = stringResource(R.string.location_unavailable),
-                        color = MaterialTheme.colors.error
-                    )
-                }
+            Column(modifier = Modifier.fillMaxSize()) {
+                GeoCoordinatesCard(loc)
+                RectCoordinatesCard(loc)
+                if (events.value == LocationUnavailable)
+                    Row {
+                        Icon(
+                            modifier = Modifier.padding(end = SPACING_8.dp),
+                            painter = painterResource(id = R.drawable.ic_location_disabled),
+                            tint = MaterialTheme.colors.error,
+                            contentDescription = null
+                        )
+                        Text(
+                            text = stringResource(R.string.location_unavailable),
+                            color = MaterialTheme.colors.error
+                        )
+                    }
+            }
         }
     }
 }

@@ -7,7 +7,7 @@ import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.compose.runtime.Composable
 import androidx.fragment.app.viewModels
-import com.spaceapps.myapplication.ui.MyApplicationTheme
+import com.spaceapps.myapplication.ui.SpaceAppsTheme
 import com.spaceapps.myapplication.utils.ComposableFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -26,7 +26,7 @@ class GeolocationFragment : ComposableFragment() {
     }
 
     @Composable
-    override fun Content() = MyApplicationTheme { GeolocationScreen() }
+    override fun Content() = SpaceAppsTheme { GeolocationScreen() }
 
     private fun tryTrackingLocationOrRequestPermission() {
         if (requireContext().checkSelfPermission(ACCESS_FINE_LOCATION) == PERMISSION_GRANTED)

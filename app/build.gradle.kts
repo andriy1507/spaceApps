@@ -2,7 +2,7 @@ import com.google.protobuf.gradle.*
 import org.jetbrains.kotlin.konan.properties.propertyString
 import java.util.*
 
-val kotlinVersion = "1.4.30"
+val kotlinVersion = "1.4.31"
 val composeVersion = "1.0.0-beta01"
 plugins {
     id("com.android.application")
@@ -67,6 +67,7 @@ android {
         }
     }
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
@@ -107,8 +108,9 @@ detekt {
 dependencies {
 //    Kotlin
     implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
 //    Accompanist
-    val accompanist_version = "0.6.0"
+    val accompanist_version = "0.6.1"
     implementation("dev.chrisbanes.accompanist:accompanist-coil:$accompanist_version")
     implementation("dev.chrisbanes.accompanist:accompanist-insets:$accompanist_version")
 //    Coroutines
@@ -119,8 +121,6 @@ dependencies {
     val retrofit_version = "2.9.0"
     implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
     implementation("com.squareup.retrofit2:converter-moshi:$retrofit_version")
-//    Joda time
-    implementation("joda-time:joda-time:2.10.9")
 //    Stetho
     val stetho_version = "1.5.1"
     implementation("com.facebook.stetho:stetho:$stetho_version")
@@ -132,14 +132,14 @@ dependencies {
 //    Timber logging
     implementation("com.jakewharton.timber:timber:4.7.1")
 //    Google play services
-    implementation("com.google.android.gms:play-services-location:17.1.0")
+    implementation("com.google.android.gms:play-services-location:18.0.0")
     implementation("com.google.android.gms:play-services-maps:17.0.0")
     implementation("com.google.android.gms:play-services-auth:19.0.0")
 //    AndroidX
     implementation("androidx.core:core-ktx:1.3.2")
     implementation("androidx.appcompat:appcompat:1.2.0")
-    implementation("androidx.activity:activity-ktx:1.3.0-alpha02")
-    implementation("androidx.activity:activity-compose:1.3.0-alpha02")
+    implementation("androidx.activity:activity-ktx:1.3.0-alpha03")
+    implementation("androidx.activity:activity-compose:1.3.0-alpha03")
     implementation("androidx.fragment:fragment-ktx:1.3.0")
     implementation("com.google.android.material:material:1.3.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.0")
@@ -147,7 +147,7 @@ dependencies {
 
 //    Paging
     val paging_version = "3.0.0-beta01"
-    val paging_compose_version = "1.0.0-alpha07"
+    val paging_compose_version = "1.0.0-alpha08"
     implementation("androidx.paging:paging-runtime-ktx:$paging_version")
     implementation("androidx.paging:paging-compose:$paging_compose_version")
 //    Moshi
@@ -169,7 +169,7 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
 //    Dagger-Hilt
-    val dagger_version = "2.32-alpha"
+    val dagger_version = "2.33-beta"
     implementation("com.google.dagger:hilt-android:$dagger_version")
     kapt("com.google.dagger:hilt-android-compiler:$dagger_version")
     val hilt_version = "1.0.0-alpha03"
@@ -183,13 +183,13 @@ dependencies {
     implementation("com.google.firebase:firebase-messaging-ktx")
     implementation("com.google.firebase:firebase-messaging-directboot")
 //    Room database
-    val room_version = "2.3.0-beta01"
+    val room_version = "2.3.0-beta02"
     implementation("androidx.room:room-runtime:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
     kapt("androidx.room:room-compiler:$room_version")
 
 //    Datastore
-    val datastore_version = "1.0.0-alpha06"
+    val datastore_version = "1.0.0-alpha07"
     implementation("androidx.datastore:datastore:$datastore_version")
     implementation("androidx.datastore:datastore-preferences:$datastore_version")
     implementation("com.google.protobuf:protobuf-javalite:3.15.1")
@@ -216,8 +216,8 @@ dependencies {
     androidTestUtil("androidx.test:orchestrator:1.3.0")
 
 //    Hilt testing
-    androidTestImplementation("com.google.dagger:hilt-android-testing:2.32-alpha")
-    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.32-alpha")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.33-beta")
+    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.33-beta")
 //   Assertions
     androidTestImplementation("androidx.test.ext:junit:1.1.2")
     androidTestImplementation("androidx.test.ext:truth:1.3.0")

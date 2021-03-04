@@ -32,7 +32,7 @@ private val LightColorPalette = lightColors(
 )
 
 @Composable
-fun MyApplicationTheme(
+fun SpaceAppsTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     lightColors: Colors = LightColorPalette,
     darkColors: Colors = DarkColorPalette,

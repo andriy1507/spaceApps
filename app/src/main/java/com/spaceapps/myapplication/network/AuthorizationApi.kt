@@ -6,13 +6,13 @@ import retrofit2.http.*
 interface AuthorizationApi {
 
     @GET("/authorization/sign-in")
-    suspend fun login(
+    suspend fun signIn(
         @Query("userName") userName: String,
         @Query("password") password: String
     ): AuthTokenResponse
 
     @POST("/authorization/sign-up")
-    suspend fun register(
+    suspend fun signUp(
         @Query("userName") userName: String,
         @Query("password") password: String
     ): AuthTokenResponse

@@ -4,6 +4,5 @@ option java_package = "com.spaceapps.myapplication";
 option java_multiple_files = true;
 
 message Settings {
-    bool notificationsEnabled = 1;
-    string language = 2;
+    string language = 1;
 }

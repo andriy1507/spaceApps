@@ -2,7 +2,7 @@ package com.spaceapps.myapplication.local
 
 import androidx.room.TypeConverter
 import com.spaceapps.myapplication.utils.MoshiConverters
-import org.joda.time.LocalDateTime
+import java.time.LocalDateTime
 
 class RoomTypeConverters {
 
