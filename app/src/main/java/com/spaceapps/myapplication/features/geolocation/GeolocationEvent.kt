@@ -1,4 +1,4 @@
-package com.spaceapps.myapplication.models
+package com.spaceapps.myapplication.features.geolocation
 
 sealed class GeolocationEvent
 object LocationUnavailable : GeolocationEvent()

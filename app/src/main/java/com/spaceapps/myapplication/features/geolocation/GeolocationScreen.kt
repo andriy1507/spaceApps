@@ -15,8 +15,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.spaceapps.myapplication.R
-import com.spaceapps.myapplication.models.InitState
-import com.spaceapps.myapplication.models.LocationUnavailable
 import com.spaceapps.myapplication.ui.SPACING_16
 import com.spaceapps.myapplication.ui.SPACING_8
 import com.spaceapps.myapplication.utils.calculateRectangularCoordinates

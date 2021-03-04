@@ -16,7 +16,7 @@ private const val PREFERENCES_DATA_STORE = "${BuildConfig.APPLICATION_ID}.PREFS_
 private const val SETTINGS_DATA_STORE = "${BuildConfig.APPLICATION_ID}.SETTINGS_DATA_STORE"
 
 private val Context.preferencesDataStore by preferencesDataStore(PREFERENCES_DATA_STORE)
-private val Context.settingsDataStore by dataStore(SETTINGS_DATA_STORE, SettingsSerializer)
+val Context.settingsDataStore by dataStore(SETTINGS_DATA_STORE, SettingsSerializer)
 
 @Module
 @InstallIn(SingletonComponent::class)

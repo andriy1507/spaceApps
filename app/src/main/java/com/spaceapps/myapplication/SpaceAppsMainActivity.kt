@@ -8,6 +8,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.WindowCompat
@@ -17,16 +18,15 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import com.spaceapps.myapplication.local.AuthTokenStorage
+import com.spaceapps.myapplication.local.StorageManager
 import com.spaceapps.myapplication.ui.ACTION_BAR_SIZE
 import com.spaceapps.myapplication.ui.SpaceAppsTheme
+import com.spaceapps.myapplication.utils.AuthDispatcher
 import com.spaceapps.myapplication.utils.NavDispatcher
 import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.accompanist.insets.LocalWindowInsets
 import dev.chrisbanes.accompanist.insets.navigationBarsHeight
 import dev.chrisbanes.accompanist.insets.toPaddingValues
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -34,10 +34,13 @@ import javax.inject.Inject
 class SpaceAppsMainActivity : AppCompatActivity() {
 
     @Inject
-    lateinit var authTokenStorage: AuthTokenStorage
+    lateinit var navDispatcher: NavDispatcher
 
     @Inject
-    lateinit var navDispatcher: NavDispatcher
+    lateinit var authDispatcher: AuthDispatcher
+
+    @Inject
+    lateinit var storageManager: StorageManager
 
     private var navController: NavController? = null
 
@@ -54,17 +57,14 @@ class SpaceAppsMainActivity : AppCompatActivity() {
         lifecycleScope.launchWhenResumed { initNavigation() }
     }
 
-    private fun observeAuthState() {
-        authTokenStorage.authTokenFlow.onEach { token ->
-            when (token) {
-                "" -> unauthorize()
-                else -> Unit
-            }
-        }.launchIn(lifecycleScope)
+    private suspend fun observeAuthState() {
+        for (e in authDispatcher.emitter) {
+            if (e) unauthorize()
+        }
     }
 
     private fun unauthorize() = lifecycleScope.launch {
-        authTokenStorage.clear()
+        storageManager.clear()
         restart()
     }
 
@@ -106,7 +106,7 @@ class SpaceAppsMainActivity : AppCompatActivity() {
                                 contentDescription = null
                             )
                         },
-                        label = { Text(text = "Location") }
+                        label = { Text(text = stringResource(R.string.location)) }
                     )
                     BottomNavigationItem(
                         selected = navController?.currentDestination?.id == R.id.notificationsScreen,
@@ -122,11 +122,14 @@ class SpaceAppsMainActivity : AppCompatActivity() {
                                 contentDescription = null
                             )
                         },
-                        label = { Text(text = "Notifications") }
+                        label = { Text(text = stringResource(R.string.notifications)) }
                     )
                     BottomNavigationItem(
                         selected = false,
-                        onClick = { },
+                        onClick = {
+                            if (navController?.currentDestination?.id != R.id.settingsScreen)
+                                navDispatcher.emit { navigate(R.id.settingsScreen) }
+                        },
                         icon = {
                             Icon(
                                 painter = painterResource(
@@ -135,7 +138,7 @@ class SpaceAppsMainActivity : AppCompatActivity() {
                                 contentDescription = null
                             )
                         },
-                        label = { Text(text = "Settings") }
+                        label = { Text(text = stringResource(R.string.settings)) }
                     )
                 }
             }

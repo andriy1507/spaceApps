@@ -15,4 +15,7 @@
     <string name="west">W</string>
     <string name="east">E</string>
     <string name="location_unavailable">Location unavailable</string>
+    <string name="notifications">Notifications</string>
+    <string name="location">Location</string>
+    <string name="settings">Settings</string>
 </resources>

@@ -16,4 +16,8 @@
         android:id="@+id/notificationsScreen"
         android:name="com.spaceapps.myapplication.features.notifications.NotificationsFragment" />
 
+    <fragment
+        android:id="@+id/settingsScreen"
+        android:name="com.spaceapps.myapplication.features.settings.SettingsFragment" />
+
 </navigation>

@@ -6,5 +6,5 @@ import com.spaceapps.myapplication.utils.ComposableFragment
 class NotificationsFragment : ComposableFragment() {
 
     @Composable
-    override fun Content() { NotificationsScreen() }
+    override fun Content() = NotificationsScreen()
 }
