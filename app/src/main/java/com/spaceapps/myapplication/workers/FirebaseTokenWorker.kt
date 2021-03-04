@@ -5,6 +5,9 @@ import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.Data
 import androidx.work.WorkerParameters
+import com.spaceapps.myapplication.local.AuthTokenStorage
+import com.spaceapps.myapplication.models.AuthRequest.*
+import com.spaceapps.myapplication.models.AuthRequest.Platform.*
 import com.spaceapps.myapplication.network.AuthorizationApi
 import com.spaceapps.myapplication.utils.Success
 import com.spaceapps.myapplication.utils.request
@@ -15,12 +18,18 @@ import dagger.assisted.AssistedInject
 class FirebaseTokenWorker @AssistedInject constructor(
     @Assisted context: Context,
     @Assisted params: WorkerParameters,
-    private val api: AuthorizationApi
+    private val api: AuthorizationApi,
+    private val authTokenStorage: AuthTokenStorage
 ) : CoroutineWorker(context, params) {
     override suspend fun doWork(): Result {
+        authTokenStorage.getAuthToken() ?: return Result.failure()
         val token = inputData.getString(TOKEN_KEY)
         token ?: return Result.failure()
-        val response = request { api.sendFcmToken(token) }
+        val device = Device(
+            token = token,
+            platform = Android
+        )
+        val response = request { api.sendFcmToken(device = device) }
         return if (response is Success) Result.success() else Result.retry()
     }
 

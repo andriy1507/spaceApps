@@ -14,4 +14,7 @@
     <string name="west">Зх</string>
     <string name="east">Сх</string>
     <string name="location_unavailable">Місцезнаходження недоступне</string>
+    <string name="notifications">Сповіщення</string>
+    <string name="location">Місцезнаходження</string>
+    <string name="settings">Налаштування</string>
 </resources>

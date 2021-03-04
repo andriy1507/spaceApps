@@ -1,5 +1,7 @@
 package com.spaceapps.myapplication.network
 
+import com.spaceapps.myapplication.AUTH_HEADER
+import com.spaceapps.myapplication.AUTH_HEADER_PREFIX
 import com.spaceapps.myapplication.local.AuthTokenStorage
 import com.spaceapps.myapplication.utils.request
 import dagger.Lazy
@@ -21,7 +23,7 @@ class SpaceAppsAuthenticator @Inject constructor(
             null
         } else {
             response.request.newBuilder()
-                .header(AUTH_HEADER, AUTH_HEADER_PREFIX + authToken)
+                .header(AUTH_HEADER, "$AUTH_HEADER_PREFIX $authToken")
                 .build()
         }
     }

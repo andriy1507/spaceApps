@@ -11,9 +11,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.location.*
 import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
-import com.spaceapps.myapplication.models.GeolocationEvent
-import com.spaceapps.myapplication.models.LocationAvailable
-import com.spaceapps.myapplication.models.LocationUnavailable
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

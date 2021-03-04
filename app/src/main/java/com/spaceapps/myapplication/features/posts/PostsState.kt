@@ -1,4 +1,4 @@
-package com.spaceapps.myapplication.models
+package com.spaceapps.myapplication.features.posts
 
 sealed class PostsState
 object PostsRequestError : PostsState()
