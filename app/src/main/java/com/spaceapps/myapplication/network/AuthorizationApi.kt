@@ -1,24 +1,20 @@
 package com.spaceapps.myapplication.network
 
+import com.spaceapps.myapplication.models.AuthRequest
+import com.spaceapps.myapplication.models.AuthRequest.*
 import com.spaceapps.myapplication.models.AuthTokenResponse
 import retrofit2.http.*
 
 interface AuthorizationApi {
 
-    @GET("/authorization/sign-in")
-    suspend fun signIn(
-        @Query("userName") userName: String,
-        @Query("password") password: String
-    ): AuthTokenResponse
+    @POST("/authorization/sign-in")
+    suspend fun signIn(@Body request: AuthRequest): AuthTokenResponse
 
     @POST("/authorization/sign-up")
-    suspend fun signUp(
-        @Query("userName") userName: String,
-        @Query("password") password: String
-    ): AuthTokenResponse
+    suspend fun signUp(@Body request: AuthRequest): AuthTokenResponse
 
     @PUT("/authorization/fcm-token/{token}")
-    suspend fun sendFcmToken(@Path("token") token: String)
+    suspend fun sendFcmToken(@Body device: Device)
 
     @GET("/authorization/refresh-token")
     suspend fun refreshToken(@Query("refresh_token") token: String): AuthTokenResponse

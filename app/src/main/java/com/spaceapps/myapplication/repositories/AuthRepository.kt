@@ -1,6 +1,11 @@
 package com.spaceapps.myapplication.repositories
 
+import com.google.android.gms.tasks.Tasks
+import com.google.firebase.messaging.FirebaseMessaging
 import com.spaceapps.myapplication.local.AuthTokenStorage
+import com.spaceapps.myapplication.models.AuthRequest
+import com.spaceapps.myapplication.models.AuthRequest.*
+import com.spaceapps.myapplication.models.AuthRequest.Platform.*
 import com.spaceapps.myapplication.network.AuthorizationApi
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -12,16 +17,30 @@ class AuthRepository @Inject constructor(
 ) {
 
     suspend fun signIn(email: String, password: String) {
-        api.signIn(email, password).also {
+        val request = AuthRequest(
+            email = email,
+            password = password,
+            device = Device(
+                token = Tasks.await(FirebaseMessaging.getInstance().token),
+                platform = Android
+            )
+        )
+        api.signIn(request = request).also {
             storage.storeTokens(it.authToken, it.refreshToken)
         }
-        storage.getFcmToken()?.let { api.sendFcmToken(it) }
     }
 
     suspend fun signUp(email: String, password: String) {
-        api.signUp(email, password).also {
+        val request = AuthRequest(
+            email = email,
+            password = password,
+            device = Device(
+                token = Tasks.await(FirebaseMessaging.getInstance().token),
+                platform = Android
+            )
+        )
+        api.signUp(request = request).also {
             storage.storeTokens(it.authToken, it.refreshToken)
         }
-        storage.getFcmToken()?.let { api.sendFcmToken(it) }
     }
 }

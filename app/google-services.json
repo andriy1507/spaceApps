@@ -15,19 +15,19 @@
       },
       "oauth_client": [
         {
-          "client_id": "88326699621-9sddpa2gte7dotgqcjoh1vfbcp2kr9r5.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.spaceapps.myapplication",
-            "certificate_hash": "bc326bac44c91fa1842e286ced5a75dbce1df42b"
-          }
-        },
-        {
-          "client_id": "88326699621-qokevv6e3endnukmq0lv7sd7sl4rasgu.apps.googleusercontent.com",
+          "client_id": "88326699621-74ksr54ommhij3dfqer0v6es0ubeju8c.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.spaceapps.myapplication",
             "certificate_hash": "b2a951a5e96663d97c13a2a7a24903e8a6c804d6"
+          }
+        },
+        {
+          "client_id": "88326699621-gesnj4e45r5otgte0gjp1qgtcd7es2js.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.spaceapps.myapplication",
+            "certificate_hash": "bc326bac44c91fa1842e286ced5a75dbce1df42b"
           }
         },
         {
