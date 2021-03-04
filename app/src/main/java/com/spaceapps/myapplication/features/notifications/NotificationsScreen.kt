@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
+import com.spaceapps.myapplication.ui.ACTION_BAR_SIZE
 import com.spaceapps.myapplication.ui.SPACING_4
 import com.spaceapps.myapplication.ui.SPACING_8
 import com.spaceapps.myapplication.ui.SpaceAppsTheme
@@ -43,7 +44,7 @@ fun NotificationsScreen() {
         additionalStart = SPACING_8.dp,
         additionalEnd = SPACING_8.dp,
         additionalTop = SPACING_4.dp,
-        additionalBottom = SPACING_4.dp
+        additionalBottom = SPACING_4.dp + ACTION_BAR_SIZE.dp
     )
     Box(
         modifier = Modifier

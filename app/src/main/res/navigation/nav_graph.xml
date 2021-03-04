@@ -12,4 +12,8 @@
         android:id="@+id/geolocationScreen"
         android:name="com.spaceapps.myapplication.features.geolocation.GeolocationFragment" />
 
+    <fragment
+        android:id="@+id/notificationsScreen"
+        android:name="com.spaceapps.myapplication.features.notifications.NotificationsFragment" />
+
 </navigation>
