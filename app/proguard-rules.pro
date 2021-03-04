@@ -37,3 +37,5 @@
     public static *** w(...);
     public static *** e(...);
 }
+
+-keep,allowoptimization class com.google.android.libraries.maps.** { *; }

@@ -25,7 +25,7 @@ class GeolocationFragment : ComposableFragment() {
     }
 
     @Composable
-    override fun Content() = GeolocationScreen()
+    override fun Content() = GeolocationScreen(fragmentManager = childFragmentManager)
 
     private fun tryTrackingLocationOrRequestPermission() {
         if (requireContext().checkSelfPermission(ACCESS_FINE_LOCATION) == PERMISSION_GRANTED)
