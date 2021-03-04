@@ -2,6 +2,7 @@ package com.spaceapps.myapplication
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
@@ -83,82 +84,90 @@ class SpaceAppsMainActivity : AppCompatActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, true)
     }
 
+    private fun isCurrentDestination(@IdRes destId: Int, action: (() -> Unit)? = null): Boolean {
+        val isCurrent = navController?.currentDestination?.id == destId
+        if (isCurrent) action?.invoke()
+        return isCurrent
+    }
+
     @Composable
     fun MainActivityScreen() {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
-            bottomBar = {
-                BottomAppBar(
-                    modifier = Modifier.navigationBarsHeight(additional = ACTION_BAR_SIZE.dp),
-                    contentPadding = LocalWindowInsets.current.navigationBars.toPaddingValues()
-                ) {
-                    BottomNavigationItem(
-                        selected = navController?.currentDestination?.id == R.id.geolocationScreen,
-                        onClick = {
-                            if (navController?.currentDestination?.id != R.id.geolocationScreen)
-                                navDispatcher.emit { navigate(R.id.geolocationScreen) }
-                        },
-                        icon = {
-                            Icon(
-                                painter = painterResource(
-                                    id = R.drawable.ic_location
-                                ),
-                                contentDescription = null
-                            )
-                        },
-                        label = { Text(text = stringResource(R.string.location)) }
-                    )
-                    BottomNavigationItem(
-                        selected = navController?.currentDestination?.id == R.id.notificationsScreen,
-                        onClick = {
-                            if (navController?.currentDestination?.id != R.id.notificationsScreen)
-                                navDispatcher.emit { navigate(R.id.notificationsScreen) }
-                        },
-                        icon = {
-                            Icon(
-                                painter = painterResource(
-                                    id = R.drawable.ic_notifications
-                                ),
-                                contentDescription = null
-                            )
-                        },
-                        label = { Text(text = stringResource(R.string.notifications)) }
-                    )
-                    BottomNavigationItem(
-                        selected = false,
-                        onClick = {
-                            if (navController?.currentDestination?.id != R.id.settingsScreen)
-                                navDispatcher.emit { navigate(R.id.settingsScreen) }
-                        },
-                        icon = {
-                            Icon(
-                                painter = painterResource(
-                                    id = R.drawable.ic_settings
-                                ),
-                                contentDescription = null
-                            )
-                        },
-                        label = { Text(text = stringResource(R.string.settings)) }
-                    )
+            bottomBar = { ApplicationBottomBar() },
+            content = { NavView() }
+        )
+    }
+
+    @Composable
+    fun ApplicationBottomBar() = BottomAppBar(
+        modifier = Modifier.navigationBarsHeight(additional = ACTION_BAR_SIZE.dp),
+        contentPadding = LocalWindowInsets.current.navigationBars.toPaddingValues()
+    ) {
+        BottomNavigationItem(
+            selected = isCurrentDestination(R.id.geolocationScreen),
+            onClick = {
+                isCurrentDestination(R.id.geolocationScreen) {
+                    navDispatcher.emit { navigate(R.id.geolocationScreen) }
                 }
-            }
+            },
+            icon = {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_location),
+                    contentDescription = null
+                )
+            },
+            label = { Text(text = stringResource(R.string.location)) }
+        )
+        BottomNavigationItem(
+            selected = isCurrentDestination(R.id.notificationsScreen),
+            onClick = {
+                isCurrentDestination(R.id.notificationsScreen) {
+                    navDispatcher.emit { navigate(R.id.notificationsScreen) }
+                }
+            },
+            icon = {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_notifications),
+                    contentDescription = null
+                )
+            },
+            label = { Text(text = stringResource(R.string.notifications)) }
+        )
+        BottomNavigationItem(
+            selected = isCurrentDestination(R.id.settingsScreen),
+            onClick = {
+                isCurrentDestination(R.id.settingsScreen) {
+                    navDispatcher.emit { navigate(R.id.settingsScreen) }
+                }
+            },
+            icon = {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_settings),
+                    contentDescription = null
+                )
+            },
+            label = { Text(text = stringResource(R.string.settings)) }
+        )
+    }
+
+    @Composable
+    private fun NavView() {
+        AndroidView(
+            factory = { FragmentContainerView(it).apply { id = R.id.navHostFragment } }
         ) {
-            AndroidView(
-                factory = { FragmentContainerView(it).apply { id = R.id.navHostFragment } }
-            ) {
-                val navHostFragment = NavHostFragment()
-                supportFragmentManager.beginTransaction()
-                    .add(R.id.navHostFragment, navHostFragment)
-                    .commit()
-                navHostFragment.lifecycle.addObserver(object : DefaultLifecycleObserver {
-                    override fun onCreate(owner: LifecycleOwner) {
-                        navHostFragment.navController.apply { setGraph(R.navigation.nav_graph) }
-                            .also {
-                                navController = it
-                            }
-                    }
-                })
-            }
+            val navHostFragment = NavHostFragment()
+            supportFragmentManager.beginTransaction()
+                .add(R.id.navHostFragment, navHostFragment)
+                .commit()
+            navHostFragment.lifecycle.addObserver(object : DefaultLifecycleObserver {
+                override fun onCreate(owner: LifecycleOwner) {
+                    navHostFragment.navController.apply { setGraph(R.navigation.nav_graph) }
+                        .also {
+                            navController = it
+                        }
+                }
+            })
         }
     }
 }

@@ -22,9 +22,6 @@ data class AuthRequest(
 
     enum class Platform {
         @Json(name = "android")
-        Android,
-
-        @Json(name = "ios")
-        iOS
+        Android
     }
 }
