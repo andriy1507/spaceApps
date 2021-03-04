@@ -84,9 +84,9 @@ class SpaceAppsMainActivity : AppCompatActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, true)
     }
 
-    private fun isCurrentDestination(@IdRes destId: Int, action: (() -> Unit)? = null): Boolean {
+    private fun isCurrentDestination(@IdRes destId: Int, otherAction: (() -> Unit)? = null): Boolean {
         val isCurrent = navController?.currentDestination?.id == destId
-        if (isCurrent) action?.invoke()
+        if (!isCurrent) otherAction?.invoke()
         return isCurrent
     }
 

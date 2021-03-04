@@ -45,8 +45,11 @@ class GeolocationViewModel @Inject constructor(
                 }
 
                 override fun onLocationAvailability(availability: LocationAvailability) {
-                    if (availability.isLocationAvailable) events.postValue(LocationAvailable)
-                    else events.postValue(LocationUnavailable)
+                    if (availability.isLocationAvailable) {
+                        events.postValue(LocationAvailable)
+                    } else {
+                        events.postValue(LocationUnavailable)
+                    }
                 }
             },
             Looper.getMainLooper()

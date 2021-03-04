@@ -133,8 +133,8 @@ dependencies {
     implementation("com.jakewharton.timber:timber:4.7.1")
 //    Google play services
     implementation("com.google.android.gms:play-services-location:18.0.0")
-    implementation("com.google.android.gms:play-services-maps:17.0.0")
     implementation("com.google.android.gms:play-services-auth:19.0.0")
+    implementation("com.google.android.gms:play-services-maps:17.0.0")
 //    AndroidX
     implementation("androidx.core:core-ktx:1.3.2")
     implementation("androidx.appcompat:appcompat:1.2.0")
