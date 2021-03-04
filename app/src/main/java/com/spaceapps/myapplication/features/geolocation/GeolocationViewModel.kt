@@ -25,7 +25,7 @@ class GeolocationViewModel @Inject constructor(
 
     @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION)
     fun trackLocation() {
-        val request = LocationRequest().apply {
+        val request = LocationRequest.create().apply {
             fastestInterval = 1500
             interval = 3000
             priority = PRIORITY_HIGH_ACCURACY
