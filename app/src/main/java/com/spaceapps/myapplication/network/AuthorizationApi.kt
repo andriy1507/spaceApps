@@ -13,7 +13,7 @@ interface AuthorizationApi {
     @POST("/authorization/sign-up")
     suspend fun signUp(@Body request: AuthRequest): AuthTokenResponse
 
-    @PUT("/authorization/fcm-token/{token}")
+    @PUT("/authorization/device")
     suspend fun sendFcmToken(@Body device: Device)
 
     @GET("/authorization/refresh-token")
