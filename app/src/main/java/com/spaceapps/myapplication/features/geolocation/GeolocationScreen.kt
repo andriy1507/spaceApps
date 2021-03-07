@@ -8,10 +8,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -19,13 +21,16 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.spaceapps.myapplication.R
 import com.spaceapps.myapplication.ui.ACTION_BAR_SIZE
+import com.spaceapps.myapplication.ui.SPACING_1
 import com.spaceapps.myapplication.ui.SPACING_16
 import com.spaceapps.myapplication.ui.SPACING_8
 import com.spaceapps.myapplication.ui.views.GoogleMap
+import com.spaceapps.myapplication.utils.LocalResources
 import com.spaceapps.myapplication.utils.calculateRectangularCoordinates
 import com.spaceapps.myapplication.utils.latitudeString
 import com.spaceapps.myapplication.utils.longitudeString
@@ -33,12 +38,14 @@ import dev.chrisbanes.accompanist.insets.LocalWindowInsets
 import dev.chrisbanes.accompanist.insets.statusBarsPadding
 import dev.chrisbanes.accompanist.insets.toPaddingValues
 
+private const val MOCK_PROVIDER = "MOCK_PROVIDER"
+
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun GeolocationScreen(fragmentManager: FragmentManager) {
     val viewModel = viewModel<GeolocationViewModel>()
-    val location = viewModel.lastLocation.observeAsState(null)
-    val events = viewModel.events.observeAsState(InitState)
+    val location by viewModel.lastLocation.observeAsState(Location(MOCK_PROVIDER))
+    val events by viewModel.events.observeAsState(InitState)
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -46,25 +53,32 @@ fun GeolocationScreen(fragmentManager: FragmentManager) {
             .statusBarsPadding()
             .padding(horizontal = SPACING_16.dp)
     ) {
-        val loc = location.value
-        if (loc == null) {
+        if (location.provider == MOCK_PROVIDER) {
             CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
         } else {
             Column(modifier = Modifier.fillMaxSize()) {
-                GeoCoordinatesCard(loc)
-                RectCoordinatesCard(loc)
-                AnimatedVisibility(visible = events.value == LocationUnavailable) {
+                GeoCoordinatesCard(location!!)
+                RectCoordinatesCard(location!!)
+                AnimatedVisibility(visible = events == LocationUnavailable) {
                     LocationUnavailable()
                 }
-
+                val density = LocalResources.current.displayMetrics.density
+                val circleStrokeColor = MaterialTheme.colors.primary.copy(alpha = .85f).toArgb()
+                val circleFillColor = MaterialTheme.colors.primary.copy(alpha = .25f).toArgb()
                 GoogleMap(
                     manager = fragmentManager,
                     onMapLoaded = {
-                        val latLng = LatLng(loc.latitude, loc.longitude)
+                        val latLng = LatLng(location.latitude, location.longitude)
                         val marker = MarkerOptions().position(latLng)
+                        val circle = CircleOptions().center(latLng)
+                            .strokeColor(circleStrokeColor)
+                            .strokeWidth(density * SPACING_1)
+                            .fillColor(circleFillColor)
+                            .radius(location.accuracy.toDouble())
                         it.clear()
+                        it.addCircle(circle)
                         it.addMarker(marker)
-                        val accuracy = loc.accuracy
+                        val accuracy = location.accuracy
                         val zoom = when {
                             accuracy < 200 -> 17.5f
                             else -> 15f
