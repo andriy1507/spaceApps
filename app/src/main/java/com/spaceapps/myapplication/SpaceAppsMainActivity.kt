@@ -166,7 +166,7 @@ class SpaceAppsMainActivity : AppCompatActivity() {
             navHostFragment.lifecycle.addObserver(object : DefaultLifecycleObserver {
                 override fun onCreate(owner: LifecycleOwner) {
                     navController = navHostFragment.navController
-                    navController?.apply { setGraph(R.navigation.nav_graph) }
+                    navController?.setGraph(R.navigation.nav_graph)
                 }
             })
         }

@@ -77,33 +77,34 @@ fun ChatBottomBar(
         end = SPACING_16.dp,
         bottom = SPACING_8.dp
     ),
-) {
-    OutlinedTextField(
-        modifier = Modifier
-            .fillMaxSize()
-            .navigationBarsPadding()
-            .imePadding(),
-        trailingIcon = {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_send),
-                contentDescription = null,
-                modifier = Modifier.clickable(onClick = onSendButtonClicked)
+    content = {
+        OutlinedTextField(
+            modifier = Modifier
+                .fillMaxSize()
+                .navigationBarsPadding()
+                .imePadding(),
+            trailingIcon = {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_send),
+                    contentDescription = null,
+                    modifier = Modifier.clickable(onClick = onSendButtonClicked)
+                )
+            },
+            value = chatMessage,
+            onValueChange = onChatMessageEntered,
+            keyboardActions = KeyboardActions(onSend = { onSendButtonClicked() }),
+            keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.Sentences,
+                imeAction = ImeAction.Send
             )
-        },
-        value = chatMessage,
-        onValueChange = onChatMessageEntered,
-        keyboardActions = KeyboardActions(onSend = { onSendButtonClicked() }),
-        keyboardOptions = KeyboardOptions(
-            capitalization = KeyboardCapitalization.Sentences,
-            imeAction = ImeAction.Send
         )
-    )
-}
+    }
+)
 
 @Composable
 fun ChatMessageItem() = Row(modifier = Modifier.fillMaxWidth()) {
     Text(
-        text = LoremIpsum(20).values.joinToString(),
+        text = LoremIpsum().values.joinToString(),
         modifier = Modifier
             .fillMaxWidth()
             .background(color = MaterialTheme.colors.primary)
