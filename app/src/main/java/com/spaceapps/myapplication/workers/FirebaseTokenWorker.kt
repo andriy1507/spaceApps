@@ -6,8 +6,8 @@ import androidx.work.CoroutineWorker
 import androidx.work.Data
 import androidx.work.WorkerParameters
 import com.spaceapps.myapplication.local.AuthTokenStorage
-import com.spaceapps.myapplication.models.AuthRequest.*
-import com.spaceapps.myapplication.models.AuthRequest.Platform.*
+import com.spaceapps.myapplication.models.DeviceDto
+import com.spaceapps.myapplication.models.DeviceDto.Platform.Android
 import com.spaceapps.myapplication.network.AuthorizationApi
 import com.spaceapps.myapplication.utils.Success
 import com.spaceapps.myapplication.utils.request
@@ -25,11 +25,11 @@ class FirebaseTokenWorker @AssistedInject constructor(
         authTokenStorage.getAuthToken() ?: return Result.failure()
         val token = inputData.getString(TOKEN_KEY)
         token ?: return Result.failure()
-        val device = Device(
+        val device = DeviceDto(
             token = token,
             platform = Android
         )
-        val response = request { api.sendFcmToken(device = device) }
+        val response = request { api.addDevice(device = device) }
         return if (response is Success) Result.success() else Result.retry()
     }
 

@@ -4,8 +4,8 @@ import com.google.android.gms.tasks.Tasks
 import com.google.firebase.messaging.FirebaseMessaging
 import com.spaceapps.myapplication.local.AuthTokenStorage
 import com.spaceapps.myapplication.models.AuthRequest
-import com.spaceapps.myapplication.models.AuthRequest.*
-import com.spaceapps.myapplication.models.AuthRequest.Platform.*
+import com.spaceapps.myapplication.models.DeviceDto
+import com.spaceapps.myapplication.models.DeviceDto.Platform.Android
 import com.spaceapps.myapplication.network.AuthorizationApi
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -20,7 +20,7 @@ class AuthRepository @Inject constructor(
         val request = AuthRequest(
             email = email,
             password = password,
-            device = Device(
+            device = DeviceDto(
                 token = Tasks.await(FirebaseMessaging.getInstance().token),
                 platform = Android
             )
@@ -34,7 +34,7 @@ class AuthRepository @Inject constructor(
         val request = AuthRequest(
             email = email,
             password = password,
-            device = Device(
+            device = DeviceDto(
                 token = Tasks.await(FirebaseMessaging.getInstance().token),
                 platform = Android
             )
