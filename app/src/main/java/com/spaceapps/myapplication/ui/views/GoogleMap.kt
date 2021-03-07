@@ -28,9 +28,7 @@ fun GoogleMap(
         },
         modifier = modifier
     ) {
-        (
-            manager.findFragmentById(R.id.googleMapFragment)
-                as? SupportMapFragment
-            )?.getMapAsync(onMapLoaded)
+        (manager.findFragmentById(R.id.googleMapFragment) as? SupportMapFragment)
+            ?.getMapAsync(onMapLoaded)
     }
 }
