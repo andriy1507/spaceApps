@@ -20,4 +20,12 @@
         android:id="@+id/settingsScreen"
         android:name="com.spaceapps.myapplication.features.settings.SettingsFragment" />
 
+    <fragment
+        android:id="@+id/authScreen"
+        android:name="com.spaceapps.myapplication.features.auth.AuthFragment" />
+
+    <fragment
+        android:id="@+id/chatScreen"
+        android:name="com.spaceapps.myapplication.features.chat.ChatFragment" />
+
 </navigation>

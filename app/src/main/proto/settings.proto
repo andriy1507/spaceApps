@@ -4,5 +4,9 @@ option java_package = "com.spaceapps.myapplication";
 option java_multiple_files = true;
 
 message Settings {
-    string language = 1;
+  Language language = 1;
+  enum Language {
+    English = 0;
+    Ukrainian = 1;
+  }
 }

@@ -114,7 +114,7 @@ dependencies {
     implementation("dev.chrisbanes.accompanist:accompanist-coil:$accompanist_version")
     implementation("dev.chrisbanes.accompanist:accompanist-insets:$accompanist_version")
 //    Coroutines
-    val coroutines_version = "1.4.2"
+    val coroutines_version = "1.4.3"
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version")
 //    Retrofit

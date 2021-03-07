@@ -1,4 +1,4 @@
-package com.spaceapps.myapplication.features.settings
+package com.spaceapps.myapplication.features.auth
 
 import androidx.compose.runtime.Composable
 import androidx.fragment.app.viewModels
@@ -6,10 +6,10 @@ import com.spaceapps.myapplication.utils.ComposableFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class SettingsFragment : ComposableFragment() {
+class AuthFragment : ComposableFragment() {
 
-    private val vm by viewModels<SettingsViewModel>()
+    private val vm by viewModels<AuthViewModel>()
 
     @Composable
-    override fun Content() = SettingsScreen()
+    override fun Content() = AuthScreen()
 }

@@ -13,7 +13,7 @@ class SettingsStorage @Inject constructor(
 ) {
     suspend fun getLanguage() = dataStore.data.firstOrNull()?.language ?: ENGLISH
 
-    suspend fun setLanguage(language: String) = dataStore.updateData {
+    suspend fun setLanguage(language: Settings.Language) = dataStore.updateData {
         it.toBuilder()
             .setLanguage(language)
             .build()

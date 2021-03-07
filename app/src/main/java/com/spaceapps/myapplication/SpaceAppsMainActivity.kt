@@ -81,10 +81,13 @@ class SpaceAppsMainActivity : AppCompatActivity() {
     }
 
     private fun setupEdgeToEdge() {
-        WindowCompat.setDecorFitsSystemWindows(window, true)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
     }
 
-    private fun isCurrentDestination(@IdRes destId: Int, otherAction: (() -> Unit)? = null): Boolean {
+    private fun isCurrentDestination(
+        @IdRes destId: Int,
+        otherAction: (() -> Unit)? = null
+    ): Boolean {
         val isCurrent = navController?.currentDestination?.id == destId
         if (!isCurrent) otherAction?.invoke()
         return isCurrent
@@ -162,10 +165,8 @@ class SpaceAppsMainActivity : AppCompatActivity() {
                 .commit()
             navHostFragment.lifecycle.addObserver(object : DefaultLifecycleObserver {
                 override fun onCreate(owner: LifecycleOwner) {
-                    navHostFragment.navController.apply { setGraph(R.navigation.nav_graph) }
-                        .also {
-                            navController = it
-                        }
+                    navController = navHostFragment.navController
+                    navController?.apply { setGraph(R.navigation.nav_graph) }
                 }
             })
         }
