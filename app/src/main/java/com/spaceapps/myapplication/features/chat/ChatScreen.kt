@@ -19,7 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
 import com.spaceapps.myapplication.R
-import com.spaceapps.myapplication.models.ChatMessage
+import com.spaceapps.myapplication.models.remote.chat.ChatMessage
 import com.spaceapps.myapplication.ui.SPACING_16
 import com.spaceapps.myapplication.ui.SPACING_8
 import com.spaceapps.myapplication.ui.SpaceAppsTheme

@@ -30,12 +30,4 @@ object RoomModule {
             .setQueryExecutor(executor)
             .build()
     }
-
-    @Provides
-    @Singleton
-    fun providePostsDao(db: SpaceAppsDatabase) = db.getPostsDao()
-
-    @Provides
-    @Singleton
-    fun provideCommentsDao(db: SpaceAppsDatabase) = db.getCommentsDao()
 }

@@ -1,4 +1,4 @@
-package com.spaceapps.myapplication.models
+package com.spaceapps.myapplication.models.remote.auth
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass

@@ -3,7 +3,7 @@ package com.spaceapps.myapplication.network
 import com.spaceapps.myapplication.AUTH_HEADER
 import com.spaceapps.myapplication.AUTH_HEADER_PREFIX
 import com.spaceapps.myapplication.local.AuthTokenStorage
-import com.spaceapps.myapplication.models.RefreshTokenRequest
+import com.spaceapps.myapplication.models.remote.auth.RefreshTokenRequest
 import com.spaceapps.myapplication.utils.request
 import dagger.Lazy
 import kotlinx.coroutines.runBlocking

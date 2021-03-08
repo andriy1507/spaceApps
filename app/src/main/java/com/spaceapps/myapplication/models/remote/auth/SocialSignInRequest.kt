@@ -1,4 +1,4 @@
-package com.spaceapps.myapplication.models
+package com.spaceapps.myapplication.models.remote.auth
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -8,5 +8,5 @@ class SocialSignInRequest(
     @Json(name = "authToken")
     val authToken: String,
     @Json(name = "device")
-    val device: DeviceDto
+    val device: DeviceRequest
 )
