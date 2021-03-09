@@ -33,7 +33,10 @@ class AuthViewModel @Inject constructor(
         request { authRepository.signUp(email = email.value!!, password = password.value!!) }
     }
 
-    fun onAuthButtonClick() = if (state.value == SignInState) signIn() else signUp()
+    fun onAuthButtonClick() = when (state.value) {
+        SignInState -> signIn()
+        else -> signUp()
+    }
 
     private suspend fun isPasswordValid(): Boolean {
         val isValid = password.value.isPassword

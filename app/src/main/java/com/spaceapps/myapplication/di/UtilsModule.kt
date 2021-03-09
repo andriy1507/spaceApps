@@ -2,6 +2,7 @@ package com.spaceapps.myapplication.di
 
 import android.content.Context
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.spaceapps.myapplication.utils.MoshiConverters
 import com.squareup.moshi.Moshi
 import dagger.Module
@@ -21,6 +22,6 @@ object UtilsModule {
 
     @Provides
     @Singleton
-    fun provideLocationProviderClient(@ApplicationContext context: Context) =
-        FusedLocationProviderClient(context)
+    fun provideLocationProviderClient(@ApplicationContext context: Context): FusedLocationProviderClient =
+        LocationServices.getFusedLocationProviderClient(context)
 }
