@@ -16,3 +16,7 @@ val orangeDark = Color(0xffe64a19)
 val surfaceDark = Color(0xff181818)
 val onSurfaceDark = Color(0xffdedede)
 val backgroundDark = Color(0xff121212)
+
+val googleColor = Color(0xFFF34A38)
+val facebookColor = Color(0xFF395181)
+val appleColor = Color(0xFF999999)

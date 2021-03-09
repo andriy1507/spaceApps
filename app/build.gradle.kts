@@ -8,6 +8,7 @@ plugins {
     id("com.android.application")
     kotlin("android")
     kotlin("kapt")
+    id("kotlin-parcelize")
     id("dagger.hilt.android.plugin")
     id("com.google.firebase.crashlytics")
     id("com.google.gms.google-services")
@@ -194,6 +195,9 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:$datastore_version")
     implementation("com.google.protobuf:protobuf-javalite:3.15.1")
 
+//    Facebook SDK
+    implementation("com.facebook.android:facebook-android-sdk:9.0.0")
+
 //    Testing
     testImplementation("junit:junit:4.13.2")
     testImplementation("com.google.truth:truth:1.1.2")
@@ -224,9 +228,13 @@ dependencies {
     androidTestImplementation("com.google.truth:truth:1.1.2")
     androidTestImplementation("com.google.truth:truth:1.1.2")
 //    androidTestImplementation("androidx.compose.ui:ui-test-junit4:$compose_version")
+//    Venom
+    val venomVersion = "0.3.1"
+    debugImplementation("com.github.YarikSOffice.Venom:venom:$venomVersion")
+    releaseImplementation("com.github.YarikSOffice.Venom:venom-no-op:$venomVersion")
 
-    debugImplementation("com.github.YarikSOffice.Venom:venom:0.3.1")
-    releaseImplementation("com.github.YarikSOffice.Venom:venom-no-op:0.3.1")
+    debugImplementation("androidx.compose.ui:ui-tooling:$composeVersion")
+    debugImplementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
 }
 
 // Generates the java Protobuf-lite code for the Protobufs in this project.

@@ -5,8 +5,8 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 class SocialSignInRequest(
-    @Json(name = "authToken")
-    val authToken: String,
+    @Json(name = "accessToken")
+    val accessToken: String,
     @Json(name = "device")
     val device: DeviceRequest
 )

@@ -6,6 +6,7 @@ import com.spaceapps.myapplication.local.AuthTokenStorage
 import com.spaceapps.myapplication.models.remote.auth.AuthRequest
 import com.spaceapps.myapplication.models.remote.auth.DeviceRequest
 import com.spaceapps.myapplication.models.remote.auth.DeviceRequest.Platform.Android
+import com.spaceapps.myapplication.models.remote.auth.SocialSignInRequest
 import com.spaceapps.myapplication.network.AuthorizationApi
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -26,7 +27,7 @@ class AuthRepository @Inject constructor(
             )
         )
         api.signIn(request = request).also {
-            storage.storeTokens(it.authToken, it.refreshToken)
+            storage.storeTokens(authToken = it.authToken, refreshToken = it.refreshToken)
         }
     }
 
@@ -40,7 +41,46 @@ class AuthRepository @Inject constructor(
             )
         )
         api.signUp(request = request).also {
-            storage.storeTokens(it.authToken, it.refreshToken)
+            storage.storeTokens(authToken = it.authToken, refreshToken = it.refreshToken)
+        }
+    }
+
+    suspend fun signInWithGoogle(accessToken: String) {
+        val request = SocialSignInRequest(
+            accessToken = accessToken,
+            device = DeviceRequest(
+                token = Tasks.await(FirebaseMessaging.getInstance().token),
+                platform = Android
+            )
+        )
+        api.googleSignIn(request = request).also {
+            storage.storeTokens(authToken = it.authToken, refreshToken = it.refreshToken)
+        }
+    }
+
+    suspend fun signInWithFacebook(accessToken: String) {
+        val request = SocialSignInRequest(
+            accessToken = accessToken,
+            device = DeviceRequest(
+                token = Tasks.await(FirebaseMessaging.getInstance().token),
+                platform = Android
+            )
+        )
+        api.facebookSignIn(request = request).also {
+            storage.storeTokens(authToken = it.authToken, refreshToken = it.refreshToken)
+        }
+    }
+
+    suspend fun signInWithApple(accessToken: String) {
+        val request = SocialSignInRequest(
+            accessToken = accessToken,
+            device = DeviceRequest(
+                token = Tasks.await(FirebaseMessaging.getInstance().token),
+                platform = Android
+            )
+        )
+        api.appleSignIn(request = request).also {
+            storage.storeTokens(authToken = it.authToken, refreshToken = it.refreshToken)
         }
     }
 

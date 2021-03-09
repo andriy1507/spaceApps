@@ -2,11 +2,16 @@ package com.spaceapps.myapplication
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -19,6 +24,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import com.spaceapps.myapplication.local.AuthTokenStorage
 import com.spaceapps.myapplication.local.StorageManager
 import com.spaceapps.myapplication.ui.ACTION_BAR_SIZE
 import com.spaceapps.myapplication.ui.SpaceAppsTheme
@@ -29,6 +35,7 @@ import dev.chrisbanes.accompanist.insets.LocalWindowInsets
 import dev.chrisbanes.accompanist.insets.navigationBarsHeight
 import dev.chrisbanes.accompanist.insets.toPaddingValues
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -41,9 +48,16 @@ class SpaceAppsMainActivity : AppCompatActivity() {
     lateinit var authDispatcher: AuthDispatcher
 
     @Inject
+    lateinit var authTokenStorage: AuthTokenStorage
+
+    @Inject
     lateinit var storageManager: StorageManager
 
     private var navController: NavController? = null
+
+    private val navHostFragment = NavHostFragment()
+
+    private val vm by viewModels<MainActivityViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,18 +100,24 @@ class SpaceAppsMainActivity : AppCompatActivity() {
 
     private fun isCurrentDestination(
         @IdRes destId: Int,
-        otherAction: (() -> Unit)? = null
+        other: (() -> Unit)? = null
     ): Boolean {
         val isCurrent = navController?.currentDestination?.id == destId
-        if (!isCurrent) otherAction?.invoke()
+        if (!isCurrent) other?.invoke()
         return isCurrent
     }
 
+    @OptIn(ExperimentalAnimationApi::class)
     @Composable
     fun MainActivityScreen() {
+        val bottomBarVisible by vm.bottomBarVisible.observeAsState()
         Scaffold(
             modifier = Modifier.fillMaxSize(),
-            bottomBar = { ApplicationBottomBar() },
+            bottomBar = {
+                AnimatedVisibility(visible = bottomBarVisible == true, initiallyVisible = false) {
+                    ApplicationBottomBar()
+                }
+            },
             content = { NavView() }
         )
     }
@@ -157,18 +177,35 @@ class SpaceAppsMainActivity : AppCompatActivity() {
     @Composable
     private fun NavView() {
         AndroidView(
-            factory = { FragmentContainerView(it).apply { id = R.id.navHostFragment } }
-        ) {
-            val navHostFragment = NavHostFragment()
-            supportFragmentManager.beginTransaction()
-                .add(R.id.navHostFragment, navHostFragment)
-                .commit()
-            navHostFragment.lifecycle.addObserver(object : DefaultLifecycleObserver {
-                override fun onCreate(owner: LifecycleOwner) {
-                    navController = navHostFragment.navController
-                    navController?.setGraph(R.navigation.nav_graph)
-                }
-            })
-        }
+            factory = {
+                val container = FragmentContainerView(it).apply { id = R.id.navHostFragment }
+                supportFragmentManager.beginTransaction()
+                    .add(R.id.navHostFragment, navHostFragment)
+                    .commit()
+                navHostFragment.lifecycle.addObserver(object : DefaultLifecycleObserver {
+                    override fun onCreate(owner: LifecycleOwner) {
+                        navController = navHostFragment.navController
+                        val graph =
+                            navHostFragment.navController.navInflater.inflate(R.navigation.nav_graph)
+                        graph.startDestination = runBlocking {
+                            if (authTokenStorage.getAuthToken() == null) {
+                                R.id.authScreen
+                            } else {
+                                R.id.geolocationScreen
+                            }
+                        }
+                        navController?.graph = graph
+                        navController?.addOnDestinationChangedListener { _, destination, _ ->
+                            when (destination.id) {
+                                R.id.authScreen,
+                                R.id.chatScreen -> vm.hideBottomBar()
+                                else -> vm.showBottomBar()
+                            }
+                        }
+                    }
+                })
+                container
+            }
+        )
     }
 }
