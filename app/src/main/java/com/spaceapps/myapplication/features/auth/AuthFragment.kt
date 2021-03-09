@@ -14,6 +14,10 @@ import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.OAuthProvider
+import com.google.firebase.auth.zze
+
 import com.spaceapps.myapplication.R
 import com.spaceapps.myapplication.utils.ComposableFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,7 +32,9 @@ class AuthFragment : ComposableFragment() {
     private val fbCallbackManager by lazy { CallbackManager.Factory.create() }
     private val googleSignIn = registerForActivityResult(StartActivityForResult()) { result ->
         GoogleSignIn.getSignedInAccountFromIntent(result.data).addOnSuccessListener { account ->
-            vm.signInWithGoogle(accessToken = account.idToken.orEmpty())
+            val token = account.idToken.orEmpty()
+            Timber.d("Login successful. Token: $token")
+            vm.signInWithGoogle(accessToken = token)
         }.addOnFailureListener { e -> Timber.e(e) }
     }
 
@@ -62,7 +68,9 @@ class AuthFragment : ComposableFragment() {
             fbCallbackManager,
             object : FacebookCallback<LoginResult> {
                 override fun onSuccess(result: LoginResult) {
-                    vm.signInWithFacebook(accessToken = result.accessToken.token)
+                    val token = result.accessToken.token
+                    Timber.d("Login successful. Token: $token")
+                    vm.signInWithFacebook(accessToken = token)
                 }
 
                 override fun onCancel() {
@@ -78,7 +86,15 @@ class AuthFragment : ComposableFragment() {
     }
 
     private fun signInWithApple() {
-        vm.signInWithApple(accessToken = "apple access token")
+        val provider = OAuthProvider.newBuilder("apple.com")
+            .apply { scopes = listOf("email, name") }.build()
+        FirebaseAuth.getInstance().startActivityForSignInWithProvider(requireActivity(), provider)
+            .addOnSuccessListener {
+                val token = (it.credential as zze).idToken
+                Timber.d("Login successful. Token: $token")
+                vm.signInWithApple(accessToken = token)
+            }
+            .addOnFailureListener { Timber.e(it) }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

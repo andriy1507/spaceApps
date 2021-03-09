@@ -34,6 +34,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.accompanist.insets.LocalWindowInsets
 import dev.chrisbanes.accompanist.insets.navigationBarsHeight
 import dev.chrisbanes.accompanist.insets.toPaddingValues
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
@@ -78,7 +79,7 @@ class SpaceAppsMainActivity : AppCompatActivity() {
         }
     }
 
-    private fun unauthorize() = lifecycleScope.launch {
+    private fun unauthorize() = lifecycleScope.launch(Dispatchers.IO) {
         storageManager.clear()
         restart()
     }
