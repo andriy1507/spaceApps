@@ -96,7 +96,7 @@ fun AuthScreen(vm: AuthViewModel) = Column(
             .padding(vertical = SPACING_16.dp)
     )
     SocialSignInButton(
-        onClick = vm::onFacebookSignInClick,
+        onClick = vm::onGoogleSignInClick,
         colors = ButtonDefaults.buttonColors(
             backgroundColor = googleColor,
             contentColor = Color.White
