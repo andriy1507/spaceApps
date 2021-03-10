@@ -10,9 +10,11 @@ data class DeviceRequest(
     @Json(name = "platform")
     val platform: Platform
 ) {
+    @JsonClass(generateAdapter = false)
     enum class Platform {
         @Json(name = "android")
         Android,
+
         @Json(name = "ios")
         Ios
     }
