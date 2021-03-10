@@ -1,9 +1,6 @@
 package com.spaceapps.myapplication.features.forgotPassword
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.OutlinedTextField
@@ -40,25 +37,30 @@ fun ForgotPasswordScreen() =
         val state by vm.state.observeAsState(EmailState)
         val event by vm.events.collectAsState(initial = InitEvent)
 
+        val textFieldModifier = Modifier.fillMaxWidth()
         when (state) {
             EmailState -> OutlinedTextField(
+                modifier = textFieldModifier,
                 value = email,
                 onValueChange = vm::onEmailEntered,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
             )
             TokenState -> OutlinedTextField(
+                modifier = textFieldModifier,
                 value = code,
                 onValueChange = vm::onTokenEntered,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
             PasswordState -> {
                 OutlinedTextField(
+                    modifier = textFieldModifier,
                     value = password,
                     onValueChange = vm::onPasswordEntered,
                     visualTransformation = PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
                 )
                 OutlinedTextField(
+                    modifier = textFieldModifier,
                     value = confirmPassword,
                     onValueChange = vm::onConfirmPasswordEntered,
                     visualTransformation = PasswordVisualTransformation(),
@@ -66,7 +68,12 @@ fun ForgotPasswordScreen() =
                 )
             }
         }
-        OutlinedButton(onClick = vm::onContinueClicked) {
+        OutlinedButton(
+            onClick = vm::onContinueClicked,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = SPACING_16.dp)
+        ) {
             Text(text = stringResource(R.string.Continue))
         }
     }

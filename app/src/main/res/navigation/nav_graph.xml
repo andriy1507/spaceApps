@@ -22,6 +22,9 @@
             android:id="@+id/goGeolocation"
             app:destination="@id/geolocationScreen"
             app:launchSingleTop="true" />
+        <action
+            android:id="@+id/goForgotPassword"
+            app:destination="@id/forgotPasswordScreen" />
     </fragment>
 
     <fragment

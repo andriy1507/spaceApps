@@ -181,7 +181,8 @@ class SpaceAppsMainActivity : AppCompatActivity() {
             factory = {
                 val container = FragmentContainerView(it).apply { id = R.id.navHostFragment }
                 supportFragmentManager.beginTransaction()
-                    .add(R.id.navHostFragment, navHostFragment)
+                    .replace(R.id.navHostFragment, navHostFragment)
+                    .setPrimaryNavigationFragment(navHostFragment)
                     .commit()
                 navHostFragment.lifecycle.addObserver(object : DefaultLifecycleObserver {
                     override fun onCreate(owner: LifecycleOwner) {
