@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/nav_graph.xml"
-    app:startDestination="@id/geolocationScreen">
-
-    <fragment
-        android:id="@+id/postsFragment"
-        android:name="com.spaceapps.myapplication.features.posts.PostsFragment" />
+    android:id="@+id/nav_graph.xml">
 
     <fragment
         android:id="@+id/geolocationScreen"
@@ -22,7 +17,12 @@
 
     <fragment
         android:id="@+id/authScreen"
-        android:name="com.spaceapps.myapplication.features.auth.AuthFragment" />
+        android:name="com.spaceapps.myapplication.features.auth.AuthFragment">
+        <action
+            android:id="@+id/goGeolocation"
+            app:destination="@id/geolocationScreen"
+            app:launchSingleTop="true" />
+    </fragment>
 
     <fragment
         android:id="@+id/chatScreen"

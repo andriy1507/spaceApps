@@ -1,4 +1,4 @@
-package com.spaceapps.myapplication.models
+package com.spaceapps.myapplication.models.remote
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -9,6 +9,8 @@ data class PaginationResponse<T>(
     val page: Int,
     @Json(name = "total")
     val total: Long,
-    @Json(name = "content")
-    val content: List<T>
+    @Json(name = "data")
+    val data: List<T>,
+    @Json(name = "isLast")
+    val isLast: Boolean
 )

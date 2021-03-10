@@ -16,8 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GeolocationViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
-    private val locationClient: FusedLocationProviderClient
+    private val locationClient: FusedLocationProviderClient,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     val lastLocation = savedStateHandle.getLiveData<Location>("location")

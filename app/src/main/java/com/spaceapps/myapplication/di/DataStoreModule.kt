@@ -12,15 +12,15 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-private const val PREFERENCES_DATA_STORE = "${BuildConfig.APPLICATION_ID}.PREFS_DATA_STORE"
-private const val SETTINGS_DATA_STORE = "${BuildConfig.APPLICATION_ID}.SETTINGS_DATA_STORE"
-
-private val Context.preferencesDataStore by preferencesDataStore(PREFERENCES_DATA_STORE)
-private val Context.settingsDataStore by dataStore(SETTINGS_DATA_STORE, SettingsSerializer)
-
 @Module
 @InstallIn(SingletonComponent::class)
 object DataStoreModule {
+
+    private const val PREFERENCES_DATA_STORE = "${BuildConfig.APPLICATION_ID}.PREFS_DATA_STORE"
+    private const val SETTINGS_DATA_STORE = "${BuildConfig.APPLICATION_ID}.SETTINGS_DATA_STORE"
+
+    private val Context.preferencesDataStore by preferencesDataStore(PREFERENCES_DATA_STORE)
+    private val Context.settingsDataStore by dataStore(SETTINGS_DATA_STORE, SettingsSerializer)
 
     @Provides
     @Singleton
