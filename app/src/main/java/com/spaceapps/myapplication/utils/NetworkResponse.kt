@@ -1,12 +1,14 @@
 package com.spaceapps.myapplication.utils
 
 import retrofit2.HttpException
+import timber.log.Timber
 import java.io.IOException
 
 inline fun <T> request(request: () -> T): NetworkResponse<T> {
     return try {
         Success(request())
     } catch (e: Exception) {
+        Timber.e(e)
         Error(e)
     }
 }
