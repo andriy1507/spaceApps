@@ -5,6 +5,7 @@ import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -121,6 +122,10 @@ fun AuthScreen(vm: AuthViewModel) = Column(
         ),
         icon = R.drawable.ic_apple,
         text = R.string.continue_with_apple_id
+    )
+    Text(
+        text = stringResource(R.string.forgot_password),
+        modifier = Modifier.clickable { vm.goForgotPassword() }
     )
 }
 

@@ -32,5 +32,7 @@
     <string name="facebook_app_id" translatable="false">1053051405183873</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb1053051405183873</string>
     <string name="log_out">Log Out</string>
+    <string name="Continue">Continue</string>
+    <string name="forgot_password">Forgot Password?</string>
 
 </resources>

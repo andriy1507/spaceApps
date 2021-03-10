@@ -97,4 +97,6 @@ class AuthViewModel @Inject constructor(
         events.emit(InputError(confirmPassword = message))
         return isValid
     }
+
+    fun goForgotPassword() = navDispatcher.emit { navigate(R.id.goForgotPassword) }
 }
