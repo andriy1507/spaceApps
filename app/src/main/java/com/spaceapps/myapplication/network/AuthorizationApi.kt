@@ -16,7 +16,7 @@ interface AuthorizationApi {
     @POST("/auth/add-device")
     suspend fun addDevice(@Body device: DeviceRequest)
 
-    @POST
+    @POST("/auth/log-out")
     suspend fun logOut(@Body device: DeviceRequest)
 
     @POST("/auth/refresh-token")
