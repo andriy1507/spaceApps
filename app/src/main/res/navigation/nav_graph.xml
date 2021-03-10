@@ -28,4 +28,8 @@
         android:id="@+id/chatScreen"
         android:name="com.spaceapps.myapplication.features.chat.ChatFragment" />
 
+    <fragment
+        android:id="@+id/forgotPasswordScreen"
+        android:name="com.spaceapps.myapplication.features.forgotPassword.ForgotPasswordFragment"/>
+
 </navigation>
