@@ -11,5 +11,5 @@ class SettingsFragment : ComposableFragment() {
     private val vm by viewModels<SettingsViewModel>()
 
     @Composable
-    override fun Content() = SettingsScreen()
+    override fun Content() = SettingsScreen(vm)
 }

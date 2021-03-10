@@ -4,6 +4,12 @@ import androidx.annotation.StringRes
 
 sealed class AuthScreenEvent
 object AuthInitialState : AuthScreenEvent()
-data class EmailError(@StringRes val msg: Int? = null) : AuthScreenEvent()
-data class PasswordError(@StringRes val msg: Int? = null) : AuthScreenEvent()
-data class ConfirmPasswordError(@StringRes val msg: Int? = null) : AuthScreenEvent()
+data class InputError(
+    @StringRes val email: Int? = null,
+    @StringRes val password: Int? = null,
+    @StringRes val confirmPassword: Int? = null,
+) : AuthScreenEvent()
+
+object SignInWithGoogle : AuthScreenEvent()
+object SignInWithFacebook : AuthScreenEvent()
+object SignInWithApple : AuthScreenEvent()
