@@ -3,10 +3,8 @@ package com.spaceapps.myapplication.repositories
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.messaging.FirebaseMessaging
 import com.spaceapps.myapplication.local.AuthTokenStorage
-import com.spaceapps.myapplication.models.remote.auth.AuthRequest
-import com.spaceapps.myapplication.models.remote.auth.DeviceRequest
+import com.spaceapps.myapplication.models.remote.auth.*
 import com.spaceapps.myapplication.models.remote.auth.DeviceRequest.Platform.Android
-import com.spaceapps.myapplication.models.remote.auth.SocialSignInRequest
 import com.spaceapps.myapplication.network.AuthorizationApi
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -82,6 +80,21 @@ class AuthRepository @Inject constructor(
         api.appleSignIn(request = request).also {
             storage.storeTokens(authToken = it.authToken, refreshToken = it.refreshToken)
         }
+    }
+
+    suspend fun sendResetToken(email: String) {
+        api.sendResetToken(request = SendResetTokenRequest(email = email))
+    }
+
+    suspend fun verifyResetToken(email: String, token: String) {
+        val request = VerifyTokenRequest(email = email, resetToken = token)
+        api.verifyResetToken(request = request)
+    }
+
+    suspend fun resetPassword(email: String, token: String, password: String) {
+        val request =
+            ResetPasswordRequest(email = email, resetToken = token, newPassword = password)
+        api.resetPassword(request = request)
     }
 
     suspend fun logOut() {

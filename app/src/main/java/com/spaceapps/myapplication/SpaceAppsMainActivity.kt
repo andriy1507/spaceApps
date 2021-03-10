@@ -189,16 +189,14 @@ class SpaceAppsMainActivity : AppCompatActivity() {
                         val graph =
                             navHostFragment.navController.navInflater.inflate(R.navigation.nav_graph)
                         graph.startDestination = runBlocking {
-                            if (authTokenStorage.getAuthToken() == null) {
-                                R.id.authScreen
-                            } else {
-                                R.id.geolocationScreen
-                            }
+                            authTokenStorage.getAuthToken()?.let { R.id.geolocationScreen }
+                                ?: R.id.authScreen
                         }
                         navController?.graph = graph
                         navController?.addOnDestinationChangedListener { _, destination, _ ->
                             when (destination.id) {
                                 R.id.authScreen,
+                                R.id.forgotPasswordScreen,
                                 R.id.chatScreen -> vm.hideBottomBar()
                                 else -> vm.showBottomBar()
                             }
