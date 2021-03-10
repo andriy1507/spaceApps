@@ -52,7 +52,7 @@ class ForgotPasswordViewModel @Inject constructor(
     }
 
     private fun resetPassword() = async {
-        if (isEmailValid() && isTokenValid() && isPasswordValid() && isConfirmPasswordValid()) {
+        if (isEmailValid() && isTokenValid() && isConfirmPasswordValid()) {
             request {
                 authRepository.resetPassword(
                     email = email.value!!,
@@ -76,7 +76,7 @@ class ForgotPasswordViewModel @Inject constructor(
     }
 
     private fun isConfirmPasswordValid(): Boolean {
-        return confirmPassword.value.isPassword && confirmPassword.value == password.value
+        return isPasswordValid() && confirmPassword.value == password.value
     }
 
     fun onContinueClicked(): Any = when (state.value) {
