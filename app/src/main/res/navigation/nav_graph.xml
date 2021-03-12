@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/nav_graph.xml">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph.xml"
+    tools:ignore="InvalidNavigation">
 
     <fragment
         android:id="@+id/geolocationScreen"
@@ -22,10 +24,17 @@
             android:id="@+id/goGeolocation"
             app:destination="@id/geolocationScreen"
             app:launchSingleTop="true" />
+        <action
+            android:id="@+id/goForgotPassword"
+            app:destination="@id/forgotPasswordScreen" />
     </fragment>
 
     <fragment
         android:id="@+id/chatScreen"
         android:name="com.spaceapps.myapplication.features.chat.ChatFragment" />
+
+    <fragment
+        android:id="@+id/forgotPasswordScreen"
+        android:name="com.spaceapps.myapplication.features.forgotPassword.ForgotPasswordFragment" />
 
 </navigation>

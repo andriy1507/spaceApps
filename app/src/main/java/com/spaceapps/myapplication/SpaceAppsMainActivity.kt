@@ -91,7 +91,7 @@ class SpaceAppsMainActivity : AppCompatActivity() {
 
     private suspend fun initNavigation() {
         lifecycleScope.launchWhenResumed {
-            for (event in NavDispatcher.events) navController?.event()
+            for (event in navDispatcher.events) navController?.event()
         }
     }
 
@@ -181,28 +181,30 @@ class SpaceAppsMainActivity : AppCompatActivity() {
             factory = {
                 val container = FragmentContainerView(it).apply { id = R.id.navHostFragment }
                 supportFragmentManager.beginTransaction()
-                    .add(R.id.navHostFragment, navHostFragment)
+                    .replace(R.id.navHostFragment, navHostFragment)
+                    .setPrimaryNavigationFragment(navHostFragment)
                     .commit()
                 navHostFragment.lifecycle.addObserver(object : DefaultLifecycleObserver {
                     override fun onCreate(owner: LifecycleOwner) {
-                        navController = navHostFragment.navController
-                        val graph =
-                            navHostFragment.navController.navInflater.inflate(R.navigation.nav_graph)
-                        graph.startDestination = runBlocking {
-                            if (authTokenStorage.getAuthToken() == null) {
-                                R.id.authScreen
-                            } else {
-                                R.id.geolocationScreen
+                        navHostFragment.navController.apply {
+                            val navGraph = navInflater.inflate(R.navigation.nav_graph)
+                            navGraph.startDestination = runBlocking {
+                                if (authTokenStorage.getAuthToken() == null) {
+                                    R.id.authScreen
+                                } else {
+                                    R.id.geolocationScreen
+                                }
                             }
-                        }
-                        navController?.graph = graph
-                        navController?.addOnDestinationChangedListener { _, destination, _ ->
-                            when (destination.id) {
-                                R.id.authScreen,
-                                R.id.chatScreen -> vm.hideBottomBar()
-                                else -> vm.showBottomBar()
+                            graph = navGraph
+                            addOnDestinationChangedListener { _, destination, _ ->
+                                when (destination.id) {
+                                    R.id.authScreen,
+                                    R.id.forgotPasswordScreen,
+                                    R.id.chatScreen -> vm.hideBottomBar()
+                                    else -> vm.showBottomBar()
+                                }
                             }
-                        }
+                        }.also { controller -> navController = controller }
                     }
                 })
                 container

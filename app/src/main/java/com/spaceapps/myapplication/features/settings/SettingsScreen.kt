@@ -31,5 +31,11 @@ fun SettingsScreen(vm: SettingsViewModel) = Box(
                 Text(text = stringResource(R.string.log_out))
             }
         }
+
+        item {
+            Button(onClick = vm::goChat) {
+                Text(text = stringResource(R.string.chat))
+            }
+        }
     }
 }

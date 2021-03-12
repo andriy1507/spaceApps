@@ -7,6 +7,7 @@ import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.graphics.drawable.toBitmap
+import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import coil.ImageLoader
@@ -35,7 +36,8 @@ class SpaceAppsFcmService : FirebaseMessagingService() {
         val request = OneTimeWorkRequestBuilder<FirebaseTokenWorker>()
             .setInputData(FirebaseTokenWorker.buildData(token))
             .build()
-        WorkManager.getInstance(this@SpaceAppsFcmService).enqueue(request)
+        WorkManager.getInstance(this@SpaceAppsFcmService)
+            .enqueueUniqueWork(FCM_TOKEN_WORK, ExistingWorkPolicy.REPLACE, request)
     }
 
     private fun buildCustomNotification(
@@ -72,5 +74,9 @@ class SpaceAppsFcmService : FirebaseMessagingService() {
         )
         val notification = buildCustomNotification(message.data, intent)
         NotificationManagerCompat.from(this).notify(Random.nextInt(), notification)
+    }
+
+    companion object {
+        const val FCM_TOKEN_WORK = "fcmTokenWork"
     }
 }

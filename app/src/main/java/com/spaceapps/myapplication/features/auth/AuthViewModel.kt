@@ -97,4 +97,10 @@ class AuthViewModel @Inject constructor(
         events.emit(InputError(confirmPassword = message))
         return isValid
     }
+
+    fun toggleState() {
+        state.postValue(if (state.value == SignInState) SignUpState else SignInState)
+    }
+
+    fun goForgotPassword() = navDispatcher.emit { navigate(R.id.goForgotPassword) }
 }
