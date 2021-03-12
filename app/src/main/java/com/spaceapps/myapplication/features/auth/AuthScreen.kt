@@ -14,17 +14,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalTextInputService
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.spaceapps.myapplication.R
 import com.spaceapps.myapplication.ui.*
+import dev.chrisbanes.accompanist.insets.navigationBarsPadding
+import dev.chrisbanes.accompanist.insets.statusBarsPadding
 
 @OptIn(ExperimentalAnimationApi::class)
 @Suppress("LongMethod")
@@ -33,14 +42,26 @@ fun AuthScreen(vm: AuthViewModel) = Column(
     modifier = Modifier
         .fillMaxSize()
         .background(color = MaterialTheme.colors.background)
-        .padding(horizontal = SPACING_16.dp),
-    verticalArrangement = Arrangement.Center
+        .padding(horizontal = SPACING_16.dp)
+        .statusBarsPadding()
+        .navigationBarsPadding()
 ) {
     val events by vm.events.collectAsState(initial = AuthInitialState)
     val email by vm.email.observeAsState("")
     val password by vm.password.observeAsState("")
     val confirmPassword by vm.confirmPassword.observeAsState("")
     val state by vm.state.observeAsState(SignInState)
+    val passwordFocus = remember { FocusRequester() }
+    val confirmPasswordFocus = remember { FocusRequester() }
+    val inputService = LocalTextInputService.current
+    Spacer(modifier = Modifier.weight(1f))
+    Text(
+        modifier = Modifier
+            .align(Alignment.CenterHorizontally),
+        text = stringResource(if (state == SignInState) R.string.sign_in else R.string.sign_up),
+        style = TextStyle(fontSize = FONT_36.sp, fontWeight = FontWeight.Bold)
+    )
+    Spacer(modifier = Modifier.weight(1f))
     OutlinedTextField(
         modifier = Modifier.fillMaxWidth(),
         value = email,
@@ -51,10 +72,13 @@ fun AuthScreen(vm: AuthViewModel) = Column(
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Next,
             keyboardType = KeyboardType.Email
-        )
+        ),
+        keyboardActions = KeyboardActions(onNext = { passwordFocus.requestFocus() })
     )
     OutlinedTextField(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .focusRequester(passwordFocus),
         value = password,
         onValueChange = vm::onPasswordEntered,
         label = { Text(text = stringResource(R.string.password)) },
@@ -65,11 +89,20 @@ fun AuthScreen(vm: AuthViewModel) = Column(
             imeAction = if (state == SignInState) ImeAction.Done else ImeAction.Next,
             keyboardType = KeyboardType.Password
         ),
-        keyboardActions = KeyboardActions(onDone = { vm.onAuthButtonClick() })
+        keyboardActions = KeyboardActions(
+            onDone = {
+                passwordFocus.freeFocus()
+                inputService?.hideSoftwareKeyboard()
+                vm.onAuthButtonClick()
+            },
+            onNext = { confirmPasswordFocus.requestFocus() }
+        )
     )
     AnimatedVisibility(visible = state == SignUpState) {
         OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .focusRequester(confirmPasswordFocus),
             value = confirmPassword,
             onValueChange = vm::onConfirmPasswordEntered,
             label = { Text(text = stringResource(R.string.confirm_password)) },
@@ -80,7 +113,13 @@ fun AuthScreen(vm: AuthViewModel) = Column(
                 imeAction = ImeAction.Done,
                 keyboardType = KeyboardType.Password
             ),
-            keyboardActions = KeyboardActions(onDone = { vm.onAuthButtonClick() })
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    confirmPasswordFocus.freeFocus()
+                    inputService?.hideSoftwareKeyboard()
+                    vm.onAuthButtonClick()
+                }
+            )
         )
     }
     OutlinedButton(
@@ -89,13 +128,33 @@ fun AuthScreen(vm: AuthViewModel) = Column(
             .padding(top = SPACING_16.dp)
             .height(SPACING_48.dp)
             .fillMaxWidth()
-    ) { Text(text = stringResource(R.string.sign_in)) }
-    Text(
-        text = "- OR -",
+    ) {
+        Text(
+            text = stringResource(if (state == SignInState) R.string.sign_in else R.string.sign_up)
+        )
+    }
+    Row(
         modifier = Modifier
-            .align(Alignment.CenterHorizontally)
+            .fillMaxWidth()
             .padding(vertical = SPACING_16.dp)
-    )
+    ) {
+        Divider(
+            modifier = Modifier
+                .weight(1f)
+                .align(Alignment.CenterVertically),
+            color = MaterialTheme.colors.onBackground
+        )
+        Text(
+            text = stringResource(R.string.OR),
+            modifier = Modifier.padding(horizontal = SPACING_16.dp)
+        )
+        Divider(
+            modifier = Modifier
+                .weight(1f)
+                .align(Alignment.CenterVertically),
+            color = MaterialTheme.colors.onBackground
+        )
+    }
     SocialSignInButton(
         onClick = vm::onGoogleSignInClick,
         colors = ButtonDefaults.buttonColors(
@@ -125,9 +184,48 @@ fun AuthScreen(vm: AuthViewModel) = Column(
     )
     Text(
         text = stringResource(R.string.forgot_password),
-        modifier = Modifier.clickable { vm.goForgotPassword() }
+        modifier = Modifier
+            .clickable { vm.goForgotPassword() }
+            .padding(top = SPACING_16.dp),
+        color = MaterialTheme.colors.primary,
+        fontWeight = FontWeight.Bold
+    )
+    Spacer(modifier = Modifier.weight(1f))
+    HaveAccountText(
+        modifier = Modifier
+            .align(Alignment.CenterHorizontally)
+            .padding(bottom = SPACING_16.dp),
+        state = state,
+        onClick = vm::toggleState
     )
 }
+
+@Composable
+fun HaveAccountText(modifier: Modifier, state: AuthScreenState, onClick: () -> Unit) =
+    Row(modifier = modifier) {
+        if (state == SignInState) {
+            Text(text = stringResource(R.string.don_t_have_an_account))
+            Spacer(modifier = Modifier.width(SPACING_4.dp))
+            Text(
+                text = stringResource(R.string.sign_up),
+                modifier = Modifier
+                    .clickable(onClick = onClick)
+                    .padding(start = SPACING_2.dp),
+                color = MaterialTheme.colors.primary,
+                fontWeight = FontWeight.Bold
+            )
+        } else {
+            Text(text = stringResource(R.string.aleady_have_an_account))
+            Spacer(modifier = Modifier.width(SPACING_4.dp))
+            Text(
+                text = stringResource(R.string.sign_in),
+                modifier = Modifier
+                    .clickable(onClick = onClick),
+                color = MaterialTheme.colors.primary,
+                fontWeight = FontWeight.Bold
+            )
+        }
+    }
 
 @Composable
 fun SocialSignInButton(

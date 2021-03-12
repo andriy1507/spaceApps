@@ -17,4 +17,22 @@
     <string name="notifications">Сповіщення</string>
     <string name="location">Місцезнаходження</string>
     <string name="settings">Налаштування</string>
+    <string name="continue_with_google">Продовжити через Google</string>
+    <string name="continue_with_facebook">Продовжити через Facebook</string>
+    <string name="continue_with_apple_id">Продовжити через Apple ID</string>
+    <string name="sign_in">Увійти</string>
+    <string name="password">Пароль</string>
+    <string name="email">Електронна пошта</string>
+    <string name="confirm_password">Підтвердити пароль</string>
+    <string name="sign_up">Зареєструватися</string>
+    <string name="invalid_email">Некоректна електронна пошта</string>
+    <string name="invalid_password">Некоректний пароль</string>
+    <string name="password_does_not_match">Паролі не збігаються</string>
+    <string name="log_out">Вийти</string>
+    <string name="Continue">Продовжити</string>
+    <string name="forgot_password">Забули пароль?</string>
+    <string name="chat">Чат</string>
+    <string name="don_t_have_an_account">Не маєте аккаунту?</string>
+    <string name="aleady_have_an_account">Вже маєте аккаунт?</string>
+    <string name="OR">АБО</string>
 </resources>

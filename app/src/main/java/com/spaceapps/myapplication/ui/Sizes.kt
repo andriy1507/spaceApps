@@ -24,3 +24,4 @@ const val FONT_16 = 16
 const val FONT_18 = 18
 const val FONT_20 = 20
 const val FONT_24 = 24
+const val FONT_36 = 36

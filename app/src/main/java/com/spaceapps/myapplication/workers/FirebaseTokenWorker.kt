@@ -13,6 +13,8 @@ import com.spaceapps.myapplication.utils.Success
 import com.spaceapps.myapplication.utils.request
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @HiltWorker
 class FirebaseTokenWorker @AssistedInject constructor(
@@ -21,16 +23,16 @@ class FirebaseTokenWorker @AssistedInject constructor(
     private val api: AuthorizationApi,
     private val authTokenStorage: AuthTokenStorage
 ) : CoroutineWorker(context, params) {
-    override suspend fun doWork(): Result {
-        authTokenStorage.getAuthToken() ?: return Result.failure()
+    override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
+        authTokenStorage.getAuthToken() ?: return@withContext Result.failure()
         val token = inputData.getString(TOKEN_KEY)
-        token ?: return Result.failure()
+        token ?: return@withContext Result.failure()
         val device = DeviceRequest(
             token = token,
             platform = Android
         )
         val response = request { api.addDevice(device = device) }
-        return if (response is Success) Result.success() else Result.retry()
+        return@withContext if (response is Success) Result.success() else Result.retry()
     }
 
     companion object {
