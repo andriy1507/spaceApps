@@ -39,7 +39,17 @@
 
     <fragment
         android:id="@+id/feedsListScreen"
-        android:name="com.spaceapps.myapplication.features.feedsList.FeedsListFragment" />
+        android:name="com.spaceapps.myapplication.features.feedsList.FeedsListFragment">
+        <action
+            android:id="@+id/goCreateFeed"
+            app:destination="@id/createFeedScreen" />
+        <action
+            android:id="@+id/goComments"
+            app:destination="@id/feedCommentsScreen" />
+        <action
+            android:id="@+id/goFeedView"
+            app:destination="@id/feedViewScreen" />
+    </fragment>
 
     <fragment
         android:id="@+id/createFeedScreen"
@@ -48,5 +58,9 @@
     <fragment
         android:id="@+id/feedCommentsScreen"
         android:name="com.spaceapps.myapplication.features.feedComments.FeedCommentsFragment" />
+
+    <fragment
+        android:id="@+id/feedViewScreen"
+        android:name="com.spaceapps.myapplication.features.feedView.FeedViewFragment" />
 
 </navigation>

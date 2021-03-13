@@ -4,5 +4,5 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 
 @Composable
-fun FeedCommentsScreen() = Column {
+fun FeedCommentsScreen(vm: FeedCommentsViewModel) = Column {
 }

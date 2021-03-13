@@ -1,4 +1,4 @@
-package com.spaceapps.myapplication.features.feedComments
+package com.spaceapps.myapplication.features.feedView
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -8,10 +8,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class FeedCommentsViewModel @Inject constructor(
+class FeedViewViewModel @Inject constructor(
     private val feedsApi: FeedsApi,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+
     private val feedId = savedStateHandle.get<Int>(FEED_ID)
         ?: throw IllegalArgumentException("Feed ID couldn't be null")
 }

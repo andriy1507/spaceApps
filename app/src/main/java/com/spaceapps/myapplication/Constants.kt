@@ -9,3 +9,5 @@ const val DATABASE_NAME = "space_apps_db"
 const val PREFERENCES_DATA_STORE = "${BuildConfig.APPLICATION_ID}.PREFS_DATA_STORE"
 const val SETTINGS_DATA_STORE = "${BuildConfig.APPLICATION_ID}.SETTINGS_DATA_STORE"
 const val SERVER_CHAT_SOCKET_URL = "${BuildConfig.SERVER_URL}chat-socket"
+
+const val FEED_ID = "feedId"

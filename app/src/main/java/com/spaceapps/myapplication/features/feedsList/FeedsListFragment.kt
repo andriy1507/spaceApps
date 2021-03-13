@@ -11,5 +11,5 @@ class FeedsListFragment : ComposableFragment() {
     private val vm by viewModels<FeedsListViewModel>()
 
     @Composable
-    override fun Content() = FeedsListScreen()
+    override fun Content() = FeedsListScreen(vm)
 }

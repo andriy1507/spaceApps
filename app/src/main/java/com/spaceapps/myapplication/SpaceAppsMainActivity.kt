@@ -200,6 +200,9 @@ class SpaceAppsMainActivity : AppCompatActivity() {
                                 when (destination.id) {
                                     R.id.authScreen,
                                     R.id.forgotPasswordScreen,
+                                    R.id.feedsListScreen,
+                                    R.id.feedCommentsScreen,
+                                    R.id.createFeedScreen,
                                     R.id.chatScreen -> vm.hideBottomBar()
                                     else -> vm.showBottomBar()
                                 }
