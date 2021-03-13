@@ -19,7 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
 import com.spaceapps.myapplication.R
-import com.spaceapps.myapplication.models.remote.chat.ChatMessage
+import com.spaceapps.myapplication.models.remote.chat.MessageResponse
 import com.spaceapps.myapplication.ui.SPACING_16
 import com.spaceapps.myapplication.ui.SPACING_8
 import com.spaceapps.myapplication.ui.SpaceAppsTheme
@@ -36,21 +36,16 @@ typealias OnSendButtonClicked = () -> Unit
 fun ChatScreenPreview() = SpaceAppsTheme { ChatScreen() }
 
 @Composable
-fun ChatScreen() {
-    Scaffold(
-        topBar = { ChatToolbar() }
+fun ChatScreen() = Column {
+    ChatToolbar()
+    LazyColumn(
+        modifier = Modifier
+            .weight(weight = 1f)
+            .fillMaxWidth()
     ) {
-        Column {
-            LazyColumn(
-                modifier = Modifier
-                    .weight(weight = 1f)
-                    .fillMaxWidth()
-            ) {
-                items(emptyList<ChatMessage>()) { ChatMessageItem() }
-            }
-            ChatBottomBar()
-        }
+        items(emptyList<MessageResponse>()) { ChatMessageItem() }
     }
+    ChatBottomBar()
 }
 
 @Composable

@@ -2,10 +2,7 @@ package com.spaceapps.myapplication.di
 
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.spaceapps.myapplication.BuildConfig
-import com.spaceapps.myapplication.network.AuthInterceptor
-import com.spaceapps.myapplication.network.AuthorizationApi
-import com.spaceapps.myapplication.network.FeedsApi
-import com.spaceapps.myapplication.network.SpaceAppsAuthenticator
+import com.spaceapps.myapplication.network.*
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
@@ -62,4 +59,8 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideFeedsApi(retrofit: Retrofit): FeedsApi = retrofit.create(FeedsApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideChatApi(retrofit: Retrofit): ChatApi = retrofit.create(ChatApi::class.java)
 }
