@@ -16,6 +16,9 @@ interface FeedsApi {
         @Query("size") size: Int? = null
     ): PaginationResponse<FeedResponse>
 
+    @GET("/feeds/{feedId}")
+    suspend fun getFeedById(@Path("feedId") feedId: Int): FeedResponse
+
     @POST("/feeds/create")
     suspend fun createFeed(@Body request: FeedRequest): FeedResponse
 
