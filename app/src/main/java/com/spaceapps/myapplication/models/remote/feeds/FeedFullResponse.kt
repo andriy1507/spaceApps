@@ -5,7 +5,7 @@ import com.squareup.moshi.JsonClass
 import java.time.LocalDateTime
 
 @JsonClass(generateAdapter = true)
-data class FeedResponse(
+data class FeedFullResponse(
     @Json(name = "id")
     val id: Int,
     @Json(name = "title")

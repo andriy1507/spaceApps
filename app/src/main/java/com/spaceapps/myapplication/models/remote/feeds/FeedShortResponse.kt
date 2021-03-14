@@ -2,11 +2,14 @@ package com.spaceapps.myapplication.models.remote.feeds
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import java.time.LocalDateTime
 
 @JsonClass(generateAdapter = true)
-data class CommentResponse(
+class FeedShortResponse(
     @Json(name = "id")
     val id: Int,
-    @Json(name = "text")
-    val text: String
+    @Json(name = "title")
+    val title: String,
+    @Json(name = "created")
+    val created: LocalDateTime
 )

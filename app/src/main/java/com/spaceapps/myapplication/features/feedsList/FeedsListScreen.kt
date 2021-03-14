@@ -3,12 +3,10 @@ package com.spaceapps.myapplication.features.feedsList
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -17,46 +15,73 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.spaceapps.myapplication.R
-import com.spaceapps.myapplication.models.remote.feeds.FeedResponse
-import com.spaceapps.myapplication.ui.ACTION_BAR_SIZE
-import com.spaceapps.myapplication.ui.SPACING_4
-import com.spaceapps.myapplication.ui.SPACING_48
-import com.spaceapps.myapplication.ui.SPACING_8
+import com.spaceapps.myapplication.models.remote.feeds.FeedShortResponse
+import com.spaceapps.myapplication.ui.*
 import dev.chrisbanes.accompanist.insets.LocalWindowInsets
 import dev.chrisbanes.accompanist.insets.statusBarsHeight
 import dev.chrisbanes.accompanist.insets.toPaddingValues
 
 @Composable
 fun FeedsListScreen(vm: FeedsListViewModel) =
-    Column(modifier = Modifier.fillMaxSize()) {
-        val feedList by vm.feeds.observeAsState(initial = emptyList())
+    Box(modifier = Modifier.fillMaxSize()) {
+        val feedList by vm.feeds.observeAsState()
+        val event by vm.events.collectAsState(initial = InitialEvent)
         FeedsTopBar(
             modifier = Modifier.statusBarsHeight(ACTION_BAR_SIZE.dp),
             onAddClicked = vm::goCreateFeed
         )
-        LazyColumn(
-            contentPadding = LocalWindowInsets.current.navigationBars.toPaddingValues(
-                additionalEnd = SPACING_8.dp,
-                additionalStart = SPACING_8.dp,
-                additionalTop = SPACING_4.dp,
-                additionalBottom = SPACING_4.dp,
-            )
-        ) {
-            items(feedList) {
-                FeedItem(it, vm::toggleFeedLike, vm::goComments)
+        if (feedList == null) {
+            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+        } else {
+            LazyColumn(
+                modifier = Modifier.padding(
+                    LocalWindowInsets.current.statusBars.toPaddingValues(
+                        additionalTop = ACTION_BAR_SIZE.dp
+                    )
+                ),
+                contentPadding = LocalWindowInsets.current.navigationBars.toPaddingValues(
+                    additionalEnd = SPACING_8.dp,
+                    additionalStart = SPACING_8.dp,
+                    additionalTop = SPACING_4.dp,
+                    additionalBottom = SPACING_4.dp,
+                )
+            ) {
+                itemsIndexed(feedList.orEmpty()) { i, item ->
+                    FeedItem(
+                        modifier = Modifier.clickable { vm.goFeedView(item.id) },
+                        feed = item,
+                        onLikeClick = vm::toggleFeedLike,
+                        onCommentClick = vm::goComments
+                    )
+                    if (i == feedList?.lastIndex ?: 0) vm.loadFeeds()
+                }
+                if (event is PaginationLoading) {
+                    item {
+                        Column(modifier = Modifier.fillMaxWidth()) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.align(Alignment.CenterHorizontally)
+                            )
+                        }
+                    }
+                }
             }
         }
     }
 
 @Composable
-fun FeedItem(feed: FeedResponse, onLikeClick: (Int) -> Unit, onCommentClick: (Int) -> Unit) =
-    Card(modifier = Modifier
-        .fillMaxWidth()
-        .padding(vertical = SPACING_4.dp)) {
+fun FeedItem(
+    modifier: Modifier = Modifier,
+    feed: FeedShortResponse,
+    onLikeClick: (Int) -> Unit,
+    onCommentClick: (Int) -> Unit
+) =
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = SPACING_4.dp)
+    ) {
         Column {
-            feed.items.forEach {
-                Text(text = it.text)
-            }
+            Text(text = feed.title, modifier = Modifier.padding(SPACING_12.dp))
             FeedSocialItem(
                 onLikeClick = { onLikeClick(feed.id) },
                 onCommentClick = { onCommentClick(feed.id) }
@@ -67,14 +92,20 @@ fun FeedItem(feed: FeedResponse, onLikeClick: (Int) -> Unit, onCommentClick: (In
 @Composable
 fun FeedSocialItem(onLikeClick: () -> Unit, onCommentClick: () -> Unit) = Row {
     Icon(
-        painter = painterResource(id = R.drawable.ic_apple),
+        painter = painterResource(id = R.drawable.ic_favorite),
         contentDescription = null,
-        modifier = Modifier.clickable(onClick = onLikeClick)
+        modifier = Modifier
+            .clickable(onClick = onLikeClick)
+            .size(SPACING_48.dp)
+            .padding(SPACING_12.dp)
     )
     Icon(
-        painter = painterResource(id = R.drawable.ic_apple),
+        painter = painterResource(id = R.drawable.ic_comment),
         contentDescription = null,
-        modifier = Modifier.clickable(onClick = onCommentClick)
+        modifier = Modifier
+            .clickable(onClick = onCommentClick)
+            .size(SPACING_48.dp)
+            .padding(SPACING_12.dp)
     )
 }
 
@@ -98,5 +129,6 @@ fun FeedsTopBar(modifier: Modifier = Modifier, onAddClicked: () -> Unit) = TopAp
             .clickable(onClick = onAddClicked)
             .align(Alignment.CenterVertically)
             .size(SPACING_48.dp)
+            .padding(SPACING_12.dp)
     )
 }

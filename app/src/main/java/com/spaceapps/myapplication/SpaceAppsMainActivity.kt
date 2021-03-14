@@ -203,6 +203,7 @@ class SpaceAppsMainActivity : AppCompatActivity() {
                                     R.id.feedsListScreen,
                                     R.id.feedCommentsScreen,
                                     R.id.createFeedScreen,
+                                    R.id.feedViewScreen,
                                     R.id.chatScreen -> vm.hideBottomBar()
                                     else -> vm.showBottomBar()
                                 }

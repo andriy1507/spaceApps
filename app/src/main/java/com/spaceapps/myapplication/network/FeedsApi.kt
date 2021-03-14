@@ -1,10 +1,7 @@
 package com.spaceapps.myapplication.network
 
 import com.spaceapps.myapplication.models.remote.PaginationResponse
-import com.spaceapps.myapplication.models.remote.feeds.CommentRequest
-import com.spaceapps.myapplication.models.remote.feeds.CommentResponse
-import com.spaceapps.myapplication.models.remote.feeds.FeedRequest
-import com.spaceapps.myapplication.models.remote.feeds.FeedResponse
+import com.spaceapps.myapplication.models.remote.feeds.*
 import retrofit2.http.*
 
 interface FeedsApi {
@@ -14,13 +11,13 @@ interface FeedsApi {
         @Query("search") search: String? = null,
         @Query("page") page: Int? = null,
         @Query("size") size: Int? = null
-    ): PaginationResponse<FeedResponse>
+    ): PaginationResponse<FeedShortResponse>
 
     @GET("/feeds/{feedId}")
-    suspend fun getFeedById(@Path("feedId") feedId: Int): FeedResponse
+    suspend fun getFeedById(@Path("feedId") feedId: Int): FeedFullResponse
 
     @POST("/feeds/create")
-    suspend fun createFeed(@Body request: FeedRequest): FeedResponse
+    suspend fun createFeed(@Body request: FeedRequest): FeedFullResponse
 
     @DELETE("/feeds/delete/{feedId}")
     suspend fun deleteFeed(@Path("feedId") feedId: Int)
@@ -28,31 +25,31 @@ interface FeedsApi {
     @PUT("/feeds/update/{feedId}")
     suspend fun updateFeed(@Path("feedId") feedId: Int, @Body request: FeedRequest)
 
-    @PATCH("/feed/like/{feedId}")
+    @PATCH("/feeds/like/{feedId}")
     suspend fun toggleFeedLike(@Path("feedId") feedId: Int)
 
-    @GET("/feed/comments/{feedId}")
+    @GET("/feeds/comments/{feedId}")
     suspend fun getCommentsPaginated(
         @Path("feedId") feedId: Int,
         @Query("page") page: Int? = null,
         @Query("size") size: Int? = null
     ): PaginationResponse<CommentResponse>
 
-    @POST("/feed/comments/create/{feedId}")
+    @POST("/feeds/comments/create/{feedId}")
     suspend fun createComment(
         @Path("feedId") feedId: Int,
         @Body request: CommentRequest
     ): CommentResponse
 
-    @DELETE("/feed/comments/delete/{commentId}")
+    @DELETE("/feeds/comments/delete/{commentId}")
     suspend fun deleteComment(@Path("commentId") commentId: Int)
 
-    @PUT("/feed/comments/update/{commentId}")
+    @PUT("/feeds/comments/update/{commentId}")
     suspend fun updateComment(
         @Path("commentId") commentId: Int,
         @Body request: CommentRequest
     ): CommentResponse
 
-    @PATCH("/feed/comments/like/{commentId}")
+    @PATCH("/feeds/comments/like/{commentId}")
     suspend fun toggleCommentLike(@Path("commentId") commentId: Int)
 }
