@@ -23,6 +23,8 @@ class SettingsViewModel @Inject constructor(
 
     fun goChat() = navDispatcher.emit { navigate(R.id.chatScreen) }
 
+    fun goFeeds() = navDispatcher.emit { navigate(R.id.feedsListScreen) }
+
     fun logOut() = async {
         request { authRepository.logOut() }.onSuccess { authDispatcher.requestDeauthorization() }
     }

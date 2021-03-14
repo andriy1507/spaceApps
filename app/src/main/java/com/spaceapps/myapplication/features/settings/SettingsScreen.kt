@@ -37,5 +37,10 @@ fun SettingsScreen(vm: SettingsViewModel) = Box(
                 Text(text = stringResource(R.string.chat))
             }
         }
+        item {
+            Button(onClick = vm::goFeeds) {
+                Text(text = stringResource(R.string.feeds))
+            }
+        }
     }
 }
