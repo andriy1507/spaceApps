@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import com.spaceapps.myapplication.FEED_ID
 import com.spaceapps.myapplication.PAGING_SIZE
 import com.spaceapps.myapplication.R
-import com.spaceapps.myapplication.models.remote.feeds.FeedFullResponse
 import com.spaceapps.myapplication.models.remote.feeds.FeedShortResponse
 import com.spaceapps.myapplication.network.FeedsApi
 import com.spaceapps.myapplication.utils.NavDispatcher

@@ -19,5 +19,4 @@ fun CreateFeedScreen(vm: CreateFeedViewModel) = Column {
     Button(onClick = vm::createFeed) {
         Text(text = "Create")
     }
-
 }

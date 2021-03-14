@@ -13,5 +13,5 @@ data class FeedFullResponse(
     @Json(name = "items")
     val items: List<FeedItemDto>,
     @Json(name = "created")
-    val created:LocalDateTime
+    val created: LocalDateTime
 )

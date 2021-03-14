@@ -28,7 +28,7 @@ fun FeedViewScreen(vm: FeedViewViewModel) = Box(modifier = Modifier.fillMaxSize(
 }
 
 @Composable
-fun FeedView(modifier: Modifier = Modifier, feed: FeedFullResponse) = Column(modifier = modifier){
+fun FeedView(modifier: Modifier = Modifier, feed: FeedFullResponse) = Column(modifier = modifier) {
     Text(feed.title)
     Divider()
     Text(DateTimeFormatter.ofPattern(DATE_FORMAT).format(feed.created))

@@ -49,5 +49,4 @@ class CreateFeedViewModel @Inject constructor(
     }
 
     private fun goBack() = navDispatcher.emit { popBackStack() }
-
 }
