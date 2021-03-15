@@ -5,7 +5,7 @@ import com.squareup.moshi.JsonClass
 import java.time.LocalDateTime
 
 @JsonClass(generateAdapter = true)
-data class ChatMessage(
+data class MessageResponse(
     @Json(name = "messageId")
     val messageId: String,
     @Json(name = "conversationId")
