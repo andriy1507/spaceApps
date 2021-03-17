@@ -63,4 +63,8 @@
         android:id="@+id/feedViewScreen"
         android:name="com.spaceapps.myapplication.features.feedView.FeedViewFragment" />
 
+    <fragment
+        android:id="@+id/legalScreen"
+        android:name="com.spaceapps.myapplication.features.termsPolicy.LegalFragment" />
+
 </navigation>

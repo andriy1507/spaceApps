@@ -12,6 +12,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.create
 import timber.log.Timber
 import javax.inject.Singleton
 
@@ -32,9 +33,11 @@ object NetworkModule {
     fun provideOkHttpClient(
         logger: HttpLoggingInterceptor,
         authInterceptor: AuthInterceptor,
+        languageInterceptor: LanguageInterceptor,
         authenticator: SpaceAppsAuthenticator
     ) = OkHttpClient.Builder().apply {
         addInterceptor(authInterceptor)
+        addInterceptor(languageInterceptor)
         authenticator(authenticator)
         addNetworkInterceptor(StethoInterceptor())
         addInterceptor(logger)
@@ -67,4 +70,18 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideUploadsApi(retrofit: Retrofit): UploadsApi = retrofit.create(UploadsApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideNotificationsApi(retrofit: Retrofit): NotificationsApi =
+        retrofit.create(NotificationsApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideStaticContentApi(retrofit: Retrofit): StaticContentApi =
+        retrofit.create(StaticContentApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideProfileApi(retrofit: Retrofit):ProfileApi = retrofit.create(ProfileApi::class.java)
 }

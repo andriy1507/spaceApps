@@ -11,5 +11,6 @@ class MainActivityViewModel @Inject constructor() : ViewModel() {
     val bottomBarVisible = MutableLiveData(false)
 
     fun hideBottomBar() = bottomBarVisible.postValue(false)
+
     fun showBottomBar() = bottomBarVisible.postValue(true)
 }
