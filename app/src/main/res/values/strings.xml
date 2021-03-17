@@ -39,5 +39,8 @@
     <string name="aleady_have_an_account">Already have an account?</string>
     <string name="OR">OR</string>
     <string name="feeds">Feeds</string>
+    <string name="vert_dash">|</string>
+    <string name="terms_of_use">Terms of Use</string>
+    <string name="privacy_policy">Privacy Policy</string>
 
 </resources>
