@@ -191,6 +191,22 @@ fun AuthScreen(vm: AuthViewModel) = Column(
         fontWeight = FontWeight.Bold
     )
     Spacer(modifier = Modifier.weight(1f))
+    Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+        Text(
+            text = stringResource(R.string.terms_of_use),
+            modifier = Modifier
+                .padding(end = SPACING_4.dp)
+                .clickable(onClick = vm::goTermsOfUse)
+        )
+        Text(text = stringResource(R.string.vert_dash))
+        Text(
+            text = stringResource(R.string.privacy_policy),
+            modifier = Modifier
+                .padding(start = SPACING_4.dp)
+                .clickable(onClick = vm::goPrivacyPolicy)
+        )
+    }
+    Spacer(modifier = Modifier.weight(1f))
     HaveAccountText(
         modifier = Modifier
             .align(Alignment.CenterHorizontally)
