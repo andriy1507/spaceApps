@@ -11,6 +11,6 @@ data class PaginationResponse<T>(
     val total: Long,
     @Json(name = "data")
     val data: List<T>,
-    @Json(name = "isLast")
+    @Json(name = "last")
     val isLast: Boolean
 )

@@ -6,12 +6,12 @@ import java.time.LocalDateTime
 
 @JsonClass(generateAdapter = true)
 data class AuthTokenResponse(
-    @Json(name = "authToken")
+    @Json(name = "auth_token")
     val authToken: String,
-    @Json(name = "authTokenExp")
+    @Json(name = "auth_token_exp")
     val authTokenExp: LocalDateTime,
-    @Json(name = "refreshToken")
+    @Json(name = "refresh_token")
     val refreshToken: String,
-    @Json(name = "refreshTokenExp")
+    @Json(name = "refresh_token_exp")
     val refreshTokenExp: LocalDateTime
 )

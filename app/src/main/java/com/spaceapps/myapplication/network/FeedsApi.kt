@@ -16,40 +16,50 @@ interface FeedsApi {
     @GET("/feeds/{feedId}")
     suspend fun getFeedById(@Path("feedId") feedId: Int): FeedFullResponse
 
-    @POST("/feeds/create")
+    @POST("/feeds")
     suspend fun createFeed(@Body request: FeedRequest): FeedFullResponse
 
-    @DELETE("/feeds/delete/{feedId}")
+    @DELETE("/feeds/{feedId}")
     suspend fun deleteFeed(@Path("feedId") feedId: Int)
 
-    @PUT("/feeds/update/{feedId}")
-    suspend fun updateFeed(@Path("feedId") feedId: Int, @Body request: FeedRequest)
+    @PUT("/feeds/{feedId}")
+    suspend fun updateFeed(
+        @Path("feedId") feedId: Int,
+        @Body request: FeedRequest
+    )
 
-    @PATCH("/feeds/like/{feedId}")
+    @PATCH("/feeds/{feedId}/toggle-like")
     suspend fun toggleFeedLike(@Path("feedId") feedId: Int)
 
-    @GET("/feeds/comments/{feedId}")
+    @GET("/feeds/{feedId}/comments")
     suspend fun getCommentsPaginated(
         @Path("feedId") feedId: Int,
         @Query("page") page: Int? = null,
         @Query("size") size: Int? = null
     ): PaginationResponse<CommentResponse>
 
-    @POST("/feeds/comments/create/{feedId}")
+    @POST("/feeds/{feedId}/comments")
     suspend fun createComment(
         @Path("feedId") feedId: Int,
         @Body request: CommentRequest
     ): CommentResponse
 
-    @DELETE("/feeds/comments/delete/{commentId}")
-    suspend fun deleteComment(@Path("commentId") commentId: Int)
+    @DELETE("/feeds/{feedId}/comments/{commentId}")
+    suspend fun deleteComment(
+        @Path("feedId") feedId: Int,
+        @Path("commentId") commentId: Int
+    )
 
-    @PUT("/feeds/comments/update/{commentId}")
+    @PUT("/feeds/{feedId}/comments/{commentId}")
     suspend fun updateComment(
+        @Path("feedId") feedId: Int,
         @Path("commentId") commentId: Int,
         @Body request: CommentRequest
     ): CommentResponse
 
-    @PATCH("/feeds/comments/like/{commentId}")
-    suspend fun toggleCommentLike(@Path("commentId") commentId: Int)
+    @PATCH("/feeds/{feedId}/comments/{commentId}/toggle-like")
+    suspend fun toggleCommentLike(
+        @Path("feedId") feedId: Int,
+        @Path("commentId") commentId: Int
+    )
 }

@@ -1,8 +1,10 @@
 package com.spaceapps.myapplication.features.auth
 
+import androidx.core.os.bundleOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.spaceapps.myapplication.R
+import com.spaceapps.myapplication.features.termsPolicy.LegalType
 import com.spaceapps.myapplication.repositories.AuthRepository
 import com.spaceapps.myapplication.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -103,4 +105,8 @@ class AuthViewModel @Inject constructor(
     }
 
     fun goForgotPassword() = navDispatcher.emit { navigate(R.id.goForgotPassword) }
+
+    fun goTermsOfUse() = navDispatcher.emit { navigate(R.id.legalScreen, bundleOf("legalType" to LegalType.TermsOfUse)) }
+
+    fun goPrivacyPolicy() = navDispatcher.emit { navigate(R.id.legalScreen, bundleOf("legalType" to LegalType.PrivacyPolicy)) }
 }

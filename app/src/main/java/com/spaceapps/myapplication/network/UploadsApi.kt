@@ -26,6 +26,6 @@ interface UploadsApi {
     @POST("/uploads/file")
     suspend fun uploadFile(@Part("file") file: MultipartBody.Part): UploadResponse
 
-    @DELETE("/uploads/delete/{fileName}")
+    @DELETE("/uploads/{fileName}")
     suspend fun deleteFile(@Path("fileName") fileName: String)
 }
