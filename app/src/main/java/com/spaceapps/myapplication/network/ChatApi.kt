@@ -1,57 +1,60 @@
 package com.spaceapps.myapplication.network
 
 import com.spaceapps.myapplication.models.remote.PaginationResponse
-import com.spaceapps.myapplication.models.remote.chat.ConversationResponse
+import com.spaceapps.myapplication.models.remote.chat.ChatRequest
+import com.spaceapps.myapplication.models.remote.chat.ChatResponse
 import com.spaceapps.myapplication.models.remote.chat.MessageRequest
 import com.spaceapps.myapplication.models.remote.chat.MessageResponse
 import retrofit2.http.*
 
 interface ChatApi {
 
-    @GET("/chat/conversations")
-    suspend fun getConversationsPaginated(
+    @GET("/chats")
+    suspend fun getChatsPaginated(
         @Query("page") page: Int? = null,
         @Query("size") size: Int? = null,
         @Query("search") search: String? = null
-    ): PaginationResponse<ConversationResponse>
+    ): PaginationResponse<ChatResponse>
 
-    @POST("/chat/conversations/create")
-    suspend fun addConversation(
-        @Body conversation: ConversationResponse
-    ): ConversationResponse
+    @POST("/chats")
+    suspend fun addChat(
+        @Body chat: ChatRequest
+    ): ChatResponse
 
-    @DELETE("/chat/conversations/delete/{conversationId}")
-    suspend fun deleteConversation(
+    @DELETE("/chats/{conversationId}")
+    suspend fun deleteChat(
         @Path("conversationId") conversationId: String
     )
 
-    @PUT("/chat/conversations/update/{conversationId}")
-    suspend fun updateConversation(
-        @Path("conversationId") conversationId: String,
-        @Body conversation: ConversationResponse
-    ): ConversationResponse
+    @PUT("/chats/{chatId}")
+    suspend fun updateChat(
+        @Path("chatId") chatId: String,
+        @Body chat: ChatRequest
+    ): ChatResponse
 
-    @GET("/chat/messages/{conversationId}")
+    @GET("/chats/{chatId}/messages")
     suspend fun getMessagesPaginated(
-        @Path("conversationId") conversationId: String,
+        @Path("chatId") chatId: String,
         @Query("page") page: Int? = null,
         @Query("size") size: Int? = null,
         @Query("search") search: String? = null
     ): PaginationResponse<MessageResponse>
 
-    @POST("/chat/messages/create/{conversationId}")
+    @POST("/chats/{chatId}/messages")
     suspend fun createMessage(
-        @Path("conversationId") conversationId: String,
+        @Path("chatId") chatId: String,
         @Body request: MessageRequest
     ): MessageResponse
 
-    @DELETE("/chat/messages/delete/{messageId}")
+    @DELETE("/chats/{chatId}/messages/{messageId}")
     suspend fun deleteMessage(
+        @Path("chatId") chatId: String,
         @Path("messageId") messageId: String
     )
 
-    @PUT("/chat/messages/update/{messageId}")
+    @PUT("/chats/{chatId}/messages/{messageId}")
     suspend fun updateMessage(
+        @Path("chatId") chatId: String,
         @Path("messageId") messageId: String,
         @Body request: MessageRequest
     ): MessageResponse

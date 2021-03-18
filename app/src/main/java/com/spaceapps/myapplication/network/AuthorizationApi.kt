@@ -1,9 +1,7 @@
 package com.spaceapps.myapplication.network
 
 import com.spaceapps.myapplication.models.remote.auth.*
-import retrofit2.http.Body
-import retrofit2.http.POST
-import retrofit2.http.PUT
+import retrofit2.http.*
 
 interface AuthorizationApi {
 
@@ -16,8 +14,8 @@ interface AuthorizationApi {
     @POST("/auth/add-device")
     suspend fun addDevice(@Body device: DeviceRequest)
 
-    @POST("/auth/log-out")
-    suspend fun logOut(@Body device: DeviceRequest)
+    @DELETE("/auth/log-out/{deviceToken}")
+    suspend fun logOut(@Path("deviceToken") deviceToken: String)
 
     @POST("/auth/refresh-token")
     suspend fun refreshToken(@Body request: RefreshTokenRequest): AuthTokenResponse

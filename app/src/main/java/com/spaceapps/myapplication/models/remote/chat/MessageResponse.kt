@@ -6,12 +6,12 @@ import java.time.LocalDateTime
 
 @JsonClass(generateAdapter = true)
 data class MessageResponse(
-    @Json(name = "messageId")
+    @Json(name = "id")
     val messageId: String,
-    @Json(name = "conversationId")
+    @Json(name = "chat_id")
     val conversationId: String,
-    @Json(name = "messageText")
+    @Json(name = "text")
     val messageText: String,
-    @Json(name = "dateTime")
+    @Json(name = "date_time")
     val dateTime: LocalDateTime
 )

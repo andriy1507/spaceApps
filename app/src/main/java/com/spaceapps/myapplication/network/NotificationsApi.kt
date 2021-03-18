@@ -10,10 +10,9 @@ interface NotificationsApi {
         @Query("size") size: Int? = null
     )
 
-    @DELETE("/notifications/delete/{notificationId}")
+    @DELETE("/notifications/{notificationId}")
     suspend fun deleteNotification(@Path("notificationId") notificationId: Int)
 
-    @PATCH("/notifications/viewed/{notificationId}")
+    @PATCH("/notifications/{notificationId}/mark-as-viewed")
     suspend fun viewNotification(@Path("notificationId") notificationId: Int)
-
 }
