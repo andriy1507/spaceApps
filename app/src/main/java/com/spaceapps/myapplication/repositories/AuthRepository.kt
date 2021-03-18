@@ -98,10 +98,6 @@ class AuthRepository @Inject constructor(
     }
 
     suspend fun logOut() {
-        val device = DeviceRequest(
-            token = Tasks.await(FirebaseMessaging.getInstance().token),
-            platform = Android
-        )
-        api.logOut(device = device)
+        api.logOut(deviceToken = Tasks.await(FirebaseMessaging.getInstance().token))
     }
 }

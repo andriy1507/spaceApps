@@ -7,6 +7,6 @@ import com.squareup.moshi.JsonClass
 data class VerifyTokenRequest(
     @Json(name = "email")
     val email: String,
-    @Json(name = "resetToken")
+    @Json(name = "reset_token")
     val resetToken: String
 )

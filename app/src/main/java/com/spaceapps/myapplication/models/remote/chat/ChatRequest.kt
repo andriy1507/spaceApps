@@ -4,9 +4,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class ConversationResponse(
-    @Json(name = "conversationId")
-    val conversationId: String,
+data class ChatRequest(
     @Json(name = "name")
     val name: String
 )

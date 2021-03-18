@@ -6,10 +6,9 @@ import retrofit2.http.Path
 
 interface ProfileApi {
 
-    @GET("/profile/{profileId}")
+    @GET("/profiles/{profileId}")
     suspend fun getProfile(@Path("profileId") profileId: Int)
 
-    @PUT("/profile/edit")
+    @PUT("/profiles")
     suspend fun updateProfile()
-
 }

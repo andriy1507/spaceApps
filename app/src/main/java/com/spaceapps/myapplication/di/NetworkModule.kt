@@ -83,5 +83,5 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideProfileApi(retrofit: Retrofit):ProfileApi = retrofit.create(ProfileApi::class.java)
+    fun provideProfileApi(retrofit: Retrofit): ProfileApi = retrofit.create(ProfileApi::class.java)
 }

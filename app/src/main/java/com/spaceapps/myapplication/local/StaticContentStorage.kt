@@ -32,5 +32,4 @@ class StaticContentStorage @Inject constructor(
     suspend fun getTermsOfUse() = dataStore.data.first()[TERMS_OF_USE_KEY]
 
     suspend fun getPrivacyPolicy() = dataStore.data.first()[PRIVACY_POLICY_KEY]
-
 }

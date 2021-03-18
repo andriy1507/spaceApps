@@ -34,5 +34,4 @@ class StaticContentRepository @Inject constructor(
             response.content
         }
     }
-
 }
