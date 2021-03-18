@@ -35,4 +35,7 @@
     <string name="don_t_have_an_account">Не маєте аккаунту?</string>
     <string name="aleady_have_an_account">Вже маєте аккаунт?</string>
     <string name="OR">АБО</string>
+    <string name="terms_of_use">Умови користування</string>
+    <string name="privacy_policy">Політика конфіденційності</string>
+    <string name="feeds">Публікації</string>
 </resources>

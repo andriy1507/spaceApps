@@ -8,7 +8,7 @@ import java.io.InputStream
 import java.io.OutputStream
 
 object SettingsSerializer : Serializer<Settings> {
-    override fun readFrom(input: InputStream): Settings {
+    override suspend fun readFrom(input: InputStream): Settings {
         return try {
             Settings.parseFrom(input)
         } catch (e: InvalidProtocolBufferException) {
@@ -16,7 +16,7 @@ object SettingsSerializer : Serializer<Settings> {
         }
     }
 
-    override fun writeTo(t: Settings, output: OutputStream) {
+    override suspend fun writeTo(t: Settings, output: OutputStream) {
         t.writeTo(output)
     }
 
