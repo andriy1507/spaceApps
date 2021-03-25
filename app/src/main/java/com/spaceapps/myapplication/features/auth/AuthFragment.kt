@@ -15,9 +15,8 @@ import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.OAuthCredential
 import com.google.firebase.auth.OAuthProvider
-import com.google.firebase.auth.zze
-
 import com.spaceapps.myapplication.R
 import com.spaceapps.myapplication.utils.ComposableFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -90,7 +89,7 @@ class AuthFragment : ComposableFragment() {
             .apply { scopes = listOf("email, name") }.build()
         FirebaseAuth.getInstance().startActivityForSignInWithProvider(requireActivity(), provider)
             .addOnSuccessListener {
-                val token = (it.credential as zze).idToken
+                val token = (it.credential as OAuthCredential).idToken
                 Timber.d("Login successful. Token: $token")
                 vm.signInWithApple(accessToken = token)
             }
