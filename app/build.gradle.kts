@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.konan.properties.propertyString
 import java.util.*
 
 val kotlinVersion = "1.4.31"
-val composeVersion = "1.0.0-beta02"
+val composeVersion = "1.0.0-beta03"
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -139,15 +139,15 @@ dependencies {
 //    AndroidX
     implementation("androidx.core:core-ktx:1.3.2")
     implementation("androidx.appcompat:appcompat:1.2.0")
-    implementation("androidx.activity:activity-ktx:1.3.0-alpha04")
-    implementation("androidx.activity:activity-compose:1.3.0-alpha04")
-    implementation("androidx.fragment:fragment-ktx:1.3.1")
+    implementation("androidx.activity:activity-ktx:1.3.0-alpha05")
+    implementation("androidx.activity:activity-compose:1.3.0-alpha05")
+    implementation("androidx.fragment:fragment-ktx:1.3.2")
     implementation("com.google.android.material:material:1.3.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha03")
 
 //    Paging
-    val paging_version = "3.0.0-beta02"
+    val paging_version = "3.0.0-beta03"
     val paging_compose_version = "1.0.0-alpha08"
     implementation("androidx.paging:paging-runtime-ktx:$paging_version")
     implementation("androidx.paging:paging-compose:$paging_compose_version")
@@ -185,7 +185,7 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-messaging-directboot")
 //    Room database
-    val room_version = "2.3.0-beta03"
+    val room_version = "2.3.0-rc01"
     implementation("androidx.room:room-runtime:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
     kapt("androidx.room:room-compiler:$room_version")
