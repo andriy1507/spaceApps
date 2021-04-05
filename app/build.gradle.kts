@@ -83,7 +83,7 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = composeVersion
     }
-    lintOptions {
+    lint {
         isAbortOnError = false
     }
     testOptions {
@@ -123,7 +123,7 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
     implementation("com.squareup.retrofit2:converter-moshi:$retrofit_version")
 //    Stetho
-    val stetho_version = "1.5.1"
+    val stetho_version = "1.6.0"
     implementation("com.facebook.stetho:stetho:$stetho_version")
     implementation("com.facebook.stetho:stetho-okhttp3:$stetho_version")
 //    OkHttp client
@@ -152,7 +152,7 @@ dependencies {
     implementation("androidx.paging:paging-runtime-ktx:$paging_version")
     implementation("androidx.paging:paging-compose:$paging_compose_version")
 //    Moshi
-    val moshi_version = "1.11.0"
+    val moshi_version = "1.12.0"
     implementation("com.squareup.moshi:moshi:$moshi_version")
     kapt("com.squareup.moshi:moshi-kotlin-codegen:$moshi_version")
 //    WorkManager
