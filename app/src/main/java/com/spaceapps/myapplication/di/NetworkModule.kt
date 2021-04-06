@@ -12,7 +12,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.create
 import timber.log.Timber
 import javax.inject.Singleton
 
@@ -20,13 +19,13 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
+    private const val OKHTTP_LOGGING_TAG = "OkHttp"
+
     @Provides
     @Singleton
-    fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
-        return HttpLoggingInterceptor {
-            Timber.tag("OkHttp").d(it)
-        }.apply { level = HttpLoggingInterceptor.Level.BODY }
-    }
+    fun provideHttpLoggingInterceptor() =
+        HttpLoggingInterceptor { Timber.tag(OKHTTP_LOGGING_TAG).d(it) }
+            .apply { level = HttpLoggingInterceptor.Level.BODY }
 
     @Provides
     @Singleton
@@ -51,7 +50,7 @@ object NetworkModule {
     ): Retrofit = Retrofit.Builder().apply {
         baseUrl(BuildConfig.SERVER_URL)
         addConverterFactory(MoshiConverterFactory.create(moshi))
-        client(client)
+        callFactory { client.newCall(it) }
     }.build()
 
     @Provides
