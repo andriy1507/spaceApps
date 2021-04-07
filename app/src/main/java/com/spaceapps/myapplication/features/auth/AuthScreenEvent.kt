@@ -13,3 +13,4 @@ data class InputError(
 object SignInWithGoogle : AuthScreenEvent()
 object SignInWithFacebook : AuthScreenEvent()
 object SignInWithApple : AuthScreenEvent()
+class ShowError(@StringRes val message: Int) : AuthScreenEvent()

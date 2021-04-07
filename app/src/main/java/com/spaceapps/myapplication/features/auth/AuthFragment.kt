@@ -3,8 +3,10 @@ package com.spaceapps.myapplication.features.auth
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.compose.runtime.Composable
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.facebook.CallbackManager
@@ -14,6 +16,7 @@ import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.OAuthProvider
 import com.google.firebase.auth.zze
@@ -45,9 +48,10 @@ class AuthFragment : ComposableFragment() {
         super.onViewCreated(view, savedInstanceState)
         vm.events.onEach {
             when (it) {
-                SignInWithGoogle -> signInWithGoogle()
-                SignInWithFacebook -> signInWithFacebook()
-                SignInWithApple -> signInWithApple()
+                is SignInWithGoogle -> signInWithGoogle()
+                is SignInWithFacebook -> signInWithFacebook()
+                is SignInWithApple -> signInWithApple()
+                is ShowError -> Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
                 else -> Unit
             }
         }.launchIn(viewLifecycleOwner.lifecycleScope)

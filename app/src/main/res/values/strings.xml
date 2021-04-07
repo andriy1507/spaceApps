@@ -36,11 +36,15 @@
     <string name="forgot_password">Forgot Password?</string>
     <string name="chat">Chat</string>
     <string name="don_t_have_an_account">Don\'t have an account?</string>
-    <string name="aleady_have_an_account">Already have an account?</string>
+    <string name="already_have_an_account">Already have an account?</string>
     <string name="OR">OR</string>
     <string name="feeds">Feeds</string>
-    <string name="vert_dash">|</string>
+    <string name="vert_dash" translatable="false">|</string>
     <string name="terms_of_use">Terms of Use</string>
     <string name="privacy_policy">Privacy Policy</string>
-
+    <string name="sign_in_failed">Sign in failed</string>
+    <string name="sign_up_failed">Sign up failed</string>
+    <string name="google_sign_in_failed">Sign in with Google failed</string>
+    <string name="facebook_sign_in_failed">Sign in with Facebook failed</string>
+    <string name="apple_sign_in_failed">Sign in with Apple ID failed</string>
 </resources>

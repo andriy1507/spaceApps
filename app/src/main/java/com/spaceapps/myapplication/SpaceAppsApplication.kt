@@ -5,6 +5,7 @@ import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import com.facebook.stetho.Stetho
 import com.github.venom.Venom
+import com.google.firebase.FirebaseApp
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 import javax.inject.Inject
@@ -17,11 +18,13 @@ class SpaceAppsApplication : Application(), Configuration.Provider {
 
     override fun onCreate() {
         super.onCreate()
+        FirebaseApp.initializeApp(this)
         Timber.plant(Timber.DebugTree())
         Stetho.initializeWithDefaults(this)
-        val venom = Venom.createInstance(this)
-        venom.initialize()
-        venom.start()
+        Venom.createInstance(this).apply {
+            initialize()
+            start()
+        }
     }
 
     override fun getWorkManagerConfiguration() =

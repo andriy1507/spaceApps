@@ -31,6 +31,9 @@ interface FeedsApi {
     @PATCH("/feeds/{feedId}/toggle-like")
     suspend fun toggleFeedLike(@Path("feedId") feedId: Int)
 
+    @PATCH("/feeds/{feedId}/toggle-saved")
+    suspend fun toggleFeedSaved(@Path("feedId") feedId: Int)
+
     @GET("/feeds/{feedId}/comments")
     suspend fun getCommentsPaginated(
         @Path("feedId") feedId: Int,
