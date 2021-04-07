@@ -121,7 +121,7 @@ class AuthRepository @Inject constructor(
     }
 
     suspend fun sendResetToken(email: String): SendResetTokenResult {
-        return when(request { api.sendResetToken(request = SendResetTokenRequest(email = email)) }) {
+        return when (request { api.sendResetToken(request = SendResetTokenRequest(email = email)) }) {
             is Success -> SendResetTokenResult.Success
             is Error -> SendResetTokenResult.Failure
         }
@@ -129,7 +129,7 @@ class AuthRepository @Inject constructor(
 
     suspend fun verifyResetToken(email: String, token: String): VerifyResetTokenResult {
         val request = VerifyTokenRequest(email = email, resetToken = token)
-        return when(request{ api.verifyResetToken(request = request) }) {
+        return when (request { api.verifyResetToken(request = request) }) {
             is Success -> VerifyResetTokenResult.Success
             is Error -> VerifyResetTokenResult.Failure
         }
