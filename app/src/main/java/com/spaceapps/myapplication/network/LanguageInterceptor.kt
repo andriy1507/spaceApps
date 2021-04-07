@@ -14,13 +14,11 @@ class LanguageInterceptor @Inject constructor(
     private val settingsStorage: SettingsStorage
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
-        val request = chain.request().newBuilder().apply {
-            val language = getLanguage()
-            if (language != null) {
-                addHeader(LANGUAGE_HEADER, language)
-            }
-        }.build()
-        return chain.proceed(request)
+        val builder = chain.request().newBuilder()
+        val language = getLanguage()
+        language ?: return chain.proceed(builder.build())
+        builder.header(LANGUAGE_HEADER, language)
+        return chain.proceed(builder.build())
     }
 
     private fun getLanguage() = runBlocking {

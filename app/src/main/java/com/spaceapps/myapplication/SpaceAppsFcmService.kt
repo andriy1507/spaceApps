@@ -77,6 +77,6 @@ class SpaceAppsFcmService : FirebaseMessagingService() {
     }
 
     companion object {
-        const val FCM_TOKEN_WORK = "fcmTokenWork"
+        private const val FCM_TOKEN_WORK = "fcmTokenWork"
     }
 }

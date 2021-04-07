@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.konan.properties.propertyString
 import java.util.*
 
 val kotlinVersion = "1.4.31"
-val composeVersion = "1.0.0-beta01"
+val composeVersion = "1.0.0-beta03"
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -83,7 +83,7 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = composeVersion
     }
-    lintOptions {
+    lint {
         isAbortOnError = false
     }
     testOptions {
@@ -111,7 +111,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
 //    Accompanist
-    val accompanist_version = "0.6.1"
+    val accompanist_version = "0.6.2"
     implementation("dev.chrisbanes.accompanist:accompanist-coil:$accompanist_version")
     implementation("dev.chrisbanes.accompanist:accompanist-insets:$accompanist_version")
 //    Coroutines
@@ -123,7 +123,7 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
     implementation("com.squareup.retrofit2:converter-moshi:$retrofit_version")
 //    Stetho
-    val stetho_version = "1.5.1"
+    val stetho_version = "1.6.0"
     implementation("com.facebook.stetho:stetho:$stetho_version")
     implementation("com.facebook.stetho:stetho-okhttp3:$stetho_version")
 //    OkHttp client
@@ -147,12 +147,12 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha03")
 
 //    Paging
-    val paging_version = "3.0.0-beta01"
+    val paging_version = "3.0.0-beta03"
     val paging_compose_version = "1.0.0-alpha08"
     implementation("androidx.paging:paging-runtime-ktx:$paging_version")
     implementation("androidx.paging:paging-compose:$paging_compose_version")
 //    Moshi
-    val moshi_version = "1.11.0"
+    val moshi_version = "1.12.0"
     implementation("com.squareup.moshi:moshi:$moshi_version")
     kapt("com.squareup.moshi:moshi-kotlin-codegen:$moshi_version")
 //    WorkManager
@@ -166,16 +166,16 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling:$composeVersion")
     runtimeOnly("androidx.compose.animation:animation:$composeVersion")
 //    Navigation component
-    val nav_version = "2.3.3"
+    val nav_version = "2.3.4"
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
 //    Dagger-Hilt
     val dagger_version = "2.33-beta"
     implementation("com.google.dagger:hilt-android:$dagger_version")
     kapt("com.google.dagger:hilt-android-compiler:$dagger_version")
-    val hilt_version = "1.0.0-alpha03"
+    val hilt_version = "1.0.0-beta01"
     kapt("androidx.hilt:hilt-compiler:$hilt_version")
-    implementation("androidx.hilt:hilt-lifecycle-viewmodel:$hilt_version")
+    implementation("androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03")
     implementation("androidx.hilt:hilt-work:$hilt_version")
 //    Firebase
     implementation(platform("com.google.firebase:firebase-bom:26.1.1"))
@@ -185,13 +185,13 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-messaging-directboot")
 //    Room database
-    val room_version = "2.3.0-beta02"
+    val room_version = "2.3.0-rc01"
     implementation("androidx.room:room-runtime:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
     kapt("androidx.room:room-compiler:$room_version")
 
 //    Datastore
-    val datastore_version = "1.0.0-alpha07"
+    val datastore_version = "1.0.0-alpha08"
     implementation("androidx.datastore:datastore:$datastore_version")
     implementation("androidx.datastore:datastore-preferences:$datastore_version")
     implementation("com.google.protobuf:protobuf-javalite:3.15.1")
