@@ -2,7 +2,11 @@ package com.spaceapps.myapplication.features.forgotPassword
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.spaceapps.myapplication.repositories.AuthRepository
+import com.spaceapps.myapplication.R
+import com.spaceapps.myapplication.repositories.auth.AuthRepository
+import com.spaceapps.myapplication.repositories.auth.ResetPasswordResult
+import com.spaceapps.myapplication.repositories.auth.SendResetTokenResult
+import com.spaceapps.myapplication.repositories.auth.VerifyResetTokenResult
 import com.spaceapps.myapplication.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -10,7 +14,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ForgotPasswordViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val navDispatcher: NavDispatcher
 ) : ViewModel() {
 
     val email = MutableLiveData<String>()
@@ -41,24 +46,36 @@ class ForgotPasswordViewModel @Inject constructor(
     }
 
     private fun sendToken() = async {
-        if (isEmailValid()) request { authRepository.sendResetToken(email = email.value!!) }
-            .onSuccess { state.postValue(TokenState) }
+        if (isEmailValid())
+            when (authRepository.sendResetToken(email = email.value!!)) {
+                SendResetTokenResult.Success -> state.postValue(TokenState)
+                SendResetTokenResult.Failure -> Unit
+            }
     }
 
     private fun verifyToken() = async {
-        if (isEmailValid() && isTokenValid()) request {
-            authRepository.verifyResetToken(email = email.value!!, token = token.value!!)
-        }.onSuccess { state.postValue(PasswordState) }
+        if (isEmailValid() && isTokenValid())
+            when (authRepository.verifyResetToken(email = email.value!!, token = token.value!!)) {
+                VerifyResetTokenResult.Success -> state.postValue(PasswordState)
+                VerifyResetTokenResult.Failure -> Unit
+            }
     }
 
     private fun resetPassword() = async {
         if (isEmailValid() && isTokenValid() && isConfirmPasswordValid()) {
-            request {
-                authRepository.resetPassword(
-                    email = email.value!!,
-                    token = token.value!!,
-                    password = password.value!!
-                )
+            val result = authRepository.resetPassword(
+                email = email.value!!,
+                token = token.value!!,
+                password = password.value!!
+            )
+            when (result) {
+                ResetPasswordResult.Failure -> Unit
+                ResetPasswordResult.Success -> navDispatcher.emit {
+                    popBackStack(
+                        R.id.authScreen,
+                        false
+                    )
+                }
             }
         }
     }

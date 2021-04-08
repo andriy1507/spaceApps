@@ -3,6 +3,7 @@ package com.spaceapps.myapplication.features.auth
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.compose.runtime.Composable
 import androidx.fragment.app.viewModels
@@ -44,9 +45,10 @@ class AuthFragment : ComposableFragment() {
         super.onViewCreated(view, savedInstanceState)
         vm.events.onEach {
             when (it) {
-                SignInWithGoogle -> signInWithGoogle()
-                SignInWithFacebook -> signInWithFacebook()
-                SignInWithApple -> signInWithApple()
+                is SignInWithGoogle -> signInWithGoogle()
+                is SignInWithFacebook -> signInWithFacebook()
+                is SignInWithApple -> signInWithApple()
+                is ShowError -> Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
                 else -> Unit
             }
         }.launchIn(viewLifecycleOwner.lifecycleScope)

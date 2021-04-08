@@ -3,11 +3,11 @@ package com.spaceapps.myapplication.features.settings
 import androidx.lifecycle.ViewModel
 import com.spaceapps.myapplication.R
 import com.spaceapps.myapplication.local.SettingsStorage
-import com.spaceapps.myapplication.repositories.AuthRepository
+import com.spaceapps.myapplication.repositories.auth.AuthRepository
+import com.spaceapps.myapplication.repositories.auth.LogOutResult
 import com.spaceapps.myapplication.utils.AuthDispatcher
 import com.spaceapps.myapplication.utils.NavDispatcher
 import com.spaceapps.myapplication.utils.async
-import com.spaceapps.myapplication.utils.request
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -26,6 +26,9 @@ class SettingsViewModel @Inject constructor(
     fun goFeeds() = navDispatcher.emit { navigate(R.id.feedsListScreen) }
 
     fun logOut() = async {
-        request { authRepository.logOut() }.onSuccess { authDispatcher.requestDeauthorization() }
+        when (authRepository.logOut()) {
+            LogOutResult.Success -> authDispatcher.requestDeauthorization()
+            LogOutResult.Failure -> Unit
+        }
     }
 }

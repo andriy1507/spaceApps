@@ -19,16 +19,25 @@ class SpaceAppsAuthenticator @Inject constructor(
     private val authTokenStorage: AuthTokenStorage,
     private val authDispatcher: AuthDispatcher
 ) : Authenticator {
-    override fun authenticate(route: Route?, response: Response): Request? = runBlocking {
-        val authToken = getAuthToken()
-        return@runBlocking if (authToken == null) {
-            authTokenStorage.clear()
-            authDispatcher.requestDeauthorization()
-            null
-        } else {
-            response.request.newBuilder()
-                .header(AUTH_HEADER, "$AUTH_HEADER_PREFIX $authToken")
-                .build()
+    override fun authenticate(route: Route?, response: Response): Request? = synchronized(this) {
+        runBlocking {
+            val requestAuthToken = response.request.header(AUTH_HEADER)
+            val localAuthToken = authTokenStorage.getAuthToken()
+            if (requestAuthToken != localAuthToken) {
+                return@runBlocking response.request.newBuilder()
+                    .header(AUTH_HEADER, localAuthToken!!)
+                    .build()
+            }
+            val newAuthToken = getAuthToken()
+            if (newAuthToken == null) {
+                authTokenStorage.clear()
+                authDispatcher.requestDeauthorization()
+                null
+            } else {
+                response.request.newBuilder()
+                    .header(AUTH_HEADER, "$AUTH_HEADER_PREFIX $newAuthToken")
+                    .build()
+            }
         }
     }
 
