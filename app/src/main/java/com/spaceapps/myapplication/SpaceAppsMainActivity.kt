@@ -1,5 +1,7 @@
 package com.spaceapps.myapplication
 
+import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -24,6 +26,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import com.spaceapps.myapplication.di.DataStoreModule.settingsDataStore
 import com.spaceapps.myapplication.local.AuthTokenStorage
 import com.spaceapps.myapplication.local.StorageManager
 import com.spaceapps.myapplication.ui.ACTION_BAR_SIZE
@@ -35,8 +38,10 @@ import dev.chrisbanes.accompanist.insets.LocalWindowInsets
 import dev.chrisbanes.accompanist.insets.navigationBarsHeight
 import dev.chrisbanes.accompanist.insets.toPaddingValues
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -59,6 +64,23 @@ class SpaceAppsMainActivity : AppCompatActivity() {
     private val navHostFragment = NavHostFragment()
 
     private val vm by viewModels<MainActivityViewModel>()
+
+    override fun attachBaseContext(newBase: Context) = runBlocking {
+        val lang = when(settingsDataStore.data.first().language){
+            Settings.Language.Ukrainian -> "UK-ua"
+            else -> "en"
+        }
+        super.attachBaseContext(SpaceAppsContextWrapper.wrap(newBase, lang))
+    }
+
+    override fun applyOverrideConfiguration(overrideConfiguration: Configuration) = runBlocking{
+        val lang = when(settingsDataStore.data.first().language){
+            Settings.Language.Ukrainian -> "UK-ua"
+            else -> "en"
+        }
+        overrideConfiguration.setLocale(Locale(lang))
+        super.applyOverrideConfiguration(overrideConfiguration)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
