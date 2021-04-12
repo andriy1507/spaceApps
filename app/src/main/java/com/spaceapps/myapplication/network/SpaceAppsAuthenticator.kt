@@ -1,10 +1,16 @@
 package com.spaceapps.myapplication.network
 
+import com.google.android.gms.tasks.Tasks
+import com.google.firebase.messaging.FirebaseMessaging
 import com.spaceapps.myapplication.AUTH_HEADER
 import com.spaceapps.myapplication.AUTH_HEADER_PREFIX
 import com.spaceapps.myapplication.local.AuthTokenStorage
+import com.spaceapps.myapplication.models.remote.auth.DeviceRequest
+import com.spaceapps.myapplication.models.remote.auth.DeviceRequest.Platform.*
 import com.spaceapps.myapplication.models.remote.auth.RefreshTokenRequest
 import com.spaceapps.myapplication.utils.AuthDispatcher
+import com.spaceapps.myapplication.utils.Error
+import com.spaceapps.myapplication.utils.Success
 import com.spaceapps.myapplication.utils.request
 import dagger.Lazy
 import kotlinx.coroutines.runBlocking
@@ -44,15 +50,22 @@ class SpaceAppsAuthenticator @Inject constructor(
     private suspend fun getAuthToken(): String? {
         val refreshToken = authTokenStorage.getRefreshToken()
         refreshToken ?: return null
-        request {
-            authApi.get().refreshToken(request = RefreshTokenRequest(refreshToken = refreshToken))
-        }.onSuccess {
-            authTokenStorage.storeTokens(
-                authToken = it.authToken,
-                refreshToken = it.refreshToken
+        val request = RefreshTokenRequest(
+            refreshToken = refreshToken,
+            device = DeviceRequest(
+                token = Tasks.await(FirebaseMessaging.getInstance().token),
+                platform = Android
             )
-            return it.authToken
+        )
+        return when (val response = request { authApi.get().refreshToken(request = request) }) {
+            is Success -> {
+                authTokenStorage.storeTokens(
+                    authToken = response.data.authToken,
+                    refreshToken = response.data.refreshToken
+                )
+                response.data.authToken
+            }
+            is Error -> null
         }
-        return null
     }
 }

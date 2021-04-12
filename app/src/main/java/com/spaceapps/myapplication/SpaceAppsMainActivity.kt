@@ -66,19 +66,20 @@ class SpaceAppsMainActivity : AppCompatActivity() {
     private val vm by viewModels<MainActivityViewModel>()
 
     override fun attachBaseContext(newBase: Context) = runBlocking {
-        val lang = when(settingsDataStore.data.first().language){
-            Settings.Language.Ukrainian -> "UK-ua"
-            else -> "en"
-        }
-        super.attachBaseContext(SpaceAppsContextWrapper.wrap(newBase, lang))
+//        val lang = when(settingsDataStore.data.first().language){
+//            Settings.Language.Ukrainian -> "UK-ua"
+//            else -> "en"
+//        }
+//        super.attachBaseContext(SpaceAppsContextWrapper.wrap(newBase, lang))
+        super.attachBaseContext(newBase)
     }
 
     override fun applyOverrideConfiguration(overrideConfiguration: Configuration) = runBlocking{
-        val lang = when(settingsDataStore.data.first().language){
-            Settings.Language.Ukrainian -> "UK-ua"
-            else -> "en"
-        }
-        overrideConfiguration.setLocale(Locale(lang))
+//        val lang = when(settingsDataStore.data.first().language){
+//            Settings.Language.Ukrainian -> "UK-ua"
+//            else -> "en"
+//        }
+//        overrideConfiguration.setLocale(Locale(lang))
         super.applyOverrideConfiguration(overrideConfiguration)
     }
 
