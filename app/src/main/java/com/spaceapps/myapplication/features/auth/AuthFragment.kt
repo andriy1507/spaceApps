@@ -3,6 +3,7 @@ package com.spaceapps.myapplication.features.auth
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.compose.runtime.Composable
 import androidx.fragment.app.viewModels
@@ -18,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.OAuthCredential
 import com.google.firebase.auth.OAuthProvider
 import com.spaceapps.myapplication.R
+import com.spaceapps.myapplication.ui.SpaceAppsTheme
 import com.spaceapps.myapplication.utils.ComposableFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
@@ -38,15 +40,18 @@ class AuthFragment : ComposableFragment() {
     }
 
     @Composable
-    override fun Content() = AuthScreen(vm)
+    override fun Content() = SpaceAppsTheme {
+        AuthScreen(vm)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         vm.events.onEach {
             when (it) {
-                SignInWithGoogle -> signInWithGoogle()
-                SignInWithFacebook -> signInWithFacebook()
-                SignInWithApple -> signInWithApple()
+                is SignInWithGoogle -> signInWithGoogle()
+                is SignInWithFacebook -> signInWithFacebook()
+                is SignInWithApple -> signInWithApple()
+                is ShowError -> Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
                 else -> Unit
             }
         }.launchIn(viewLifecycleOwner.lifecycleScope)

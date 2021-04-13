@@ -22,6 +22,7 @@ object UtilsModule {
 
     @Provides
     @Singleton
-    fun provideLocationProviderClient(@ApplicationContext context: Context): FusedLocationProviderClient =
-        LocationServices.getFusedLocationProviderClient(context)
+    fun provideLocationProviderClient(
+        @ApplicationContext context: Context
+    ): FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
 }

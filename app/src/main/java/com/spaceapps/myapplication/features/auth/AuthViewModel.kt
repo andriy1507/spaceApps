@@ -5,7 +5,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.spaceapps.myapplication.R
 import com.spaceapps.myapplication.features.termsPolicy.LegalType
-import com.spaceapps.myapplication.repositories.AuthRepository
+import com.spaceapps.myapplication.repositories.auth.AuthRepository
+import com.spaceapps.myapplication.repositories.auth.SignInResult
+import com.spaceapps.myapplication.repositories.auth.SignUpResult
+import com.spaceapps.myapplication.repositories.auth.SocialSignInResult
 import com.spaceapps.myapplication.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -26,16 +29,20 @@ class AuthViewModel @Inject constructor(
 
     private fun signIn() = async {
         if (!isEmailValid() && !isPasswordValid()) return@async
-        request { authRepository.signIn(email = email.value!!, password = password.value!!) }
-            .onSuccess { goGeolocation() }
+        when (authRepository.signIn(email = email.value!!, password = password.value!!)) {
+            SignInResult.Failure -> events.emit(ShowError(R.string.sign_in_failed))
+            SignInResult.Success -> goGeolocation()
+        }
     }
 
     private fun goGeolocation() = navDispatcher.emit { navigate(R.id.goGeolocation) }
 
     private fun signUp() = async {
         if (!isEmailValid() && !isPasswordValid() && !isConfirmPasswordValid()) return@async
-        request { authRepository.signUp(email = email.value!!, password = password.value!!) }
-            .onSuccess { goGeolocation() }
+        when (authRepository.signUp(email = email.value!!, password = password.value!!)) {
+            SignUpResult.Failure -> events.emit(ShowError(R.string.sign_up_failed))
+            SignUpResult.Success -> goGeolocation()
+        }
     }
 
     fun onAuthButtonClick() = when (state.value) {
@@ -65,18 +72,24 @@ class AuthViewModel @Inject constructor(
     fun onAppleSignInClick() = async { events.emit(SignInWithApple) }
 
     fun signInWithGoogle(accessToken: String) = async {
-        request { authRepository.signInWithGoogle(accessToken = accessToken) }
-            .onSuccess { goGeolocation() }
+        when (authRepository.signInWithGoogle(accessToken = accessToken)) {
+            SocialSignInResult.Failure -> events.emit(ShowError(R.string.google_sign_in_failed))
+            SocialSignInResult.Success -> goGeolocation()
+        }
     }
 
     fun signInWithFacebook(accessToken: String) = async {
-        request { authRepository.signInWithFacebook(accessToken = accessToken) }
-            .onSuccess { goGeolocation() }
+        when (authRepository.signInWithFacebook(accessToken = accessToken)) {
+            SocialSignInResult.Failure -> events.emit(ShowError(R.string.facebook_sign_in_failed))
+            SocialSignInResult.Success -> goGeolocation()
+        }
     }
 
     fun signInWithApple(accessToken: String) = async {
-        request { authRepository.signInWithApple(accessToken = accessToken) }
-            .onSuccess { goGeolocation() }
+        when (authRepository.signInWithApple(accessToken = accessToken)) {
+            SocialSignInResult.Failure -> events.emit(ShowError(R.string.apple_sign_in_failed))
+            SocialSignInResult.Success -> goGeolocation()
+        }
     }
 
     private suspend fun isPasswordValid(): Boolean {
@@ -106,7 +119,17 @@ class AuthViewModel @Inject constructor(
 
     fun goForgotPassword() = navDispatcher.emit { navigate(R.id.goForgotPassword) }
 
-    fun goTermsOfUse() = navDispatcher.emit { navigate(R.id.legalScreen, bundleOf("legalType" to LegalType.TermsOfUse)) }
+    fun goTermsOfUse() = navDispatcher.emit {
+        navigate(
+            R.id.legalScreen,
+            bundleOf("legalType" to LegalType.TermsOfUse)
+        )
+    }
 
-    fun goPrivacyPolicy() = navDispatcher.emit { navigate(R.id.legalScreen, bundleOf("legalType" to LegalType.PrivacyPolicy)) }
+    fun goPrivacyPolicy() = navDispatcher.emit {
+        navigate(
+            R.id.legalScreen,
+            bundleOf("legalType" to LegalType.PrivacyPolicy)
+        )
+    }
 }

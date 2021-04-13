@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.konan.properties.propertyString
 import java.util.*
 
 val kotlinVersion = "1.4.31"
-val composeVersion = "1.0.0-beta03"
+val composeVersion = "1.0.0-beta04"
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -12,9 +12,9 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("com.google.firebase.crashlytics")
     id("com.google.gms.google-services")
-    id("com.google.protobuf") version "0.8.12"
-    id("org.jlleitschuh.gradle.ktlint") version "9.3.0"
-    id("io.gitlab.arturbosch.detekt") version "1.15.0"
+    id("com.google.protobuf") version "0.8.15"
+    id("org.jlleitschuh.gradle.ktlint") version "10.0.0"
+    id("io.gitlab.arturbosch.detekt") version "1.16.0"
 }
 
 android {
@@ -79,11 +79,12 @@ android {
     }
     buildFeatures {
         compose = true
+        viewBinding = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = composeVersion
     }
-    lintOptions {
+    lint {
         isAbortOnError = false
     }
     testOptions {
@@ -123,7 +124,7 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
     implementation("com.squareup.retrofit2:converter-moshi:$retrofit_version")
 //    Stetho
-    val stetho_version = "1.5.1"
+    val stetho_version = "1.6.0"
     implementation("com.facebook.stetho:stetho:$stetho_version")
     implementation("com.facebook.stetho:stetho-okhttp3:$stetho_version")
 //    OkHttp client
@@ -138,13 +139,13 @@ dependencies {
     implementation("com.google.android.gms:play-services-maps:17.0.0")
 //    AndroidX
     implementation("androidx.core:core-ktx:1.3.2")
-    implementation("androidx.appcompat:appcompat:1.2.0")
-    implementation("androidx.activity:activity-ktx:1.3.0-alpha05")
-    implementation("androidx.activity:activity-compose:1.3.0-alpha05")
+    implementation("androidx.appcompat:appcompat:1.3.0-rc01")
+    implementation("androidx.activity:activity-ktx:1.3.0-alpha06")
+    implementation("androidx.activity:activity-compose:1.3.0-alpha06")
     implementation("androidx.fragment:fragment-ktx:1.3.2")
     implementation("com.google.android.material:material:1.3.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha03")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha04")
 
 //    Paging
     val paging_version = "3.0.0-beta03"
@@ -152,7 +153,7 @@ dependencies {
     implementation("androidx.paging:paging-runtime-ktx:$paging_version")
     implementation("androidx.paging:paging-compose:$paging_compose_version")
 //    Moshi
-    val moshi_version = "1.11.0"
+    val moshi_version = "1.12.0"
     implementation("com.squareup.moshi:moshi:$moshi_version")
     kapt("com.squareup.moshi:moshi-kotlin-codegen:$moshi_version")
 //    WorkManager
@@ -166,11 +167,11 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling:$composeVersion")
     runtimeOnly("androidx.compose.animation:animation:$composeVersion")
 //    Navigation component
-    val nav_version = "2.3.4"
+    val nav_version = "2.3.5"
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
 //    Dagger-Hilt
-    val dagger_version = "2.33-beta"
+    val dagger_version = "2.34-beta"
     implementation("com.google.dagger:hilt-android:$dagger_version")
     kapt("com.google.dagger:hilt-android-compiler:$dagger_version")
     val hilt_version = "1.0.0-beta01"
@@ -197,7 +198,7 @@ dependencies {
     implementation("com.google.protobuf:protobuf-javalite:3.15.1")
 
 //    Facebook SDK
-    implementation("com.facebook.android:facebook-android-sdk:9.1.0")
+    implementation("com.facebook.android:facebook-android-sdk:9.1.1")
 
 //    Testing
     testImplementation("junit:junit:4.13.2")
@@ -221,7 +222,7 @@ dependencies {
     androidTestUtil("androidx.test:orchestrator:1.3.0")
 
 //    Hilt testing
-    androidTestImplementation("com.google.dagger:hilt-android-testing:2.33-beta")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.34-beta")
     kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.33-beta")
 //   Assertions
     androidTestImplementation("androidx.test.ext:junit:1.1.2")

@@ -231,7 +231,7 @@ fun HaveAccountText(modifier: Modifier, state: AuthScreenState, onClick: () -> U
                 fontWeight = FontWeight.Bold
             )
         } else {
-            Text(text = stringResource(R.string.aleady_have_an_account))
+            Text(text = stringResource(R.string.already_have_an_account))
             Spacer(modifier = Modifier.width(SPACING_4.dp))
             Text(
                 text = stringResource(R.string.sign_in),

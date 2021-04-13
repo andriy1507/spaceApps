@@ -13,9 +13,9 @@ class AuthInterceptor @Inject constructor(
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response = runBlocking {
         val builder = chain.request().newBuilder()
-        authTokenStorage.getAuthToken()?.let { token ->
-            builder.header(AUTH_HEADER, "$AUTH_HEADER_PREFIX $token")
-        }
+        val token = authTokenStorage.getAuthToken()
+        token ?: return@runBlocking chain.proceed(builder.build())
+        builder.header(AUTH_HEADER, "$AUTH_HEADER_PREFIX $token")
         return@runBlocking chain.proceed(builder.build())
     }
 }

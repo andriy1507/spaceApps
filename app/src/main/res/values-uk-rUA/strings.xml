@@ -33,9 +33,14 @@
     <string name="forgot_password">Забули пароль?</string>
     <string name="chat">Чат</string>
     <string name="don_t_have_an_account">Не маєте аккаунту?</string>
-    <string name="aleady_have_an_account">Вже маєте аккаунт?</string>
+    <string name="already_have_an_account">Вже маєте аккаунт?</string>
     <string name="OR">АБО</string>
-    <string name="terms_of_use">Умови користування</string>
+    <string name="google_sign_in_failed">Не вдалося увійти за допомогою Google</string>
+    <string name="facebook_sign_in_failed">Не вдалося увійти за допомогою Facebook</string>
+    <string name="apple_sign_in_failed">Не вдалося увійти за допомогою Apple ID</string>
+    <string name="sign_in_failed">Не вдалося увійти</string>
+    <string name="sign_up_failed">Не вдалося зареєструватися</string>
+    <string name="terms_of_use">Правила користування</string>
     <string name="privacy_policy">Політика конфіденційності</string>
-    <string name="feeds">Публікації</string>
+    <string name="feeds">Дописи</string>
 </resources>
