@@ -26,7 +26,7 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
       - name: Run ktlint check
-        run: ./gradlew ktlintDebugCheck --continue
+        run: ./gradlew ktlintCheck --continue
 #  Lint Check
   lint_check:
     runs-on: ubuntu-20.04
