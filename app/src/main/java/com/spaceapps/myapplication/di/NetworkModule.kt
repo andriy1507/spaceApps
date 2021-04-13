@@ -88,4 +88,8 @@ object NetworkModule {
     @Singleton
     fun provideSettingsApi(retrofit: Retrofit): SettingsApi =
         retrofit.create(SettingsApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideToolsApi(retrofit: Retrofit): ToolsApi = retrofit.create(ToolsApi::class.java)
 }
