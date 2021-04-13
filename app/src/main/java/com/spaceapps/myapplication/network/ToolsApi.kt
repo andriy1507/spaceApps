@@ -1,6 +1,7 @@
 package com.spaceapps.myapplication.network
 
 import com.spaceapps.myapplication.models.remote.tools.MetadataResponse
+import com.spaceapps.myapplication.models.remote.tools.QrCodeResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -14,5 +15,5 @@ interface ToolsApi {
         @Query("data") data: String,
         @Query("width") width: Int? = null,
         @Query("height") height: Int? = null
-    ): String
+    ): QrCodeResponse
 }
