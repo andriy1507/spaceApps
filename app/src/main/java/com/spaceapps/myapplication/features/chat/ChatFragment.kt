@@ -3,6 +3,7 @@ package com.spaceapps.myapplication.features.chat
 import android.os.Bundle
 import androidx.compose.runtime.Composable
 import androidx.fragment.app.viewModels
+import com.spaceapps.myapplication.ui.SpaceAppsTheme
 import com.spaceapps.myapplication.utils.ComposableFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -17,5 +18,5 @@ class ChatFragment : ComposableFragment() {
     }
 
     @Composable
-    override fun Content() = ChatScreen()
+    override fun Content() = SpaceAppsTheme { ChatScreen() }
 }

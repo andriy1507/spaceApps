@@ -18,7 +18,7 @@ import javax.inject.Singleton
 object DataStoreModule {
 
     private val Context.preferencesDataStore by preferencesDataStore(PREFERENCES_DATA_STORE)
-    private val Context.settingsDataStore by dataStore(SETTINGS_DATA_STORE, SettingsSerializer)
+    val Context.settingsDataStore by dataStore(SETTINGS_DATA_STORE, SettingsSerializer)
 
     @Provides
     @Singleton
