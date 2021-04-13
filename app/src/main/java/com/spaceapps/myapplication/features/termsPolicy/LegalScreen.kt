@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.text.HtmlCompat
-import androidx.core.text.toSpanned
 import com.spaceapps.myapplication.R
 import com.spaceapps.myapplication.ui.ACTION_BAR_SIZE
 import com.spaceapps.myapplication.ui.SPACING_4

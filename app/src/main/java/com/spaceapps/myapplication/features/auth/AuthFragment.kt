@@ -41,7 +41,8 @@ class AuthFragment : ComposableFragment() {
 
     @Composable
     override fun Content() = SpaceAppsTheme {
-        AuthScreen(vm) }
+        AuthScreen(vm)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

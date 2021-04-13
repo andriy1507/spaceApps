@@ -28,7 +28,7 @@ class LegalViewModel @Inject constructor(
             LegalType.TermsOfUse -> repository.getTermsOfUse()
             LegalType.PrivacyPolicy -> repository.getPrivacyPolicy()
         }
-        when(result) {
+        when (result) {
             is GetLegalResult.Success -> content.postValue(result.content)
             is GetLegalResult.Failure -> Unit
         }

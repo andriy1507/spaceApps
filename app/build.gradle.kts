@@ -12,9 +12,9 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("com.google.firebase.crashlytics")
     id("com.google.gms.google-services")
-    id("com.google.protobuf") version "0.8.12"
-    id("org.jlleitschuh.gradle.ktlint") version "9.3.0"
-    id("io.gitlab.arturbosch.detekt") version "1.15.0"
+    id("com.google.protobuf") version "0.8.15"
+    id("org.jlleitschuh.gradle.ktlint") version "10.0.0"
+    id("io.gitlab.arturbosch.detekt") version "1.16.0"
 }
 
 android {

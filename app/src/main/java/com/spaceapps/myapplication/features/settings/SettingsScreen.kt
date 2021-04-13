@@ -26,6 +26,8 @@ import com.spaceapps.myapplication.ui.SPACING_16
 import dev.chrisbanes.accompanist.insets.LocalWindowInsets
 import dev.chrisbanes.accompanist.insets.toPaddingValues
 
+private const val DIALOG_WIDTH_RATIO = .8f
+
 @Composable
 fun SettingsScreen(vm: SettingsViewModel) = Box(
     modifier = Modifier
@@ -66,7 +68,7 @@ fun LogOutDialog(
 ) = Dialog(onDismissRequest = dismiss) {
     Column(
         modifier = Modifier
-            .fillMaxWidth(.8f)
+            .fillMaxWidth(DIALOG_WIDTH_RATIO)
             .wrapContentHeight()
             .clip(RoundedCornerShape(SPACING_16.dp))
             .background(MaterialTheme.colors.background)
