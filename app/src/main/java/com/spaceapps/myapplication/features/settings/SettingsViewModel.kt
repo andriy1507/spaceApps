@@ -24,6 +24,8 @@ class SettingsViewModel @Inject constructor(
 
     fun goAuth() = navDispatcher.emit { navigate(R.id.authScreen) }
 
+    fun goQrCode() = navDispatcher.emit { navigate(R.id.qrCodeScreen) }
+
     fun goChat() = navDispatcher.emit { navigate(R.id.chatScreen) }
 
     fun goFeeds() = navDispatcher.emit { navigate(R.id.feedsListScreen) }

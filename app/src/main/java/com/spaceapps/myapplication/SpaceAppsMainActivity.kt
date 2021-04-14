@@ -96,6 +96,7 @@ class SpaceAppsMainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.authScreen,
+                R.id.qrCodeScreen,
                 R.id.forgotPasswordScreen -> binding.bottomNavView.isGone = true
                 else -> binding.bottomNavView.isVisible = true
             }

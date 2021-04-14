@@ -67,4 +67,8 @@
         android:id="@+id/legalScreen"
         android:name="com.spaceapps.myapplication.features.termsPolicy.LegalFragment" />
 
+    <fragment
+        android:id="@+id/qrCodeScreen"
+        android:name="com.spaceapps.myapplication.features.qrCodeScreen.QrCodeFragment"/>
+
 </navigation>
