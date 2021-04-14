@@ -47,4 +47,5 @@
     <string name="google_sign_in_failed">Sign in with Google failed</string>
     <string name="facebook_sign_in_failed">Sign in with Facebook failed</string>
     <string name="apple_sign_in_failed">Sign in with Apple ID failed</string>
+    <string name="qr_code">QR-Code</string>
 </resources>

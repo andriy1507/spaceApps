@@ -7,7 +7,7 @@ on:
 jobs:
   #  KtLint Check
   ktlint_check:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -29,7 +29,7 @@ jobs:
         run: ./gradlew ktlintCheck --continue
   #  Lint Check
   lint_check:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -52,7 +52,7 @@ jobs:
         run: ./gradlew lintRelease
   #  Detekt Check
   detekt_check:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -122,7 +122,7 @@ jobs:
       - detekt_check
 #      - android_test
       - test
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2

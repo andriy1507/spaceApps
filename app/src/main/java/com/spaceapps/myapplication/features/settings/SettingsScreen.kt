@@ -54,6 +54,11 @@ fun SettingsScreen(vm: SettingsViewModel) = Box(
                 Text(text = stringResource(R.string.feeds))
             }
         }
+        item {
+            Button(onClick = vm::goQrCode) {
+                Text(text = stringResource(R.string.qr_code))
+            }
+        }
     }
     if (events is ShowLogOutDialog) {
         LogOutDialog(dismiss = vm::dismissLogOut, logOut = vm::logOut)
