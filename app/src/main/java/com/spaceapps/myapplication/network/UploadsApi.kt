@@ -12,19 +12,19 @@ interface UploadsApi {
 
     @Multipart
     @POST("/uploads/image")
-    suspend fun uploadImage(@Part("file") file: MultipartBody.Part): UploadResponse
+    suspend fun uploadImage(@Part file: MultipartBody.Part): UploadResponse
 
     @Multipart
     @POST("/uploads/video")
-    suspend fun uploadVideo(@Part("file") file: MultipartBody.Part): UploadResponse
+    suspend fun uploadVideo(@Part file: MultipartBody.Part): UploadResponse
 
     @Multipart
     @POST("/uploads/audio")
-    suspend fun uploadAudio(@Part("file") file: MultipartBody.Part): UploadResponse
+    suspend fun uploadAudio(@Part file: MultipartBody.Part): UploadResponse
 
     @Multipart
     @POST("/uploads/file")
-    suspend fun uploadFile(@Part("file") file: MultipartBody.Part): UploadResponse
+    suspend fun uploadFile(@Part file: MultipartBody.Part): UploadResponse
 
     @DELETE("/uploads/{fileName}")
     suspend fun deleteFile(@Path("fileName") fileName: String)
