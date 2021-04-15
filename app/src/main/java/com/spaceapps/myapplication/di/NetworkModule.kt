@@ -33,10 +33,14 @@ object NetworkModule {
         logger: HttpLoggingInterceptor,
         authInterceptor: AuthInterceptor,
         languageInterceptor: LanguageInterceptor,
-        authenticator: SpaceAppsAuthenticator
+        authenticator: SpaceAppsAuthenticator,
+        headersInterceptor: HeadersInterceptor,
+        gzipInterceptor: GzipInterceptor
     ) = OkHttpClient.Builder().apply {
         addInterceptor(authInterceptor)
         addInterceptor(languageInterceptor)
+        addInterceptor(headersInterceptor)
+        addInterceptor(gzipInterceptor)
         authenticator(authenticator)
         addNetworkInterceptor(StethoInterceptor())
         addInterceptor(logger)
