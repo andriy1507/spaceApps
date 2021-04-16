@@ -1,6 +1,6 @@
-import com.google.protobuf.gradle.*
-import org.jetbrains.kotlin.konan.properties.propertyString
-import java.util.*
+import com.google.protobuf.gradle.generateProtoTasks
+import com.google.protobuf.gradle.protobuf
+import com.google.protobuf.gradle.protoc
 
 val kotlinVersion = "1.4.31"
 val composeVersion = "1.0.0-beta04"
@@ -29,17 +29,6 @@ android {
         testInstrumentationRunner = "com.spaceapps.myapplication.runner.SpaceAppsHiltRunner"
         testInstrumentationRunnerArguments(mapOf("clearPackageData" to "true"))
     }
-    signingConfigs {
-//        create("release") {
-//            val propFile = rootProject.file("keystore/keystore.properties")
-//            val keyProps = Properties()
-//            if (propFile.exists()) keyProps.load(propFile.inputStream())
-//            keyAlias = keyProps.propertyString("keyAlias")
-//            keyPassword = keyProps.propertyString("keyPassword")
-//            storeFile = keyProps.propertyString("storeFile")?.let { file(it) }
-//            storePassword = keyProps.propertyString("storePassword")
-//        }
-    }
     buildTypes {
         getByName("release") {
             isMinifyEnabled = true
@@ -52,7 +41,6 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-//            signingConfig = signingConfigs.getByName("release")
         }
         getByName("debug") {
             isMinifyEnabled = false

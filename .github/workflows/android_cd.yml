@@ -2,8 +2,7 @@ name: Android CD
 
 on:
   push:
-    branches: [ci-cd-test]
-
+    branches: [master]
 jobs:
   #  Build artifact
   build:
