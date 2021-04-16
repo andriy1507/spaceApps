@@ -30,15 +30,15 @@ android {
         testInstrumentationRunnerArguments(mapOf("clearPackageData" to "true"))
     }
     signingConfigs {
-        create("release") {
-            val propFile = rootProject.file("keystore/keystore.properties")
-            val keyProps = Properties()
-            if (propFile.exists()) keyProps.load(propFile.inputStream())
-            keyAlias = keyProps.propertyString("keyAlias")
-            keyPassword = keyProps.propertyString("keyPassword")
-            storeFile = keyProps.propertyString("storeFile")?.let { file(it) }
-            storePassword = keyProps.propertyString("storePassword")
-        }
+//        create("release") {
+//            val propFile = rootProject.file("keystore/keystore.properties")
+//            val keyProps = Properties()
+//            if (propFile.exists()) keyProps.load(propFile.inputStream())
+//            keyAlias = keyProps.propertyString("keyAlias")
+//            keyPassword = keyProps.propertyString("keyPassword")
+//            storeFile = keyProps.propertyString("storeFile")?.let { file(it) }
+//            storePassword = keyProps.propertyString("storePassword")
+//        }
     }
     buildTypes {
         getByName("release") {
