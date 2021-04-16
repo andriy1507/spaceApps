@@ -4,8 +4,7 @@ on:
   pull_request:
     branches: [master]
 jobs:
-  #  KtLint Check
-  ktlint_check:
+  ktlint-check:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -26,8 +25,7 @@ jobs:
         run: chmod +x ./gradlew
       - name: Run ktlint check
         run: ./gradlew ktlintCheck --continue
-  #  Lint Check
-  lint_check:
+  lint-check:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -49,8 +47,7 @@ jobs:
         run: chmod +x ./gradlew
       - name: Run lint check
         run: ./gradlew lintRelease
-  #  Detekt Check
-  detekt_check:
+  detekt-check:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -72,9 +69,8 @@ jobs:
         run: chmod +x ./gradlew
       - name: Run detekt check
         run: ./gradlew detektRelease
-  #  Unit Test Check
-  test:
-    needs: [lint_check, ktlint_check, detekt_check]
+  unit-tests:
+    needs: [lint-check, ktlint-check, detekt-check]
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
@@ -86,9 +82,8 @@ jobs:
         run: chmod +x ./gradlew
       - name: Run test
         run: ./gradlew testReleaseUnitTest
-  #  Instrumentation Test Check
-  #  android_test:
-  #    needs: [lint_check, ktlint_check, detekt_check, test]
+  #  instrumentation-tests:
+  #    needs: [lint-check, ktlint-check, detekt-check, unit-tests]
   #    runs-on: ubuntu-20.04
   #    steps:
   #      - uses: actions/checkout@v2
