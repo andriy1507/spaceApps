@@ -3,7 +3,6 @@ name: Android CI
 on:
   pull_request:
     branches: [master]
-
 jobs:
   #  KtLint Check
   ktlint_check:
