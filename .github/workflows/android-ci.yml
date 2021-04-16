@@ -4,107 +4,114 @@ on:
   pull_request:
     branches: [master]
 jobs:
-  ktlint-check:
-    runs-on: ubuntu-latest
+#  ktlint-check:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#      - uses: actions/cache@v2
+#        with:
+#          path: |
+#            ~/.gradle/caches
+#            ~/.gradle/wrapper
+#          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+#          restore-keys: |
+#            ${{ runner.os }}-gradle-
+#      - name: Set up JDK 11
+#        uses: actions/setup-java@v1
+#        with:
+#          java-version: 11
+#      - name: Make gradlew executable
+#        run: chmod +x ./gradlew
+#      - name: Run ktlint check
+#        run: ./gradlew ktlintCheck --continue
+#  lint-check:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#      - name: Restore Cache
+#        uses: actions/cache@v2
+#        with:
+#          path: |
+#            ~/.gradle/caches
+#            ~/.gradle/wrapper
+#          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+#          restore-keys: |
+#            ${{ runner.os }}-gradle-
+#      - name: Set up JDK 11
+#        uses: actions/setup-java@v1
+#        with:
+#          java-version: 11
+#      - name: Make gradlew executable
+#        run: chmod +x ./gradlew
+#      - name: Run lint check
+#        run: ./gradlew lintRelease
+#  detekt-check:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#      - name: Restore Cache
+#        uses: actions/cache@v2
+#        with:
+#          path: |
+#            ~/.gradle/caches
+#            ~/.gradle/wrapper
+#          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+#          restore-keys: |
+#            ${{ runner.os }}-gradle-
+#      - name: Set up JDK 11
+#        uses: actions/setup-java@v1
+#        with:
+#          java-version: 11
+#      - name: Make gradlew executable
+#        run: chmod +x ./gradlew
+#      - name: Run detekt check
+#        run: ./gradlew detektRelease
+#  unit-tests:
+#    needs: [lint-check, ktlint-check, detekt-check]
+#    runs-on: ubuntu-20.04
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#      - name: Set up JDK 11
+#        uses: actions/setup-java@v1
+#        with:
+#          java-version: 11
+#      - name: Make gradlew executable
+#        run: chmod +x ./gradlew
+#      - name: Run Unit Tests
+#        run: ./gradlew testReleaseUnitTest
+  instrumentation-tests:
+#    needs: [lint-check, ktlint-check, detekt-check, unit-tests]
+    runs-on: macos-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - uses: actions/cache@v2
+      - name: Run Instrumentation Tests
+        uses: reactivecircus/android-emulator-runner@v2
         with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-      - name: Set up JDK 11
-        uses: actions/setup-java@v1
-        with:
-          java-version: 11
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew
-      - name: Run ktlint check
-        run: ./gradlew ktlintCheck --continue
-  lint-check:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Restore Cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-      - name: Set up JDK 11
-        uses: actions/setup-java@v1
-        with:
-          java-version: 11
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew
-      - name: Run lint check
-        run: ./gradlew lintRelease
-  detekt-check:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Restore Cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-      - name: Set up JDK 11
-        uses: actions/setup-java@v1
-        with:
-          java-version: 11
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew
-      - name: Run detekt check
-        run: ./gradlew detektRelease
-  unit-tests:
-    needs: [lint-check, ktlint-check, detekt-check]
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up JDK 11
-        uses: actions/setup-java@v1
-        with:
-          java-version: 11
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew
-      - name: Run test
-        run: ./gradlew testReleaseUnitTest
-  #  instrumentation-tests:
-  #    needs: [lint-check, ktlint-check, detekt-check, unit-tests]
-  #    runs-on: ubuntu-20.04
-  #    steps:
-  #      - uses: actions/checkout@v2
-  #      - uses: actions/setup-java@v1
-  #        with:
-  #          java-version: 11
-  #      - name: Make gradlew executable
-  #        run: chmod +x ./gradlew
-  #      - name: Build APK for UI test after Unit tests
-  #        run: |
-  #          ./gradlew test
-  #          ./gradlew assembleDebug
-  #          ./gradlew assembleDebugAndroidTest
-  #      - name: Firebase auth with gcloud
-  #        uses: google-github-actions/setup-gcloud@master
-  #        with:
-  #          version: '290.0.1'
-  #          service_account_key: ${{ secrets.FIREBASE_KEY }}
-  #          project_id: ${{ secrets.FIREBASE_PROJECT_ID }}
-  #
-  #      - name: Run Instrumentation Tests in Firebase Test Lab
-  #        run: |
-  #          gcloud firebase test android models list
-  #          gcloud firebase test android run --type instrumentation --use-orchestrator --app app/build/outputs/apk/debug/app-debug.apk --test app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk --device model=Pixel2,version=30,locale=en,orientation=portrait
+          api-level: 29
+          script: ./gradlew connectedCheck
+#      - uses: actions/setup-java@v1
+#        with:
+#          java-version: 11
+#      - name: Make gradlew executable
+#        run: chmod +x ./gradlew
+#      - name: Build APK for UI test after Unit tests
+#        run: |
+#          ./gradlew test
+#          ./gradlew assembleDebug
+#          ./gradlew assembleDebugAndroidTest
+#      - name: Firebase auth with gcloud
+#        uses: google-github-actions/setup-gcloud@master
+#        with:
+#          version: '290.0.1'
+#          service_account_key: ${{ secrets.FIREBASE_KEY }}
+#          project_id: ${{ secrets.FIREBASE_PROJECT_ID }}
+#
+#      - name: Run Instrumentation Tests in Firebase Test Lab
+#        run: |
+#          gcloud firebase test android models list
+#          gcloud firebase test android run --type instrumentation --use-orchestrator --app app/build/outputs/apk/debug/app-debug.apk --test app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk --device model=Pixel2,version=30,locale=en,orientation=portrait
