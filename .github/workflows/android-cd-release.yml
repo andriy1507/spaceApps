@@ -58,15 +58,14 @@ jobs:
         uses: actions/download-artifact@master
         with:
           name: release-aab
-      - run: ls -R
       - name: Upload file to Google Play
         uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJsonPlainText: ${{ secrets.FIREBASE_KEY }}
           packageName: com.spaceapps.myapplication
-          releaseFiles: app-release.aab
+          releaseFiles: bundle/release/app-release.aab
           track: internal
           #          inAppUpdatePriority: 2
           #          userFraction: 0.33
           #          whatsNewDirectory: distribution/whatsnew
-          mappingFile: mapping.txt
+          mappingFile: bundle/mapping/release/mapping.txt
