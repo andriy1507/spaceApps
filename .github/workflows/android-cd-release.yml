@@ -2,9 +2,7 @@ name: Android CD Release
 
 on:
   push:
-    branches:
-      - master
-#    tags: [ v* ]
+    tags: [ v* ]
 jobs:
   build-aab:
     name: Build signed AAB
@@ -42,7 +40,6 @@ jobs:
           keyPassword: ${{ secrets.KEY_PASSWORD }}
         env:
           BUILD_TOOLS_VERSION: 30.0.2
-      - run: echo ${{steps.signing.outputs.signedReleaseFile}}
       - uses: actions/upload-artifact@v2
         with:
           name: release-aab
