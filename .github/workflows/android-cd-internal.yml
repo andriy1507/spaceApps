@@ -2,7 +2,7 @@ name: Android CD Internal
 
 on:
   push:
-    branches: [ master ]
+    branches-ignore:  [ master ]
 jobs:
   build-apk:
     name: Build signed APK
