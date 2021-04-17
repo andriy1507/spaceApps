@@ -58,6 +58,7 @@ jobs:
         uses: actions/download-artifact@master
         with:
           name: release-aab
+      - run: ls -R
       - name: Upload file to Google Play
         uses: r0adkll/upload-google-play@v1
         with:
