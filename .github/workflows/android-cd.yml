@@ -4,6 +4,7 @@ on:
   push:
     branches: [ master, ci-cd-test ]
 jobs:
+#  region CHECKS TESTS
 #  ktlint-check:
 #    name: Ktlint code check
 #    runs-on: ubuntu-latest
@@ -104,12 +105,11 @@ jobs:
 #        with:
 #          api-level: 29
 #          script: ./gradlew connectedAndroidTest
+#  endregion
   build-apk:
     name: Build signed APK
 #    needs: [ unit-test,instrumentation-tests ]
     runs-on: ubuntu-latest
-    outputs:
-      release-apk: ${{steps.signing.outputs.signedReleaseFile}}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -192,12 +192,10 @@ jobs:
       - uses: actions/download-artifact@master
         with:
           name: release-apk
-      - name: Display structure of downloaded files
-        run: ls -R
       - name: Upload bundle to Firebase App Distribution
-        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        uses: wzieba/Firebase-Distribution-Github-Action@v1.3.2
         with:
           appId: ${{secrets.FIREBASE_PROJECT_ID}}
           token: ${{secrets.FIREBASE_KEY}}
-          groups: developers
-          file: ${{needs.build-apk.outputs.signedReleaseFile}}
+          serviceCredentialsFile: ${{secrets.FIREBASE_KEY}}
+          file: app-release-unsigned-signed.apk
