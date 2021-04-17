@@ -74,7 +74,7 @@ jobs:
         run: ./gradlew detektRelease
   unit-tests:
     name: Unit tests
-    needs: [lint-check, ktlint-check, detekt-check]
+    needs: [ lint-check, ktlint-check, detekt-check ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -89,7 +89,7 @@ jobs:
         run: ./gradlew testReleaseUnitTest
   instrumentation-tests:
     name: Instrumentation tests
-    needs: [lint-check, ktlint-check, detekt-check]
+    needs: [ lint-check, ktlint-check, detekt-check ]
     runs-on: macos-latest
     steps:
       - name: Checkout
@@ -103,4 +103,4 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
-          script: ./gradlew connectedCheck
+          script: ./gradlew connectedAndroidTest
