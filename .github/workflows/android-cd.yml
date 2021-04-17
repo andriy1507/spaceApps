@@ -4,8 +4,30 @@ on:
   push:
     branches: [ master ]
 jobs:
-  build-apk:
-    name: Build signed APK
+  ktlint-check:
+    name: Ktlint code check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+      - name: Run ktlint check
+        run: ./gradlew ktlintCheck --continue
+  lint-check:
+    name: Lint code check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -25,10 +47,89 @@ jobs:
           java-version: 11
       - name: Make gradlew executable
         run: chmod +x ./gradlew
-      - name: Assemble release apk
+      - name: Run lint check
+        run: ./gradlew lintRelease
+  detekt-check:
+    name: Detekt code check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Restore Cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+      - name: Run detekt check
+        run: ./gradlew detektRelease
+  unit-tests:
+    name: Unit tests
+    needs: [ lint-check, ktlint-check, detekt-check ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+      - name: Run Unit Tests
+        run: ./gradlew testReleaseUnitTest
+  instrumentation-tests:
+    name: Instrumentation tests
+    needs: [ lint-check, ktlint-check, detekt-check ]
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+      - name: Run Instrumentation Tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 29
+          script: ./gradlew connectedAndroidTest
+  build-apk:
+    name: Build signed APK
+    needs: [ unit-test,instrumentation-tests ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Restore Cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Change gradle permission
+        run: chmod +x ./gradlew
+      - name: Assemble release APK
         run: ./gradlew assembleRelease
       - uses: r0adkll/sign-android-release@v1
-        name: Sign app APK
+        name: Sign release APK
         id: signing
         with:
           releaseDirectory: app/build/outputs/apk/release
@@ -40,10 +141,13 @@ jobs:
           BUILD_TOOLS_VERSION: 30.0.2
       - uses: actions/upload-artifact@v2
         with:
-          name: Signed APK file
+          name: release-apk
           path: ${{steps.signing.outputs.signedReleaseFile}}
   build-aab:
     name: Build signed AAB
+    needs: [ unit-test,instrumentation-tests ]
+    outputs:
+      release-apk: ${{steps.signing.outputs.signedReleaseFile}}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -61,12 +165,12 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
-      - name: Make gradlew executable
+      - name: Change gradle permission
         run: chmod +x ./gradlew
-      - name: Assemble release apk
+      - name: Assemble release AAB
         run: ./gradlew bundleRelease
       - uses: r0adkll/sign-android-release@v1
-        name: Sign app AAB
+        name: Sign release AAB
         id: signing
         with:
           releaseDirectory: app/build/outputs/bundle/release
@@ -78,5 +182,43 @@ jobs:
           BUILD_TOOLS_VERSION: 30.0.2
       - uses: actions/upload-artifact@v2
         with:
-          name: Signed AAB file
+          name: release-aab
           path: ${{steps.signing.outputs.signedReleaseFile}}
+  deploy-firebase:
+    name: Deploy to Firebase App Distribution
+    needs: [ build-apk ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Download release APK
+        uses: actions/download-artifact@master
+        with:
+          name: release-apk
+      - name: Upload file to Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1.3.2
+        with:
+          appId: ${{secrets.FIREBASE_APP_ID}}
+          token: ${{secrets.FIREBASE_TOKEN}}
+          groups: developers
+          file: app-release-unsigned-signed.apk
+#  deploy-google-play:
+#    name: Deploy to Google Play
+#    needs: [ build-aab ]
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Download release AAB
+#        uses: actions/download-artifact@master
+#        with:
+#          name: release-aab
+#      - name: Upload file to Google Play
+#        uses: r0adkll/upload-google-play@v1
+#        with:
+#          serviceAccountJson: ${{ SERVICE_ACCOUNT_JSON }}
+#          packageName: com.example.MyApp
+#          releaseFiles: app-release-unsigned-signed.aab
+#          track: internal
+#          inAppUpdatePriority: 2
+#          userFraction: 0.33
+#          whatsNewDirectory: distribution/whatsnew
+#          mappingFile: app/build/outputs/mapping/release/mapping.txt
