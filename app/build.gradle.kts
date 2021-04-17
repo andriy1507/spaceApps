@@ -185,7 +185,7 @@ dependencies {
     val datastore_version = "1.0.0-alpha08"
     implementation("androidx.datastore:datastore:$datastore_version")
     implementation("androidx.datastore:datastore-preferences:$datastore_version")
-    implementation("com.google.protobuf:protobuf-javalite:3.15.1")
+    implementation("com.google.protobuf:protobuf-javalite:3.11.1")
 
 //    Facebook SDK
     implementation("com.facebook.android:facebook-android-sdk:9.1.1")
