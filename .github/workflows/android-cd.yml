@@ -108,6 +108,8 @@ jobs:
     name: Build signed APK
 #    needs: [ unit-test,instrumentation-tests ]
     runs-on: ubuntu-latest
+    outputs:
+      release-apk: ${{steps.signing.outputs.signedReleaseFile}}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -124,12 +126,11 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew
-      - name: Assemble release apk
+      - run: chmod +x ./gradlew
+      - name: Assemble release APK
         run: ./gradlew assembleRelease
       - uses: r0adkll/sign-android-release@v1
-        name: Sign app APK
+        name: Sign release APK
         id: signing
         with:
           releaseDirectory: app/build/outputs/apk/release
@@ -146,6 +147,8 @@ jobs:
 #  build-aab:
 #    name: Build signed AAB
 #    needs: [ unit-test,instrumentation-tests ]
+#    outputs:
+#      release-apk: ${{steps.signing.outputs.signedReleaseFile}}
 #    runs-on: ubuntu-latest
 #    steps:
 #      - name: Checkout
@@ -163,12 +166,11 @@ jobs:
 #        uses: actions/setup-java@v1
 #        with:
 #          java-version: 11
-#      - name: Make gradlew executable
-#        run: chmod +x ./gradlew
-#      - name: Assemble release apk
+#      - run: chmod +x ./gradlew
+#      - name: Assemble release AAB
 #        run: ./gradlew bundleRelease
 #      - uses: r0adkll/sign-android-release@v1
-#        name: Sign app AAB
+#        name: Sign release AAB
 #        id: signing
 #        with:
 #          releaseDirectory: app/build/outputs/bundle/release
@@ -183,6 +185,7 @@ jobs:
 #          name: release-aab
 #          path: ${{steps.signing.outputs.signedReleaseFile}}
   deploy-firebase:
+    name: Deploy to Firebase App Distribution
     needs: [ build-apk ]
     runs-on: ubuntu-latest
     steps:
@@ -195,4 +198,4 @@ jobs:
           appId: ${{secrets.FIREBASE_PROJECT_ID}}
           token: ${{secrets.FIREBASE_KEY}}
           groups: developers
-          file: ${{needs.build-apk.signing.outputs.signedReleaseFile}}
+          file: ${{needs.build-apk.outputs.signedReleaseFile}}
