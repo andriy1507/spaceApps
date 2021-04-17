@@ -5,6 +5,7 @@ on:
     branches: [ master ]
 jobs:
   build-apk:
+    name: Build signed APK
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -42,6 +43,7 @@ jobs:
           name: Signed APK file
           path: ${{steps.signing.outputs.signedReleaseFile}}
   build-aab:
+    name: Build signed AAB
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

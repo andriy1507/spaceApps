@@ -5,6 +5,7 @@ on:
     branches: [ master ]
 jobs:
   ktlint-check:
+    name: Ktlint code check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -26,6 +27,7 @@ jobs:
       - name: Run ktlint check
         run: ./gradlew ktlintCheck --continue
   lint-check:
+    name: Lint code check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -48,6 +50,7 @@ jobs:
       - name: Run lint check
         run: ./gradlew lintRelease
   detekt-check:
+    name: Detekt code check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -70,6 +73,7 @@ jobs:
       - name: Run detekt check
         run: ./gradlew detektRelease
   unit-tests:
+    name: Unit tests
     needs: [lint-check, ktlint-check, detekt-check]
     runs-on: ubuntu-latest
     steps:
@@ -84,6 +88,7 @@ jobs:
       - name: Run Unit Tests
         run: ./gradlew testReleaseUnitTest
   instrumentation-tests:
+    name: Instrumentation tests
     needs: [lint-check, ktlint-check, detekt-check]
     runs-on: macos-latest
     steps:
