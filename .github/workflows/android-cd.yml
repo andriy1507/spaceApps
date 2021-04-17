@@ -126,7 +126,8 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
-      - run: chmod +x ./gradlew
+      - name: Change gradle permission
+        run: chmod +x ./gradlew
       - name: Assemble release APK
         run: ./gradlew assembleRelease
       - uses: r0adkll/sign-android-release@v1
@@ -166,7 +167,8 @@ jobs:
 #        uses: actions/setup-java@v1
 #        with:
 #          java-version: 11
-#      - run: chmod +x ./gradlew
+#      - name: Change gradle permission
+#        run: chmod +x ./gradlew
 #      - name: Assemble release AAB
 #        run: ./gradlew bundleRelease
 #      - uses: r0adkll/sign-android-release@v1
@@ -189,7 +191,10 @@ jobs:
     needs: [ build-apk ]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@master
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Download release APK
+        uses: actions/download-artifact@master
         with:
           name: release-apk
       - name: Upload bundle to Firebase App Distribution
@@ -197,5 +202,4 @@ jobs:
         with:
           appId: ${{secrets.FIREBASE_PROJECT_ID}}
           token: ${{secrets.FIREBASE_TOKEN}}
-          serviceCredentialsFile: ${{secrets.FIREBASE_KEY}}
           file: app-release-unsigned-signed.apk
