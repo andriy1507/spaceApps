@@ -11,6 +11,7 @@ plugins {
     id("kotlin-parcelize")
     id("dagger.hilt.android.plugin")
     id("com.google.firebase.crashlytics")
+    id("com.google.firebase.firebase-perf")
     id("com.google.gms.google-services")
     id("com.google.protobuf") version "0.8.15"
     id("org.jlleitschuh.gradle.ktlint") version "10.0.0"
@@ -173,6 +174,7 @@ dependencies {
     implementation("com.google.firebase:firebase-messaging-ktx")
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-messaging-directboot")
+    implementation("com.google.firebase:firebase-perf-ktx")
 //    Room database
     val room_version = "2.3.0-rc01"
     implementation("androidx.room:room-runtime:$room_version")
