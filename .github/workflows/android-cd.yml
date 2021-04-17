@@ -106,7 +106,7 @@ jobs:
           script: ./gradlew connectedAndroidTest
   build-apk:
     name: Build signed APK
-    needs: [ unit-test,instrumentation-tests ]
+    needs: [ unit-tests ,instrumentation-tests ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -145,7 +145,7 @@ jobs:
           path: ${{steps.signing.outputs.signedReleaseFile}}
   build-aab:
     name: Build signed AAB
-    needs: [ unit-test,instrumentation-tests ]
+    needs: [ unit-tests ,instrumentation-tests ]
     outputs:
       release-apk: ${{steps.signing.outputs.signedReleaseFile}}
     runs-on: ubuntu-latest
