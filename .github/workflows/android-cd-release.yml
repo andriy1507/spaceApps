@@ -2,7 +2,9 @@ name: Android CD Release
 
 on:
   push:
-    tags: [ v* ]
+    branches:
+      - master
+      #    tags: [ v* ]
 jobs:
   build-aab:
     name: Build signed AAB
@@ -65,4 +67,4 @@ jobs:
           #          inAppUpdatePriority: 2
           #          userFraction: 0.33
           #          whatsNewDirectory: distribution/whatsnew
-          mappingFile: bundle/mapping/release/mapping.txt
+          mappingFile: mapping/release/mapping.txt
