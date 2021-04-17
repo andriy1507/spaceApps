@@ -160,7 +160,7 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
 //    Dagger-Hilt
-    val dagger_version = "2.34-beta"
+    val dagger_version = "2.34.1-beta"
     implementation("com.google.dagger:hilt-android:$dagger_version")
     kapt("com.google.dagger:hilt-android-compiler:$dagger_version")
     val hilt_version = "1.0.0-beta01"
@@ -212,8 +212,8 @@ dependencies {
     androidTestUtil("androidx.test:orchestrator:1.3.0")
 
 //    Hilt testing
-    androidTestImplementation("com.google.dagger:hilt-android-testing:2.34-beta")
-    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.34-beta")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.34.1-beta")
+    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.34.1-beta")
 //   Assertions
     androidTestImplementation("androidx.test.ext:junit:1.1.2")
     androidTestImplementation("androidx.test.ext:truth:1.3.0")
