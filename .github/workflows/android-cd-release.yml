@@ -1,0 +1,69 @@
+name: Android CD Release
+
+on:
+  push:
+    branches: [ master ]
+    tags: [ * ]
+jobs:
+  build-aab:
+    name: Build signed AAB
+    outputs:
+      release-apk: ${{steps.signing.outputs.signedReleaseFile}}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Restore Cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Change gradle permission
+        run: chmod +x ./gradlew
+      - name: Assemble release AAB
+        run: ./gradlew bundleRelease
+      - uses: r0adkll/sign-android-release@v1
+        name: Sign release AAB
+        id: signing
+        with:
+          releaseDirectory: app/build/outputs/bundle/release
+          signingKeyBase64: ${{ secrets.SIGN_KEY }}
+          alias: ${{ secrets.KEY_ALIAS }}
+          keyStorePassword: ${{ secrets.STORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEY_PASSWORD }}
+        env:
+          BUILD_TOOLS_VERSION: 30.0.2
+      - uses: actions/upload-artifact@v2
+        with:
+          name: release-aab
+          path: |
+            ${{steps.signing.outputs.signedReleaseFile}}
+            app/build/outputs/mapping/release/mapping.txt
+  deploy-google-play:
+    name: Deploy to Google Play
+    needs: [ build-aab ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download release AAB
+        uses: actions/download-artifact@master
+        with:
+          name: release-aab
+      - name: Upload file to Google Play
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.FIREBASE_KEY }}
+          packageName: com.spaceapps.myapplication
+          releaseFiles: app-release-unsigned-signed.aab
+          track: internal
+          #          inAppUpdatePriority: 2
+          #          userFraction: 0.33
+          #          whatsNewDirectory: distribution/whatsnew
+          mappingFile: mapping.txt
