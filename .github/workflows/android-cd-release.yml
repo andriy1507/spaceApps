@@ -2,6 +2,7 @@ name: Android CD Release
 
 on:
   push:
+    branches: [ master ]
     tags: [ v* ]
 jobs:
   build-aab:
@@ -60,7 +61,7 @@ jobs:
         with:
           serviceAccountJsonPlainText: ${{ secrets.FIREBASE_KEY }}
           packageName: com.spaceapps.myapplication
-          releaseFiles: app-release-unsigned-signed.aab
+          releaseFiles: app-release.aab
           track: internal
           #          inAppUpdatePriority: 2
           #          userFraction: 0.33
