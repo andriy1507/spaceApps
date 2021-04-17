@@ -2,9 +2,7 @@ name: Android CD Release
 
 on:
   push:
-    branches:
-      - master
-      #    tags: [ v* ]
+    tags: [ v* ]
 jobs:
   build-aab:
     name: Build signed AAB
