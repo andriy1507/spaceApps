@@ -47,7 +47,7 @@ class RegexExtTest {
         const val ONLY_LETTERS_PASSWORD = "qwertyasd"
         const val ONLY_NUMBERS_PASSWORD = "123456789"
         const val TOO_SHORT_PASSWORD = "qwe123"
-        const val VALID_EMAIL ="123asd@mail.com"
+        const val VALID_EMAIL = "123asd@mail.com"
         const val EMAIL_WITHOUT_AT = "string.mail.com"
         const val EMAIL_WITHOUT_DOT = "string@mail"
     }
