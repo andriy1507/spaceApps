@@ -4,8 +4,109 @@ on:
   push:
     branches: [ master ]
 jobs:
+#  ktlint-check:
+#    name: Ktlint code check
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#      - uses: actions/cache@v2
+#        with:
+#          path: |
+#            ~/.gradle/caches
+#            ~/.gradle/wrapper
+#          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+#          restore-keys: |
+#            ${{ runner.os }}-gradle-
+#      - name: Set up JDK 11
+#        uses: actions/setup-java@v1
+#        with:
+#          java-version: 11
+#      - name: Make gradlew executable
+#        run: chmod +x ./gradlew
+#      - name: Run ktlint check
+#        run: ./gradlew ktlintCheck --continue
+#  lint-check:
+#    name: Lint code check
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#      - name: Restore Cache
+#        uses: actions/cache@v2
+#        with:
+#          path: |
+#            ~/.gradle/caches
+#            ~/.gradle/wrapper
+#          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+#          restore-keys: |
+#            ${{ runner.os }}-gradle-
+#      - name: Set up JDK 11
+#        uses: actions/setup-java@v1
+#        with:
+#          java-version: 11
+#      - name: Make gradlew executable
+#        run: chmod +x ./gradlew
+#      - name: Run lint check
+#        run: ./gradlew lintRelease
+#  detekt-check:
+#    name: Detekt code check
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#      - name: Restore Cache
+#        uses: actions/cache@v2
+#        with:
+#          path: |
+#            ~/.gradle/caches
+#            ~/.gradle/wrapper
+#          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+#          restore-keys: |
+#            ${{ runner.os }}-gradle-
+#      - name: Set up JDK 11
+#        uses: actions/setup-java@v1
+#        with:
+#          java-version: 11
+#      - name: Make gradlew executable
+#        run: chmod +x ./gradlew
+#      - name: Run detekt check
+#        run: ./gradlew detektRelease
+#  unit-tests:
+#    name: Unit tests
+#    needs: [ lint-check, ktlint-check, detekt-check ]
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#      - name: Set up JDK 11
+#        uses: actions/setup-java@v1
+#        with:
+#          java-version: 11
+#      - name: Make gradlew executable
+#        run: chmod +x ./gradlew
+#      - name: Run Unit Tests
+#        run: ./gradlew testReleaseUnitTest
+#  instrumentation-tests:
+#    name: Instrumentation tests
+#    needs: [ lint-check, ktlint-check, detekt-check ]
+#    runs-on: macos-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#      - uses: actions/setup-java@v1
+#        with:
+#          java-version: 11
+#      - name: Make gradlew executable
+#        run: chmod +x ./gradlew
+#      - name: Run Instrumentation Tests
+#        uses: reactivecircus/android-emulator-runner@v2
+#        with:
+#          api-level: 29
+#          script: ./gradlew connectedAndroidTest
   build-apk:
     name: Build signed APK
+#    needs: [ unit-test,instrumentation-tests ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -40,43 +141,58 @@ jobs:
           BUILD_TOOLS_VERSION: 30.0.2
       - uses: actions/upload-artifact@v2
         with:
-          name: Signed APK file
+          name: release-apk
           path: ${{steps.signing.outputs.signedReleaseFile}}
-  build-aab:
-    name: Build signed AAB
+#  build-aab:
+#    name: Build signed AAB
+#    needs: [ unit-test,instrumentation-tests ]
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#      - name: Restore Cache
+#        uses: actions/cache@v2
+#        with:
+#          path: |
+#            ~/.gradle/caches
+#            ~/.gradle/wrapper
+#          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+#          restore-keys: |
+#            ${{ runner.os }}-gradle-
+#      - name: Set up JDK 11
+#        uses: actions/setup-java@v1
+#        with:
+#          java-version: 11
+#      - name: Make gradlew executable
+#        run: chmod +x ./gradlew
+#      - name: Assemble release apk
+#        run: ./gradlew bundleRelease
+#      - uses: r0adkll/sign-android-release@v1
+#        name: Sign app AAB
+#        id: signing
+#        with:
+#          releaseDirectory: app/build/outputs/bundle/release
+#          signingKeyBase64: ${{ secrets.SIGN_KEY }}
+#          alias: ${{ secrets.KEY_ALIAS }}
+#          keyStorePassword: ${{ secrets.STORE_PASSWORD }}
+#          keyPassword: ${{ secrets.KEY_PASSWORD }}
+#        env:
+#          BUILD_TOOLS_VERSION: 30.0.2
+#      - uses: actions/upload-artifact@v2
+#        with:
+#          name: release-aab
+#          path: ${{steps.signing.outputs.signedReleaseFile}}
+  deploy-firebase:
+    needs: [ build-apk ]
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Restore Cache
-        uses: actions/cache@v2
+      - uses: actions/download-artifact@master
         with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-      - name: Set up JDK 11
-        uses: actions/setup-java@v1
+          name: release-apk
+      - name: Upload bundle to Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
-          java-version: 11
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew
-      - name: Assemble release apk
-        run: ./gradlew bundleRelease
-      - uses: r0adkll/sign-android-release@v1
-        name: Sign app AAB
-        id: signing
-        with:
-          releaseDirectory: app/build/outputs/bundle/release
-          signingKeyBase64: ${{ secrets.SIGN_KEY }}
-          alias: ${{ secrets.KEY_ALIAS }}
-          keyStorePassword: ${{ secrets.STORE_PASSWORD }}
-          keyPassword: ${{ secrets.KEY_PASSWORD }}
-        env:
-          BUILD_TOOLS_VERSION: 30.0.2
-      - uses: actions/upload-artifact@v2
-        with:
-          name: Signed AAB file
-          path: ${{steps.signing.outputs.signedReleaseFile}}
+          appId: ${{secrets.FIREBASE_PROJECT_ID}}
+          token: ${{secrets.FIREBASE_KEY}}
+          groups: developers
+          file: ${{jobs.build-apk.steps.signing.outputs.signedReleaseFile}}
