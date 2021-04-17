@@ -89,6 +89,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 11
       - name: Make gradlew executable
         run: chmod +x ./gradlew
       - name: Run Instrumentation Tests
@@ -96,9 +99,6 @@ jobs:
         with:
           api-level: 29
           script: ./gradlew connectedCheck
-#      - uses: actions/setup-java@v1
-#        with:
-#          java-version: 11
 #      - name: Build APK for UI test after Unit tests
 #        run: |
 #          ./gradlew test
