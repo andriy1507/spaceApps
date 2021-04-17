@@ -211,7 +211,7 @@ dependencies {
 
 //    Hilt testing
     androidTestImplementation("com.google.dagger:hilt-android-testing:2.34-beta")
-    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.33-beta")
+    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.34-beta")
 //   Assertions
     androidTestImplementation("androidx.test.ext:junit:1.1.2")
     androidTestImplementation("androidx.test.ext:truth:1.3.0")

@@ -2,10 +2,10 @@ name: Android CI
 
 on:
   pull_request:
-    branches: [master]
+    branches: [ master ]
 jobs:
-  #  KtLint Check
-  ktlint_check:
+  ktlint-check:
+    name: Ktlint code check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -26,8 +26,8 @@ jobs:
         run: chmod +x ./gradlew
       - name: Run ktlint check
         run: ./gradlew ktlintCheck --continue
-  #  Lint Check
-  lint_check:
+  lint-check:
+    name: Lint code check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -49,8 +49,8 @@ jobs:
         run: chmod +x ./gradlew
       - name: Run lint check
         run: ./gradlew lintRelease
-  #  Detekt Check
-  detekt_check:
+  detekt-check:
+    name: Detekt code check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -72,44 +72,35 @@ jobs:
         run: chmod +x ./gradlew
       - name: Run detekt check
         run: ./gradlew detektRelease
-  #  Unit Test Check
-  test:
-    needs: [lint_check, ktlint_check, detekt_check]
-    runs-on: ubuntu-20.04
+  unit-tests:
+    name: Unit tests
+    needs: [ lint-check, ktlint-check, detekt-check ]
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Set up JDK 11
         uses: actions/setup-java@v1
         with:
           java-version: 11
       - name: Make gradlew executable
         run: chmod +x ./gradlew
-      - name: Run test
+      - name: Run Unit Tests
         run: ./gradlew testReleaseUnitTest
-  #  Instrumentation Test Check
-  #  android_test:
-  #    needs: [lint_check, ktlint_check, detekt_check, test]
-  #    runs-on: ubuntu-20.04
-  #    steps:
-  #      - uses: actions/checkout@v2
-  #      - uses: actions/setup-java@v1
-  #        with:
-  #          java-version: 11
-  #      - name: Make gradlew executable
-  #        run: chmod +x ./gradlew
-  #      - name: Build APK for UI test after Unit tests
-  #        run: |
-  #          ./gradlew test
-  #          ./gradlew assembleDebug
-  #          ./gradlew assembleDebugAndroidTest
-  #      - name: Firebase auth with gcloud
-  #        uses: google-github-actions/setup-gcloud@master
-  #        with:
-  #          version: '290.0.1'
-  #          service_account_key: ${{ secrets.FIREBASE_KEY }}
-  #          project_id: ${{ secrets.FIREBASE_PROJECT_ID }}
-  #
-  #      - name: Run Instrumentation Tests in Firebase Test Lab
-  #        run: |
-  #          gcloud firebase test android models list
-  #          gcloud firebase test android run --type instrumentation --use-orchestrator --app app/build/outputs/apk/debug/app-debug.apk --test app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk --device model=Pixel2,version=30,locale=en,orientation=portrait
+  instrumentation-tests:
+    name: Instrumentation tests
+    needs: [ lint-check, ktlint-check, detekt-check ]
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+      - name: Run Instrumentation Tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 29
+          script: ./gradlew connectedAndroidTest
