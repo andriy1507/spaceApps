@@ -4,11 +4,6 @@ on:
   pull_request:
     branches: [ master ]
 jobs:
-  say-hello:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Says hello
-        run: echo 'Hello world!!!'
   ktlint-check:
     name: Ktlint code check
     runs-on: ubuntu-latest
