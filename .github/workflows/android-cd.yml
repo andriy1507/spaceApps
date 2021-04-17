@@ -195,4 +195,4 @@ jobs:
           appId: ${{secrets.FIREBASE_PROJECT_ID}}
           token: ${{secrets.FIREBASE_KEY}}
           groups: developers
-          file: ${{jobs.build-apk.steps.signing.outputs.signedReleaseFile}}
+          file: ${{needs.build-apk.signing.outputs.signedReleaseFile}}
