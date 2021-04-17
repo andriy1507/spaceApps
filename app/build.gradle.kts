@@ -11,6 +11,7 @@ plugins {
     id("kotlin-parcelize")
     id("dagger.hilt.android.plugin")
     id("com.google.firebase.crashlytics")
+    id("com.google.firebase.firebase-perf")
     id("com.google.gms.google-services")
     id("com.google.protobuf") version "0.8.15"
     id("org.jlleitschuh.gradle.ktlint") version "10.0.0"
@@ -160,7 +161,7 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
 //    Dagger-Hilt
-    val dagger_version = "2.34-beta"
+    val dagger_version = "2.34.1-beta"
     implementation("com.google.dagger:hilt-android:$dagger_version")
     kapt("com.google.dagger:hilt-android-compiler:$dagger_version")
     val hilt_version = "1.0.0-beta01"
@@ -174,6 +175,7 @@ dependencies {
     implementation("com.google.firebase:firebase-messaging-ktx")
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-messaging-directboot")
+    implementation("com.google.firebase:firebase-perf-ktx")
 //    Room database
     val room_version = "2.3.0-rc01"
     implementation("androidx.room:room-runtime:$room_version")
@@ -184,7 +186,7 @@ dependencies {
     val datastore_version = "1.0.0-alpha08"
     implementation("androidx.datastore:datastore:$datastore_version")
     implementation("androidx.datastore:datastore-preferences:$datastore_version")
-    implementation("com.google.protobuf:protobuf-javalite:3.15.1")
+    implementation("com.google.protobuf:protobuf-javalite:3.11.1")
 
 //    Facebook SDK
     implementation("com.facebook.android:facebook-android-sdk:9.1.1")
