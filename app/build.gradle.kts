@@ -77,6 +77,7 @@ android {
     }
     testOptions {
         execution = "ANDROIDX_TEST_ORCHESTRATOR"
+        unitTests.isReturnDefaultValues = true
     }
 }
 configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
@@ -200,7 +201,11 @@ dependencies {
 //   AndroidJUnitRunner and JUnit Rules
     testImplementation("androidx.test:runner:1.3.0")
     testImplementation("androidx.test:rules:1.3.0")
-
+//    OkHttp MockWebServer
+    testImplementation("com.squareup.okhttp3:mockwebserver:$okhttp_version")
+//    Mockito
+    testImplementation("org.mockito:mockito-core:3.9.0")
+    testImplementation("org.mockito:mockito-inline:3.9.0")
 //    Instrumentation testing
     androidTestImplementation("androidx.test:core:1.3.0")
 
@@ -210,8 +215,8 @@ dependencies {
     androidTestUtil("androidx.test:orchestrator:1.3.0")
 
 //    Hilt testing
-    androidTestImplementation("com.google.dagger:hilt-android-testing:2.34-beta")
-    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.34-beta")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:$dagger_version")
+    kaptAndroidTest("com.google.dagger:hilt-android-compiler:$dagger_version")
 //   Assertions
     androidTestImplementation("androidx.test.ext:junit:1.1.2")
     androidTestImplementation("androidx.test.ext:truth:1.3.0")

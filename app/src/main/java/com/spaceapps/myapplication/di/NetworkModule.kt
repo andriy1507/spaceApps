@@ -77,8 +77,8 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideStaticContentApi(retrofit: Retrofit): StaticContentApi =
-        retrofit.create(StaticContentApi::class.java)
+    fun provideStaticContentApi(retrofit: Retrofit): LegalApi =
+        retrofit.create(LegalApi::class.java)
 
     @Provides
     @Singleton

@@ -12,14 +12,17 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.spaceapps.myapplication.databinding.ActivityMainBinding
+import com.spaceapps.myapplication.di.DataStoreModule.settingsDataStore
 import com.spaceapps.myapplication.local.AuthTokenStorage
 import com.spaceapps.myapplication.local.StorageManager
 import com.spaceapps.myapplication.utils.AuthDispatcher
 import com.spaceapps.myapplication.utils.NavDispatcher
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -42,20 +45,19 @@ class SpaceAppsMainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     override fun attachBaseContext(newBase: Context) = runBlocking {
-//        val lang = when(settingsDataStore.data.first().language){
-//            Settings.Language.Ukrainian -> "UK-ua"
-//            else -> "en"
-//        }
-//        super.attachBaseContext(SpaceAppsContextWrapper.wrap(newBase, lang))
-        super.attachBaseContext(newBase)
+        val lang = when (newBase.settingsDataStore.data.first().language) {
+            Settings.Language.Ukrainian -> "uk"
+            else -> "en"
+        }
+        super.attachBaseContext(SpaceAppsContextWrapper.wrap(newBase, lang))
     }
 
     override fun applyOverrideConfiguration(overrideConfiguration: Configuration) = runBlocking {
-//        val lang = when(settingsDataStore.data.first().language){
-//            Settings.Language.Ukrainian -> "UK-ua"
-//            else -> "en"
-//        }
-//        overrideConfiguration.setLocale(Locale(lang))
+        val lang = when (settingsDataStore.data.first().language) {
+            Settings.Language.Ukrainian -> "uk"
+            else -> "en"
+        }
+        overrideConfiguration.setLocale(Locale(lang))
         super.applyOverrideConfiguration(overrideConfiguration)
     }
 

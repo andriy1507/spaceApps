@@ -1,10 +1,9 @@
-package com.spaceapps.myapplication.repositories
+package com.spaceapps.myapplication.repositories.legal
 
 import com.spaceapps.myapplication.PRIVACY_POLICY
 import com.spaceapps.myapplication.TERMS_OF_USE
-import com.spaceapps.myapplication.local.StaticContentStorage
-import com.spaceapps.myapplication.network.StaticContentApi
-import com.spaceapps.myapplication.repositories.legal.GetLegalResult
+import com.spaceapps.myapplication.local.LegalStorage
+import com.spaceapps.myapplication.network.LegalApi
 import com.spaceapps.myapplication.utils.Error
 import com.spaceapps.myapplication.utils.Success
 import com.spaceapps.myapplication.utils.request
@@ -12,9 +11,9 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class StaticContentRepository @Inject constructor(
-    private val api: StaticContentApi,
-    private val storage: StaticContentStorage
+class LegalRepository @Inject constructor(
+    private val api: LegalApi,
+    private val storage: LegalStorage
 ) {
 
     suspend fun getTermsOfUse(): GetLegalResult {

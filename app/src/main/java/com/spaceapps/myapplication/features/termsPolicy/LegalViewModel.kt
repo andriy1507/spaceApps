@@ -2,7 +2,7 @@ package com.spaceapps.myapplication.features.termsPolicy
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.spaceapps.myapplication.repositories.StaticContentRepository
+import com.spaceapps.myapplication.repositories.legal.LegalRepository
 import com.spaceapps.myapplication.repositories.legal.GetLegalResult
 import com.spaceapps.myapplication.utils.async
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LegalViewModel @Inject constructor(
-    private val repository: StaticContentRepository,
+    private val repository: LegalRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 

@@ -43,4 +43,5 @@
     <string name="terms_of_use">Правила користування</string>
     <string name="privacy_policy">Політика конфіденційності</string>
     <string name="feeds">Дописи</string>
+    <string name="qr_code">QR-Код</string>
 </resources>
