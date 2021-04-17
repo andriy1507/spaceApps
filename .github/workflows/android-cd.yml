@@ -200,6 +200,6 @@ jobs:
       - name: Upload bundle to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1.3.2
         with:
-          appId: ${{secrets.FIREBASE_PROJECT_ID}}
+          appId: ${{secrets.FIREBASE_APP_ID}}
           token: ${{secrets.FIREBASE_TOKEN}}
           file: app-release-unsigned-signed.apk
