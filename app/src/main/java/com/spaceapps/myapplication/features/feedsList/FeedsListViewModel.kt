@@ -9,7 +9,7 @@ import com.spaceapps.myapplication.R
 import com.spaceapps.myapplication.models.remote.feeds.FeedShortResponse
 import com.spaceapps.myapplication.network.FeedsApi
 import com.spaceapps.myapplication.utils.NavDispatcher
-import com.spaceapps.myapplication.utils.async
+import com.spaceapps.myapplication.utils.launch
 import com.spaceapps.myapplication.utils.plusAssign
 import com.spaceapps.myapplication.utils.request
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -34,7 +34,7 @@ class FeedsListViewModel @Inject constructor(
         loadFeeds()
     }
 
-    fun deleteFeed(feedId: Int) = async {
+    fun deleteFeed(feedId: Int) = launch {
         request { feedsApi.deleteFeed(feedId = feedId) }
             .onSuccess {
                 val newFeeds = feeds.value?.toMutableList()
@@ -46,7 +46,7 @@ class FeedsListViewModel @Inject constructor(
 
     fun goCreateFeed() = navDispatcher.emit { navigate(R.id.goCreateFeed) }
 
-    fun toggleFeedLike(feedId: Int) = async {
+    fun toggleFeedLike(feedId: Int) = launch {
         request { feedsApi.toggleFeedLike(feedId = feedId) }
     }
 
@@ -60,8 +60,8 @@ class FeedsListViewModel @Inject constructor(
     fun goFeedView(feedId: Int) =
         navDispatcher.emit { navigate(R.id.goFeedView, bundleOf(FEED_ID to feedId)) }
 
-    fun loadFeeds() = async {
-        if (!isFetchAvailable or !isMoreDataAvailable) return@async
+    fun loadFeeds() = launch {
+        if (!isFetchAvailable or !isMoreDataAvailable) return@launch
         events.emit(PaginationLoading)
         request {
             isFetchAvailable = false

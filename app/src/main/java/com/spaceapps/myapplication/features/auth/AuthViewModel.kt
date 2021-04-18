@@ -27,8 +27,8 @@ class AuthViewModel @Inject constructor(
     val password = savedStateHandle.getLiveData<String>("password")
     val confirmPassword = savedStateHandle.getLiveData<String>("confirmPassword")
 
-    private fun signIn() = async {
-        if (!isEmailValid() && !isPasswordValid()) return@async
+    private fun signIn() = launch {
+        if (!isEmailValid() && !isPasswordValid()) return@launch
         when (authRepository.signIn(email = email.value!!, password = password.value!!)) {
             SignInResult.Failure -> events.emit(ShowError(R.string.sign_in_failed))
             SignInResult.Success -> goGeolocation()
@@ -37,8 +37,8 @@ class AuthViewModel @Inject constructor(
 
     private fun goGeolocation() = navDispatcher.emit { navigate(R.id.goGeolocation) }
 
-    private fun signUp() = async {
-        if (!isEmailValid() && !isPasswordValid() && !isConfirmPasswordValid()) return@async
+    private fun signUp() = launch {
+        if (!isEmailValid() && !isPasswordValid() && !isConfirmPasswordValid()) return@launch
         when (authRepository.signUp(email = email.value!!, password = password.value!!)) {
             SignUpResult.Failure -> events.emit(ShowError(R.string.sign_up_failed))
             SignUpResult.Success -> goGeolocation()
@@ -50,42 +50,42 @@ class AuthViewModel @Inject constructor(
         else -> signUp()
     }
 
-    fun onEmailEntered(input: String) = async {
+    fun onEmailEntered(input: String) = launch {
         isEmailValid()
         email.postValue(input)
     }
 
-    fun onPasswordEntered(input: String) = async {
+    fun onPasswordEntered(input: String) = launch {
         isPasswordValid()
         password.postValue(input)
     }
 
-    fun onConfirmPasswordEntered(input: String) = async {
+    fun onConfirmPasswordEntered(input: String) = launch {
         isConfirmPasswordValid()
         confirmPassword.postValue(input)
     }
 
-    fun onGoogleSignInClick() = async { events.emit(SignInWithGoogle) }
+    fun onGoogleSignInClick() = launch { events.emit(SignInWithGoogle) }
 
-    fun onFacebookSignInClick() = async { events.emit(SignInWithFacebook) }
+    fun onFacebookSignInClick() = launch { events.emit(SignInWithFacebook) }
 
-    fun onAppleSignInClick() = async { events.emit(SignInWithApple) }
+    fun onAppleSignInClick() = launch { events.emit(SignInWithApple) }
 
-    fun signInWithGoogle(accessToken: String) = async {
+    fun signInWithGoogle(accessToken: String) = launch {
         when (authRepository.signInWithGoogle(accessToken = accessToken)) {
             SocialSignInResult.Failure -> events.emit(ShowError(R.string.google_sign_in_failed))
             SocialSignInResult.Success -> goGeolocation()
         }
     }
 
-    fun signInWithFacebook(accessToken: String) = async {
+    fun signInWithFacebook(accessToken: String) = launch {
         when (authRepository.signInWithFacebook(accessToken = accessToken)) {
             SocialSignInResult.Failure -> events.emit(ShowError(R.string.facebook_sign_in_failed))
             SocialSignInResult.Success -> goGeolocation()
         }
     }
 
-    fun signInWithApple(accessToken: String) = async {
+    fun signInWithApple(accessToken: String) = launch {
         when (authRepository.signInWithApple(accessToken = accessToken)) {
             SocialSignInResult.Failure -> events.emit(ShowError(R.string.apple_sign_in_failed))
             SocialSignInResult.Success -> goGeolocation()

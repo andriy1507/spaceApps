@@ -6,7 +6,7 @@ import com.spaceapps.myapplication.models.remote.feeds.FeedItemDto
 import com.spaceapps.myapplication.models.remote.feeds.FeedRequest
 import com.spaceapps.myapplication.network.FeedsApi
 import com.spaceapps.myapplication.utils.NavDispatcher
-import com.spaceapps.myapplication.utils.async
+import com.spaceapps.myapplication.utils.launch
 import com.spaceapps.myapplication.utils.request
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -24,8 +24,8 @@ class CreateFeedViewModel @Inject constructor(
     val text = savedStateHandle.getLiveData<String>("feedText")
     val events = MutableSharedFlow<CreateFeedEvent>()
 
-    fun createFeed() = async {
-        if (!isFeedValid()) return@async
+    fun createFeed() = launch {
+        if (!isFeedValid()) return@launch
         request {
             feedsApi.createFeed(
                 FeedRequest(

@@ -8,7 +8,7 @@ import com.spaceapps.myapplication.SERVER_CHAT_SOCKET_URL
 import com.spaceapps.myapplication.local.AuthTokenStorage
 import com.spaceapps.myapplication.models.remote.chat.MessageResponse
 import com.spaceapps.myapplication.network.ChatApi
-import com.spaceapps.myapplication.utils.async
+import com.spaceapps.myapplication.utils.launch
 import com.squareup.moshi.Moshi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -35,7 +35,7 @@ class ChatViewModel @Inject constructor(
     private val conversationId = savedStateHandle.get<String>("conversationId").orEmpty()
 
     init {
-        async { connectToSocket() }
+        launch { connectToSocket() }
     }
 
     private suspend fun connectToSocket() {
@@ -73,7 +73,7 @@ class ChatViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    private fun sendMessage(text: String) = async {
+    private fun sendMessage(text: String) = launch {
         sentMessages.emit(
             MessageResponse(
                 messageId = "",

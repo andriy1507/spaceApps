@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.spaceapps.myapplication.FEED_ID
 import com.spaceapps.myapplication.models.remote.feeds.FeedFullResponse
 import com.spaceapps.myapplication.network.FeedsApi
-import com.spaceapps.myapplication.utils.async
+import com.spaceapps.myapplication.utils.launch
 import com.spaceapps.myapplication.utils.request
 import dagger.hilt.android.lifecycle.HiltViewModel
 import timber.log.Timber
@@ -27,7 +27,7 @@ class FeedViewViewModel @Inject constructor(
     private val feedId = savedStateHandle.get<Int>(FEED_ID)
         ?: throw IllegalArgumentException("Feed ID couldn't be null")
 
-    private fun getFeed() = async {
+    private fun getFeed() = launch {
         request { feedsApi.getFeedById(feedId) }
             .onSuccess { feed.postValue(it) }
             .onError { Timber.e(it) }
