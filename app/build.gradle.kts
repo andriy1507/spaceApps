@@ -77,8 +77,24 @@ android {
         isAbortOnError = false
     }
     testOptions {
-        execution = "ANDROIDX_TEST_ORCHESTRATOR"
+//        execution = "ANDROIDX_TEST_ORCHESTRATOR"
         unitTests.isReturnDefaultValues = true
+    }
+    packagingOptions {
+        resources {
+            excludes += listOf(
+                "META-INF/DEPENDENCIES",
+                "META-INF/NOTICE",
+                "META-INF/LICENSE",
+                "META-INF/LICENSE.txt",
+                "META-INF/NOTICE.txt",
+                "META-INF/license.txt",
+                "META-INF/notice.txt",
+                "META-INF/ASL2.0",
+                "META-INF/LGPL2.1",
+                "META-INF/AL2.0"
+            )
+        }
     }
 }
 configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
@@ -109,7 +125,7 @@ dependencies {
     val coroutines_version = "1.4.3"
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version")
+
 //    Retrofit
     val retrofit_version = "2.9.0"
     implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
@@ -207,8 +223,11 @@ dependencies {
 //    OkHttp MockWebServer
     testImplementation("com.squareup.okhttp3:mockwebserver:$okhttp_version")
 //    Mockito
-    testImplementation("org.mockito:mockito-core:3.9.0")
-    testImplementation("org.mockito:mockito-inline:3.9.0")
+    val mockito_version = "3.9.0"
+    testImplementation("org.mockito:mockito-core:$mockito_version")
+    testImplementation("org.mockito:mockito-inline:$mockito_version")
+//    Coroutines test
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version")
 //    Instrumentation testing
     androidTestImplementation("androidx.test:core:1.3.0")
 
@@ -225,7 +244,9 @@ dependencies {
     androidTestImplementation("androidx.test.ext:truth:1.3.0")
     androidTestImplementation("com.google.truth:truth:1.1.2")
     androidTestImplementation("com.google.truth:truth:1.1.2")
-//    androidTestImplementation("androidx.compose.ui:ui-test-junit4:$compose_version")
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:$composeVersion")
+//    Coroutines test
+    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version")
 //    Venom
     val venomVersion = "0.3.1"
     debugImplementation("com.github.YarikSOffice.Venom:venom:$venomVersion")

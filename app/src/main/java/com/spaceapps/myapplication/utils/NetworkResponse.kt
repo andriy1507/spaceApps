@@ -33,4 +33,14 @@ sealed class NetworkResponse<out T> {
 }
 
 class Success<T>(val data: T) : NetworkResponse<T>()
-class Error(val error: Exception) : NetworkResponse<Nothing>()
+class Error(val error: Exception) : NetworkResponse<Nothing>() {
+
+    val errorMessage: String?
+        get() = if (error is HttpException) error.response()?.errorBody()?.string() else null
+
+    val statusCode: Int?
+        get() = if (error is HttpException) error.response()?.code() else null
+
+    val headers: Map<String, List<String>>?
+        get() = if (error is HttpException) error.response()?.headers()?.toMultimap() else null
+}
