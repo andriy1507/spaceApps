@@ -97,6 +97,7 @@ class SpaceAppsMainActivity : AppCompatActivity() {
             when (destination.id) {
                 R.id.authScreen,
                 R.id.qrCodeScreen,
+                R.id.legalScreen,
                 R.id.forgotPasswordScreen -> binding.bottomNavView.isGone = true
                 else -> binding.bottomNavView.isVisible = true
             }

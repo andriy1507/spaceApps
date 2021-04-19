@@ -22,13 +22,7 @@ class SettingsViewModel @Inject constructor(
 
     val events = MutableSharedFlow<SettingsEvent>()
 
-    fun goAuth() = navDispatcher.emit { navigate(R.id.authScreen) }
-
-    fun goQrCode() = navDispatcher.emit { navigate(R.id.qrCodeScreen) }
-
-    fun goChat() = navDispatcher.emit { navigate(R.id.chatScreen) }
-
-    fun goFeeds() = navDispatcher.emit { navigate(R.id.feedsListScreen) }
+    fun goQrCode() = navDispatcher.emit { navigate(R.id.goQrCode) }
 
     fun showLogOut() = async { events.emit(ShowLogOutDialog) }
 

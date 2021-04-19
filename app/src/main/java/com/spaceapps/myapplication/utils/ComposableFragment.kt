@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
+import com.spaceapps.myapplication.ui.SpaceAppsTheme
 
 open class ComposableFragment : Fragment() {
 
@@ -22,6 +23,10 @@ open class ComposableFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        if (view is ComposeView) view.setContent { Content() }
+        if (view is ComposeView) view.setContent {
+            SpaceAppsTheme {
+                Content()
+            }
+        }
     }
 }

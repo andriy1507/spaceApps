@@ -15,7 +15,15 @@
 
     <fragment
         android:id="@+id/settingsScreen"
-        android:name="com.spaceapps.myapplication.features.settings.SettingsFragment" />
+        android:name="com.spaceapps.myapplication.features.settings.SettingsFragment" >
+        <action
+            android:id="@+id/goQrCode"
+            app:destination="@id/qrCodeScreen"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+    </fragment>
 
     <fragment
         android:id="@+id/authScreen"
@@ -23,45 +31,30 @@
         <action
             android:id="@+id/goGeolocation"
             app:destination="@id/geolocationScreen"
-            app:launchSingleTop="true" />
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:launchSingleTop="true"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
         <action
             android:id="@+id/goForgotPassword"
-            app:destination="@id/forgotPasswordScreen" />
+            app:destination="@id/forgotPasswordScreen"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+        <action
+            android:id="@+id/goLegal"
+            app:destination="@id/legalScreen"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
     </fragment>
-
-    <fragment
-        android:id="@+id/chatScreen"
-        android:name="com.spaceapps.myapplication.features.chat.ChatFragment" />
 
     <fragment
         android:id="@+id/forgotPasswordScreen"
         android:name="com.spaceapps.myapplication.features.forgotPassword.ForgotPasswordFragment" />
-
-    <fragment
-        android:id="@+id/feedsListScreen"
-        android:name="com.spaceapps.myapplication.features.feedsList.FeedsListFragment">
-        <action
-            android:id="@+id/goCreateFeed"
-            app:destination="@id/createFeedScreen" />
-        <action
-            android:id="@+id/goComments"
-            app:destination="@id/feedCommentsScreen" />
-        <action
-            android:id="@+id/goFeedView"
-            app:destination="@id/feedViewScreen" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/createFeedScreen"
-        android:name="com.spaceapps.myapplication.features.createFeed.CreateFeedFragment" />
-
-    <fragment
-        android:id="@+id/feedCommentsScreen"
-        android:name="com.spaceapps.myapplication.features.feedComments.FeedCommentsFragment" />
-
-    <fragment
-        android:id="@+id/feedViewScreen"
-        android:name="com.spaceapps.myapplication.features.feedView.FeedViewFragment" />
 
     <fragment
         android:id="@+id/legalScreen"
@@ -69,6 +62,6 @@
 
     <fragment
         android:id="@+id/qrCodeScreen"
-        android:name="com.spaceapps.myapplication.features.qrCodeScreen.QrCodeFragment"/>
+        android:name="com.spaceapps.myapplication.features.qrCodeScreen.QrCodeFragment" />
 
 </navigation>

@@ -19,7 +19,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.OAuthCredential
 import com.google.firebase.auth.OAuthProvider
 import com.spaceapps.myapplication.R
-import com.spaceapps.myapplication.ui.SpaceAppsTheme
 import com.spaceapps.myapplication.utils.ComposableFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
@@ -40,9 +39,7 @@ class AuthFragment : ComposableFragment() {
     }
 
     @Composable
-    override fun Content() = SpaceAppsTheme {
-        AuthScreen(vm)
-    }
+    override fun Content() = AuthScreen(vm)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

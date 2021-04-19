@@ -2,7 +2,6 @@ package com.spaceapps.myapplication.features.settings
 
 import androidx.compose.runtime.Composable
 import androidx.fragment.app.viewModels
-import com.spaceapps.myapplication.ui.SpaceAppsTheme
 import com.spaceapps.myapplication.utils.ComposableFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -12,5 +11,5 @@ class SettingsFragment : ComposableFragment() {
     private val vm by viewModels<SettingsViewModel>()
 
     @Composable
-    override fun Content() = SpaceAppsTheme { SettingsScreen(vm) }
+    override fun Content() = SettingsScreen(vm)
 }

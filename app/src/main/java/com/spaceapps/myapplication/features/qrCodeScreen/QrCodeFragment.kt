@@ -6,7 +6,6 @@ import androidx.compose.runtime.Composable
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import com.spaceapps.myapplication.R
-import com.spaceapps.myapplication.ui.SpaceAppsTheme
 import com.spaceapps.myapplication.utils.ComposableFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -22,5 +21,5 @@ class QrCodeFragment : ComposableFragment() {
     }
 
     @Composable
-    override fun Content() = SpaceAppsTheme { QrCodeScreen(vm = vm) }
+    override fun Content() = QrCodeScreen(vm = vm)
 }
