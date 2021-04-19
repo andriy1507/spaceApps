@@ -1,2 +1,2 @@
-rootProject.name = "My Application"
+rootProject.name = "spaceApps"
 include (":app")
