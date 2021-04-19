@@ -10,7 +10,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class StaticContentStorage @Inject constructor(
+class LegalStorage @Inject constructor(
     private val dataStore: DataStore<Preferences>
 ) {
 

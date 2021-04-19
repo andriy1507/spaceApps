@@ -7,7 +7,7 @@ import com.spaceapps.myapplication.repositories.auth.AuthRepository
 import com.spaceapps.myapplication.repositories.auth.LogOutResult
 import com.spaceapps.myapplication.utils.AuthDispatcher
 import com.spaceapps.myapplication.utils.NavDispatcher
-import com.spaceapps.myapplication.utils.async
+import com.spaceapps.myapplication.utils.launch
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import javax.inject.Inject
@@ -24,11 +24,11 @@ class SettingsViewModel @Inject constructor(
 
     fun goQrCode() = navDispatcher.emit { navigate(R.id.goQrCode) }
 
-    fun showLogOut() = async { events.emit(ShowLogOutDialog) }
+    fun showLogOut() = launch { events.emit(ShowLogOutDialog) }
 
-    fun dismissLogOut() = async { events.emit(InitSettingsState) }
+    fun dismissLogOut() = launch { events.emit(InitSettingsState) }
 
-    fun logOut() = async {
+    fun logOut() = launch {
         when (authRepository.logOut()) {
             LogOutResult.Success -> authDispatcher.requestDeauthorization()
             LogOutResult.Failure -> Unit

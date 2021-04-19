@@ -45,7 +45,7 @@ class ForgotPasswordViewModel @Inject constructor(
         confirmPassword.postValue(input)
     }
 
-    private fun sendToken() = async {
+    private fun sendToken() = launch {
         if (isEmailValid())
             when (authRepository.sendResetToken(email = email.value!!)) {
                 SendResetTokenResult.Success -> state.postValue(TokenState)
@@ -53,7 +53,7 @@ class ForgotPasswordViewModel @Inject constructor(
             }
     }
 
-    private fun verifyToken() = async {
+    private fun verifyToken() = launch {
         if (isEmailValid() && isTokenValid())
             when (authRepository.verifyResetToken(email = email.value!!, token = token.value!!)) {
                 VerifyResetTokenResult.Success -> state.postValue(PasswordState)
@@ -61,7 +61,7 @@ class ForgotPasswordViewModel @Inject constructor(
             }
     }
 
-    private fun resetPassword() = async {
+    private fun resetPassword() = launch {
         if (isEmailValid() && isTokenValid() && isConfirmPasswordValid()) {
             val result = authRepository.resetPassword(
                 email = email.value!!,
