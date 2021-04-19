@@ -1,5 +1,6 @@
 package com.spaceapps.myapplication.features.settings
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -28,6 +29,7 @@ import dev.chrisbanes.accompanist.insets.toPaddingValues
 
 private const val DIALOG_WIDTH_RATIO = .8f
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SettingsScreen(vm: SettingsViewModel) = Box(
     modifier = Modifier
@@ -42,16 +44,6 @@ fun SettingsScreen(vm: SettingsViewModel) = Box(
         item {
             Button(onClick = vm::showLogOut) {
                 Text(text = stringResource(R.string.log_out))
-            }
-        }
-        item {
-            Button(onClick = vm::goChat) {
-                Text(text = stringResource(R.string.chat))
-            }
-        }
-        item {
-            Button(onClick = vm::goFeeds) {
-                Text(text = stringResource(R.string.feeds))
             }
         }
         item {

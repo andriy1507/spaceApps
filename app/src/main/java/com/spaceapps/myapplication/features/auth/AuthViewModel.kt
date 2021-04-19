@@ -121,14 +121,14 @@ class AuthViewModel @Inject constructor(
 
     fun goTermsOfUse() = navDispatcher.emit {
         navigate(
-            R.id.legalScreen,
+            R.id.goLegal,
             bundleOf("legalType" to LegalType.TermsOfUse)
         )
     }
 
     fun goPrivacyPolicy() = navDispatcher.emit {
         navigate(
-            R.id.legalScreen,
+            R.id.goLegal,
             bundleOf("legalType" to LegalType.PrivacyPolicy)
         )
     }
