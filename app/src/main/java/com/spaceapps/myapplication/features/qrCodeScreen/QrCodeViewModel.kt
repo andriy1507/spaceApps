@@ -4,16 +4,11 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.util.Base64
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asFlow
-import androidx.lifecycle.asLiveData
+import androidx.lifecycle.*
 import com.spaceapps.myapplication.network.ToolsApi
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -24,12 +19,11 @@ class QrCodeViewModel @Inject constructor(
 
     val userInput = MutableLiveData<String>()
     private val qrCodeColor = MutableLiveData(Color.BLACK)
-    val image = userInput.asFlow().filter { !it.isNullOrBlank() }
+    val image = userInput.asFlow().flowOn(Dispatchers.IO).filter { !it.isNullOrBlank() }
         .map { toolsApi.generateQrCode(data = it, width = 400, height = 400) }
-        .map { mapStringToBitmap(it.encodedImage, it.width, it.height) }
+        .flowOn(Dispatchers.Default).map { mapStringToBitmap(it.encodedImage, it.width, it.height) }
         .combine(qrCodeColor.asFlow()) { bitmap, color -> colorizeBitmap(bitmap, color) }
-        .catch { Timber.e(it) }
-        .asLiveData()
+        .catch { Timber.e(it) }.conflate().shareIn(viewModelScope, SharingStarted.Eagerly).asLiveData()
 
     fun onUserInput(input: String) = userInput.postValue(input)
 

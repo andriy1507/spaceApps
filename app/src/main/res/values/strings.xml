@@ -1,11 +1,9 @@
 <resources>
     <string name="app_name">My Application</string>
     <string name="default_notification_channel_id">spaceApps</string>
-    <string name="search">Search</string>
     <string name="longitude_label">Longitude:</string>
     <string name="latitude_label">Latitude:</string>
     <string name="degree_value" translatable="false">%.5f\u00B0</string>
-    <string name="temperature_value" translatable="false">%.0f\u00B0</string>
     <string name="altitude_label">Altitude:</string>
     <string name="altitude_value">%.0f m over sea level</string>
     <string name="accuracy_label">Accuracy:</string>
@@ -34,12 +32,10 @@
     <string name="log_out">Log Out</string>
     <string name="Continue">Continue</string>
     <string name="forgot_password">Forgot Password?</string>
-    <string name="chat">Chat</string>
     <string name="don_t_have_an_account">Don\'t have an account?</string>
     <string name="already_have_an_account">Already have an account?</string>
     <string name="OR">OR</string>
-    <string name="feeds">Feeds</string>
-    <string name="vert_dash" translatable="false">|</string>
+    <string name="vert_dash" translatable="false">\u0020|\u0020</string>
     <string name="terms_of_use">Terms of Use</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="sign_in_failed">Sign in failed</string>

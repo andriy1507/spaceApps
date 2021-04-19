@@ -5,8 +5,8 @@ import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -23,11 +23,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalTextInputService
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.spaceapps.myapplication.R
@@ -128,11 +132,7 @@ fun AuthScreen(vm: AuthViewModel) = Column(
             .padding(top = SPACING_16.dp)
             .height(SPACING_48.dp)
             .fillMaxWidth()
-    ) {
-        Text(
-            text = stringResource(if (state == SignInState) R.string.sign_in else R.string.sign_up)
-        )
-    }
+    ) { Text(text = stringResource(if (state == SignInState) R.string.sign_in else R.string.sign_up)) }
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -182,29 +182,34 @@ fun AuthScreen(vm: AuthViewModel) = Column(
         icon = R.drawable.ic_apple,
         text = R.string.continue_with_apple_id
     )
-    Text(
-        text = stringResource(R.string.forgot_password),
-        modifier = Modifier
-            .clickable { vm.goForgotPassword() }
-            .padding(top = SPACING_16.dp),
-        color = MaterialTheme.colors.primary,
-        fontWeight = FontWeight.Bold
+    ClickableText(
+        text = buildAnnotatedString {
+            withStyle(
+                SpanStyle(
+                    color = MaterialTheme.colors.primary,
+                    fontWeight = FontWeight.Bold
+                )
+            ) { append(stringResource(R.string.forgot_password)) }
+        },
+        modifier = Modifier.padding(top = SPACING_16.dp),
+        onClick = { vm.goForgotPassword() }
     )
     Spacer(modifier = Modifier.weight(1f))
-    Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-        Text(
-            text = stringResource(R.string.terms_of_use),
-            modifier = Modifier
-                .padding(end = SPACING_4.dp)
-                .clickable(onClick = vm::goTermsOfUse)
-        )
-        Text(text = stringResource(R.string.vert_dash))
-        Text(
-            text = stringResource(R.string.privacy_policy),
-            modifier = Modifier
-                .padding(start = SPACING_4.dp)
-                .clickable(onClick = vm::goPrivacyPolicy)
-        )
+    val termsOfUse = stringResource(R.string.terms_of_use)
+    val dash = stringResource(R.string.vert_dash)
+    val privacyPolicy = stringResource(R.string.privacy_policy)
+    ClickableText(
+        text = buildAnnotatedString {
+            append(termsOfUse)
+            append(dash)
+            append(privacyPolicy)
+        },
+        modifier = Modifier.align(Alignment.CenterHorizontally)
+    ) {
+        when {
+            it <= termsOfUse.length -> vm.goTermsOfUse()
+            it >= (termsOfUse + dash).length -> vm.goPrivacyPolicy()
+        }
     }
     Spacer(modifier = Modifier.weight(1f))
     HaveAccountText(
@@ -217,31 +222,38 @@ fun AuthScreen(vm: AuthViewModel) = Column(
 }
 
 @Composable
-fun HaveAccountText(modifier: Modifier, state: AuthScreenState, onClick: () -> Unit) =
-    Row(modifier = modifier) {
-        if (state == SignInState) {
-            Text(text = stringResource(R.string.don_t_have_an_account))
-            Spacer(modifier = Modifier.width(SPACING_4.dp))
-            Text(
-                text = stringResource(R.string.sign_up),
-                modifier = Modifier
-                    .clickable(onClick = onClick)
-                    .padding(start = SPACING_2.dp),
-                color = MaterialTheme.colors.primary,
-                fontWeight = FontWeight.Bold
-            )
-        } else {
-            Text(text = stringResource(R.string.already_have_an_account))
-            Spacer(modifier = Modifier.width(SPACING_4.dp))
-            Text(
-                text = stringResource(R.string.sign_in),
-                modifier = Modifier
-                    .clickable(onClick = onClick),
-                color = MaterialTheme.colors.primary,
-                fontWeight = FontWeight.Bold
-            )
-        }
+fun HaveAccountText(modifier: Modifier, state: AuthScreenState, onClick: () -> Unit) {
+    val style = SpanStyle(color = MaterialTheme.colors.primary, fontWeight = FontWeight.Bold)
+    if (state == SignInState) {
+        val dontHaveAccount = stringResource(id = R.string.don_t_have_an_account)
+        ClickableText(
+            modifier = modifier,
+            text = buildAnnotatedString {
+                withStyle(style = style) {
+                    append(dontHaveAccount)
+                    append(' ')
+                    withStyle(SpanStyle(textDecoration = TextDecoration.Underline)) {
+                        append(stringResource(id = R.string.sign_up))
+                    }
+                }
+            }
+        ) { if (it > dontHaveAccount.length) onClick() }
+    } else {
+        val alreadyHaveAnAccount = stringResource(id = R.string.already_have_an_account)
+        ClickableText(
+            modifier = modifier,
+            text = buildAnnotatedString {
+                withStyle(style = style) {
+                    append(alreadyHaveAnAccount)
+                    append(' ')
+                    withStyle(SpanStyle(textDecoration = TextDecoration.Underline)) {
+                        append(stringResource(id = R.string.sign_in))
+                    }
+                }
+            }
+        ) { if (it > alreadyHaveAnAccount.length) onClick() }
     }
+}
 
 @Composable
 fun SocialSignInButton(

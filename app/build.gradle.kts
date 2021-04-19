@@ -20,7 +20,6 @@ plugins {
 
 android {
     compileSdkVersion(30)
-
     defaultConfig {
         applicationId = "com.spaceapps.myapplication"
         minSdkVersion(23)
@@ -31,7 +30,7 @@ android {
         testInstrumentationRunnerArguments(mapOf("clearPackageData" to "true"))
     }
     buildTypes {
-        getByName("release") {
+        release {
             isMinifyEnabled = true
             buildConfigField(
                 "String",
@@ -43,7 +42,7 @@ android {
                 "proguard-rules.pro"
             )
         }
-        getByName("debug") {
+        debug {
             isMinifyEnabled = false
             buildConfigField(
                 "String",
@@ -191,6 +190,7 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("com.google.firebase:firebase-messaging-ktx")
     implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-config-ktx")
     implementation("com.google.firebase:firebase-messaging-directboot")
     implementation("com.google.firebase:firebase-perf-ktx")
 //    Room database

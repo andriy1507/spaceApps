@@ -2,7 +2,6 @@
 <resources>
     <string name="app_name">My Application</string>
     <string name="default_notification_channel_id">spaceApps</string>
-    <string name="search">Пошук</string>
     <string name="longitude_label">Довгота:</string>
     <string name="latitude_label">Широта:</string>
     <string name="altitude_label">Висота:</string>
@@ -31,7 +30,6 @@
     <string name="log_out">Вийти</string>
     <string name="Continue">Продовжити</string>
     <string name="forgot_password">Забули пароль?</string>
-    <string name="chat">Чат</string>
     <string name="don_t_have_an_account">Не маєте аккаунту?</string>
     <string name="already_have_an_account">Вже маєте аккаунт?</string>
     <string name="OR">АБО</string>
@@ -42,6 +40,5 @@
     <string name="sign_up_failed">Не вдалося зареєструватися</string>
     <string name="terms_of_use">Правила користування</string>
     <string name="privacy_policy">Політика конфіденційності</string>
-    <string name="feeds">Дописи</string>
     <string name="qr_code">QR-Код</string>
 </resources>
