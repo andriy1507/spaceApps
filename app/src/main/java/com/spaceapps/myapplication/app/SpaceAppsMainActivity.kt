@@ -1,4 +1,4 @@
-package com.spaceapps.myapplication
+package com.spaceapps.myapplication.app
 
 import android.content.Context
 import android.content.res.Configuration
@@ -11,6 +11,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
+import com.spaceapps.myapplication.R
+import com.spaceapps.myapplication.Settings
 import com.spaceapps.myapplication.databinding.ActivityMainBinding
 import com.spaceapps.myapplication.di.DataStoreModule.settingsDataStore
 import com.spaceapps.myapplication.local.AuthTokenStorage

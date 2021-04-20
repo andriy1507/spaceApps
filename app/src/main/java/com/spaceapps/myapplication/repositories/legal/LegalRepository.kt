@@ -1,7 +1,7 @@
 package com.spaceapps.myapplication.repositories.legal
 
-import com.spaceapps.myapplication.PRIVACY_POLICY
-import com.spaceapps.myapplication.TERMS_OF_USE
+import com.spaceapps.myapplication.app.PRIVACY_POLICY
+import com.spaceapps.myapplication.app.TERMS_OF_USE
 import com.spaceapps.myapplication.local.LegalStorage
 import com.spaceapps.myapplication.network.LegalApi
 import com.spaceapps.myapplication.utils.Error

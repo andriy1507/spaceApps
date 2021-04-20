@@ -1,7 +1,6 @@
 package com.spaceapps.myapplication.network
 
-import com.spaceapps.myapplication.LANGUAGE_HEADER
-import com.spaceapps.myapplication.Settings.*
+import com.spaceapps.myapplication.app.LANGUAGE_HEADER
 import com.spaceapps.myapplication.Settings.Language.*
 import com.spaceapps.myapplication.local.SettingsStorage
 import kotlinx.coroutines.runBlocking

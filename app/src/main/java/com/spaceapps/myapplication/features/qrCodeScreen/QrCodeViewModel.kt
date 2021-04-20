@@ -23,7 +23,8 @@ class QrCodeViewModel @Inject constructor(
         .map { toolsApi.generateQrCode(data = it, width = 400, height = 400) }
         .flowOn(Dispatchers.Default).map { mapStringToBitmap(it.encodedImage, it.width, it.height) }
         .combine(qrCodeColor.asFlow()) { bitmap, color -> colorizeBitmap(bitmap, color) }
-        .catch { Timber.e(it) }.conflate().shareIn(viewModelScope, SharingStarted.Eagerly).asLiveData()
+        .catch { Timber.e(it) }.conflate().shareIn(viewModelScope, SharingStarted.Eagerly)
+        .asLiveData()
 
     fun onUserInput(input: String) = userInput.postValue(input)
 
