@@ -1,4 +1,4 @@
-package com.spaceapps.myapplication
+package com.spaceapps.myapplication.app
 
 import android.content.BroadcastReceiver
 import android.content.Context

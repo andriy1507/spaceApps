@@ -3,8 +3,8 @@ package com.spaceapps.myapplication.di
 import android.content.Context
 import androidx.datastore.dataStore
 import androidx.datastore.preferences.preferencesDataStore
-import com.spaceapps.myapplication.PREFERENCES_DATA_STORE
-import com.spaceapps.myapplication.SETTINGS_DATA_STORE
+import com.spaceapps.myapplication.app.PREFERENCES_DATA_STORE
+import com.spaceapps.myapplication.app.SETTINGS_DATA_STORE
 import com.spaceapps.myapplication.local.SettingsSerializer
 import dagger.Module
 import dagger.Provides

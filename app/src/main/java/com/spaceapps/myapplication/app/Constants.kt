@@ -1,4 +1,6 @@
-package com.spaceapps.myapplication
+package com.spaceapps.myapplication.app
+
+import com.spaceapps.myapplication.BuildConfig
 
 const val PAGING_SIZE = 20
 const val INIT_LOAD_SIZE = PAGING_SIZE * 2

@@ -2,7 +2,7 @@ package com.spaceapps.myapplication.di
 
 import android.content.Context
 import androidx.room.Room
-import com.spaceapps.myapplication.DATABASE_NAME
+import com.spaceapps.myapplication.app.DATABASE_NAME
 import com.spaceapps.myapplication.local.SpaceAppsDatabase
 import dagger.Module
 import dagger.Provides
