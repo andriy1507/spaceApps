@@ -2,8 +2,8 @@ package com.spaceapps.myapplication.network
 
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.messaging.FirebaseMessaging
-import com.spaceapps.myapplication.AUTH_HEADER
-import com.spaceapps.myapplication.AUTH_HEADER_PREFIX
+import com.spaceapps.myapplication.app.AUTH_HEADER
+import com.spaceapps.myapplication.app.AUTH_HEADER_PREFIX
 import com.spaceapps.myapplication.local.AuthTokenStorage
 import com.spaceapps.myapplication.models.remote.auth.DeviceRequest
 import com.spaceapps.myapplication.models.remote.auth.DeviceRequest.Platform.*

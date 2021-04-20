@@ -1,7 +1,9 @@
 package com.spaceapps.myapplication.features.forgotPassword
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
@@ -25,6 +27,7 @@ fun ForgotPasswordScreen() =
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(color = MaterialTheme.colors.background)
             .padding(horizontal = SPACING_16.dp),
         verticalArrangement = Arrangement.Center,
     ) {

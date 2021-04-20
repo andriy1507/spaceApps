@@ -1,7 +1,7 @@
 package com.spaceapps.myapplication.network
 
-import com.spaceapps.myapplication.AUTH_HEADER
-import com.spaceapps.myapplication.AUTH_HEADER_PREFIX
+import com.spaceapps.myapplication.app.AUTH_HEADER
+import com.spaceapps.myapplication.app.AUTH_HEADER_PREFIX
 import com.spaceapps.myapplication.local.AuthTokenStorage
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor

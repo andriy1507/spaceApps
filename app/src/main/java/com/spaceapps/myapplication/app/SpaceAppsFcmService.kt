@@ -1,4 +1,4 @@
-package com.spaceapps.myapplication
+package com.spaceapps.myapplication.app
 
 import android.app.Notification
 import android.app.PendingIntent
@@ -14,6 +14,7 @@ import coil.ImageLoader
 import coil.request.ImageRequest
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.spaceapps.myapplication.R
 import com.spaceapps.myapplication.workers.FirebaseTokenWorker
 import kotlinx.coroutines.runBlocking
 import timber.log.Timber

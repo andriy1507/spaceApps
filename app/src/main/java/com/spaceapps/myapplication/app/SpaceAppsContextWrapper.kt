@@ -1,4 +1,4 @@
-package com.spaceapps.myapplication
+package com.spaceapps.myapplication.app
 
 import android.content.Context
 import android.content.ContextWrapper
