@@ -37,7 +37,7 @@ class SpaceAppsAuthenticator @Inject constructor(
             val newAuthToken = getAuthToken()
             if (newAuthToken == null) {
                 authTokenStorage.clear()
-                authDispatcher.requestDeauthorization()
+                authDispatcher.requestLogOut()
                 null
             } else {
                 response.request.newBuilder()

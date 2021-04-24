@@ -10,5 +10,5 @@ class AuthDispatcher @Inject constructor() {
 
     val emitter = Channel<Boolean>(UNLIMITED)
 
-    fun requestDeauthorization() = emitter.offer(true)
+    fun requestLogOut() = emitter.offer(true)
 }

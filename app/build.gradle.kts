@@ -3,7 +3,7 @@ import com.google.protobuf.gradle.protobuf
 import com.google.protobuf.gradle.protoc
 
 val kotlinVersion = "1.4.31"
-val composeVersion = "1.0.0-beta04"
+val composeVersion = "1.0.0-beta05"
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -156,7 +156,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha04")
 
 //    Paging
-    val paging_version = "3.0.0-beta03"
+    val paging_version = "3.0.0-rc01"
     val paging_compose_version = "1.0.0-alpha08"
     implementation("androidx.paging:paging-runtime-ktx:$paging_version")
     implementation("androidx.paging:paging-compose:$paging_compose_version")
@@ -179,7 +179,7 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
 //    Dagger-Hilt
-    val dagger_version = "2.34.1-beta"
+    val dagger_version = "2.35"
     implementation("com.google.dagger:hilt-android:$dagger_version")
     kapt("com.google.dagger:hilt-android-compiler:$dagger_version")
     val hilt_version = "1.0.0-beta01"
@@ -196,13 +196,13 @@ dependencies {
     implementation("com.google.firebase:firebase-messaging-directboot")
     implementation("com.google.firebase:firebase-perf-ktx")
 //    Room database
-    val room_version = "2.3.0-rc01"
+    val room_version = "2.4.0-alpha01"
     implementation("androidx.room:room-runtime:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
     kapt("androidx.room:room-compiler:$room_version")
 
 //    Datastore
-    val datastore_version = "1.0.0-alpha08"
+    val datastore_version = "1.0.0-beta01"
     implementation("androidx.datastore:datastore:$datastore_version")
     implementation("androidx.datastore:datastore-preferences:$datastore_version")
     implementation("com.google.protobuf:protobuf-javalite:3.11.1")
