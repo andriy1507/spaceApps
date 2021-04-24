@@ -30,7 +30,7 @@ class SettingsViewModel @Inject constructor(
 
     fun logOut() = launch {
         when (authRepository.logOut()) {
-            LogOutResult.Success -> authDispatcher.requestDeauthorization()
+            LogOutResult.Success -> authDispatcher.requestLogOut()
             LogOutResult.Failure -> Unit
         }
     }
