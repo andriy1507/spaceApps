@@ -32,6 +32,7 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = true
+            isShrinkResources = true
             buildConfigField(
                 "String",
                 "SERVER_URL",
@@ -41,6 +42,11 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            withGroovyBuilder {
+                "FirebasePerformance" {
+                    invokeMethod("setInstrumentationEnabled", false)
+                }
+            }
         }
         debug {
             isMinifyEnabled = false
