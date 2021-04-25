@@ -22,6 +22,9 @@ class GeolocationViewModel @Inject constructor(
 
     val lastLocation = savedStateHandle.getLiveData<Location>("location")
     val events = MutableLiveData<GeolocationEvent>()
+    val isMapTracking = MutableLiveData(true)
+
+    fun setMapTracking(tracking: Boolean) = isMapTracking.postValue(tracking)
 
     @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION)
     fun trackLocation() {

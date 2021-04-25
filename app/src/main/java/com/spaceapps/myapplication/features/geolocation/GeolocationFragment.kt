@@ -2,10 +2,13 @@ package com.spaceapps.myapplication.features.geolocation
 
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.content.pm.PackageManager.PERMISSION_GRANTED
+import android.location.Location
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.fragment.app.viewModels
 import com.spaceapps.myapplication.utils.ComposableFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,7 +28,16 @@ class GeolocationFragment : ComposableFragment() {
     }
 
     @Composable
-    override fun Content() = GeolocationScreen(fragmentManager = childFragmentManager)
+    override fun Content() {
+        val location by viewModel.lastLocation.observeAsState(initial = Location(MOCK_PROVIDER))
+        val isMapTracking by viewModel.isMapTracking.observeAsState(initial = true)
+        GeolocationScreen(
+            fragmentManager = childFragmentManager,
+            location = location,
+            isMapTracking = isMapTracking,
+            onMapTrackingChange = viewModel::setMapTracking
+        )
+    }
 
     private fun tryTrackingLocationOrRequestPermission() {
         if (requireContext().checkSelfPermission(ACCESS_FINE_LOCATION) == PERMISSION_GRANTED)
