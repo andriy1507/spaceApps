@@ -19,9 +19,9 @@ import com.spaceapps.myapplication.R
 import com.spaceapps.myapplication.ui.ACTION_BAR_SIZE
 import com.spaceapps.myapplication.ui.SPACING_4
 import com.spaceapps.myapplication.ui.SPACING_8
-import dev.chrisbanes.accompanist.insets.LocalWindowInsets
-import dev.chrisbanes.accompanist.insets.statusBarsHeight
-import dev.chrisbanes.accompanist.insets.toPaddingValues
+import com.google.accompanist.insets.LocalWindowInsets
+import com.google.accompanist.insets.statusBarsHeight
+import com.google.accompanist.insets.toPaddingValues
 
 @Composable
 fun LegalScreen(vm: LegalViewModel) = Box(modifier = Modifier.fillMaxSize()) {

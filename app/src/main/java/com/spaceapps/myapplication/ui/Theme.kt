@@ -4,7 +4,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import dev.chrisbanes.accompanist.insets.ProvideWindowInsets
+import com.google.accompanist.insets.ProvideWindowInsets
 
 private val DarkColorPalette = darkColors(
     primary = pinkDark,

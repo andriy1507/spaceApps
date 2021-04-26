@@ -36,8 +36,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.spaceapps.myapplication.R
 import com.spaceapps.myapplication.ui.*
-import dev.chrisbanes.accompanist.insets.navigationBarsPadding
-import dev.chrisbanes.accompanist.insets.statusBarsPadding
+import com.google.accompanist.insets.navigationBarsPadding
+import com.google.accompanist.insets.statusBarsPadding
 
 @OptIn(ExperimentalAnimationApi::class)
 @Suppress("LongMethod")

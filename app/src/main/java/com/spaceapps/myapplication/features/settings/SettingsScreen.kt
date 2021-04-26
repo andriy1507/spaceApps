@@ -24,8 +24,8 @@ import com.spaceapps.myapplication.ui.ACTION_BAR_SIZE
 import com.spaceapps.myapplication.ui.FONT_16
 import com.spaceapps.myapplication.ui.FONT_24
 import com.spaceapps.myapplication.ui.SPACING_16
-import dev.chrisbanes.accompanist.insets.LocalWindowInsets
-import dev.chrisbanes.accompanist.insets.toPaddingValues
+import com.google.accompanist.insets.LocalWindowInsets
+import com.google.accompanist.insets.toPaddingValues
 
 private const val DIALOG_WIDTH_RATIO = .8f
 

@@ -20,6 +20,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentManager
+import com.google.accompanist.insets.statusBarsPadding
+import com.google.accompanist.insets.systemBarsPadding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE
 import com.google.android.gms.maps.model.CircleOptions
@@ -31,8 +33,6 @@ import com.spaceapps.myapplication.ui.SPACING_16
 import com.spaceapps.myapplication.ui.SPACING_8
 import com.spaceapps.myapplication.ui.views.GoogleMap
 import com.spaceapps.myapplication.utils.LocalResources
-import dev.chrisbanes.accompanist.insets.statusBarsPadding
-import dev.chrisbanes.accompanist.insets.systemBarsPadding
 
 const val MOCK_PROVIDER = "MOCK_PROVIDER"
 typealias OnMapTrackingChange = (Boolean) -> Unit
