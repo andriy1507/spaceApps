@@ -76,11 +76,11 @@ class SpaceAppsMainActivity : AppCompatActivity() {
 
     private suspend fun observeAuthState() {
         for (e in authDispatcher.emitter) {
-            if (e) unauthorize()
+            if (e) logOut() else restart()
         }
     }
 
-    private fun unauthorize() = lifecycleScope.launch(Dispatchers.IO) {
+    private fun logOut() = lifecycleScope.launch(Dispatchers.IO) {
         storageManager.clear()
         restart()
     }
