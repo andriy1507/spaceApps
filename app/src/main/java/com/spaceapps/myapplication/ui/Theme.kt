@@ -3,15 +3,14 @@ package com.spaceapps.myapplication.ui
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 import com.google.accompanist.insets.ProvideWindowInsets
 
 private val DarkColorPalette = darkColors(
     primary = pinkDark,
     primaryVariant = pinkDarkVariant,
     secondary = orangeDark,
-    onPrimary = Color.Black,
-    onSecondary = Color.Black,
+    onPrimary = onPrimaryColor,
+    onSecondary = onSecondaryColor,
     background = backgroundDark,
     surface = surfaceDark,
     onSurface = onSurfaceDark,
@@ -23,8 +22,8 @@ private val LightColorPalette = lightColors(
     primaryVariant = pinkVariant,
     secondary = orange,
     secondaryVariant = orangeVariant,
-    onPrimary = Color.White,
-    onSecondary = Color.White,
+    onPrimary = onPrimaryColor,
+    onSecondary = onSecondaryColor,
     background = background,
     surface = surface,
     onSurface = onSurface,

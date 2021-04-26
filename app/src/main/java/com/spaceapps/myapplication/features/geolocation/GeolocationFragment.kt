@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.fragment.app.viewModels
+import com.google.android.gms.maps.GoogleMap
 import com.spaceapps.myapplication.utils.ComposableFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -20,7 +21,7 @@ class GeolocationFragment : ComposableFragment() {
         if (granted) tryTrackingLocationOrRequestPermission()
     }
 
-    private val viewModel by viewModels<GeolocationViewModel>()
+    private val vm by viewModels<GeolocationViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -29,19 +30,22 @@ class GeolocationFragment : ComposableFragment() {
 
     @Composable
     override fun Content() {
-        val location by viewModel.lastLocation.observeAsState(initial = Location(MOCK_PROVIDER))
-        val isMapTracking by viewModel.isMapTracking.observeAsState(initial = true)
+        val location by vm.lastLocation.observeAsState(initial = Location(MOCK_PROVIDER))
+        val isMapTracking by vm.isMapTracking.observeAsState(initial = true)
+        val mapType by vm.mapType.observeAsState(GoogleMap.MAP_TYPE_NORMAL)
         GeolocationScreen(
             fragmentManager = childFragmentManager,
             location = location,
             isMapTracking = isMapTracking,
-            onMapTrackingChange = viewModel::setMapTracking
+            onMapTrackingChange = vm::setMapTracking,
+            mapType = mapType,
+            onMapTypeChange = vm::setMapType
         )
     }
 
     private fun tryTrackingLocationOrRequestPermission() {
         if (requireContext().checkSelfPermission(ACCESS_FINE_LOCATION) == PERMISSION_GRANTED)
-            viewModel.trackLocation()
+            vm.trackLocation()
         else requestPermission()
     }
 

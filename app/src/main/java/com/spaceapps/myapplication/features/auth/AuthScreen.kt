@@ -151,7 +151,7 @@ fun AuthScreen(vm: AuthViewModel) = Column(
 @Composable
 fun ColumnScope.AuthFooter(
     state: AuthScreenState,
-    onToggleStateClick:OnClick,
+    onToggleStateClick: OnClick,
     onForgotClick: OnClick,
     onTermsClick: OnClick,
     onPrivacyClick: OnClick

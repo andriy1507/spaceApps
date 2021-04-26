@@ -11,6 +11,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.location.*
 import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
+import com.google.android.gms.maps.GoogleMap
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -23,8 +24,11 @@ class GeolocationViewModel @Inject constructor(
     val lastLocation = savedStateHandle.getLiveData<Location>("location")
     val events = MutableLiveData<GeolocationEvent>()
     val isMapTracking = MutableLiveData(true)
+    val mapType = MutableLiveData(GoogleMap.MAP_TYPE_NORMAL)
 
     fun setMapTracking(tracking: Boolean) = isMapTracking.postValue(tracking)
+
+    fun setMapType(type: Int) = mapType.postValue(type)
 
     @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION)
     fun trackLocation() {
