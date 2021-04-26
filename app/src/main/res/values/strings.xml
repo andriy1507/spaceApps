@@ -47,4 +47,10 @@
     <string name="satellite">Satellite</string>
     <string name="hybrid">Hybrid</string>
     <string name="normal">Normal</string>
+    <string name="are_you_sure_you_want_to_log_out">Are you sure you want log out?</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">Ok</string>
+    <string name="english">English</string>
+    <string name="ukrainian">Ukrainian</string>
+    <string name="change_language">Change language</string>
 </resources>

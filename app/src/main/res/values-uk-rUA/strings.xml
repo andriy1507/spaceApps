@@ -41,4 +41,13 @@
     <string name="terms_of_use">Правила користування</string>
     <string name="privacy_policy">Політика конфіденційності</string>
     <string name="qr_code">QR-Код</string>
+    <string name="satellite">Супутник</string>
+    <string name="hybrid">Гібрид</string>
+    <string name="normal">Звичайна</string>
+    <string name="are_you_sure_you_want_to_log_out">Ви впевнені, що хочете вийти?</string>
+    <string name="cancel">Скасувати</string>
+    <string name="ok">Ок</string>
+    <string name="english">Англійська</string>
+    <string name="ukrainian">Українська</string>
+    <string name="change_language">Змінити мову</string>
 </resources>
