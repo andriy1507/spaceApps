@@ -123,9 +123,9 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
 //    Accompanist
-    val accompanist_version = "0.6.2"
-    implementation("dev.chrisbanes.accompanist:accompanist-coil:$accompanist_version")
-    implementation("dev.chrisbanes.accompanist:accompanist-insets:$accompanist_version")
+    val accompanist_version = "0.8.1"
+    implementation("com.google.accompanist:accompanist-coil:$accompanist_version")
+    implementation("com.google.accompanist:accompanist-insets:$accompanist_version")
 //    Coroutines
     val coroutines_version = "1.4.3"
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version")

@@ -34,10 +34,10 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.accompanist.insets.navigationBarsPadding
+import com.google.accompanist.insets.statusBarsPadding
 import com.spaceapps.myapplication.R
 import com.spaceapps.myapplication.ui.*
-import dev.chrisbanes.accompanist.insets.navigationBarsPadding
-import dev.chrisbanes.accompanist.insets.statusBarsPadding
 
 @OptIn(ExperimentalAnimationApi::class)
 @Suppress("LongMethod")
@@ -133,55 +133,29 @@ fun AuthScreen(vm: AuthViewModel) = Column(
             .height(SPACING_48.dp)
             .fillMaxWidth()
     ) { Text(text = stringResource(if (state == SignInState) R.string.sign_in else R.string.sign_up)) }
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = SPACING_16.dp)
-    ) {
-        Divider(
-            modifier = Modifier
-                .weight(1f)
-                .align(Alignment.CenterVertically),
-            color = MaterialTheme.colors.onBackground
-        )
-        Text(
-            text = stringResource(R.string.OR),
-            modifier = Modifier.padding(horizontal = SPACING_16.dp)
-        )
-        Divider(
-            modifier = Modifier
-                .weight(1f)
-                .align(Alignment.CenterVertically),
-            color = MaterialTheme.colors.onBackground
-        )
-    }
-    SocialSignInButton(
-        onClick = vm::onGoogleSignInClick,
-        colors = ButtonDefaults.buttonColors(
-            backgroundColor = googleColor,
-            contentColor = Color.White
-        ),
-        icon = R.drawable.ic_google,
-        text = R.string.continue_with_google
+    SocialsDivider()
+    SocialButtons(
+        onGoogleClick = vm::onGoogleSignInClick,
+        onFacebookClick = vm::onFacebookSignInClick,
+        onAppleClick = vm::onAppleSignInClick
     )
-    SocialSignInButton(
-        onClick = vm::onFacebookSignInClick,
-        colors = ButtonDefaults.buttonColors(
-            backgroundColor = facebookColor,
-            contentColor = Color.White
-        ),
-        icon = R.drawable.ic_facebook,
-        text = R.string.continue_with_facebook
+    AuthFooter(
+        onForgotClick = vm::goForgotPassword,
+        state = state,
+        onToggleStateClick = vm::toggleState,
+        onTermsClick = vm::goTermsOfUse,
+        onPrivacyClick = vm::goPrivacyPolicy
     )
-    SocialSignInButton(
-        onClick = vm::onAppleSignInClick,
-        colors = ButtonDefaults.buttonColors(
-            backgroundColor = appleColor,
-            contentColor = Color.White
-        ),
-        icon = R.drawable.ic_apple,
-        text = R.string.continue_with_apple_id
-    )
+}
+
+@Composable
+fun ColumnScope.AuthFooter(
+    state: AuthScreenState,
+    onToggleStateClick: OnClick,
+    onForgotClick: OnClick,
+    onTermsClick: OnClick,
+    onPrivacyClick: OnClick
+) {
     ClickableText(
         text = buildAnnotatedString {
             withStyle(
@@ -192,7 +166,7 @@ fun AuthScreen(vm: AuthViewModel) = Column(
             ) { append(stringResource(R.string.forgot_password)) }
         },
         modifier = Modifier.padding(top = SPACING_16.dp),
-        onClick = { vm.goForgotPassword() }
+        onClick = { onForgotClick() }
     )
     Spacer(modifier = Modifier.weight(1f))
     val termsOfUse = stringResource(R.string.terms_of_use)
@@ -207,8 +181,8 @@ fun AuthScreen(vm: AuthViewModel) = Column(
         modifier = Modifier.align(Alignment.CenterHorizontally)
     ) {
         when {
-            it <= termsOfUse.length -> vm.goTermsOfUse()
-            it >= (termsOfUse + dash).length -> vm.goPrivacyPolicy()
+            it <= termsOfUse.length -> onTermsClick()
+            it >= (termsOfUse + dash).length -> onPrivacyClick()
         }
     }
     Spacer(modifier = Modifier.weight(1f))
@@ -217,7 +191,7 @@ fun AuthScreen(vm: AuthViewModel) = Column(
             .align(Alignment.CenterHorizontally)
             .padding(bottom = SPACING_16.dp),
         state = state,
-        onClick = vm::toggleState
+        onClick = onToggleStateClick
     )
 }
 
@@ -281,3 +255,62 @@ fun SocialSignInButton(
         )
     }
 )
+
+@Composable
+fun SocialButtons(
+    onGoogleClick: OnClick,
+    onFacebookClick: OnClick,
+    onAppleClick: OnClick
+) {
+    SocialSignInButton(
+        onClick = onGoogleClick,
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = googleColor,
+            contentColor = Color.White
+        ),
+        icon = R.drawable.ic_google,
+        text = R.string.continue_with_google
+    )
+    SocialSignInButton(
+        onClick = onFacebookClick,
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = facebookColor,
+            contentColor = Color.White
+        ),
+        icon = R.drawable.ic_facebook,
+        text = R.string.continue_with_facebook
+    )
+    SocialSignInButton(
+        onClick = onAppleClick,
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = appleColor,
+            contentColor = Color.White
+        ),
+        icon = R.drawable.ic_apple,
+        text = R.string.continue_with_apple_id
+    )
+}
+
+@Composable
+fun SocialsDivider() = Row(
+    modifier = Modifier
+        .fillMaxWidth()
+        .padding(vertical = SPACING_16.dp)
+) {
+    Divider(
+        modifier = Modifier
+            .weight(1f)
+            .align(Alignment.CenterVertically),
+        color = MaterialTheme.colors.onBackground
+    )
+    Text(
+        text = stringResource(R.string.OR),
+        modifier = Modifier.padding(horizontal = SPACING_16.dp)
+    )
+    Divider(
+        modifier = Modifier
+            .weight(1f)
+            .align(Alignment.CenterVertically),
+        color = MaterialTheme.colors.onBackground
+    )
+}

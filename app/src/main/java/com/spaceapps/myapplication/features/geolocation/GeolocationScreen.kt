@@ -3,231 +3,198 @@ package com.spaceapps.myapplication.features.geolocation
 import android.location.Location
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.accompanist.insets.navigationBarsPadding
+import com.google.accompanist.insets.statusBarsPadding
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap.*
+import com.google.android.gms.maps.GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE
 import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.spaceapps.myapplication.R
-import com.spaceapps.myapplication.ui.ACTION_BAR_SIZE
-import com.spaceapps.myapplication.ui.SPACING_1
-import com.spaceapps.myapplication.ui.SPACING_16
-import com.spaceapps.myapplication.ui.SPACING_8
+import com.spaceapps.myapplication.ui.*
 import com.spaceapps.myapplication.ui.views.GoogleMap
 import com.spaceapps.myapplication.utils.LocalResources
-import com.spaceapps.myapplication.utils.calculateRectangularCoordinates
-import com.spaceapps.myapplication.utils.latitudeString
-import com.spaceapps.myapplication.utils.longitudeString
-import dev.chrisbanes.accompanist.insets.LocalWindowInsets
-import dev.chrisbanes.accompanist.insets.statusBarsPadding
-import dev.chrisbanes.accompanist.insets.toPaddingValues
 
-private const val MOCK_PROVIDER = "MOCK_PROVIDER"
+const val MOCK_PROVIDER = "MOCK_PROVIDER"
+typealias OnMapTrackingChange = (Boolean) -> Unit
+typealias OnMapTypeChange = (Int) -> Unit
+
+private const val DIALOG_WIDTH_RATIO = .75f
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun GeolocationScreen(fragmentManager: FragmentManager) {
-    val viewModel = viewModel<GeolocationViewModel>()
-    val location by viewModel.lastLocation.observeAsState(Location(MOCK_PROVIDER))
-    val events by viewModel.events.observeAsState(InitState)
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colors.background)
-            .statusBarsPadding()
-            .padding(horizontal = SPACING_16.dp)
-    ) {
+fun GeolocationScreen(
+    fragmentManager: FragmentManager,
+    location: Location,
+    isMapTracking: Boolean,
+    onMapTrackingChange: OnMapTrackingChange,
+    mapType: Int,
+    onMapTypeChange: OnMapTypeChange
+) = Scaffold(
+    modifier = Modifier
+        .fillMaxSize()
+        .navigationBarsPadding()
+        .padding(bottom = ACTION_BAR_SIZE.dp)
+        .background(MaterialTheme.colors.background),
+    floatingActionButton = {
+        AnimatedVisibility(visible = !isMapTracking, enter = fadeIn(), exit = fadeOut()) {
+            MapTrackingFab(onClick = { onMapTrackingChange(true) })
+        }
+    }
+) {
+    Box(modifier = Modifier.fillMaxSize()) {
         if (location.provider == MOCK_PROVIDER) {
             CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
         } else {
-            Column(modifier = Modifier.fillMaxSize()) {
-                GeoCoordinatesCard(location!!)
-                RectCoordinatesCard(location!!)
-                AnimatedVisibility(visible = events == LocationUnavailable) {
-                    LocationUnavailable()
-                }
-                val density = LocalResources.current.displayMetrics.density
-                val circleStrokeColor = MaterialTheme.colors.primary.copy(alpha = .85f).toArgb()
-                val circleFillColor = MaterialTheme.colors.primary.copy(alpha = .25f).toArgb()
-                GoogleMap(
-                    manager = fragmentManager,
-                    onMapLoaded = {
-                        val latLng = LatLng(location.latitude, location.longitude)
-                        val marker = MarkerOptions().position(latLng)
-                        val circle = CircleOptions().center(latLng)
-                            .strokeColor(circleStrokeColor)
-                            .strokeWidth(density * SPACING_1)
-                            .fillColor(circleFillColor)
-                            .radius(location.accuracy.toDouble())
-                        it.clear()
-                        it.addCircle(circle)
-                        it.addMarker(marker)
-                        val accuracy = location.accuracy
-                        val zoom = when {
-                            accuracy < 200 -> 17.5f
-                            else -> 15f
-                        }
-                        it.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom))
-                    },
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(
-                            paddingValues = LocalWindowInsets.current.navigationBars
-                                .toPaddingValues(additionalBottom = (ACTION_BAR_SIZE + SPACING_8).dp)
-                        )
-                        .clip(RoundedCornerShape(size = SPACING_16.dp))
-                        .background(color = MaterialTheme.colors.surface)
-                )
-            }
+            MapPreview(
+                fragmentManager = fragmentManager,
+                location = location,
+                isMapTracking = isMapTracking,
+                onMapTrackingChange = onMapTrackingChange,
+                mapType = mapType
+            )
+            MapToolbar(mapType, onMapTypeChange)
         }
     }
 }
 
 @Composable
-fun LocationUnavailable() = Row {
-    Icon(
-        modifier = Modifier.padding(end = SPACING_8.dp),
-        painter = painterResource(id = R.drawable.ic_location_disabled),
-        tint = MaterialTheme.colors.error,
-        contentDescription = null
-    )
-    Text(
-        text = stringResource(R.string.location_unavailable),
-        color = MaterialTheme.colors.error
-    )
-}
-
-@Composable
-@Suppress("NamedArguments")
-fun GeoCoordinatesCard(loc: Location) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
-            .padding(vertical = SPACING_8.dp),
-        backgroundColor = MaterialTheme.colors.surface,
-        shape = RoundedCornerShape(SPACING_16.dp),
-        elevation = SPACING_8.dp
-    ) {
-        Row {
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(start = SPACING_16.dp)
-            ) {
-                LabelValueText(
-                    label = stringResource(R.string.latitude_label),
-                    value = latitudeString(loc.latitude)
-                )
-                LabelValueText(
-                    label = stringResource(R.string.longitude_label),
-                    value = longitudeString(loc.longitude)
-                )
-            }
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(end = SPACING_16.dp)
-            ) {
-                LabelValueText(
-                    label = stringResource(R.string.altitude_label),
-                    value = stringResource(R.string.altitude_value, loc.altitude)
-                )
-                LabelValueText(
-                    label = stringResource(R.string.accuracy_label),
-                    value = stringResource(R.string.distance_meters, loc.accuracy)
-                )
-            }
+fun MapToolbar(mapType: Int, onMapTypeChange: OnMapTypeChange) = Box(
+    modifier = Modifier
+        .fillMaxWidth()
+        .wrapContentHeight()
+        .statusBarsPadding()
+) {
+    var isExpanded by remember { mutableStateOf(false) }
+    IconButton(modifier = Modifier.align(Alignment.CenterEnd), onClick = { isExpanded = true }) {
+        Icon(
+            painter = painterResource(id = R.drawable.ic_map_layers),
+            contentDescription = null,
+            tint = if (mapType == MAP_TYPE_NORMAL) Color.DarkGray else Color.White
+        )
+        if (isExpanded) {
+            MapTypeDialog(
+                mapType = mapType,
+                onDismiss = { isExpanded = false },
+                onMapTypeChange = onMapTypeChange
+            )
         }
     }
 }
 
 @Composable
-fun ColumnScope.LabelValueText(label: String, value: String) {
-    LabelText(
-        modifier = Modifier.align(Alignment.Start),
-        text = label
-    )
-    ValueText(
-        modifier = Modifier.align(Alignment.Start),
-        text = value
-    )
-}
-
-@Composable
-fun LabelText(modifier: Modifier = Modifier, text: String) {
-    val labelStyle = LocalTextStyle.current.copy(
-        color = MaterialTheme.colors.primary,
-        fontWeight = FontWeight.Bold
-    )
-    Text(
-        text = text,
-        style = labelStyle,
-        modifier = modifier
-            .padding(vertical = SPACING_8.dp)
-    )
-}
-
-@Composable
-fun ValueText(modifier: Modifier = Modifier, text: String) {
-    Text(
-        text = text,
-        modifier = modifier.padding(bottom = SPACING_8.dp)
-    )
-}
-
-@Composable
-@Suppress("NamedArguments")
-fun RectCoordinatesCard(loc: Location) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
-            .padding(vertical = SPACING_8.dp),
-        backgroundColor = MaterialTheme.colors.surface,
-        shape = RoundedCornerShape(SPACING_16.dp),
-        elevation = SPACING_8.dp
-    ) {
-        val rect = calculateRectangularCoordinates(loc.longitude, loc.latitude, loc.altitude)
+fun MapTypeDialog(
+    mapType: Int,
+    onDismiss: OnClick,
+    onMapTypeChange: OnMapTypeChange
+) {
+    Dialog(onDismissRequest = onDismiss) {
         Column(
             modifier = Modifier
-                .fillMaxWidth(1f)
-                .padding(start = SPACING_16.dp)
+                .fillMaxWidth(DIALOG_WIDTH_RATIO)
+                .clip(RoundedCornerShape(SPACING_16.dp))
+                .background(MaterialTheme.colors.background)
+                .padding(SPACING_16.dp)
         ) {
-            Text(
-                text = "X: ${rect.x}",
-                modifier = Modifier
-                    .align(Alignment.Start)
-                    .padding(vertical = SPACING_8.dp)
-            )
-            Text(
-                text = "Y: ${rect.y}",
-                modifier = Modifier
-                    .align(Alignment.Start)
-                    .padding(vertical = SPACING_8.dp)
-            )
-            Text(
-                text = "Z: ${rect.z}",
-                modifier = Modifier
-                    .align(Alignment.Start)
-                    .padding(vertical = SPACING_8.dp)
-            )
+            Row(modifier = Modifier.padding(vertical = SPACING_8.dp)) {
+                RadioButton(
+                    selected = mapType == MAP_TYPE_SATELLITE,
+                    onClick = {
+                        onMapTypeChange(MAP_TYPE_SATELLITE)
+                        onDismiss()
+                    }
+                )
+                Text(text = stringResource(R.string.satellite))
+            }
+            Row(modifier = Modifier.padding(vertical = SPACING_8.dp)) {
+                RadioButton(
+                    selected = mapType == MAP_TYPE_HYBRID,
+                    onClick = {
+                        onMapTypeChange(MAP_TYPE_HYBRID)
+                        onDismiss()
+                    }
+                )
+                Text(text = stringResource(R.string.hybrid))
+            }
+            Row(modifier = Modifier.padding(vertical = SPACING_8.dp)) {
+                RadioButton(
+                    selected = mapType == MAP_TYPE_NORMAL,
+                    onClick = {
+                        onMapTypeChange(MAP_TYPE_NORMAL)
+                        onDismiss()
+                    }
+                )
+                Text(text = stringResource(R.string.normal))
+            }
         }
     }
+}
+
+@Composable
+fun MapTrackingFab(
+    onClick: OnClick
+) = FloatingActionButton(onClick = onClick) {
+    Icon(painter = painterResource(id = R.drawable.ic_location), contentDescription = null)
+}
+
+@Composable
+fun MapPreview(
+    fragmentManager: FragmentManager,
+    location: Location,
+    isMapTracking: Boolean,
+    onMapTrackingChange: OnMapTrackingChange,
+    mapType: Int
+) {
+    val density = LocalResources.current.displayMetrics.density
+    val circleStrokeColor = MaterialTheme.colors.primary.copy(alpha = .85f).toArgb()
+    val circleFillColor = MaterialTheme.colors.primary.copy(alpha = .25f).toArgb()
+    GoogleMap(
+        modifier = Modifier.fillMaxSize(),
+        manager = fragmentManager,
+        onMapLoaded = {
+            if (it.mapType != mapType) it.mapType = mapType
+            it.setOnCameraMoveStartedListener { reason ->
+                if (reason == REASON_GESTURE) onMapTrackingChange(false)
+            }
+            val latLng = LatLng(location.latitude, location.longitude)
+            val marker = MarkerOptions().position(latLng)
+            val circle = CircleOptions().center(latLng)
+                .strokeColor(circleStrokeColor)
+                .strokeWidth(density * SPACING_1)
+                .fillColor(circleFillColor)
+                .radius(location.accuracy.toDouble())
+            it.clear()
+            it.addCircle(circle)
+            it.addMarker(marker)
+            val accuracy = location.accuracy
+            val zoom = when {
+                accuracy < 200 -> 17.5f
+                else -> 15f
+            }
+            if (isMapTracking) it.animateCamera(
+                CameraUpdateFactory.newLatLngZoom(
+                    latLng,
+                    zoom
+                )
+            )
+        }
+    )
 }
