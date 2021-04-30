@@ -2,7 +2,7 @@ import com.google.protobuf.gradle.generateProtoTasks
 import com.google.protobuf.gradle.protobuf
 import com.google.protobuf.gradle.protoc
 
-val kotlinVersion = "1.4.31"
+val kotlinVersion = "1.5.0"
 val composeVersion = "1.0.0-beta05"
 plugins {
     id("com.android.application")
@@ -32,7 +32,6 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = true
-            isShrinkResources = true
             buildConfigField(
                 "String",
                 "SERVER_URL",
@@ -148,15 +147,15 @@ dependencies {
 //    Google play services
     implementation("com.google.android.gms:play-services-location:18.0.0")
     implementation("com.google.android.gms:play-services-auth:19.0.0")
-    implementation("com.google.android.gms:play-services-maps:17.0.0")
+    implementation("com.google.android.gms:play-services-maps:17.0.1")
 //    AndroidX
-    implementation("androidx.core:core-ktx:1.3.2")
+    implementation("androidx.core:core-ktx:1.6.0-alpha02")
     implementation("androidx.appcompat:appcompat:1.3.0-rc01")
-    implementation("androidx.activity:activity-ktx:1.3.0-alpha06")
-    implementation("androidx.activity:activity-compose:1.3.0-alpha06")
+    implementation("androidx.activity:activity-ktx:1.3.0-alpha07")
+    implementation("androidx.activity:activity-compose:1.3.0-alpha07")
     implementation("androidx.startup:startup-runtime:1.0.0")
     implementation("androidx.browser:browser:1.3.0")
-    implementation("androidx.fragment:fragment-ktx:1.3.2")
+    implementation("androidx.fragment:fragment-ktx:1.3.3")
     implementation("com.google.android.material:material:1.3.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha04")
@@ -185,7 +184,7 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
 //    Dagger-Hilt
-    val dagger_version = "2.35"
+    val dagger_version = "2.35.1"
     implementation("com.google.dagger:hilt-android:$dagger_version")
     kapt("com.google.dagger:hilt-android-compiler:$dagger_version")
     val hilt_version = "1.0.0-beta01"
@@ -193,7 +192,7 @@ dependencies {
     implementation("androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03")
     implementation("androidx.hilt:hilt-work:$hilt_version")
 //    Firebase
-    implementation(platform("com.google.firebase:firebase-bom:26.1.1"))
+    implementation(platform("com.google.firebase:firebase-bom:27.1.0"))
     implementation("com.google.firebase:firebase-crashlytics-ktx")
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("com.google.firebase:firebase-messaging-ktx")
