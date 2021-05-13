@@ -48,7 +48,7 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
       - name: Run lint check
-        run: ./gradlew lintRelease
+        run: ./gradlew lint
   detekt-check:
     name: Detekt code check
     runs-on: ubuntu-latest
@@ -71,7 +71,7 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
       - name: Run detekt check
-        run: ./gradlew detektRelease
+        run: ./gradlew detekt
   unit-tests:
     name: Unit tests
     needs: [ lint-check, ktlint-check, detekt-check ]
