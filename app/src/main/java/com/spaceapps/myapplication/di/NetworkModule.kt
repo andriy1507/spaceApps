@@ -32,11 +32,9 @@ object NetworkModule {
     fun provideOkHttpClient(
         logger: HttpLoggingInterceptor,
         authInterceptor: AuthInterceptor,
-        languageInterceptor: LanguageInterceptor,
         authenticator: SpaceAppsAuthenticator
     ) = OkHttpClient.Builder().apply {
         addInterceptor(authInterceptor)
-        addInterceptor(languageInterceptor)
         authenticator(authenticator)
         addNetworkInterceptor(StethoInterceptor())
         addInterceptor(logger)

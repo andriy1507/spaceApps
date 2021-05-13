@@ -129,6 +129,7 @@ dependencies {
     val coroutines_version = "1.4.3"
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$coroutines_version")
 
 //    Retrofit
     val retrofit_version = "2.9.0"
