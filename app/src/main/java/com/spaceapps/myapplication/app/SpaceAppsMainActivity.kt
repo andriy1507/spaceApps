@@ -99,10 +99,8 @@ class SpaceAppsMainActivity : AppCompatActivity() {
         navController.graph = navGraph
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.authScreen,
                 R.id.qrCodeScreen,
-                R.id.legalScreen,
-                R.id.forgotPasswordScreen -> binding.bottomNavView.isGone = true
+                R.id.legalScreen -> binding.bottomNavView.isGone = true
                 else -> binding.bottomNavView.isVisible = true
             }
         }
@@ -112,12 +110,7 @@ class SpaceAppsMainActivity : AppCompatActivity() {
         }
     }
 
-    private fun getStartDestination() =
-        if (runBlocking { authTokenStorage.getAuthToken() }.isNullOrBlank()) {
-            R.id.authScreen
-        } else {
-            R.id.geolocationScreen
-        }
+    private fun getStartDestination() = R.id.geolocationScreen
 
     private fun setupEdgeToEdge() {
         WindowCompat.setDecorFitsSystemWindows(window, false)

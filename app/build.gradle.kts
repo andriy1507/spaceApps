@@ -2,8 +2,8 @@ import com.google.protobuf.gradle.generateProtoTasks
 import com.google.protobuf.gradle.protobuf
 import com.google.protobuf.gradle.protoc
 
-val kotlinVersion = "1.4.31"
-val composeVersion = "1.0.0-beta05"
+val kotlinVersion = "1.5.0"
+val composeVersion = "1.0.0-beta06"
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -19,20 +19,19 @@ plugins {
 }
 
 android {
-    compileSdkVersion(30)
+    compileSdk = 30
     defaultConfig {
         applicationId = "com.spaceapps.myapplication"
-        minSdkVersion(23)
-        targetSdkVersion(30)
+        minSdk = 23
+        targetSdk = 30
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "com.spaceapps.myapplication.runner.SpaceAppsHiltRunner"
-        testInstrumentationRunnerArguments(mapOf("clearPackageData" to "true"))
+        testInstrumentationRunnerArguments += mapOf("clearPackageData" to "true")
     }
     buildTypes {
         release {
             isMinifyEnabled = true
-            isShrinkResources = true
             buildConfigField(
                 "String",
                 "SERVER_URL",
@@ -69,7 +68,7 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
         useIR = true
-        freeCompilerArgs += listOf("-Xopt-in=kotlin.RequiresOptIn")
+        freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn")
     }
     buildFeatures {
         compose = true
@@ -123,7 +122,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
 //    Accompanist
-    val accompanist_version = "0.8.1"
+    val accompanist_version = "0.9.1"
     implementation("com.google.accompanist:accompanist-coil:$accompanist_version")
     implementation("com.google.accompanist:accompanist-insets:$accompanist_version")
 //    Coroutines
@@ -148,21 +147,21 @@ dependencies {
 //    Google play services
     implementation("com.google.android.gms:play-services-location:18.0.0")
     implementation("com.google.android.gms:play-services-auth:19.0.0")
-    implementation("com.google.android.gms:play-services-maps:17.0.0")
+    implementation("com.google.android.gms:play-services-maps:17.0.1")
 //    AndroidX
-    implementation("androidx.core:core-ktx:1.3.2")
+    implementation("androidx.core:core-ktx:1.6.0-alpha03")
     implementation("androidx.appcompat:appcompat:1.3.0-rc01")
-    implementation("androidx.activity:activity-ktx:1.3.0-alpha06")
-    implementation("androidx.activity:activity-compose:1.3.0-alpha06")
+    implementation("androidx.activity:activity-ktx:1.3.0-alpha07")
+    implementation("androidx.activity:activity-compose:1.3.0-alpha07")
     implementation("androidx.startup:startup-runtime:1.0.0")
     implementation("androidx.browser:browser:1.3.0")
-    implementation("androidx.fragment:fragment-ktx:1.3.2")
+    implementation("androidx.fragment:fragment-ktx:1.3.3")
     implementation("com.google.android.material:material:1.3.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha04")
 
 //    Paging
-    val paging_version = "3.0.0-rc01"
+    val paging_version = "3.0.0"
     val paging_compose_version = "1.0.0-alpha08"
     implementation("androidx.paging:paging-runtime-ktx:$paging_version")
     implementation("androidx.paging:paging-compose:$paging_compose_version")
@@ -179,21 +178,23 @@ dependencies {
     implementation("androidx.compose.material:material:$composeVersion")
     implementation("androidx.compose.foundation:foundation:$composeVersion")
     implementation("androidx.compose.ui:ui-tooling:$composeVersion")
+    implementation("androidx.navigation:navigation-compose:1.0.0-alpha10")
     runtimeOnly("androidx.compose.animation:animation:$composeVersion")
 //    Navigation component
     val nav_version = "2.3.5"
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
 //    Dagger-Hilt
-    val dagger_version = "2.35"
+    val dagger_version = "2.35.1"
     implementation("com.google.dagger:hilt-android:$dagger_version")
     kapt("com.google.dagger:hilt-android-compiler:$dagger_version")
-    val hilt_version = "1.0.0-beta01"
-    kapt("androidx.hilt:hilt-compiler:$hilt_version")
+    val hilt_version = "1.0.0"
     implementation("androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0-alpha01")
     implementation("androidx.hilt:hilt-work:$hilt_version")
+    kapt("androidx.hilt:hilt-compiler:$hilt_version")
 //    Firebase
-    implementation(platform("com.google.firebase:firebase-bom:26.1.1"))
+    implementation(platform("com.google.firebase:firebase-bom:27.1.0"))
     implementation("com.google.firebase:firebase-crashlytics-ktx")
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("com.google.firebase:firebase-messaging-ktx")
@@ -202,7 +203,7 @@ dependencies {
     implementation("com.google.firebase:firebase-messaging-directboot")
     implementation("com.google.firebase:firebase-perf-ktx")
 //    Room database
-    val room_version = "2.4.0-alpha01"
+    val room_version = "2.4.0-alpha02"
     implementation("androidx.room:room-runtime:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
     kapt("androidx.room:room-compiler:$room_version")
@@ -231,7 +232,7 @@ dependencies {
 //    OkHttp MockWebServer
     testImplementation("com.squareup.okhttp3:mockwebserver:$okhttp_version")
 //    Mockito
-    val mockito_version = "3.9.0"
+    val mockito_version = "3.10.0"
     testImplementation("org.mockito:mockito-core:$mockito_version")
     testImplementation("org.mockito:mockito-inline:$mockito_version")
 //    Coroutines test
