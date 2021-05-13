@@ -178,6 +178,7 @@ dependencies {
     implementation("androidx.compose.material:material:$composeVersion")
     implementation("androidx.compose.foundation:foundation:$composeVersion")
     implementation("androidx.compose.ui:ui-tooling:$composeVersion")
+    implementation("androidx.navigation:navigation-compose:1.0.0-alpha10")
     runtimeOnly("androidx.compose.animation:animation:$composeVersion")
 //    Navigation component
     val nav_version = "2.3.5"
@@ -188,9 +189,10 @@ dependencies {
     implementation("com.google.dagger:hilt-android:$dagger_version")
     kapt("com.google.dagger:hilt-android-compiler:$dagger_version")
     val hilt_version = "1.0.0"
-    kapt("androidx.hilt:hilt-compiler:$hilt_version")
     implementation("androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0-alpha01")
     implementation("androidx.hilt:hilt-work:$hilt_version")
+    kapt("androidx.hilt:hilt-compiler:$hilt_version")
 //    Firebase
     implementation(platform("com.google.firebase:firebase-bom:27.1.0"))
     implementation("com.google.firebase:firebase-crashlytics-ktx")
