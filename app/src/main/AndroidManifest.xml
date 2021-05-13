@@ -16,7 +16,7 @@
     android:supportsRtl="true"
     android:theme="@style/Theme.MyApplication">
         <activity
-        android:name="com.spaceapps.myapplication.app.SpaceAppsMainActivity"
+        android:name="com.spaceapps.myapplication.app.MainActivity"
         android:exported="true"
         android:label="@string/app_name"
         android:launchMode="singleTask"

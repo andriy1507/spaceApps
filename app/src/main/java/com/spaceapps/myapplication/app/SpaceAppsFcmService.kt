@@ -70,7 +70,7 @@ class SpaceAppsFcmService : FirebaseMessagingService() {
         val intent = PendingIntent.getActivity(
             this@SpaceAppsFcmService,
             Random.nextInt(),
-            Intent(this, SpaceAppsMainActivity::class.java),
+            Intent(this, MainActivity::class.java),
             PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
         )
         val notification = buildCustomNotification(message.data, intent)
