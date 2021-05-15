@@ -1,31 +1,72 @@
 package com.spaceapps.myapplication.ui.views
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import android.os.Bundle
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.fragment.app.FragmentContainerView
-import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.SupportMapFragment
-import com.spaceapps.myapplication.R
+import com.google.android.gms.maps.MapView
+import com.google.maps.android.ktx.awaitMap
+import kotlinx.coroutines.launch
 
 typealias OnMapLoaded = (GoogleMap) -> Unit
 
 @Composable
-fun GoogleMap(
-    manager: FragmentManager,
-    modifier: Modifier = Modifier,
-    onMapLoaded: OnMapLoaded
-) {
-    val mapFragment = remember { SupportMapFragment() }
+fun GoogleMap(modifier: Modifier = Modifier, onMapLoaded: OnMapLoaded) {
+    val map = rememberMapViewWithLifecycle()
+    var mapInitialized by remember { mutableStateOf(false) }
+    LaunchedEffect(map, mapInitialized) {
+        if (mapInitialized) return@LaunchedEffect
+        map.awaitMap()
+        mapInitialized = true
+    }
+    val coroutineScope = rememberCoroutineScope()
     AndroidView(
-        factory = {
-            val fragmentContainerView = FragmentContainerView(it).apply { id = R.id.googleMapFragment }
-            manager.beginTransaction().replace(R.id.googleMapFragment, mapFragment).commit()
-            fragmentContainerView
-        },
         modifier = modifier,
-        update = { mapFragment.getMapAsync(onMapLoaded) }
+        factory = { map },
+        update = { mapView ->
+            coroutineScope.launch {
+                val googleMap = mapView.awaitMap()
+                onMapLoaded(googleMap)
+            }
+        }
     )
 }
+
+@Composable
+private fun rememberMapViewWithLifecycle(): MapView {
+    val context = LocalContext.current
+    val mapView = remember { MapView(context) }
+
+    // Makes MapView follow the lifecycle of this composable
+    val lifecycleObserver = rememberMapLifecycleObserver(mapView)
+    val lifecycle = LocalLifecycleOwner.current.lifecycle
+    DisposableEffect(lifecycle) {
+        lifecycle.addObserver(lifecycleObserver)
+        onDispose {
+            lifecycle.removeObserver(lifecycleObserver)
+        }
+    }
+
+    return mapView
+}
+
+@Composable
+private fun rememberMapLifecycleObserver(mapView: MapView): LifecycleEventObserver =
+    remember(mapView) {
+        LifecycleEventObserver { _, event ->
+            when (event) {
+                Lifecycle.Event.ON_CREATE -> mapView.onCreate(Bundle())
+                Lifecycle.Event.ON_START -> mapView.onStart()
+                Lifecycle.Event.ON_RESUME -> mapView.onResume()
+                Lifecycle.Event.ON_PAUSE -> mapView.onPause()
+                Lifecycle.Event.ON_STOP -> mapView.onStop()
+                Lifecycle.Event.ON_DESTROY -> mapView.onDestroy()
+                else -> throw IllegalStateException()
+            }
+        }
+    }

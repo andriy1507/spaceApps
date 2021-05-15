@@ -149,6 +149,7 @@ dependencies {
     implementation("com.google.android.gms:play-services-location:18.0.0")
     implementation("com.google.android.gms:play-services-auth:19.0.0")
     implementation("com.google.android.gms:play-services-maps:17.0.1")
+    implementation("com.google.maps.android:maps-ktx:3.0.1")
 //    AndroidX
     implementation("androidx.core:core-ktx:1.6.0-alpha03")
     implementation("androidx.appcompat:appcompat:1.3.0-rc01")

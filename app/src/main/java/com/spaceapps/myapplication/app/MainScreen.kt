@@ -1,11 +1,14 @@
 package com.spaceapps.myapplication.app
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.BottomAppBar
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltNavGraphViewModel
 import androidx.navigation.NavController
@@ -22,6 +25,7 @@ import com.spaceapps.myapplication.features.notifications.NotificationsScreen
 import com.spaceapps.myapplication.features.settings.SettingsScreen
 import com.spaceapps.myapplication.features.settings.SettingsViewModel
 import com.spaceapps.myapplication.ui.SpaceAppsTheme
+import com.spaceapps.myapplication.ui.views.GoogleMap
 
 @Preview
 @Composable
@@ -44,10 +48,11 @@ fun MainScreen() = SpaceAppsTheme {
                 NotificationsScreen()
             }
             composable(geolocation) {
-
+                Box(modifier = Modifier.fillMaxSize()) {
+                    GoogleMap(modifier = Modifier.fillMaxSize()) {}
+                }
             }
             composable(qrCode) {
-
             }
         }
     }

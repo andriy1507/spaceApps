@@ -19,7 +19,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import androidx.fragment.app.FragmentManager
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.statusBarsPadding
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -42,7 +41,6 @@ private const val DIALOG_WIDTH_RATIO = .75f
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun GeolocationScreen(
-    fragmentManager: FragmentManager,
     location: Location,
     isMapTracking: Boolean,
     onMapTrackingChange: OnMapTrackingChange,
@@ -65,7 +63,6 @@ fun GeolocationScreen(
             CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
         } else {
             MapPreview(
-                fragmentManager = fragmentManager,
                 location = location,
                 isMapTracking = isMapTracking,
                 onMapTrackingChange = onMapTrackingChange,
@@ -157,7 +154,6 @@ fun MapTrackingFab(
 
 @Composable
 fun MapPreview(
-    fragmentManager: FragmentManager,
     location: Location,
     isMapTracking: Boolean,
     onMapTrackingChange: OnMapTrackingChange,
@@ -168,7 +164,6 @@ fun MapPreview(
     val circleFillColor = MaterialTheme.colors.primary.copy(alpha = .25f).toArgb()
     GoogleMap(
         modifier = Modifier.fillMaxSize(),
-        manager = fragmentManager,
         onMapLoaded = {
             if (it.mapType != mapType) it.mapType = mapType
             it.setOnCameraMoveStartedListener { reason ->
