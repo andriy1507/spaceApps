@@ -7,7 +7,6 @@ import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
-import com.spaceapps.myapplication.R
 import com.spaceapps.myapplication.Settings
 import com.spaceapps.myapplication.di.DataStoreModule.settingsDataStore
 import com.spaceapps.myapplication.local.AuthTokenStorage
@@ -52,7 +51,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTheme(R.style.Theme_MyApplication_NoActionBar)
         setupEdgeToEdge()
         setContent {
             MainScreen()
