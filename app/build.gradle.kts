@@ -72,7 +72,6 @@ android {
     }
     buildFeatures {
         compose = true
-        viewBinding = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = composeVersion
@@ -126,7 +125,7 @@ dependencies {
     implementation("com.google.accompanist:accompanist-coil:$accompanist_version")
     implementation("com.google.accompanist:accompanist-insets:$accompanist_version")
 //    Coroutines
-    val coroutines_version = "1.4.3"
+    val coroutines_version = "1.5.0"
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$coroutines_version")

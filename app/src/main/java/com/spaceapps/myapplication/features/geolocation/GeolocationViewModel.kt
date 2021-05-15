@@ -1,10 +1,10 @@
 package com.spaceapps.myapplication.features.geolocation
 
+import android.annotation.SuppressLint
 import android.location.Location
 import android.location.LocationManager
 import android.os.Build
 import android.os.Looper
-import androidx.annotation.RequiresPermission
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
@@ -30,7 +30,7 @@ class GeolocationViewModel @Inject constructor(
 
     fun setMapType(type: Int) = mapType.postValue(type)
 
-    @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION)
+    @SuppressLint("MissingPermission")
     fun trackLocation() {
         val request = LocationRequest.create().apply {
             fastestInterval = 1500

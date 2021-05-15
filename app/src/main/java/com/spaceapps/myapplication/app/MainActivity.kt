@@ -15,6 +15,8 @@ import com.spaceapps.myapplication.utils.AuthDispatcher
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.*
@@ -55,14 +57,15 @@ class MainActivity : AppCompatActivity() {
         setContent {
             MainScreen()
         }
-        lifecycleScope.launchWhenCreated { observeAuthState() }
+        observeAuthState()
     }
 
-    private suspend fun observeAuthState() {
-        for (e in authDispatcher.emitter) {
-            if (e) logOut() else restart()
+    private fun observeAuthState() = authDispatcher.emitter.onEach {
+        when (it) {
+            true -> logOut()
+            false -> restart()
         }
-    }
+    }.launchIn(lifecycleScope)
 
     private fun logOut() = lifecycleScope.launch(Dispatchers.IO) {
         storageManager.clear()
