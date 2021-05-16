@@ -4,11 +4,17 @@ import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.spaceapps.myapplication.BuildConfig
 import com.spaceapps.myapplication.network.*
 import com.squareup.moshi.Moshi
+import com.tinder.scarlet.Scarlet
+import com.tinder.scarlet.messageadapter.moshi.MoshiMessageAdapter
+import com.tinder.scarlet.websocket.okhttp.OkHttpWebSocket
+import com.tinder.streamadapter.coroutines.CoroutinesStreamAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.WebSocketListener
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -50,6 +56,23 @@ object NetworkModule {
         addConverterFactory(MoshiConverterFactory.create(moshi))
         callFactory { client.newCall(it) }
     }.build()
+
+    @Provides
+    @Singleton
+    fun provideScarlet(
+        moshi: Moshi,
+        okHttpClient: OkHttpClient
+    ) = Scarlet.Builder()
+        .addMessageAdapterFactory(MoshiMessageAdapter.Factory(moshi))
+        .webSocketFactory(
+            OkHttpWebSocket.Factory(object : OkHttpWebSocket.ConnectionEstablisher {
+                override fun establishConnection(webSocketListener: WebSocketListener) {
+                    val request = Request.Builder().url("wss://echo.websocket.org").build()
+                    okHttpClient.newWebSocket(request, webSocketListener)
+                }
+            })
+        ).addStreamAdapterFactory(CoroutinesStreamAdapterFactory())
+        .build()
 
     @Provides
     @Singleton

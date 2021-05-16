@@ -218,6 +218,12 @@ dependencies {
 //    Facebook SDK
     implementation("com.facebook.android:facebook-android-sdk:9.1.1")
 
+    val scarlet_version = "0.1.12"
+    implementation("com.tinder.scarlet:scarlet:$scarlet_version")
+    implementation("com.tinder.scarlet:message-adapter-moshi:$scarlet_version")
+    implementation("com.tinder.scarlet:websocket-okhttp:$scarlet_version")
+    implementation("com.tinder.scarlet:stream-adapter-coroutines:$scarlet_version")
+
 //    Testing
     testImplementation("junit:junit:4.13.2")
     testImplementation("com.google.truth:truth:1.1.2")
