@@ -8,4 +8,6 @@ object Navigation {
     const val notifications = "notifications"
 
     const val qrCode = "qr-code"
+
+    const val chat = "chat"
 }

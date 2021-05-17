@@ -27,10 +27,12 @@ import androidx.navigation.compose.*
 import com.google.android.gms.maps.GoogleMap.MAP_TYPE_NORMAL
 import com.spaceapps.myapplication.R
 import com.spaceapps.myapplication.Settings
+import com.spaceapps.myapplication.app.Navigation.chat
 import com.spaceapps.myapplication.app.Navigation.geolocation
 import com.spaceapps.myapplication.app.Navigation.notifications
 import com.spaceapps.myapplication.app.Navigation.qrCode
 import com.spaceapps.myapplication.app.Navigation.settings
+import com.spaceapps.myapplication.features.chat.ChatScreen
 import com.spaceapps.myapplication.features.geolocation.GeolocationScreen
 import com.spaceapps.myapplication.features.geolocation.GeolocationViewModel
 import com.spaceapps.myapplication.features.notifications.NotificationsScreen
@@ -46,9 +48,16 @@ import com.spaceapps.myapplication.ui.SpaceAppsTheme
 fun MainScreen() = SpaceAppsTheme {
     val navController = rememberNavController()
     Scaffold(
-        bottomBar = { BottomBar(navController) }
+        bottomBar = {
+            when (currentRoute(navController)) {
+                settings,
+                geolocation,
+                notifications -> BottomBar(navController)
+                else -> Unit
+            }
+        }
     ) {
-        NavHost(navController = navController, startDestination = settings) {
+        NavHost(navController = navController, startDestination = chat) {
             composable(settings) {
                 val vm = hiltNavGraphViewModel<SettingsViewModel>(it)
                 val language by vm.language.observeAsState(Settings.Language.UNRECOGNIZED)
@@ -75,6 +84,9 @@ fun MainScreen() = SpaceAppsTheme {
                 )
             }
             composable(qrCode) {
+            }
+            composable(chat) {
+                ChatScreen()
             }
         }
     }
