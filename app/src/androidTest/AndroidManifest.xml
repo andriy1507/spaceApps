@@ -9,7 +9,7 @@
 
     <application>
         <uses-library android:name="android.test.runner" />
-        <activity android:name="com.spaceapps.myapplication.app.SpaceAppsMainActivity" />
+        <activity android:name="com.spaceapps.myapplication.app.MainActivity" />
     </application>
 
 </manifest>

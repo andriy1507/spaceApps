@@ -6,6 +6,7 @@ import android.content.Intent
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
@@ -48,7 +49,8 @@ class SpaceAppsFcmService : FirebaseMessagingService() {
         return NotificationCompat.Builder(this, getString(R.string.default_notification_channel_id))
             .apply {
                 setContentText(data["text"])
-                setSmallIcon(R.drawable.ic_notifications_active)
+                setSmallIcon(R.drawable.ic_launcher_foreground)
+                color = ContextCompat.getColor(this@SpaceAppsFcmService, R.color.colorPrimary)
                 data["imageUrl"]?.let { imageUrl ->
                     val request = ImageRequest.Builder(this@SpaceAppsFcmService)
                         .data(imageUrl)
@@ -70,7 +72,7 @@ class SpaceAppsFcmService : FirebaseMessagingService() {
         val intent = PendingIntent.getActivity(
             this@SpaceAppsFcmService,
             Random.nextInt(),
-            Intent(this, SpaceAppsMainActivity::class.java),
+            Intent(this, MainActivity::class.java),
             PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
         )
         val notification = buildCustomNotification(message.data, intent)
