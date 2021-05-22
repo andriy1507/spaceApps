@@ -2,8 +2,8 @@ import com.google.protobuf.gradle.generateProtoTasks
 import com.google.protobuf.gradle.protobuf
 import com.google.protobuf.gradle.protoc
 
-val kotlinVersion = "1.5.0"
-val composeVersion = "1.0.0-beta06"
+val kotlinVersion by extra("1.5.0")
+val composeVersion by extra("1.0.0-beta07")
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -11,7 +11,6 @@ plugins {
     id("kotlin-parcelize")
     id("dagger.hilt.android.plugin")
     id("com.google.firebase.crashlytics")
-    id("com.google.firebase.firebase-perf")
     id("com.google.gms.google-services")
     id("com.google.protobuf") version "0.8.15"
     id("org.jlleitschuh.gradle.ktlint") version "10.0.0"
@@ -41,11 +40,6 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            withGroovyBuilder {
-                "FirebasePerformance" {
-                    invokeMethod("setInstrumentationEnabled", false)
-                }
-            }
         }
         debug {
             isMinifyEnabled = false
@@ -67,7 +61,6 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
-        useIR = true
         freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn")
     }
     buildFeatures {
@@ -121,27 +114,27 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
 //    Accompanist
-    val accompanist_version = "0.9.1"
-    implementation("com.google.accompanist:accompanist-coil:$accompanist_version")
-    implementation("com.google.accompanist:accompanist-insets:$accompanist_version")
+    val accompanistVersion = "0.10.0"
+    implementation("com.google.accompanist:accompanist-coil:$accompanistVersion")
+    implementation("com.google.accompanist:accompanist-insets:$accompanistVersion")
 //    Coroutines
-    val coroutines_version = "1.5.0"
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$coroutines_version")
+    val coroutinesVersion = "1.5.0"
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$coroutinesVersion")
 
 //    Retrofit
-    val retrofit_version = "2.9.0"
-    implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
-    implementation("com.squareup.retrofit2:converter-moshi:$retrofit_version")
+    val retrofitVersion = "2.9.0"
+    implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
+    implementation("com.squareup.retrofit2:converter-moshi:$retrofitVersion")
 //    Stetho
-    val stetho_version = "1.6.0"
-    implementation("com.facebook.stetho:stetho:$stetho_version")
-    implementation("com.facebook.stetho:stetho-okhttp3:$stetho_version")
+    val stethoVersion = "1.6.0"
+    implementation("com.facebook.stetho:stetho:$stethoVersion")
+    implementation("com.facebook.stetho:stetho-okhttp3:$stethoVersion")
 //    OkHttp client
-    val okhttp_version = "5.0.0-alpha.2"
-    implementation("com.squareup.okhttp3:logging-interceptor:$okhttp_version")
-    implementation("com.squareup.okhttp3:okhttp:$okhttp_version")
+    val okhttpVersion = "5.0.0-alpha.2"
+    implementation("com.squareup.okhttp3:logging-interceptor:$okhttpVersion")
+    implementation("com.squareup.okhttp3:okhttp:$okhttpVersion")
 //    Timber logging
     implementation("com.jakewharton.timber:timber:4.7.1")
 //    Google play services
@@ -150,79 +143,74 @@ dependencies {
     implementation("com.google.android.gms:play-services-maps:17.0.1")
     implementation("com.google.maps.android:maps-ktx:3.0.1")
 //    AndroidX
-    implementation("androidx.core:core-ktx:1.6.0-alpha03")
-    implementation("androidx.appcompat:appcompat:1.3.0-rc01")
-    implementation("androidx.activity:activity-ktx:1.3.0-alpha07")
-    implementation("androidx.activity:activity-compose:1.3.0-alpha07")
+    implementation("androidx.core:core-ktx:1.6.0-beta01")
+    implementation("androidx.appcompat:appcompat:1.4.0-alpha01")
+    implementation("androidx.activity:activity-ktx:1.3.0-alpha08")
+    implementation("androidx.activity:activity-compose:1.3.0-alpha08")
     implementation("androidx.startup:startup-runtime:1.0.0")
     implementation("androidx.browser:browser:1.3.0")
-    implementation("androidx.fragment:fragment-ktx:1.3.3")
+    implementation("androidx.fragment:fragment-ktx:1.3.4")
     implementation("com.google.android.material:material:1.3.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha04")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha05")
 
 //    Paging
-    val paging_version = "3.0.0"
-    val paging_compose_version = "1.0.0-alpha08"
-    implementation("androidx.paging:paging-runtime-ktx:$paging_version")
-    implementation("androidx.paging:paging-compose:$paging_compose_version")
+    val pagingVersion = "3.0.0"
+    val pagingComposeVersion = "1.0.0-alpha09"
+    implementation("androidx.paging:paging-runtime-ktx:$pagingVersion")
+    implementation("androidx.paging:paging-compose:$pagingComposeVersion")
 //    Moshi
-    val moshi_version = "1.12.0"
-    implementation("com.squareup.moshi:moshi:$moshi_version")
-    kapt("com.squareup.moshi:moshi-kotlin-codegen:$moshi_version")
+    val moshiVersion = "1.12.0"
+    implementation("com.squareup.moshi:moshi:$moshiVersion")
+    kapt("com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion")
 //    WorkManager
-    val work_version = "2.5.0"
-    implementation("androidx.work:work-runtime-ktx:$work_version")
+    val workVersion = "2.5.0"
+    implementation("androidx.work:work-runtime-ktx:$workVersion")
 //    Jetpack Compose
     implementation("androidx.compose.ui:ui:$composeVersion")
     implementation("androidx.compose.runtime:runtime-livedata:$composeVersion")
     implementation("androidx.compose.material:material:$composeVersion")
     implementation("androidx.compose.foundation:foundation:$composeVersion")
     implementation("androidx.compose.ui:ui-tooling:$composeVersion")
-    implementation("androidx.navigation:navigation-compose:1.0.0-alpha10")
+    implementation("androidx.navigation:navigation-compose:2.4.0-alpha01")
     runtimeOnly("androidx.compose.animation:animation:$composeVersion")
-//    Navigation component
-    val nav_version = "2.3.5"
-    implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
-    implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
 //    Dagger-Hilt
-    val dagger_version = "2.35.1"
-    implementation("com.google.dagger:hilt-android:$dagger_version")
-    kapt("com.google.dagger:hilt-android-compiler:$dagger_version")
-    val hilt_version = "1.0.0"
+    val daggerVersion = "2.35.1"
+    implementation("com.google.dagger:hilt-android:$daggerVersion")
+    kapt("com.google.dagger:hilt-android-compiler:$daggerVersion")
+    val hiltVersion = "1.0.0"
     implementation("androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03")
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0-alpha01")
-    implementation("androidx.hilt:hilt-work:$hilt_version")
-    kapt("androidx.hilt:hilt-compiler:$hilt_version")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0-alpha02")
+    implementation("androidx.hilt:hilt-work:$hiltVersion")
+    kapt("androidx.hilt:hilt-compiler:$hiltVersion")
 //    Firebase
-    implementation(platform("com.google.firebase:firebase-bom:27.1.0"))
+    implementation(platform("com.google.firebase:firebase-bom:28.0.1"))
     implementation("com.google.firebase:firebase-crashlytics-ktx")
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("com.google.firebase:firebase-messaging-ktx")
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-config-ktx")
     implementation("com.google.firebase:firebase-messaging-directboot")
-    implementation("com.google.firebase:firebase-perf-ktx")
 //    Room database
-    val room_version = "2.4.0-alpha02"
-    implementation("androidx.room:room-runtime:$room_version")
-    implementation("androidx.room:room-ktx:$room_version")
-    kapt("androidx.room:room-compiler:$room_version")
+    val roomVersion = "2.4.0-alpha02"
+    implementation("androidx.room:room-runtime:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
+    kapt("androidx.room:room-compiler:$roomVersion")
 
 //    Datastore
-    val datastore_version = "1.0.0-beta01"
-    implementation("androidx.datastore:datastore:$datastore_version")
-    implementation("androidx.datastore:datastore-preferences:$datastore_version")
+    val datastoreVersion = "1.0.0-beta01"
+    implementation("androidx.datastore:datastore:$datastoreVersion")
+    implementation("androidx.datastore:datastore-preferences:$datastoreVersion")
     implementation("com.google.protobuf:protobuf-javalite:3.11.1")
 
 //    Facebook SDK
     implementation("com.facebook.android:facebook-android-sdk:9.1.1")
 
-    val scarlet_version = "0.1.12"
-    implementation("com.tinder.scarlet:scarlet:$scarlet_version")
-    implementation("com.tinder.scarlet:message-adapter-moshi:$scarlet_version")
-    implementation("com.tinder.scarlet:websocket-okhttp:$scarlet_version")
-    implementation("com.tinder.scarlet:stream-adapter-coroutines:$scarlet_version")
+    val scarletVersion = "0.1.12"
+    implementation("com.tinder.scarlet:scarlet:$scarletVersion")
+    implementation("com.tinder.scarlet:message-adapter-moshi:$scarletVersion")
+    implementation("com.tinder.scarlet:websocket-okhttp:$scarletVersion")
+    implementation("com.tinder.scarlet:stream-adapter-coroutines:$scarletVersion")
 
 //    Testing
     testImplementation("junit:junit:4.13.2")
@@ -237,13 +225,13 @@ dependencies {
     testImplementation("androidx.test:runner:1.3.0")
     testImplementation("androidx.test:rules:1.3.0")
 //    OkHttp MockWebServer
-    testImplementation("com.squareup.okhttp3:mockwebserver:$okhttp_version")
+    testImplementation("com.squareup.okhttp3:mockwebserver:$okhttpVersion")
 //    Mockito
-    val mockito_version = "3.10.0"
-    testImplementation("org.mockito:mockito-core:$mockito_version")
-    testImplementation("org.mockito:mockito-inline:$mockito_version")
+    val mockitoVersion = "3.10.0"
+    testImplementation("org.mockito:mockito-core:$mockitoVersion")
+    testImplementation("org.mockito:mockito-inline:$mockitoVersion")
 //    Coroutines test
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
 //    Instrumentation testing
     androidTestImplementation("androidx.test:core:1.3.0")
 
@@ -253,16 +241,15 @@ dependencies {
     androidTestUtil("androidx.test:orchestrator:1.3.0")
 
 //    Hilt testing
-    androidTestImplementation("com.google.dagger:hilt-android-testing:$dagger_version")
-    kaptAndroidTest("com.google.dagger:hilt-android-compiler:$dagger_version")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:$daggerVersion")
+    kaptAndroidTest("com.google.dagger:hilt-android-compiler:$daggerVersion")
 //   Assertions
     androidTestImplementation("androidx.test.ext:junit:1.1.2")
     androidTestImplementation("androidx.test.ext:truth:1.3.0")
     androidTestImplementation("com.google.truth:truth:1.1.2")
-    androidTestImplementation("com.google.truth:truth:1.1.2")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:$composeVersion")
 //    Coroutines test
-    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version")
+    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
 //    Venom
     val venomVersion = "0.3.1"
     debugImplementation("com.github.YarikSOffice.Venom:venom:$venomVersion")

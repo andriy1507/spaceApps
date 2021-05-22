@@ -12,6 +12,7 @@ import com.spaceapps.myapplication.di.DataStoreModule.settingsDataStore
 import com.spaceapps.myapplication.local.AuthTokenStorage
 import com.spaceapps.myapplication.local.StorageManager
 import com.spaceapps.myapplication.utils.AuthDispatcher
+import com.spaceapps.myapplication.utils.NavigationDispatcher
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -30,6 +31,9 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var authTokenStorage: AuthTokenStorage
+
+    @Inject
+    lateinit var navDispatcher: NavigationDispatcher
 
     @Inject
     lateinit var storageManager: StorageManager

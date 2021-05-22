@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -21,7 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltNavGraphViewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
 import com.google.android.gms.maps.GoogleMap.MAP_TYPE_NORMAL
@@ -42,11 +43,19 @@ import com.spaceapps.myapplication.ui.FONT_10
 import com.spaceapps.myapplication.ui.OnClick
 import com.spaceapps.myapplication.ui.SPACING_2
 import com.spaceapps.myapplication.ui.SpaceAppsTheme
+import com.spaceapps.myapplication.utils.NavigationDispatcher
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 @Preview
 @Composable
-fun MainScreen() = SpaceAppsTheme {
+fun MainScreen(navDispatcher: NavigationDispatcher = NavigationDispatcher()) = SpaceAppsTheme {
     val navController = rememberNavController()
+    LaunchedEffect(navController) {
+        navDispatcher.emitter.onEach { command ->
+            command(navController)
+        }.launchIn(this)
+    }
     Scaffold(
         bottomBar = {
             when (currentRoute(navController)) {
@@ -59,7 +68,7 @@ fun MainScreen() = SpaceAppsTheme {
     ) {
         NavHost(navController = navController, startDestination = chat) {
             composable(settings) {
-                val vm = hiltNavGraphViewModel<SettingsViewModel>(it)
+                val vm = hiltViewModel<SettingsViewModel>(it)
                 val language by vm.language.observeAsState(Settings.Language.UNRECOGNIZED)
                 SettingsScreen(
                     language = language,
@@ -71,7 +80,7 @@ fun MainScreen() = SpaceAppsTheme {
                 NotificationsScreen()
             }
             composable(geolocation) {
-                val vm = hiltNavGraphViewModel<GeolocationViewModel>(it)
+                val vm = hiltViewModel<GeolocationViewModel>(it)
                 val location by vm.lastLocation.observeAsState(Location(""))
                 val isMapTracking by vm.isMapTracking.observeAsState(true)
                 val mapType by vm.mapType.observeAsState(MAP_TYPE_NORMAL)
@@ -173,5 +182,5 @@ fun RowScope.CounterNavigationItem(
 @Composable
 private fun currentRoute(navController: NavHostController): String? {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    return navBackStackEntry?.arguments?.getString(KEY_ROUTE)
+    return navBackStackEntry?.destination?.route
 }
