@@ -16,7 +16,8 @@ import coil.request.ImageRequest
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.spaceapps.myapplication.R
-import com.spaceapps.myapplication.workers.FirebaseTokenWorker
+import com.spaceapps.myapplication.app.activity.MainActivity
+import com.spaceapps.myapplication.app.workers.FirebaseTokenWorker
 import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import kotlin.random.Random
