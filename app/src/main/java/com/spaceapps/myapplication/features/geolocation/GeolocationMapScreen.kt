@@ -21,7 +21,7 @@ import timber.log.Timber
 
 @SuppressLint("MissingPermission")
 @Composable
-fun GeolocationScreen(vm: GeolocationViewModel) {
+fun GeolocationMapScreen(vm: GeolocationMapViewModel) {
     val locationRequest = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions(),
         onResult = { permissions ->
