@@ -20,5 +20,4 @@ object DataStoreModule {
     @Singleton
     fun providePreferencesDataStore(@ApplicationContext context: Context) =
         context.preferencesDataStore
-
 }

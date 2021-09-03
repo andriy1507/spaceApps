@@ -21,5 +21,4 @@ class AuthInterceptor @Inject constructor(
         builder.header(AUTH_HEADER, "$AUTH_HEADER_PREFIX $token")
         return@runBlocking chain.proceed(builder.build())
     }
-
 }

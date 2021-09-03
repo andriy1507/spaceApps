@@ -30,5 +30,4 @@ class DataStoreManager @Inject constructor(private val dataStore: DataStore<Pref
         private val AUTH_TOKEN = stringPreferencesKey("AUTH_TOKEN")
         private val REFRESH_TOKEN = stringPreferencesKey("REFRESH_TOKEN")
     }
-
 }

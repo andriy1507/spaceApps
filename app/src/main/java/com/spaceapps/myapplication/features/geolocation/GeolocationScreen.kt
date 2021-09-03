@@ -56,7 +56,6 @@ fun MapPreview() {
     GoogleMap(
         modifier = Modifier.fillMaxSize(),
         onMapLoaded = {
-
         }
     )
 }

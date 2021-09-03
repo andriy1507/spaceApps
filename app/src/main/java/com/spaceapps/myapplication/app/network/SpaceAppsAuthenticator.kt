@@ -1,6 +1,5 @@
 package com.spaceapps.myapplication.app.network
 
-import com.google.android.gms.tasks.Tasks
 import com.google.firebase.messaging.FirebaseMessaging
 import com.spaceapps.myapplication.app.AUTH_HEADER
 import com.spaceapps.myapplication.app.AUTH_HEADER_PREFIX
@@ -8,7 +7,6 @@ import com.spaceapps.myapplication.app.local.DataStoreManager
 import com.spaceapps.myapplication.app.models.remote.auth.DeviceRequest
 import com.spaceapps.myapplication.app.models.remote.auth.DeviceRequest.Platform.*
 import com.spaceapps.myapplication.app.models.remote.auth.RefreshTokenRequest
-import com.spaceapps.myapplication.app.network.AuthorizationApi
 import com.spaceapps.myapplication.utils.AuthDispatcher
 import com.spaceapps.myapplication.utils.Error
 import com.spaceapps.myapplication.utils.Success

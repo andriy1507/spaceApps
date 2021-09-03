@@ -40,7 +40,6 @@ class GeolocationViewModel @Inject constructor(
                 }
 
                 override fun onLocationAvailability(availability: LocationAvailability) {
-
                 }
             },
             Looper.getMainLooper()

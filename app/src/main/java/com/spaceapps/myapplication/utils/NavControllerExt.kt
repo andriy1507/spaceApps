@@ -6,8 +6,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigator
 
-
-//sets value to previous savedStateHandle unless route is specified
+// sets value to previous savedStateHandle unless route is specified
 fun <T> NavController.setNavigationResult(route: String? = null, key: String, result: T) {
     if (route == null) {
         previousBackStackEntry?.savedStateHandle?.set(key, result)
@@ -25,8 +24,7 @@ fun <T> NavController.observeNavigationResultLiveData(key: String) =
 fun <T> NavController.observeNavigationResult(key: String) =
     currentBackStackEntry?.savedStateHandle?.getLiveData<T>(key)?.asFlow()
 
-
-//popUpToRoute - should always be the start destination of the bottomBar, not app
+// popUpToRoute - should always be the start destination of the bottomBar, not app
 fun NavController.navigateToRootDestination(
     route: String,
     popUpToRoute: String
