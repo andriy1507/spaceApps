@@ -10,8 +10,8 @@ plugins {
     kotlin("kapt")
     id("kotlin-parcelize")
     id("dagger.hilt.android.plugin")
-    id("com.google.firebase.crashlytics")
     id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
     id("com.google.protobuf") version "0.8.15"
     id("org.jlleitschuh.gradle.ktlint") version "10.1.0"
     id("io.gitlab.arturbosch.detekt") version "1.18.1"
