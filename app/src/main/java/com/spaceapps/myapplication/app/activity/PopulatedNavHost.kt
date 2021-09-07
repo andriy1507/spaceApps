@@ -11,12 +11,16 @@ import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.navigation
+import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
+import com.google.accompanist.navigation.material.bottomSheet
 import com.spaceapps.myapplication.app.GeolocationGraph
 import com.spaceapps.myapplication.app.Screens
 import com.spaceapps.myapplication.features.auth.AuthScreen
+import com.spaceapps.myapplication.features.forgotPassword.ForgotPasswordScreen
 import com.spaceapps.myapplication.features.geolocation.GeolocationMapScreen
+import com.spaceapps.myapplication.features.socialAuth.SocialAuthScreen
 
-@OptIn(ExperimentalAnimationApi::class)
+@OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialNavigationApi::class)
 @Composable
 fun PopulatedNavHost(
     navController: NavHostController,
@@ -31,7 +35,15 @@ fun PopulatedNavHost(
     ) {
 
         composable(Screens.Auth.route) {
-            AuthScreen()
+            AuthScreen(hiltViewModel(it))
+        }
+
+        composable(Screens.ForgotPassword.route) {
+            ForgotPasswordScreen()
+        }
+
+        bottomSheet(Screens.SocialAuth.route) {
+            SocialAuthScreen()
         }
 
         navigation(
