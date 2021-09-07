@@ -126,6 +126,7 @@ dependencies {
     implementation("com.google.accompanist:accompanist-systemuicontroller:$accompanistVersion")
 //    Coil
     implementation("io.coil-kt:coil:1.3.2")
+    implementation("io.coil-kt:coil-compose:1.3.2")
 //    Coroutines
     val coroutinesVersion = "1.5.2"
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
