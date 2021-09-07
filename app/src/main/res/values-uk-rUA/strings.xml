@@ -50,4 +50,7 @@
     <string name="english">Англійська</string>
     <string name="ukrainian">Українська</string>
     <string name="change_language">Змінити мову</string>
+    <string name="select_language">Оберіть мову</string>
+    <string name="chat">Чат</string>
+    <string name="n_a">Н/Д</string>
 </resources>

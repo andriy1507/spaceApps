@@ -5,6 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.spaceapps.myapplication.app.GeolocationGraph
 import com.spaceapps.myapplication.app.repositories.auth.*
+import com.spaceapps.myapplication.app.repositories.auth.results.LogOutResult
+import com.spaceapps.myapplication.app.repositories.auth.results.SignInResult
+import com.spaceapps.myapplication.app.repositories.auth.results.SignUpResult
+import com.spaceapps.myapplication.app.repositories.auth.results.SocialSignInResult
 import com.spaceapps.myapplication.utils.AuthDispatcher
 import com.spaceapps.myapplication.utils.NavigationDispatcher
 import com.spaceapps.myapplication.utils.getStateFlow

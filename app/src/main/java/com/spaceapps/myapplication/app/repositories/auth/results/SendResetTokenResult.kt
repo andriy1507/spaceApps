@@ -1,4 +1,4 @@
-package com.spaceapps.myapplication.app.repositories.auth
+package com.spaceapps.myapplication.app.repositories.auth.results
 
 sealed class SendResetTokenResult {
     object Success : SendResetTokenResult()

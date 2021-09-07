@@ -19,6 +19,7 @@ import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
 import com.spaceapps.myapplication.app.GeolocationGraph
 import com.spaceapps.myapplication.app.local.DataStoreManager
 import com.spaceapps.myapplication.app.local.SpaceAppsDatabase
+import com.spaceapps.myapplication.ui.SpaceAppsTheme
 import com.spaceapps.myapplication.utils.AuthDispatcher
 import com.spaceapps.myapplication.utils.NavigationDispatcher
 import dagger.hilt.android.AndroidEntryPoint
@@ -76,8 +77,10 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
-            Scaffold {
-                PopulatedNavHost(navController, GeolocationGraph.route, it)
+            SpaceAppsTheme {
+                Scaffold {
+                    PopulatedNavHost(navController, GeolocationGraph.route, it)
+                }
             }
         }
     }

@@ -1,5 +1,7 @@
 package com.spaceapps.myapplication.app.repositories.auth
 
+import com.spaceapps.myapplication.app.repositories.auth.results.*
+
 interface AuthRepository {
     suspend fun signIn(email: String, password: String): SignInResult
 

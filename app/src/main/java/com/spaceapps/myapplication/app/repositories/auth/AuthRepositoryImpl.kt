@@ -5,6 +5,7 @@ import com.spaceapps.myapplication.app.local.DataStoreManager
 import com.spaceapps.myapplication.app.models.remote.auth.*
 import com.spaceapps.myapplication.app.models.remote.auth.DeviceRequest.Platform.Android
 import com.spaceapps.myapplication.app.network.AuthorizationApi
+import com.spaceapps.myapplication.app.repositories.auth.results.*
 import com.spaceapps.myapplication.utils.Error
 import com.spaceapps.myapplication.utils.Success
 import com.spaceapps.myapplication.utils.request
