@@ -18,7 +18,6 @@ import com.google.accompanist.navigation.material.ExperimentalMaterialNavigation
 import com.google.accompanist.navigation.material.ModalBottomSheetLayout
 import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
 import com.spaceapps.myapplication.app.GeolocationGraph
-import com.spaceapps.myapplication.app.Screens
 import com.spaceapps.myapplication.app.local.DataStoreManager
 import com.spaceapps.myapplication.app.local.SpaceAppsDatabase
 import com.spaceapps.myapplication.ui.SpaceAppsTheme
@@ -28,7 +27,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -83,7 +81,7 @@ class MainActivity : AppCompatActivity() {
             SpaceAppsTheme {
                 ModalBottomSheetLayout(bottomSheetNavigator) {
                     Scaffold {
-                        PopulatedNavHost(navController, Screens.Auth.route, it)
+                        PopulatedNavHost(navController, GeolocationGraph.route, it)
                     }
                 }
             }

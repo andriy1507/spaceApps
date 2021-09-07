@@ -93,12 +93,11 @@ class AuthViewModel @Inject constructor(
         navigationDispatcher.emit { it.navigate(Screens.ForgotPassword.route) }
 
     fun onAuthClick() {
-        when(isSignUp.value) {
+        when (isSignUp.value) {
             true -> signUp()
             false -> signIn()
         }
     }
-
 
     private fun signIn() = launch {
         when (repository.signIn(email = email.value.text, password = password.value.text)) {

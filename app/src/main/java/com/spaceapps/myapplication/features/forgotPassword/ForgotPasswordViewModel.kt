@@ -12,6 +12,4 @@ class ForgotPasswordViewModel @Inject constructor(
     private val repository: AuthRepository,
     private val navigationDispatcher: NavigationDispatcher,
     savedStateHandle: SavedStateHandle
-) : ViewModel() {
-
-}
+) : ViewModel()

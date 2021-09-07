@@ -1,5 +1,8 @@
 package com.spaceapps.myapplication.app.di
 
+import android.content.Context
+import coil.ImageLoader
+import coil.util.CoilUtils
 import com.spaceapps.myapplication.BuildConfig
 import com.spaceapps.myapplication.app.network.AuthInterceptor
 import com.spaceapps.myapplication.app.network.AuthorizationApi
@@ -8,6 +11,7 @@ import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -55,4 +59,18 @@ object NetworkModule {
     @Singleton
     fun provideAuthorizationApi(retrofit: Retrofit): AuthorizationApi =
         retrofit.create(AuthorizationApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideCoilImageLoader(
+        @ApplicationContext context: Context,
+        client: OkHttpClient
+    ): ImageLoader {
+        return ImageLoader.Builder(context)
+            .okHttpClient(
+                client.newBuilder()
+                    .cache(CoilUtils.createDefaultCache(context))
+                    .build()
+            ).build()
+    }
 }

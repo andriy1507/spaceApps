@@ -14,8 +14,4 @@ class SocialAuthViewModel @Inject constructor(
     private val navigationDispatcher: NavigationDispatcher,
     private val authDispatcher: AuthDispatcher,
     savedStateHandle: SavedStateHandle
-) : ViewModel() {
-
-
-
-}
+) : ViewModel()

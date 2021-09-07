@@ -21,7 +21,7 @@ fun AuthScreen(vm: AuthViewModel) {
     val password by vm.password.collectAsState()
     val confirmPassword by vm.confirmPassword.collectAsState()
     val isSignUp by vm.isSignUp.collectAsState()
-    val titleId = when(isSignUp) {
+    val titleId = when (isSignUp) {
         true -> R.string.sign_up
         false -> R.string.sign_in
     }
