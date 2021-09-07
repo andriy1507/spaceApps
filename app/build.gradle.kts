@@ -114,9 +114,18 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
 //    Accompanist
-    val accompanistVersion = "0.15.0"
-    implementation("com.google.accompanist:accompanist-coil:$accompanistVersion")
+    val accompanistVersion = "0.17.0"
+    implementation("com.google.accompanist:accompanist-drawablepainter:$accompanistVersion")
     implementation("com.google.accompanist:accompanist-insets:$accompanistVersion")
+    implementation("com.google.accompanist:accompanist-navigation-material:$accompanistVersion")
+    implementation("com.google.accompanist:accompanist-navigation-animation:$accompanistVersion")
+    implementation("com.google.accompanist:accompanist-pager:$accompanistVersion")
+    implementation("com.google.accompanist:accompanist-pager-indicators:$accompanistVersion")
+    implementation("com.google.accompanist:accompanist-swiperefresh:$accompanistVersion")
+    implementation("com.google.accompanist:accompanist-insets:$accompanistVersion")
+    implementation("com.google.accompanist:accompanist-systemuicontroller:$accompanistVersion")
+//    Coil
+    implementation("io.coil-kt:coil:1.3.2")
 //    Coroutines
     val coroutinesVersion = "1.5.2"
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
@@ -147,9 +156,9 @@ dependencies {
     implementation("androidx.browser:browser:1.3.0")
     implementation("androidx.fragment:fragment-ktx:1.3.6")
     implementation("com.google.android.material:material:1.4.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.4.0-alpha03")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0-alpha03")
 
 //    Paging
 //    val pagingVersion = "3.0.1"

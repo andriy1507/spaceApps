@@ -1,7 +1,9 @@
 package com.spaceapps.myapplication.ui.views
 
 import android.os.Bundle
+import android.view.View
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -40,8 +42,7 @@ fun GoogleMap(modifier: Modifier = Modifier, onMapLoaded: OnMapLoaded) {
 @Composable
 private fun rememberMapViewWithLifecycle(): MapView {
     val context = LocalContext.current
-    val mapView = remember { MapView(context) }
-
+    val mapView = remember { MapView(context).apply { id = View.generateViewId() } }
     // Makes MapView follow the lifecycle of this composable
     val lifecycleObserver = rememberMapLifecycleObserver(mapView)
     val lifecycle = LocalLifecycleOwner.current.lifecycle
@@ -56,17 +57,22 @@ private fun rememberMapViewWithLifecycle(): MapView {
 }
 
 @Composable
-private fun rememberMapLifecycleObserver(mapView: MapView): LifecycleEventObserver =
-    remember(mapView) {
+private fun rememberMapLifecycleObserver(mapView: MapView): LifecycleEventObserver {
+    val bundle = rememberSaveable(key = "mapBundle") { Bundle() }
+    return remember(mapView) {
         LifecycleEventObserver { _, event ->
             when (event) {
-                Lifecycle.Event.ON_CREATE -> mapView.onCreate(Bundle())
+                Lifecycle.Event.ON_CREATE -> mapView.onCreate(bundle)
                 Lifecycle.Event.ON_START -> mapView.onStart()
                 Lifecycle.Event.ON_RESUME -> mapView.onResume()
                 Lifecycle.Event.ON_PAUSE -> mapView.onPause()
-                Lifecycle.Event.ON_STOP -> mapView.onStop()
+                Lifecycle.Event.ON_STOP -> {
+                    mapView.onSaveInstanceState(bundle)
+                    mapView.onStop()
+                }
                 Lifecycle.Event.ON_DESTROY -> mapView.onDestroy()
                 else -> throw IllegalStateException()
             }
         }
     }
+}

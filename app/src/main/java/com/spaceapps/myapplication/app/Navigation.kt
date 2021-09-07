@@ -1,13 +1,13 @@
 package com.spaceapps.myapplication.app
 
-object Navigation {
-    const val settings = "settings"
+sealed class Screens(val route: String) {
+    object Auth : Screens("auth")
+}
 
-    const val geolocation = "geolocation"
+sealed class GeolocationGraph(val route: String) {
+    object GeolocationMap : GeolocationGraph("geolocationMap")
 
-    const val notifications = "notifications"
-
-    const val qrCode = "qr-code"
-
-    const val chat = "chat"
+    companion object {
+        const val route = "geolocation"
+    }
 }

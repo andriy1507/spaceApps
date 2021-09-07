@@ -1,5 +1,6 @@
 package com.spaceapps.myapplication.features.geolocation
 
+import android.location.Location
 import android.location.LocationManager
 import android.os.Build
 import android.os.Looper
@@ -7,16 +8,30 @@ import androidx.annotation.RequiresPermission
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.android.gms.location.*
 import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
+import com.spaceapps.myapplication.utils.getStateFlow
+import com.spaceapps.myapplication.utils.launch
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class GeolocationViewModel @Inject constructor(
+class GeolocationMapViewModel @Inject constructor(
     private val locationClient: FusedLocationProviderClient,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+
+    val isFocusMode = savedStateHandle.getStateFlow(
+        scope = viewModelScope,
+        key = "isFocusMode",
+        initialValue = true
+    )
+    val location = savedStateHandle.getStateFlow<Location?>(
+        scope = viewModelScope,
+        key = "location",
+        initialValue = null
+    )
 
     @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION)
     fun trackLocation() {
@@ -37,6 +52,7 @@ class GeolocationViewModel @Inject constructor(
             request,
             object : LocationCallback() {
                 override fun onLocationResult(result: LocationResult) {
+                    launch { location.emit(result.lastLocation) }
                 }
 
                 override fun onLocationAvailability(availability: LocationAvailability) {
@@ -45,4 +61,8 @@ class GeolocationViewModel @Inject constructor(
             Looper.getMainLooper()
         )
     }
+
+    fun onCameraMoved() = launch { isFocusMode.emit(false) }
+
+    fun onFocusClick() = launch { isFocusMode.emit(true) }
 }

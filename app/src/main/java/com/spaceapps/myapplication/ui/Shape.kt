@@ -2,10 +2,9 @@ package com.spaceapps.myapplication.ui
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes
-import androidx.compose.ui.unit.dp
 
 val shapes = Shapes(
-    small = RoundedCornerShape(4.dp),
-    medium = RoundedCornerShape(4.dp),
-    large = RoundedCornerShape(0.dp)
+    small = RoundedCornerShape(SPACING_4),
+    medium = RoundedCornerShape(SPACING_8),
+    large = RoundedCornerShape(SPACING_16)
 )
