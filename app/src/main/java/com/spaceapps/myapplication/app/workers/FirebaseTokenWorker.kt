@@ -24,7 +24,7 @@ class FirebaseTokenWorker @AssistedInject constructor(
     private val dataStoreManager: DataStoreManager
 ) : CoroutineWorker(context, params) {
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
-        dataStoreManager.getAuthToken() ?: return@withContext Result.failure()
+        dataStoreManager.getAccessToken() ?: return@withContext Result.failure()
         val token = inputData.getString(TOKEN_KEY)
         token ?: return@withContext Result.failure()
         val device = DeviceRequest(

@@ -31,7 +31,7 @@ class AuthRepositoryImpl @Inject constructor(
         return when (val response = request { api.signIn(request = request) }) {
             is Success -> {
                 dataStoreManager.storeTokens(
-                    authToken = response.data.authToken,
+                    accessToken = response.data.accessToken,
                     refreshToken = response.data.refreshToken
                 )
                 SignInResult.Success
@@ -52,7 +52,7 @@ class AuthRepositoryImpl @Inject constructor(
         return when (val response = request { api.signUp(request = request) }) {
             is Success -> {
                 dataStoreManager.storeTokens(
-                    authToken = response.data.authToken,
+                    accessToken = response.data.accessToken,
                     refreshToken = response.data.refreshToken
                 )
                 SignUpResult.Success
@@ -72,7 +72,7 @@ class AuthRepositoryImpl @Inject constructor(
         return when (val response = request { api.googleSignIn(request = request) }) {
             is Success -> {
                 dataStoreManager.storeTokens(
-                    authToken = response.data.authToken,
+                    accessToken = response.data.accessToken,
                     refreshToken = response.data.refreshToken
                 )
                 SocialSignInResult.Success
@@ -92,7 +92,7 @@ class AuthRepositoryImpl @Inject constructor(
         return when (val response = request { api.facebookSignIn(request = request) }) {
             is Success -> {
                 dataStoreManager.storeTokens(
-                    authToken = response.data.authToken,
+                    accessToken = response.data.accessToken,
                     refreshToken = response.data.refreshToken
                 )
                 SocialSignInResult.Success
@@ -112,7 +112,7 @@ class AuthRepositoryImpl @Inject constructor(
         return when (val response = request { api.appleSignIn(request = request) }) {
             is Success -> {
                 dataStoreManager.storeTokens(
-                    authToken = response.data.authToken,
+                    accessToken = response.data.accessToken,
                     refreshToken = response.data.refreshToken
                 )
                 SocialSignInResult.Success
