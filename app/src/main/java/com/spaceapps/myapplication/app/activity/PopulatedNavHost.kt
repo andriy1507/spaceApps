@@ -50,6 +50,7 @@ fun PopulatedNavHost(
             startDestination = GeolocationGraph.GeolocationMap.route,
             route = GeolocationGraph.route
         ) {
+
             composable(GeolocationGraph.GeolocationMap.route) {
                 onBackPressIntercepted?.let { onBack -> BackHandler(onBack = onBack) }
                 GeolocationMapScreen(hiltViewModel(it))

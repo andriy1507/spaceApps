@@ -99,17 +99,28 @@ class AuthViewModel @Inject constructor(
         }
     }
 
+    fun onHaveAccountClick() = launch { isSignUp.emit(!isSignUp.value) }
+
     private fun signIn() = launch {
         when (repository.signIn(email = email.value.text, password = password.value.text)) {
-            SignInResult.Success -> navigationDispatcher.emit { it.navigate(GeolocationGraph.route) }
+            SignInResult.Success -> goGeolocationScreen()
             SignInResult.Failure -> Timber.e("ERROR")
         }
     }
 
     private fun signUp() = launch {
         when (repository.signUp(email = email.value.text, password = password.value.text)) {
-            SignUpResult.Success -> navigationDispatcher.emit { it.navigate(GeolocationGraph.route) }
+            SignUpResult.Success -> goGeolocationScreen()
             SignUpResult.Failure -> Timber.e("ERROR")
+        }
+    }
+
+    private fun goGeolocationScreen() = navigationDispatcher.emit {
+        it.navigate(GeolocationGraph.route) {
+            launchSingleTop = true
+            popUpTo(Screens.Auth.route) {
+                inclusive = true
+            }
         }
     }
 
