@@ -27,6 +27,7 @@ import com.spaceapps.myapplication.ui.SPACING_16
 import com.spaceapps.myapplication.ui.SPACING_64
 import com.spaceapps.myapplication.ui.SPACING_8
 
+@Suppress("LongMethod")
 @OptIn(ExperimentalAnimationApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun AuthScreen(vm: AuthViewModel) {
