@@ -59,4 +59,6 @@
     <string name="coordinate_dms" translatable="false">%1$d\u00B0 %2$d\u0027 %3$.5f\u0022</string>
     <string name="heading" translatable="false">%1$s %2$s</string>
     <string name="sign_in_with_social">Sign in with social</string>
+    <string name="about">About</string>
+    <string name="version">Version</string>
 </resources>

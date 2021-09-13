@@ -13,3 +13,13 @@ sealed class GeolocationGraph(val route: String) {
         const val route = "geolocation"
     }
 }
+
+sealed class AboutGraph(val route: String) {
+    object About : AboutGraph("about")
+
+    object TermsPolicy : AboutGraph("termsPolicy")
+
+    companion object {
+        const val route = "aboutGraph"
+    }
+}
