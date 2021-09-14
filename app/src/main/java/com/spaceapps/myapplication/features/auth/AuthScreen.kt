@@ -12,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.autofill.AutofillType
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -26,6 +27,7 @@ import com.spaceapps.myapplication.ui.FONT_35
 import com.spaceapps.myapplication.ui.SPACING_16
 import com.spaceapps.myapplication.ui.SPACING_64
 import com.spaceapps.myapplication.ui.SPACING_8
+import com.spaceapps.myapplication.utils.autofill
 
 @Suppress("LongMethod")
 @OptIn(ExperimentalAnimationApi::class, ExperimentalComposeUiApi::class)
@@ -69,7 +71,8 @@ fun AuthScreen(vm: AuthViewModel) {
             OutlinedTextField(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = SPACING_16),
+                    .padding(horizontal = SPACING_16)
+                    .autofill(vm::onEmailEnter, AutofillType.EmailAddress),
                 value = email.text,
                 onValueChange = vm::onEmailEnter,
                 keyboardOptions = KeyboardOptions(
@@ -87,7 +90,8 @@ fun AuthScreen(vm: AuthViewModel) {
             OutlinedTextField(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = SPACING_16),
+                    .padding(horizontal = SPACING_16)
+                    .autofill(vm::onPasswordEnter, AutofillType.Password),
                 value = password.text,
                 onValueChange = vm::onPasswordEnter,
                 keyboardOptions = KeyboardOptions(
@@ -111,7 +115,8 @@ fun AuthScreen(vm: AuthViewModel) {
                 OutlinedTextField(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = SPACING_16),
+                        .padding(horizontal = SPACING_16)
+                        .autofill(vm::onConfirmPasswordEnter, AutofillType.NewPassword),
                     value = confirmPassword.text,
                     onValueChange = vm::onConfirmPasswordEnter,
                     keyboardOptions = KeyboardOptions(

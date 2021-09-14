@@ -15,6 +15,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.plusAssign
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -65,25 +66,34 @@ class MainActivity : AppCompatActivity() {
             ObserveEvents(navController)
             val bottomItems = provideBottomItems()
             var selectedIndex by remember { mutableStateOf(0) }
+            val currentDestination by navController.currentBackStackEntryAsState()
+            val isBottomBarVisible = when (currentDestination?.destination?.route) {
+                Screens.Auth.route,
+                Screens.SocialAuth.route,
+                Screens.ForgotPassword.route -> false
+                else -> true
+            }
             SpaceAppsTheme {
                 Scaffold(
                     bottomBar = {
-                        BottomNavigation(modifier = Modifier.navigationBarsPadding()) {
-                            bottomItems.forEachIndexed { index, menuItem ->
-                                BottomNavigationItem(
-                                    selected = selectedIndex == index,
-                                    onClick = {
-                                        selectedIndex = index
-                                        navController.navigateToRootDestination(menuItem.route)
-                                    },
-                                    icon = {
-                                        Icon(
-                                            painter = painterResource(id = menuItem.iconId),
-                                            contentDescription = null
-                                        )
-                                    },
-                                    label = { Text(text = stringResource(id = menuItem.labelId)) }
-                                )
+                        if (isBottomBarVisible) {
+                            BottomNavigation(modifier = Modifier.navigationBarsPadding()) {
+                                bottomItems.forEachIndexed { index, menuItem ->
+                                    BottomNavigationItem(
+                                        selected = selectedIndex == index,
+                                        onClick = {
+                                            selectedIndex = index
+                                            navController.navigateToRootDestination(menuItem.route)
+                                        },
+                                        icon = {
+                                            Icon(
+                                                painter = painterResource(id = menuItem.iconId),
+                                                contentDescription = null
+                                            )
+                                        },
+                                        label = { Text(text = stringResource(id = menuItem.labelId)) }
+                                    )
+                                }
                             }
                         }
                     }
