@@ -15,6 +15,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.plusAssign
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -23,6 +24,7 @@ import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
 import com.spaceapps.myapplication.R
 import com.spaceapps.myapplication.app.AboutGraph
 import com.spaceapps.myapplication.app.GeolocationGraph
+import com.spaceapps.myapplication.app.Screens
 import com.spaceapps.myapplication.app.local.DataStoreManager
 import com.spaceapps.myapplication.app.local.SpaceAppsDatabase
 import com.spaceapps.myapplication.ui.SpaceAppsTheme
@@ -35,6 +37,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -63,30 +66,39 @@ class MainActivity : AppCompatActivity() {
             ObserveEvents(navController)
             val bottomItems = provideBottomItems()
             var selectedIndex by remember { mutableStateOf(0) }
+            val currentDestination by navController.currentBackStackEntryAsState()
+            val isBottomBarVisible = when (currentDestination?.destination?.route) {
+                Screens.Auth.route,
+                Screens.SocialAuth.route,
+                Screens.ForgotPassword.route -> false
+                else -> true
+            }
             SpaceAppsTheme {
                 Scaffold(
                     bottomBar = {
-                        BottomNavigation(modifier = Modifier.navigationBarsPadding()) {
-                            bottomItems.forEachIndexed { index, menuItem ->
-                                BottomNavigationItem(
-                                    selected = selectedIndex == index,
-                                    onClick = {
-                                        selectedIndex = index
-                                        navController.navigateToRootDestination(menuItem.route)
-                                    },
-                                    icon = {
-                                        Icon(
-                                            painter = painterResource(id = menuItem.iconId),
-                                            contentDescription = null
-                                        )
-                                    },
-                                    label = { Text(text = stringResource(id = menuItem.labelId)) }
-                                )
+                        if (isBottomBarVisible) {
+                            BottomNavigation(modifier = Modifier.navigationBarsPadding()) {
+                                bottomItems.forEachIndexed { index, menuItem ->
+                                    BottomNavigationItem(
+                                        selected = selectedIndex == index,
+                                        onClick = {
+                                            selectedIndex = index
+                                            navController.navigateToRootDestination(menuItem.route)
+                                        },
+                                        icon = {
+                                            Icon(
+                                                painter = painterResource(id = menuItem.iconId),
+                                                contentDescription = null
+                                            )
+                                        },
+                                        label = { Text(text = stringResource(id = menuItem.labelId)) }
+                                    )
+                                }
                             }
                         }
                     }
                 ) {
-                    PopulatedNavHost(navController, GeolocationGraph.route, it) {
+                    PopulatedNavHost(navController, provideStartDestination(), it) {
                         selectedIndex = 0
                         navController.navigateToRootDestination(GeolocationGraph.route)
                     }
@@ -138,8 +150,13 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun setupEdgeToEdge() {
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+    private fun setupEdgeToEdge() = WindowCompat.setDecorFitsSystemWindows(window, false)
+
+    private fun provideStartDestination() = runBlocking {
+        when (dataStoreManager.getAccessToken()) {
+            null -> Screens.Auth.route
+            else -> GeolocationGraph.route
+        }
     }
 
     @Composable

@@ -8,7 +8,7 @@ import androidx.work.WorkerParameters
 import com.spaceapps.myapplication.app.local.DataStoreManager
 import com.spaceapps.myapplication.app.models.remote.auth.DeviceRequest
 import com.spaceapps.myapplication.app.models.remote.auth.DeviceRequest.Platform.Android
-import com.spaceapps.myapplication.app.network.AuthorizationApi
+import com.spaceapps.myapplication.app.network.calls.AuthorizationCalls
 import com.spaceapps.myapplication.utils.Success
 import com.spaceapps.myapplication.utils.request
 import dagger.assisted.Assisted
@@ -20,18 +20,18 @@ import kotlinx.coroutines.withContext
 class FirebaseTokenWorker @AssistedInject constructor(
     @Assisted context: Context,
     @Assisted params: WorkerParameters,
-    private val api: AuthorizationApi,
+    private val calls: AuthorizationCalls,
     private val dataStoreManager: DataStoreManager
 ) : CoroutineWorker(context, params) {
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
-        dataStoreManager.getAuthToken() ?: return@withContext Result.failure()
+        dataStoreManager.getAccessToken() ?: return@withContext Result.failure()
         val token = inputData.getString(TOKEN_KEY)
         token ?: return@withContext Result.failure()
         val device = DeviceRequest(
             token = token,
             platform = Android
         )
-        val response = request { api.addDevice(device = device) }
+        val response = request { calls.addDevice(device = device) }
         return@withContext if (response is Success) Result.success() else Result.retry()
     }
 

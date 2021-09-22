@@ -1,13 +1,19 @@
 package com.spaceapps.myapplication.app.di
 
+import android.content.Context
+import coil.ImageLoader
+import coil.util.CoilUtils
 import com.spaceapps.myapplication.BuildConfig
 import com.spaceapps.myapplication.app.network.AuthInterceptor
-import com.spaceapps.myapplication.app.network.AuthorizationApi
+import com.spaceapps.myapplication.app.network.calls.AuthorizationCalls
+import com.spaceapps.myapplication.app.network.calls.LocationsCalls
 import com.spaceapps.myapplication.app.network.SpaceAppsAuthenticator
+import com.spaceapps.myapplication.utils.QueryEnumConverterFactory
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -48,11 +54,31 @@ object NetworkModule {
     ): Retrofit = Retrofit.Builder().apply {
         baseUrl(BuildConfig.SERVER_URL)
         addConverterFactory(MoshiConverterFactory.create(moshi))
+        addConverterFactory(QueryEnumConverterFactory)
         callFactory { client.newCall(it) }
     }.build()
 
     @Provides
     @Singleton
-    fun provideAuthorizationApi(retrofit: Retrofit): AuthorizationApi =
-        retrofit.create(AuthorizationApi::class.java)
+    fun provideCoilImageLoader(
+        @ApplicationContext context: Context,
+        client: OkHttpClient
+    ): ImageLoader {
+        return ImageLoader.Builder(context)
+            .okHttpClient(
+                client.newBuilder()
+                    .cache(CoilUtils.createDefaultCache(context))
+                    .build()
+            ).build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideAuthorizationApi(retrofit: Retrofit): AuthorizationCalls =
+        retrofit.create(AuthorizationCalls::class.java)
+
+    @Provides
+    @Singleton
+    fun provideLocationsApi(retrofit: Retrofit): LocationsCalls =
+        retrofit.create(LocationsCalls::class.java)
 }

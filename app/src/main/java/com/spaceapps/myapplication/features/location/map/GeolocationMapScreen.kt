@@ -1,4 +1,4 @@
-package com.spaceapps.myapplication.features.geolocation
+package com.spaceapps.myapplication.features.location.map
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION

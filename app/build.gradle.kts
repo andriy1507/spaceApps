@@ -27,6 +27,15 @@ android {
         versionName = "1.0"
         testInstrumentationRunner = "com.spaceapps.myapplication.runner.SpaceAppsHiltRunner"
         testInstrumentationRunnerArguments += mapOf("clearPackageData" to "true")
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += mapOf(
+                    "room.schemaLocation" to "$projectDir/schemas",
+                    "room.incremental" to "true",
+                    "room.expandProjection" to "true"
+                )
+            }
+        }
     }
     buildTypes {
         release {
@@ -56,8 +65,6 @@ android {
     }
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
         jvmTarget = "1.8"
@@ -73,7 +80,6 @@ android {
         isAbortOnError = false
     }
     testOptions {
-//        execution = "ANDROIDX_TEST_ORCHESTRATOR"
         unitTests.isReturnDefaultValues = true
     }
     packagingOptions {
@@ -121,12 +127,14 @@ dependencies {
     implementation("com.google.accompanist:accompanist-navigation-animation:$accompanistVersion")
     implementation("com.google.accompanist:accompanist-pager:$accompanistVersion")
     implementation("com.google.accompanist:accompanist-pager-indicators:$accompanistVersion")
+    implementation("com.google.accompanist:accompanist-placeholder-material:$accompanistVersion")
     implementation("com.google.accompanist:accompanist-swiperefresh:$accompanistVersion")
     implementation("com.google.accompanist:accompanist-insets:$accompanistVersion")
     implementation("com.google.accompanist:accompanist-systemuicontroller:$accompanistVersion")
 //    Coil
-    implementation("io.coil-kt:coil:1.3.2")
-    implementation("io.coil-kt:coil-compose:1.3.2")
+    val coilVersion = "1.3.2"
+    implementation("io.coil-kt:coil:$coilVersion")
+    implementation("io.coil-kt:coil-compose:$coilVersion")
 //    Coroutines
     val coroutinesVersion = "1.5.2"
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
@@ -138,9 +146,9 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
     implementation("com.squareup.retrofit2:converter-moshi:$retrofitVersion")
 //    OkHttp client
-    val okhttpVersion = "5.0.0-alpha.2"
-    implementation("com.squareup.okhttp3:logging-interceptor:$okhttpVersion")
-    implementation("com.squareup.okhttp3:okhttp:$okhttpVersion")
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:5.0.0-alpha.2"))
+    implementation("com.squareup.okhttp3:okhttp")
+    implementation("com.squareup.okhttp3:logging-interceptor")
 //    Timber logging
     implementation("com.jakewharton.timber:timber:5.0.1")
 //    Google play services
@@ -162,10 +170,10 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0-alpha03")
 
 //    Paging
-//    val pagingVersion = "3.0.1"
-//    val pagingComposeVersion = "1.0.0-alpha12"
-//    implementation("androidx.paging:paging-runtime-ktx:$pagingVersion")
-//    implementation("androidx.paging:paging-compose:$pagingComposeVersion")
+    val pagingVersion = "3.0.1"
+    val pagingComposeVersion = "1.0.0-alpha12"
+    implementation("androidx.paging:paging-runtime-ktx:$pagingVersion")
+    implementation("androidx.paging:paging-compose:$pagingComposeVersion")
 //    Moshi
     val moshiVersion = "1.12.0"
     implementation("com.squareup.moshi:moshi:$moshiVersion")
@@ -223,7 +231,7 @@ dependencies {
     testImplementation("androidx.test:runner:1.4.0")
     testImplementation("androidx.test:rules:1.4.0")
 //    OkHttp MockWebServer
-    testImplementation("com.squareup.okhttp3:mockwebserver:$okhttpVersion")
+    testImplementation("com.squareup.okhttp3:mockwebserver")
 //    Mockito
     val mockitoVersion = "3.12.4"
     testImplementation("org.mockito:mockito-core:$mockitoVersion")

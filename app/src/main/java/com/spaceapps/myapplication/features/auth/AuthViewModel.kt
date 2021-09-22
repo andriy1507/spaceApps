@@ -3,17 +3,18 @@ package com.spaceapps.myapplication.features.auth
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.spaceapps.myapplication.R
 import com.spaceapps.myapplication.app.GeolocationGraph
-import com.spaceapps.myapplication.app.repositories.auth.*
+import com.spaceapps.myapplication.app.Screens
+import com.spaceapps.myapplication.app.models.InputWrapper
+import com.spaceapps.myapplication.app.repositories.auth.AuthRepository
 import com.spaceapps.myapplication.app.repositories.auth.results.LogOutResult
 import com.spaceapps.myapplication.app.repositories.auth.results.SignInResult
 import com.spaceapps.myapplication.app.repositories.auth.results.SignUpResult
 import com.spaceapps.myapplication.app.repositories.auth.results.SocialSignInResult
-import com.spaceapps.myapplication.utils.AuthDispatcher
-import com.spaceapps.myapplication.utils.NavigationDispatcher
-import com.spaceapps.myapplication.utils.getStateFlow
-import com.spaceapps.myapplication.utils.launch
+import com.spaceapps.myapplication.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -25,60 +26,137 @@ class AuthViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val email = savedStateHandle.getStateFlow(
+    val email = savedStateHandle.getStateFlow(
         scope = viewModelScope,
         key = "email",
-        initialValue = ""
+        initialValue = InputWrapper()
     )
 
-    private val password = savedStateHandle.getStateFlow(
+    val password = savedStateHandle.getStateFlow(
         scope = viewModelScope,
         key = "password",
-        initialValue = ""
+        initialValue = InputWrapper()
     )
 
-    private val confirmPassword = savedStateHandle.getStateFlow(
+    val confirmPassword = savedStateHandle.getStateFlow(
         scope = viewModelScope,
         key = "confirmPassword",
-        initialValue = ""
+        initialValue = InputWrapper()
     )
 
-    fun signIn() = launch {
-        when (repository.signIn(email = email.value, password = password.value)) {
-            SignInResult.Success -> navigationDispatcher.emit { it.navigate(GeolocationGraph.route) }
+    val isSignUp = savedStateHandle.getStateFlow(
+        scope = viewModelScope,
+        key = "isSignUp",
+        initialValue = false
+    )
+
+    fun onEmailEnter(input: String) = viewModelScope.launch {
+        email.emit(
+            InputWrapper(
+                text = input,
+                errorId = when (input.isEmail) {
+                    true -> null
+                    false -> R.string.invalid_email
+                }
+            )
+        )
+    }
+
+    fun onPasswordEnter(input: String) = viewModelScope.launch {
+        password.emit(
+            InputWrapper(
+                text = input,
+                errorId = when (input.isPassword) {
+                    true -> null
+                    false -> R.string.invalid_password
+                }
+            )
+        )
+    }
+
+    fun onConfirmPasswordEnter(input: String) = viewModelScope.launch {
+        confirmPassword.emit(
+            InputWrapper(
+                text = input,
+                errorId = when {
+                    !input.isPassword -> R.string.invalid_password
+                    input != password.value.text -> R.string.password_does_not_match
+                    else -> null
+                }
+            )
+        )
+    }
+
+    fun onSignInWithSocialClick() =
+        navigationDispatcher.emit { it.navigate(Screens.SocialAuth.route) }
+
+    fun onForgotPasswordClick() =
+        navigationDispatcher.emit { it.navigate(Screens.ForgotPassword.route) }
+
+    fun onAuthClick() = when (isSignUp.value) {
+        true -> signUp()
+        false -> signIn()
+    }
+
+    fun onHaveAccountClick() = viewModelScope.launch { isSignUp.emit(!isSignUp.value) }
+
+    private fun signIn() = viewModelScope.launch {
+        when (repository.signIn(email = email.value.text, password = password.value.text)) {
+            SignInResult.Success -> goGeolocationScreen()
             SignInResult.Failure -> Timber.e("ERROR")
         }
     }
 
-    fun signUp() = launch {
-        when (repository.signUp(email = email.value, password = password.value)) {
-            SignUpResult.Success -> navigationDispatcher.emit { it.navigate(GeolocationGraph.route) }
+    private fun signUp() = viewModelScope.launch {
+        when (repository.signUp(email = email.value.text, password = password.value.text)) {
+            SignUpResult.Success -> goGeolocationScreen()
             SignUpResult.Failure -> Timber.e("ERROR")
         }
     }
 
-    fun signInWithGoogle(accessToken: String) = launch {
+    private fun goGeolocationScreen() = navigationDispatcher.emit {
+        it.navigate(GeolocationGraph.route) {
+            launchSingleTop = true
+            popUpTo(Screens.Auth.route) {
+                inclusive = true
+            }
+        }
+    }
+
+    private fun signInWithGoogle(accessToken: String) = viewModelScope.launch {
         when (repository.signInWithGoogle(accessToken = accessToken)) {
-            SocialSignInResult.Success -> navigationDispatcher.emit { it.navigate(GeolocationGraph.route) }
+            SocialSignInResult.Success -> navigationDispatcher.emit {
+                it.navigate(
+                    GeolocationGraph.route
+                )
+            }
             SocialSignInResult.Failure -> Timber.e("ERROR")
         }
     }
 
-    fun signInWithFacebook(accessToken: String) = launch {
+    private fun signInWithFacebook(accessToken: String) = viewModelScope.launch {
         when (repository.signInWithFacebook(accessToken = accessToken)) {
-            SocialSignInResult.Success -> navigationDispatcher.emit { it.navigate(GeolocationGraph.route) }
+            SocialSignInResult.Success -> navigationDispatcher.emit {
+                it.navigate(
+                    GeolocationGraph.route
+                )
+            }
             SocialSignInResult.Failure -> Timber.e("ERROR")
         }
     }
 
-    fun signInWithApple(accessToken: String) = launch {
+    private fun signInWithApple(accessToken: String) = viewModelScope.launch {
         when (repository.signInWithApple(accessToken = accessToken)) {
-            SocialSignInResult.Success -> navigationDispatcher.emit { it.navigate(GeolocationGraph.route) }
+            SocialSignInResult.Success -> navigationDispatcher.emit {
+                it.navigate(
+                    GeolocationGraph.route
+                )
+            }
             SocialSignInResult.Failure -> Timber.e("ERROR")
         }
     }
 
-    fun logOut() = launch {
+    private fun logOut() = viewModelScope.launch {
         when (repository.logOut()) {
             LogOutResult.Success -> authDispatcher.requestLogOut()
             LogOutResult.Failure -> Timber.e("ERROR")

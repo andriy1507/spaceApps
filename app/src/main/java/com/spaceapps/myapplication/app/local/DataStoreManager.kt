@@ -11,23 +11,24 @@ import javax.inject.Singleton
 @Singleton
 class DataStoreManager @Inject constructor(private val dataStore: DataStore<Preferences>) {
 
-    suspend fun getAuthToken() = dataStore.data.first()[AUTH_TOKEN]
+    suspend fun getAccessToken() = dataStore.data.first()[ACCESS_TOKEN]
 
     suspend fun getRefreshToken() = dataStore.data.first()[REFRESH_TOKEN]
-    suspend fun storeTokens(authToken: String, refreshToken: String) = dataStore.edit {
-        it[AUTH_TOKEN] = authToken
+
+    suspend fun storeTokens(accessToken: String, refreshToken: String) = dataStore.edit {
+        it[ACCESS_TOKEN] = accessToken
         it[REFRESH_TOKEN] = refreshToken
     }
 
     suspend fun removeTokens() = dataStore.edit {
-        it.remove(AUTH_TOKEN)
+        it.remove(ACCESS_TOKEN)
         it.remove(REFRESH_TOKEN)
     }
 
     suspend fun clearData() = dataStore.edit { it.clear() }
 
     companion object {
-        private val AUTH_TOKEN = stringPreferencesKey("AUTH_TOKEN")
+        private val ACCESS_TOKEN = stringPreferencesKey("ACCESS_TOKEN")
         private val REFRESH_TOKEN = stringPreferencesKey("REFRESH_TOKEN")
     }
 }

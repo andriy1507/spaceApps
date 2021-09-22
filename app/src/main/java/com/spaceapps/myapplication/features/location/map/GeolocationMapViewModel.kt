@@ -1,4 +1,4 @@
-package com.spaceapps.myapplication.features.geolocation
+package com.spaceapps.myapplication.features.location.map
 
 import android.location.Location
 import android.location.LocationManager
@@ -12,8 +12,8 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.gms.location.*
 import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
 import com.spaceapps.myapplication.utils.getStateFlow
-import com.spaceapps.myapplication.utils.launch
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -52,7 +52,7 @@ class GeolocationMapViewModel @Inject constructor(
             request,
             object : LocationCallback() {
                 override fun onLocationResult(result: LocationResult) {
-                    launch { location.emit(result.lastLocation) }
+                    viewModelScope.launch { location.emit(result.lastLocation) }
                 }
 
                 override fun onLocationAvailability(availability: LocationAvailability) {
@@ -62,7 +62,7 @@ class GeolocationMapViewModel @Inject constructor(
         )
     }
 
-    fun onCameraMoved() = launch { isFocusMode.emit(false) }
+    fun onCameraMoved() = viewModelScope.launch { isFocusMode.emit(false) }
 
-    fun onFocusClick() = launch { isFocusMode.emit(true) }
+    fun onFocusClick() = viewModelScope.launch { isFocusMode.emit(true) }
 }
