@@ -5,6 +5,7 @@ import com.spaceapps.myapplication.app.AUTH_HEADER_PREFIX
 import com.spaceapps.myapplication.app.local.DataStoreManager
 import com.spaceapps.myapplication.app.models.remote.auth.DeviceRequest.Platform.*
 import com.spaceapps.myapplication.app.models.remote.auth.RefreshTokenRequest
+import com.spaceapps.myapplication.app.network.calls.AuthorizationCalls
 import com.spaceapps.myapplication.utils.AuthDispatcher
 import com.spaceapps.myapplication.utils.Error
 import com.spaceapps.myapplication.utils.Success
@@ -20,7 +21,7 @@ import javax.inject.Singleton
 
 @Singleton
 class SpaceAppsAuthenticator @Inject constructor(
-    private val authApi: Lazy<AuthorizationApi>,
+    private val authCalls: Lazy<AuthorizationCalls>,
     private val dataStoreManager: DataStoreManager,
     private val authDispatcher: AuthDispatcher
 ) : Authenticator {
@@ -50,7 +51,7 @@ class SpaceAppsAuthenticator @Inject constructor(
         val refreshToken = dataStoreManager.getRefreshToken()
         refreshToken ?: return null
         val request = RefreshTokenRequest(refreshToken = refreshToken)
-        return when (val response = request { authApi.get().refreshToken(request = request) }) {
+        return when (val response = request { authCalls.get().refreshToken(request = request) }) {
             is Success -> {
                 dataStoreManager.storeTokens(
                     accessToken = response.data.accessToken,

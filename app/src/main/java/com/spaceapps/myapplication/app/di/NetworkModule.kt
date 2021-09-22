@@ -5,8 +5,10 @@ import coil.ImageLoader
 import coil.util.CoilUtils
 import com.spaceapps.myapplication.BuildConfig
 import com.spaceapps.myapplication.app.network.AuthInterceptor
-import com.spaceapps.myapplication.app.network.AuthorizationApi
+import com.spaceapps.myapplication.app.network.calls.AuthorizationCalls
+import com.spaceapps.myapplication.app.network.calls.LocationsCalls
 import com.spaceapps.myapplication.app.network.SpaceAppsAuthenticator
+import com.spaceapps.myapplication.utils.QueryEnumConverterFactory
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
@@ -52,13 +54,9 @@ object NetworkModule {
     ): Retrofit = Retrofit.Builder().apply {
         baseUrl(BuildConfig.SERVER_URL)
         addConverterFactory(MoshiConverterFactory.create(moshi))
+        addConverterFactory(QueryEnumConverterFactory)
         callFactory { client.newCall(it) }
     }.build()
-
-    @Provides
-    @Singleton
-    fun provideAuthorizationApi(retrofit: Retrofit): AuthorizationApi =
-        retrofit.create(AuthorizationApi::class.java)
 
     @Provides
     @Singleton
@@ -73,4 +71,14 @@ object NetworkModule {
                     .build()
             ).build()
     }
+
+    @Provides
+    @Singleton
+    fun provideAuthorizationApi(retrofit: Retrofit): AuthorizationCalls =
+        retrofit.create(AuthorizationCalls::class.java)
+
+    @Provides
+    @Singleton
+    fun provideLocationsApi(retrofit: Retrofit): LocationsCalls =
+        retrofit.create(LocationsCalls::class.java)
 }

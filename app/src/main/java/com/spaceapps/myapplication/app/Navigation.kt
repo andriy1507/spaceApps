@@ -9,6 +9,10 @@ sealed class Screens(val route: String) {
 sealed class GeolocationGraph(val route: String) {
     object GeolocationMap : GeolocationGraph("geolocationMap")
 
+    object SaveLocation : GeolocationGraph("saveLocation")
+
+    object LocationsList : GeolocationGraph("locationsList")
+
     companion object {
         const val route = "geolocation"
     }

@@ -14,6 +14,7 @@ import com.spaceapps.myapplication.app.repositories.auth.results.SignUpResult
 import com.spaceapps.myapplication.app.repositories.auth.results.SocialSignInResult
 import com.spaceapps.myapplication.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -49,7 +50,7 @@ class AuthViewModel @Inject constructor(
         initialValue = false
     )
 
-    fun onEmailEnter(input: String) = launch {
+    fun onEmailEnter(input: String) = viewModelScope.launch {
         email.emit(
             InputWrapper(
                 text = input,
@@ -61,7 +62,7 @@ class AuthViewModel @Inject constructor(
         )
     }
 
-    fun onPasswordEnter(input: String) = launch {
+    fun onPasswordEnter(input: String) = viewModelScope.launch {
         password.emit(
             InputWrapper(
                 text = input,
@@ -73,7 +74,7 @@ class AuthViewModel @Inject constructor(
         )
     }
 
-    fun onConfirmPasswordEnter(input: String) = launch {
+    fun onConfirmPasswordEnter(input: String) = viewModelScope.launch {
         confirmPassword.emit(
             InputWrapper(
                 text = input,
@@ -92,23 +93,21 @@ class AuthViewModel @Inject constructor(
     fun onForgotPasswordClick() =
         navigationDispatcher.emit { it.navigate(Screens.ForgotPassword.route) }
 
-    fun onAuthClick() {
-        when (isSignUp.value) {
-            true -> signUp()
-            false -> signIn()
-        }
+    fun onAuthClick() = when (isSignUp.value) {
+        true -> signUp()
+        false -> signIn()
     }
 
-    fun onHaveAccountClick() = launch { isSignUp.emit(!isSignUp.value) }
+    fun onHaveAccountClick() = viewModelScope.launch { isSignUp.emit(!isSignUp.value) }
 
-    private fun signIn() = launch {
+    private fun signIn() = viewModelScope.launch {
         when (repository.signIn(email = email.value.text, password = password.value.text)) {
             SignInResult.Success -> goGeolocationScreen()
             SignInResult.Failure -> Timber.e("ERROR")
         }
     }
 
-    private fun signUp() = launch {
+    private fun signUp() = viewModelScope.launch {
         when (repository.signUp(email = email.value.text, password = password.value.text)) {
             SignUpResult.Success -> goGeolocationScreen()
             SignUpResult.Failure -> Timber.e("ERROR")
@@ -124,28 +123,40 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    private fun signInWithGoogle(accessToken: String) = launch {
+    private fun signInWithGoogle(accessToken: String) = viewModelScope.launch {
         when (repository.signInWithGoogle(accessToken = accessToken)) {
-            SocialSignInResult.Success -> navigationDispatcher.emit { it.navigate(GeolocationGraph.route) }
+            SocialSignInResult.Success -> navigationDispatcher.emit {
+                it.navigate(
+                    GeolocationGraph.route
+                )
+            }
             SocialSignInResult.Failure -> Timber.e("ERROR")
         }
     }
 
-    private fun signInWithFacebook(accessToken: String) = launch {
+    private fun signInWithFacebook(accessToken: String) = viewModelScope.launch {
         when (repository.signInWithFacebook(accessToken = accessToken)) {
-            SocialSignInResult.Success -> navigationDispatcher.emit { it.navigate(GeolocationGraph.route) }
+            SocialSignInResult.Success -> navigationDispatcher.emit {
+                it.navigate(
+                    GeolocationGraph.route
+                )
+            }
             SocialSignInResult.Failure -> Timber.e("ERROR")
         }
     }
 
-    private fun signInWithApple(accessToken: String) = launch {
+    private fun signInWithApple(accessToken: String) = viewModelScope.launch {
         when (repository.signInWithApple(accessToken = accessToken)) {
-            SocialSignInResult.Success -> navigationDispatcher.emit { it.navigate(GeolocationGraph.route) }
+            SocialSignInResult.Success -> navigationDispatcher.emit {
+                it.navigate(
+                    GeolocationGraph.route
+                )
+            }
             SocialSignInResult.Failure -> Timber.e("ERROR")
         }
     }
 
-    private fun logOut() = launch {
+    private fun logOut() = viewModelScope.launch {
         when (repository.logOut()) {
             LogOutResult.Success -> authDispatcher.requestLogOut()
             LogOutResult.Failure -> Timber.e("ERROR")

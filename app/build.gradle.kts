@@ -80,7 +80,6 @@ android {
         isAbortOnError = false
     }
     testOptions {
-//        execution = "ANDROIDX_TEST_ORCHESTRATOR"
         unitTests.isReturnDefaultValues = true
     }
     packagingOptions {
@@ -128,6 +127,7 @@ dependencies {
     implementation("com.google.accompanist:accompanist-navigation-animation:$accompanistVersion")
     implementation("com.google.accompanist:accompanist-pager:$accompanistVersion")
     implementation("com.google.accompanist:accompanist-pager-indicators:$accompanistVersion")
+    implementation("com.google.accompanist:accompanist-placeholder-material:$accompanistVersion")
     implementation("com.google.accompanist:accompanist-swiperefresh:$accompanistVersion")
     implementation("com.google.accompanist:accompanist-insets:$accompanistVersion")
     implementation("com.google.accompanist:accompanist-systemuicontroller:$accompanistVersion")
@@ -170,10 +170,10 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0-alpha03")
 
 //    Paging
-//    val pagingVersion = "3.0.1"
-//    val pagingComposeVersion = "1.0.0-alpha12"
-//    implementation("androidx.paging:paging-runtime-ktx:$pagingVersion")
-//    implementation("androidx.paging:paging-compose:$pagingComposeVersion")
+    val pagingVersion = "3.0.1"
+    val pagingComposeVersion = "1.0.0-alpha12"
+    implementation("androidx.paging:paging-runtime-ktx:$pagingVersion")
+    implementation("androidx.paging:paging-compose:$pagingComposeVersion")
 //    Moshi
     val moshiVersion = "1.12.0"
     implementation("com.squareup.moshi:moshi:$moshiVersion")

@@ -10,3 +10,6 @@ const val PREFERENCES_DATA_STORE = "${BuildConfig.APPLICATION_ID}.PREFS_DATA_STO
 const val MINUTES_IN_DEGREE = 60
 const val SECONDS_IN_DEGREE = 3600
 const val DEFAULT_MAP_ZOOM = 18f
+
+const val INITIAL_PAGE = 1
+const val PAGE_SIZE = 10

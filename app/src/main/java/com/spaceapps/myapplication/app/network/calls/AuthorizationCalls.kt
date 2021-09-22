@@ -1,9 +1,9 @@
-package com.spaceapps.myapplication.app.network
+package com.spaceapps.myapplication.app.network.calls
 
 import com.spaceapps.myapplication.app.models.remote.auth.*
 import retrofit2.http.*
 
-interface AuthorizationApi {
+interface AuthorizationCalls {
 
     @POST("/auth/sign-in")
     suspend fun signIn(@Body request: AuthRequest): AuthTokenResponse
