@@ -120,7 +120,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
 //    Accompanist
-    val accompanistVersion = "0.17.0"
+    val accompanistVersion = "0.18.0"
     implementation("com.google.accompanist:accompanist-drawablepainter:$accompanistVersion")
     implementation("com.google.accompanist:accompanist-insets:$accompanistVersion")
     implementation("com.google.accompanist:accompanist-navigation-material:$accompanistVersion")
@@ -157,7 +157,7 @@ dependencies {
     implementation("com.google.android.gms:play-services-maps:17.0.1")
     implementation("com.google.maps.android:maps-ktx:3.1.0")
 //    AndroidX
-    implementation("androidx.core:core-ktx:1.7.0-alpha02")
+    implementation("androidx.core:core-ktx:1.7.0-beta01")
     implementation("androidx.appcompat:appcompat:1.4.0-alpha03")
     implementation("androidx.activity:activity-ktx:1.3.1")
     implementation("androidx.activity:activity-compose:1.3.1")
@@ -165,9 +165,9 @@ dependencies {
     implementation("androidx.browser:browser:1.3.0")
     implementation("androidx.fragment:fragment-ktx:1.3.6")
     implementation("com.google.android.material:material:1.4.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.4.0-alpha03")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0-alpha03")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0-beta01")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.4.0-beta01")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0-beta01")
 
 //    Paging
     val pagingVersion = "3.0.1"
@@ -187,7 +187,7 @@ dependencies {
     implementation("androidx.compose.material:material:$composeVersion")
     implementation("androidx.compose.foundation:foundation:$composeVersion")
     implementation("androidx.compose.ui:ui-tooling:$composeVersion")
-    implementation("androidx.navigation:navigation-compose:2.4.0-alpha08")
+    implementation("androidx.navigation:navigation-compose:2.4.0-alpha09")
     runtimeOnly("androidx.compose.animation:animation:$composeVersion")
 //    Dagger-Hilt
     val daggerVersion = "2.38.1"
@@ -216,19 +216,19 @@ dependencies {
     implementation("com.google.protobuf:protobuf-javalite:3.11.1")
 
 //    Facebook SDK
-    implementation("com.facebook.android:facebook-android-sdk:11.2.0")
+    implementation("com.facebook.android:facebook-android-sdk:11.3.0")
 
 //    WW-geo
     implementation("com.rgi-corp:ww-geo-coords:1.0")
 
 //    Testing
     testImplementation("junit:junit:4.13.2")
-    testImplementation("com.google.truth:truth:1.1.2")
+    testImplementation("com.google.truth:truth:1.1.3")
 
 //    Assertions
     testImplementation("androidx.test.ext:junit:1.1.3")
     testImplementation("androidx.test.ext:truth:1.4.0")
-    testImplementation("com.google.truth:truth:1.1.2")
+    testImplementation("com.google.truth:truth:1.1.3")
 
 //   AndroidJUnitRunner and JUnit Rules
     testImplementation("androidx.test:runner:1.4.0")
@@ -255,7 +255,7 @@ dependencies {
 //   Assertions
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
     androidTestImplementation("androidx.test.ext:truth:1.4.0")
-    androidTestImplementation("com.google.truth:truth:1.1.2")
+    androidTestImplementation("com.google.truth:truth:1.1.3")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:$composeVersion")
 //    Coroutines test
     androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
