@@ -3,9 +3,10 @@ package com.spaceapps.myapplication.app.activity
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
@@ -17,6 +18,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.plusAssign
+import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
@@ -27,6 +29,7 @@ import com.spaceapps.myapplication.app.GeolocationGraph
 import com.spaceapps.myapplication.app.Screens
 import com.spaceapps.myapplication.app.local.DataStoreManager
 import com.spaceapps.myapplication.app.local.SpaceAppsDatabase
+import com.spaceapps.myapplication.ui.ACTION_BAR_SIZE
 import com.spaceapps.myapplication.ui.SpaceAppsTheme
 import com.spaceapps.myapplication.utils.AuthDispatcher
 import com.spaceapps.myapplication.utils.NavigationCommand
@@ -70,16 +73,24 @@ class MainActivity : AppCompatActivity() {
             val isBottomBarVisible = when (currentDestination?.destination?.route) {
                 Screens.Auth.route,
                 Screens.SocialAuth.route,
-                Screens.ForgotPassword.route -> false
+                Screens.ForgotPassword.route,
+                GeolocationGraph.MapSettings.route -> false
                 else -> true
             }
             SpaceAppsTheme {
                 Scaffold(
                     bottomBar = {
-                        if (isBottomBarVisible) {
-                            BottomNavigation(modifier = Modifier.navigationBarsPadding()) {
+                        AnimatedVisibility(
+                            visible = isBottomBarVisible,
+                            enter = fadeIn() + expandVertically(Alignment.Top),
+                            exit = fadeOut() + shrinkVertically(Alignment.Top)
+                        ) {
+                            BottomNavigation(
+                                modifier = Modifier.navigationBarsHeight(ACTION_BAR_SIZE)
+                            ) {
                                 bottomItems.forEachIndexed { index, menuItem ->
                                     BottomNavigationItem(
+                                        modifier = Modifier.navigationBarsPadding(),
                                         selected = selectedIndex == index,
                                         onClick = {
                                             selectedIndex = index
@@ -153,10 +164,11 @@ class MainActivity : AppCompatActivity() {
     private fun setupEdgeToEdge() = WindowCompat.setDecorFitsSystemWindows(window, false)
 
     private fun provideStartDestination() = runBlocking {
-        when (dataStoreManager.getAccessToken()) {
-            null -> Screens.Auth.route
-            else -> GeolocationGraph.route
-        }
+//        when (dataStoreManager.getAccessToken()) {
+//            null -> Screens.Auth.route
+//            else -> GeolocationGraph.route
+//        }
+        return@runBlocking GeolocationGraph.route
     }
 
     @Composable

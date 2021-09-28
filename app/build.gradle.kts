@@ -218,6 +218,9 @@ dependencies {
 //    Facebook SDK
     implementation("com.facebook.android:facebook-android-sdk:11.2.0")
 
+//    WW-geo
+    implementation("com.rgi-corp:ww-geo-coords:1.0")
+
 //    Testing
     testImplementation("junit:junit:4.13.2")
     testImplementation("com.google.truth:truth:1.1.2")
