@@ -156,6 +156,7 @@ dependencies {
     implementation("com.google.android.gms:play-services-auth:19.2.0")
     implementation("com.google.android.gms:play-services-maps:17.0.1")
     implementation("com.google.maps.android:maps-ktx:3.1.0")
+    implementation("com.google.maps.android:maps-utils-ktx:3.1.0")
 //    AndroidX
     implementation("androidx.core:core-ktx:1.7.0-beta01")
     implementation("androidx.appcompat:appcompat:1.4.0-alpha03")
@@ -168,6 +169,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0-beta01")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.4.0-beta01")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0-beta01")
+    implementation("androidx.core:core-splashscreen:1.0.0-alpha01")
 
 //    Paging
     val pagingVersion = "3.0.1"

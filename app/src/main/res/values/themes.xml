@@ -1,8 +1,12 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Theme.MyApplication" parent="Theme.AppCompat.DayNight.NoActionBar">
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/colorPrimary</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/img_splash</item>
+        <item name="postSplashScreenTheme">@style/Theme.App.Main</item>
+    </style>
+    <style name="Theme.App.Main" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
-        <item name="android:windowBackground">@drawable/img_splash</item>
     </style>
 </resources>
