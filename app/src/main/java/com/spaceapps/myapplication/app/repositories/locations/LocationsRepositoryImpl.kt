@@ -39,9 +39,10 @@ class LocationsRepositoryImpl @Inject constructor(
             calls = calls,
             db = db,
             dao = dao,
-            keysDao = keysDao
+            keysDao = keysDao,
+            query = name
         ),
-        pagingSourceFactory = { dao.pagingSource() }
+        pagingSourceFactory = { dao.pagingSource(name) }
     )
 
     override suspend fun deleteLocation(id: Int): DeleteLocationResult =
