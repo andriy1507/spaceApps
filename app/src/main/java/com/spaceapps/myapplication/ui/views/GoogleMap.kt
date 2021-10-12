@@ -7,13 +7,16 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.maps.android.ktx.awaitMap
+import com.google.maps.android.ktx.buildGoogleMapOptions
 import kotlinx.coroutines.launch
+import com.spaceapps.myapplication.R
 
 typealias OnMapLoaded = (GoogleMap) -> Unit
 
@@ -42,7 +45,11 @@ fun GoogleMap(modifier: Modifier = Modifier, onMapLoaded: OnMapLoaded) {
 @Composable
 private fun rememberMapViewWithLifecycle(): MapView {
     val context = LocalContext.current
-    val mapView = remember { MapView(context).apply { id = View.generateViewId() } }
+    val options = buildGoogleMapOptions {
+//        TODO("Currently not available")
+//        mapId(stringResource(id = R.string.map_id))
+    }
+    val mapView = remember { MapView(context, options).apply { id = View.generateViewId() } }
     // Makes MapView follow the lifecycle of this composable
     val lifecycleObserver = rememberMapLifecycleObserver(mapView)
     val lifecycle = LocalLifecycleOwner.current.lifecycle

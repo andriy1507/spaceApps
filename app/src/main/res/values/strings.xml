@@ -70,4 +70,5 @@
     <string name="degrees_dms" translatable="false">DD°MM\'SS.SSSSS\"</string>
     <string name="degrees_decimal" translatable="false">DD.dddddddd°</string>
     <string name="back">Back</string>
+    <string name="map_id" translatable="false">546cb7945ddfd227</string>
 </resources>
