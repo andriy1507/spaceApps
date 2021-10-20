@@ -24,16 +24,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.google.accompanist.insets.navigationBarsPadding
+import com.google.accompanist.insets.statusBarsPadding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.spaceapps.myapplication.R
-import com.spaceapps.myapplication.app.DEFAULT_MAP_ZOOM
-import com.spaceapps.myapplication.app.MINUTES_IN_DEGREE
-import com.spaceapps.myapplication.app.SECONDS_IN_DEGREE
+import com.spaceapps.myapplication.app.*
 import com.spaceapps.myapplication.ui.*
 import com.spaceapps.myapplication.ui.views.GoogleMap
+import gov.nasa.worldwind.geom.Angle
+import gov.nasa.worldwind.geom.coords.UTMCoord
 import timber.log.Timber
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
@@ -51,21 +52,47 @@ fun GeolocationMapScreen(vm: GeolocationMapViewModel) {
     )
     val location by vm.location.collectAsState()
     val isFocusMode by vm.isFocusMode.collectAsState()
-    val scaffoldState = rememberBottomSheetScaffoldState(
-        bottomSheetState = BottomSheetState(initialValue = BottomSheetValue.Expanded)
-    )
+    val bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Expanded)
+    val scaffoldState = rememberBottomSheetScaffoldState(bottomSheetState = bottomSheetState)
+    val degreesFormat by vm.degreesFormat.collectAsState()
+    val coordSystem by vm.coordSystem.collectAsState()
     LaunchedEffect(Unit) {
         locationRequest.launch(arrayOf(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION))
     }
     BottomSheetScaffold(
-        sheetContent = { BottomSheetContent(location = location) },
+        sheetContent = {
+            BottomSheetContent(
+                location = location,
+                degreesFormat = degreesFormat,
+                coordSystem = coordSystem
+            )
+        },
         scaffoldState = scaffoldState,
         floatingActionButton = {
             AnimatedVisibility(visible = !isFocusMode, enter = fadeIn(), exit = fadeOut()) {
                 MapTrackingFab(onClick = vm::onFocusClick)
             }
         },
-        content = { MapPreview(location = location, isFocusMode = isFocusMode, vm::onCameraMoved) },
+        content = {
+            Box(Modifier.fillMaxSize()) {
+                MapPreview(location = location, isFocusMode = isFocusMode, vm::onCameraMoved)
+                Button(
+                    modifier = Modifier
+                        .statusBarsPadding()
+                        .padding(SPACING_16)
+                        .size(SPACING_48)
+                        .align(Alignment.TopEnd),
+                    onClick = vm::goToSettings,
+                    contentPadding = PaddingValues(SPACING_12),
+                    shape = CircleShape
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_settings),
+                        contentDescription = null
+                    )
+                }
+            }
+        },
         sheetPeekHeight = SPACING_64,
         sheetShape = MaterialTheme.shapes.large.copy(
             bottomEnd = CornerSize(SPACING_0),
@@ -75,7 +102,7 @@ fun GeolocationMapScreen(vm: GeolocationMapViewModel) {
 }
 
 @Composable
-fun BottomSheetContent(location: Location?) {
+fun BottomSheetContent(location: Location?, degreesFormat: String, coordSystem: String) {
     Column(
         modifier = Modifier
             .padding(
@@ -92,42 +119,119 @@ fun BottomSheetContent(location: Location?) {
                 .size(width = SPACING_64, height = SPACING_4)
                 .background(color = MaterialTheme.colors.onBackground, shape = CircleShape)
         )
-        Row(
-            modifier = Modifier.padding(bottom = SPACING_16),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                modifier = Modifier.weight(1f),
-                text = stringResource(id = R.string.longitude_label),
-                style = MaterialTheme.typography.h5
-            )
-            Text(
-                modifier = Modifier.weight(1f),
-                text = getLongitudeString(location = location),
-                style = MaterialTheme.typography.body1
-            )
-        }
-        Divider()
-        Row(
-            modifier = Modifier.padding(top = SPACING_16),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                modifier = Modifier.weight(1f),
-                text = stringResource(id = R.string.latitude_label),
-                style = MaterialTheme.typography.h5
-            )
-            Text(
-                modifier = Modifier.weight(1f),
-                text = getLatitudeString(location = location),
-                style = MaterialTheme.typography.body1
-            )
+        when (coordSystem) {
+            SYSTEM_GEO -> GeoCoordSystem(location = location, degreesFormat = degreesFormat)
+            SYSTEM_UTM -> UtmCoordSystem(location = location)
+            SYSTEM_S43 -> S43CoordSystem(location = location)
+            SYSTEM_S63 -> S63CoordSystem(location = location)
+            else -> throw IllegalArgumentException("Format is not supported")
         }
     }
 }
 
 @Composable
-private fun getLatitudeString(location: Location?) = when (location) {
+private fun GeoCoordSystem(location: Location?, degreesFormat: String) {
+    Row(
+        modifier = Modifier.padding(bottom = SPACING_16),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            modifier = Modifier.weight(1f),
+            text = stringResource(id = R.string.latitude_label),
+            style = MaterialTheme.typography.h5
+        )
+        Text(
+            modifier = Modifier.weight(1f),
+            text = getLatitudeString(location = location, format = degreesFormat),
+            style = MaterialTheme.typography.body1
+        )
+    }
+    Divider()
+    Row(
+        modifier = Modifier.padding(top = SPACING_16),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            modifier = Modifier.weight(1f),
+            text = stringResource(id = R.string.longitude_label),
+            style = MaterialTheme.typography.h5
+        )
+        Text(
+            modifier = Modifier.weight(1f),
+            text = getLongitudeString(location = location, format = degreesFormat),
+            style = MaterialTheme.typography.body1
+        )
+    }
+}
+
+@Composable
+private fun UtmCoordSystem(location: Location?) {
+    location ?: return
+    val coord = UTMCoord.fromLatLon(
+        Angle.fromDegreesLatitude(location.latitude),
+        Angle.fromDegreesLongitude(location.longitude)
+    )
+    Row(
+        modifier = Modifier.padding(bottom = SPACING_16),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            modifier = Modifier.weight(1f),
+            text = "Northing",
+            style = MaterialTheme.typography.h5
+        )
+        Text(
+            modifier = Modifier.weight(1f),
+            text = "${coord.northing}",
+            style = MaterialTheme.typography.body1
+        )
+    }
+    Divider()
+    Row(
+        modifier = Modifier.padding(vertical = SPACING_16),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            modifier = Modifier.weight(1f),
+            text = "Easting",
+            style = MaterialTheme.typography.h5
+        )
+        Text(
+            modifier = Modifier.weight(1f),
+            text = "${coord.easting}",
+            style = MaterialTheme.typography.body1
+        )
+    }
+    Divider()
+    Row(
+        modifier = Modifier.padding(top = SPACING_16),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            modifier = Modifier.weight(1f),
+            text = "Zone",
+            style = MaterialTheme.typography.h5
+        )
+        Text(
+            modifier = Modifier.weight(1f),
+            text = "${coord.zone}",
+            style = MaterialTheme.typography.body1
+        )
+    }
+}
+
+@Composable
+private fun S43CoordSystem(location: Location?) {
+    // TODO 9/28/2021
+}
+
+@Composable
+private fun S63CoordSystem(location: Location?) {
+    // TODO 9/28/2021
+}
+
+@Composable
+private fun getLatitudeString(location: Location?, format: String) = when (location) {
     null -> stringResource(id = R.string.n_a)
     else -> {
         val heading = when (location.latitude < 0) {
@@ -136,14 +240,21 @@ private fun getLatitudeString(location: Location?) = when (location) {
         }
         stringResource(
             id = R.string.heading,
-            convertDecimalToDMS(value = location.latitude),
+            when (format) {
+                DEGREES_DMS -> convertDecimalToDMS(value = location.latitude)
+                DEGREES_DECIMAL -> stringResource(
+                    id = R.string.coordinate_decimal,
+                    location.latitude
+                )
+                else -> ""
+            },
             stringResource(id = heading)
         )
     }
 }
 
 @Composable
-private fun getLongitudeString(location: Location?) = when (location) {
+private fun getLongitudeString(location: Location?, format: String) = when (location) {
     null -> stringResource(id = R.string.n_a)
     else -> {
         val heading = when (location.longitude < 0) {
@@ -152,7 +263,14 @@ private fun getLongitudeString(location: Location?) = when (location) {
         }
         stringResource(
             id = R.string.heading,
-            convertDecimalToDMS(value = location.longitude),
+            when (format) {
+                DEGREES_DMS -> convertDecimalToDMS(value = location.longitude)
+                DEGREES_DECIMAL -> stringResource(
+                    id = R.string.coordinate_decimal,
+                    location.longitude
+                )
+                else -> ""
+            },
             stringResource(id = heading)
         )
     }

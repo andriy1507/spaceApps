@@ -13,8 +13,8 @@ interface LocationsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(locations: List<LocationEntity>)
 
-    @Query("SELECT * FROM Locations")
-    fun pagingSource(): PagingSource<Int, LocationEntity>
+    @Query("SELECT * FROM Locations WHERE name=:name")
+    fun pagingSource(name: String?): PagingSource<Int, LocationEntity>
 
     @Query("DELETE FROM Locations")
     suspend fun clearAll()

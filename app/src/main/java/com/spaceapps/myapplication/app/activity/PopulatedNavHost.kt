@@ -23,6 +23,7 @@ import com.spaceapps.myapplication.features.forgotPassword.ForgotPasswordScreen
 import com.spaceapps.myapplication.features.location.locationsList.LocationsListScreen
 import com.spaceapps.myapplication.features.location.map.GeolocationMapScreen
 import com.spaceapps.myapplication.features.location.saveLocation.SaveLocationScreen
+import com.spaceapps.myapplication.features.settings.SettingsScreen
 import com.spaceapps.myapplication.features.socialAuth.SocialAuthScreen
 import com.spaceapps.myapplication.features.termsPolicy.TermsPolicyScreen
 
@@ -58,6 +59,9 @@ fun PopulatedNavHost(
         ) {
             composable(GeolocationGraph.GeolocationMap.route) {
                 GeolocationMapScreen(hiltViewModel(it))
+            }
+            composable(GeolocationGraph.MapSettings.route) {
+                SettingsScreen(hiltViewModel(it))
             }
             dialog(GeolocationGraph.SaveLocation.route) {
                 SaveLocationScreen()

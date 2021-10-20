@@ -49,7 +49,6 @@
     <string name="normal">Normal</string>
     <string name="are_you_sure_you_want_to_log_out">Are you sure you want log out?</string>
     <string name="cancel">Cancel</string>
-    <string name="ok">Ok</string>
     <string name="english">English</string>
     <string name="ukrainian">Ukrainian</string>
     <string name="change_language">Change language</string>
@@ -57,8 +56,19 @@
     <string name="chat">Chat</string>
     <string name="n_a">N/A</string>
     <string name="coordinate_dms" translatable="false">%1$d\u00B0 %2$d\u0027 %3$.5f\u0022</string>
+    <string name="coordinate_decimal" translatable="false">%1$.7f</string>
     <string name="heading" translatable="false">%1$s %2$s</string>
     <string name="sign_in_with_social">Sign in with social</string>
     <string name="about">About</string>
     <string name="version">Version</string>
+    <string name="coordinates_system">Coordinates system</string>
+    <string name="degrees_format">Degrees format</string>
+    <string name="system_geo">Geographical</string>
+    <string name="system_s43">S-43</string>
+    <string name="system_s63">S-63</string>
+    <string name="system_utm" translatable="false">UTM</string>
+    <string name="degrees_dms" translatable="false">DD°MM\'SS.SSSSS\"</string>
+    <string name="degrees_decimal" translatable="false">DD.dddddddd°</string>
+    <string name="back">Back</string>
+    <string name="map_id" translatable="false">546cb7945ddfd227</string>
 </resources>

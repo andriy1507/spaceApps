@@ -46,7 +46,6 @@
     <string name="normal">Звичайна</string>
     <string name="are_you_sure_you_want_to_log_out">Ви впевнені, що хочете вийти?</string>
     <string name="cancel">Скасувати</string>
-    <string name="ok">Ок</string>
     <string name="english">Англійська</string>
     <string name="ukrainian">Українська</string>
     <string name="change_language">Змінити мову</string>
@@ -54,4 +53,12 @@
     <string name="chat">Чат</string>
     <string name="n_a">Н/Д</string>
     <string name="sign_in_with_social">Увійти через соцмережі</string>
+    <string name="about">Про додаток</string>
+    <string name="version">Версія</string>
+    <string name="coordinates_system">Система координат</string>
+    <string name="degrees_format">Формат градусів</string>
+    <string name="system_geo">Географічні</string>
+    <string name="system_s43">СК-43</string>
+    <string name="system_s63">СК-63</string>
+    <string name="back">Назад</string>
 </resources>

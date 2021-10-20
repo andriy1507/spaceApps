@@ -11,15 +11,24 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.location.*
 import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
+import com.spaceapps.myapplication.app.DEGREES_DMS
+import com.spaceapps.myapplication.app.GeolocationGraph
+import com.spaceapps.myapplication.app.SYSTEM_GEO
+import com.spaceapps.myapplication.app.local.DataStoreManager
+import com.spaceapps.myapplication.utils.NavigationDispatcher
 import com.spaceapps.myapplication.utils.getStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class GeolocationMapViewModel @Inject constructor(
     private val locationClient: FusedLocationProviderClient,
-    savedStateHandle: SavedStateHandle
+    private val navigationDispatcher: NavigationDispatcher,
+    savedStateHandle: SavedStateHandle,
+    dataStoreManager: DataStoreManager
 ) : ViewModel() {
 
     val isFocusMode = savedStateHandle.getStateFlow(
@@ -32,6 +41,11 @@ class GeolocationMapViewModel @Inject constructor(
         key = "location",
         initialValue = null
     )
+
+    val degreesFormat = dataStoreManager.observeDegreesFormat()
+        .stateIn(viewModelScope, SharingStarted.Lazily, DEGREES_DMS)
+    val coordSystem = dataStoreManager.observeCoordSystem()
+        .stateIn(viewModelScope, SharingStarted.Lazily, SYSTEM_GEO)
 
     @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION)
     fun trackLocation() {
@@ -65,4 +79,7 @@ class GeolocationMapViewModel @Inject constructor(
     fun onCameraMoved() = viewModelScope.launch { isFocusMode.emit(false) }
 
     fun onFocusClick() = viewModelScope.launch { isFocusMode.emit(true) }
+
+    fun goToSettings() =
+        navigationDispatcher.emit { it.navigate(GeolocationGraph.MapSettings.route) }
 }

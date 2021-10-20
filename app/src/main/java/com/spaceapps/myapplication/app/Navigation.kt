@@ -9,6 +9,8 @@ sealed class Screens(val route: String) {
 sealed class GeolocationGraph(val route: String) {
     object GeolocationMap : GeolocationGraph("geolocationMap")
 
+    object MapSettings : GeolocationGraph("mapSettings")
+
     object SaveLocation : GeolocationGraph("saveLocation")
 
     object LocationsList : GeolocationGraph("locationsList")

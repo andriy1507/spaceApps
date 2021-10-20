@@ -156,6 +156,7 @@ dependencies {
     implementation("com.google.android.gms:play-services-auth:19.2.0")
     implementation("com.google.android.gms:play-services-maps:17.0.1")
     implementation("com.google.maps.android:maps-ktx:3.2.0")
+    implementation("com.google.maps.android:maps-utils-ktx:3.2.0")
 //    AndroidX
     implementation("androidx.core:core-ktx:1.7.0-beta02")
     implementation("androidx.appcompat:appcompat:1.4.0-beta01")
@@ -164,6 +165,7 @@ dependencies {
     implementation("androidx.startup:startup-runtime:1.1.0")
     implementation("androidx.browser:browser:1.3.0")
     implementation("androidx.fragment:fragment-ktx:1.3.6")
+    implementation("androidx.core:core-splashscreen:1.0.0-alpha02")
     implementation("com.google.android.material:material:1.4.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0-rc01")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.4.0-rc01")
@@ -219,6 +221,9 @@ dependencies {
 //    Facebook SDK
     implementation("com.facebook.android:facebook-android-sdk:12.0.1")
 
+//    WW-geo
+    implementation("com.rgi-corp:ww-geo-coords:1.0")
+
 //    Testing
     testImplementation("junit:junit:4.13.2")
     testImplementation("com.google.truth:truth:1.1.3")
@@ -253,7 +258,7 @@ dependencies {
 //   Assertions
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
     androidTestImplementation("androidx.test.ext:truth:1.4.0")
-    androidTestImplementation("com.google.truth:truth:1.1.2")
+    androidTestImplementation("com.google.truth:truth:1.1.3")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:$composeVersion")
 //    Coroutines test
     androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")

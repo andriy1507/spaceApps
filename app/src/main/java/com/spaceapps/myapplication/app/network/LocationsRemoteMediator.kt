@@ -18,6 +18,7 @@ import com.spaceapps.myapplication.utils.request
 
 @OptIn(ExperimentalPagingApi::class)
 class LocationsRemoteMediator(
+    private val query: String?,
     private val calls: LocationsCalls,
     private val db: SpaceAppsDatabase,
     private val dao: LocationsDao,
@@ -48,7 +49,8 @@ class LocationsRemoteMediator(
         val response = request {
             calls.getLocations(
                 pageSize = state.config.pageSize,
-                page = loadKey
+                page = loadKey,
+                search = query
             )
         }
         return when (response) {
@@ -62,7 +64,7 @@ class LocationsRemoteMediator(
                     val page = response.data.page
                     val prevKey = if (page == INITIAL_PAGE) null else page - 1
                     val nextKey = if (response.data.isLast) null else page + 1
-                    val keys = locations.map { LocationRemoteKey(it.id, nextKey, prevKey, null) }
+                    val keys = locations.map { LocationRemoteKey(it.id, nextKey, prevKey, query) }
                     dao.insertAll(
                         locations.map {
                             LocationEntity(
@@ -85,13 +87,13 @@ class LocationsRemoteMediator(
 
     private suspend fun getRemoteKeysForLastItem(state: PagingState<Int, LocationEntity>): LocationRemoteKey? {
         return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()?.let { l ->
-            keysDao.remoteKeysById(l.id)
+            keysDao.remoteKeysByIdAndQuery(l.id, query)
         }
     }
 
     private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, LocationEntity>): LocationRemoteKey? {
         return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()?.let { l ->
-            keysDao.remoteKeysById(l.id)
+            keysDao.remoteKeysByIdAndQuery(l.id, query)
         }
     }
 }

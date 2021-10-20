@@ -13,6 +13,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.maps.android.ktx.awaitMap
+import com.google.maps.android.ktx.buildGoogleMapOptions
 import kotlinx.coroutines.launch
 
 typealias OnMapLoaded = (GoogleMap) -> Unit
@@ -42,7 +43,11 @@ fun GoogleMap(modifier: Modifier = Modifier, onMapLoaded: OnMapLoaded) {
 @Composable
 private fun rememberMapViewWithLifecycle(): MapView {
     val context = LocalContext.current
-    val mapView = remember { MapView(context).apply { id = View.generateViewId() } }
+    val options = buildGoogleMapOptions {
+//        TODO("Currently not available")
+//        mapId(stringResource(id = R.string.map_id))
+    }
+    val mapView = remember { MapView(context, options).apply { id = View.generateViewId() } }
     // Makes MapView follow the lifecycle of this composable
     val lifecycleObserver = rememberMapLifecycleObserver(mapView)
     val lifecycle = LocalLifecycleOwner.current.lifecycle
