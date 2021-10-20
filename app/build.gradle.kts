@@ -3,7 +3,7 @@ import com.google.protobuf.gradle.protobuf
 import com.google.protobuf.gradle.protoc
 
 val kotlinVersion by extra("1.5.21")
-val composeVersion by extra("1.0.2")
+val composeVersion by extra("1.0.3")
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -120,7 +120,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
 //    Accompanist
-    val accompanistVersion = "0.17.0"
+    val accompanistVersion = "0.20.0"
     implementation("com.google.accompanist:accompanist-drawablepainter:$accompanistVersion")
     implementation("com.google.accompanist:accompanist-insets:$accompanistVersion")
     implementation("com.google.accompanist:accompanist-navigation-material:$accompanistVersion")
@@ -155,23 +155,23 @@ dependencies {
     implementation("com.google.android.gms:play-services-location:18.0.0")
     implementation("com.google.android.gms:play-services-auth:19.2.0")
     implementation("com.google.android.gms:play-services-maps:17.0.1")
-    implementation("com.google.maps.android:maps-ktx:3.1.0")
+    implementation("com.google.maps.android:maps-ktx:3.2.0")
 //    AndroidX
-    implementation("androidx.core:core-ktx:1.7.0-alpha02")
-    implementation("androidx.appcompat:appcompat:1.4.0-alpha03")
+    implementation("androidx.core:core-ktx:1.7.0-beta02")
+    implementation("androidx.appcompat:appcompat:1.4.0-beta01")
     implementation("androidx.activity:activity-ktx:1.3.1")
     implementation("androidx.activity:activity-compose:1.3.1")
     implementation("androidx.startup:startup-runtime:1.1.0")
     implementation("androidx.browser:browser:1.3.0")
     implementation("androidx.fragment:fragment-ktx:1.3.6")
     implementation("com.google.android.material:material:1.4.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.4.0-alpha03")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0-alpha03")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0-rc01")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.4.0-rc01")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0-rc01")
 
 //    Paging
     val pagingVersion = "3.0.1"
-    val pagingComposeVersion = "1.0.0-alpha12"
+    val pagingComposeVersion = "1.0.0-alpha13"
     implementation("androidx.paging:paging-runtime-ktx:$pagingVersion")
     implementation("androidx.paging:paging-compose:$pagingComposeVersion")
 //    Moshi
@@ -179,7 +179,7 @@ dependencies {
     implementation("com.squareup.moshi:moshi:$moshiVersion")
     kapt("com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion")
 //    WorkManager
-    val workVersion = "2.6.0"
+    val workVersion = "2.7.0"
     implementation("androidx.work:work-runtime-ktx:$workVersion")
 //    Jetpack Compose
     implementation("androidx.compose.ui:ui:$composeVersion")
@@ -187,10 +187,10 @@ dependencies {
     implementation("androidx.compose.material:material:$composeVersion")
     implementation("androidx.compose.foundation:foundation:$composeVersion")
     implementation("androidx.compose.ui:ui-tooling:$composeVersion")
-    implementation("androidx.navigation:navigation-compose:2.4.0-alpha08")
+    implementation("androidx.navigation:navigation-compose:2.4.0-alpha10")
     runtimeOnly("androidx.compose.animation:animation:$composeVersion")
 //    Dagger-Hilt
-    val daggerVersion = "2.38.1"
+    val daggerVersion = "2.39.1"
     implementation("com.google.dagger:hilt-android:$daggerVersion")
     kapt("com.google.dagger:hilt-android-compiler:$daggerVersion")
     val hiltVersion = "1.0.0"
@@ -207,6 +207,7 @@ dependencies {
     val roomVersion = "2.4.0-alpha04"
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
+    implementation("androidx.room:room-paging:$roomVersion")
     kapt("androidx.room:room-compiler:$roomVersion")
 
 //    Datastore
@@ -216,16 +217,16 @@ dependencies {
     implementation("com.google.protobuf:protobuf-javalite:3.11.1")
 
 //    Facebook SDK
-    implementation("com.facebook.android:facebook-android-sdk:11.2.0")
+    implementation("com.facebook.android:facebook-android-sdk:12.0.1")
 
 //    Testing
     testImplementation("junit:junit:4.13.2")
-    testImplementation("com.google.truth:truth:1.1.2")
+    testImplementation("com.google.truth:truth:1.1.3")
 
 //    Assertions
     testImplementation("androidx.test.ext:junit:1.1.3")
     testImplementation("androidx.test.ext:truth:1.4.0")
-    testImplementation("com.google.truth:truth:1.1.2")
+    testImplementation("com.google.truth:truth:1.1.3")
 
 //   AndroidJUnitRunner and JUnit Rules
     testImplementation("androidx.test:runner:1.4.0")
@@ -233,7 +234,7 @@ dependencies {
 //    OkHttp MockWebServer
     testImplementation("com.squareup.okhttp3:mockwebserver")
 //    Mockito
-    val mockitoVersion = "3.12.4"
+    val mockitoVersion = "4.0.0"
     testImplementation("org.mockito:mockito-core:$mockitoVersion")
     testImplementation("org.mockito:mockito-inline:$mockitoVersion")
 //    Coroutines test
