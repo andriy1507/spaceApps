@@ -5,8 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import com.spaceapps.myapplication.app.repositories.locations.LocationsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -22,5 +20,4 @@ class LocationsListViewModel @Inject constructor(
         .map { repository.getLocationsByName(it).flow }
 
     fun onSearchQueryEnter(input: String) = searchQuery.postValue(input)
-
 }

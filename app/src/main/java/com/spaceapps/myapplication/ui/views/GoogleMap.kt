@@ -7,7 +7,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -16,7 +15,6 @@ import com.google.android.gms.maps.MapView
 import com.google.maps.android.ktx.awaitMap
 import com.google.maps.android.ktx.buildGoogleMapOptions
 import kotlinx.coroutines.launch
-import com.spaceapps.myapplication.R
 
 typealias OnMapLoaded = (GoogleMap) -> Unit
 
