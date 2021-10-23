@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "LocationRemoteKeys")
 data class LocationRemoteKey(
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = false)
     val id: Int,
     @ColumnInfo(name = "nextKey")
     val nextKey: Int?,

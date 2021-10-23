@@ -158,7 +158,7 @@ dependencies {
     implementation("com.google.maps.android:maps-ktx:3.2.0")
     implementation("com.google.maps.android:maps-utils-ktx:3.2.0")
 //    AndroidX
-    implementation("androidx.core:core-ktx:1.7.0-beta02")
+    implementation("androidx.core:core-ktx:1.7.0-rc01")
     implementation("androidx.appcompat:appcompat:1.4.0-beta01")
     implementation("androidx.activity:activity-ktx:1.3.1")
     implementation("androidx.activity:activity-compose:1.3.1")
@@ -166,7 +166,6 @@ dependencies {
     implementation("androidx.browser:browser:1.3.0")
     implementation("androidx.fragment:fragment-ktx:1.3.6")
     implementation("androidx.core:core-splashscreen:1.0.0-alpha02")
-    implementation("com.google.android.material:material:1.4.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0-rc01")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.4.0-rc01")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0-rc01")
@@ -187,6 +186,7 @@ dependencies {
     implementation("androidx.compose.ui:ui:$composeVersion")
     implementation("androidx.compose.runtime:runtime-livedata:$composeVersion")
     implementation("androidx.compose.material:material:$composeVersion")
+    implementation("androidx.compose.material:material-icons-extended:$composeVersion")
     implementation("androidx.compose.foundation:foundation:$composeVersion")
     implementation("androidx.compose.ui:ui-tooling:$composeVersion")
     implementation("androidx.navigation:navigation-compose:2.4.0-alpha10")
@@ -205,6 +205,7 @@ dependencies {
     implementation("com.google.firebase:firebase-crashlytics-ktx")
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("com.google.firebase:firebase-messaging-ktx")
+    implementation("com.google.firebase:firebase-installations")
 //    Room database
     val roomVersion = "2.4.0-alpha04"
     implementation("androidx.room:room-runtime:$roomVersion")

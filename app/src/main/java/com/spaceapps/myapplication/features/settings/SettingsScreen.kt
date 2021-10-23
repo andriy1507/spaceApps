@@ -2,12 +2,13 @@ package com.spaceapps.myapplication.features.settings
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.navigationBarsPadding
@@ -26,7 +27,7 @@ fun SettingsScreen(vm: SettingsViewModel) {
                 content = {
                     IconButton(onClick = vm::goBack) {
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_back),
+                            imageVector = Icons.Filled.ArrowBack,
                             contentDescription = stringResource(id = R.string.back)
                         )
                     }

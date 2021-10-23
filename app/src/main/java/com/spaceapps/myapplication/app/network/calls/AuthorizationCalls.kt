@@ -14,8 +14,8 @@ interface AuthorizationCalls {
     @POST("/auth/add-device")
     suspend fun addDevice(@Body device: DeviceRequest)
 
-    @DELETE("/auth/log-out/{deviceToken}")
-    suspend fun logOut(@Path("deviceToken") deviceToken: String)
+    @DELETE("/auth/log-out/{installationId}")
+    suspend fun logOut(@Path("installationId") installationId: String)
 
     @POST("/auth/refresh-token")
     suspend fun refreshToken(@Body request: RefreshTokenRequest): AuthTokenResponse

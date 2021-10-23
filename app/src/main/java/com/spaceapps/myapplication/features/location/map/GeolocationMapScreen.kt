@@ -2,7 +2,6 @@ package com.spaceapps.myapplication.features.location.map
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
-import android.annotation.SuppressLint
 import android.location.Location
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -15,49 +14,56 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.statusBarsPadding
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import com.spaceapps.myapplication.R
 import com.spaceapps.myapplication.app.*
 import com.spaceapps.myapplication.ui.*
 import com.spaceapps.myapplication.ui.views.GoogleMap
 import gov.nasa.worldwind.geom.Angle
 import gov.nasa.worldwind.geom.coords.UTMCoord
-import timber.log.Timber
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
-@SuppressLint("MissingPermission")
 @Composable
 fun GeolocationMapScreen(vm: GeolocationMapViewModel) {
     val locationRequest = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions(),
-        onResult = { permissions ->
-            when (permissions.all { it.value }) {
-                true -> vm.trackLocation()
-                else -> Timber.e("Permission not granted")
-            }
-        }
+        onResult = { permissions -> vm.onPermissionsResult(permissions.all { it.value }) }
     )
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val events = remember(vm.events, lifecycleOwner) {
+        vm.events.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.RESUMED)
+    }
+    val context = LocalContext.current
     val location by vm.location.collectAsState()
     val isFocusMode by vm.isFocusMode.collectAsState()
     val bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Expanded)
     val scaffoldState = rememberBottomSheetScaffoldState(bottomSheetState = bottomSheetState)
     val degreesFormat by vm.degreesFormat.collectAsState()
     val coordSystem by vm.coordSystem.collectAsState()
+    val scope = rememberCoroutineScope()
     LaunchedEffect(Unit) {
         locationRequest.launch(arrayOf(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION))
+        events.collect { event ->
+            when (event) {
+                is GeolocationMapEvents.ShowSnackBar ->
+                    scaffoldState.snackbarHostState
+                        .showSnackbar(context.getString(event.messageId))
+                else -> Unit
+            }
+        }
     }
     BottomSheetScaffold(
         sheetContent = {
@@ -69,13 +75,39 @@ fun GeolocationMapScreen(vm: GeolocationMapViewModel) {
         },
         scaffoldState = scaffoldState,
         floatingActionButton = {
-            AnimatedVisibility(visible = !isFocusMode, enter = fadeIn(), exit = fadeOut()) {
-                MapTrackingFab(onClick = vm::onFocusClick)
-            }
+            MapMultiActionFab(
+                isLocationVisible = isFocusMode,
+                onFocusClick = vm::onFocusClick,
+                onListClick = vm::goLocationsList,
+                onAddClick = { vm.addLocation(location) }
+            )
         },
         content = {
             Box(Modifier.fillMaxSize()) {
-                MapPreview(location = location, isFocusMode = isFocusMode, vm::onCameraMoved)
+                GoogleMap(
+                    modifier = Modifier.fillMaxSize(),
+                    onMapLoaded = { map ->
+                        map.setOnCameraMoveStartedListener(vm::onCameraMoved)
+                        scope.launch {
+                            events.collect {
+                                when (it) {
+                                    is GeolocationMapEvents.AddMarker -> {
+                                        map.clear()
+                                        map.addMarker(it.options)
+                                    }
+                                    is GeolocationMapEvents.UpdateCamera -> {
+                                        map.animateCamera(it.update)
+                                    }
+                                    else -> Unit
+                                }
+                            }
+                        }
+                    }
+                )
+                DisposableEffect(Unit) {
+                    onDispose {
+                    }
+                }
                 Button(
                     modifier = Modifier
                         .statusBarsPadding()
@@ -87,7 +119,7 @@ fun GeolocationMapScreen(vm: GeolocationMapViewModel) {
                     shape = CircleShape
                 ) {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_settings),
+                        imageVector = Icons.Filled.Settings,
                         contentDescription = null
                     )
                 }
@@ -99,6 +131,42 @@ fun GeolocationMapScreen(vm: GeolocationMapViewModel) {
             bottomStart = CornerSize(SPACING_0)
         )
     )
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+@Composable
+fun MapMultiActionFab(
+    isLocationVisible: Boolean,
+    onFocusClick: OnClick,
+    onListClick: OnClick,
+    onAddClick: OnClick
+) {
+    Column(horizontalAlignment = Alignment.End) {
+        AnimatedVisibility(visible = !isLocationVisible, enter = fadeIn(), exit = fadeOut()) {
+            FloatingActionButton(onClick = onFocusClick) {
+                Icon(
+                    imageVector = Icons.Filled.MyLocation,
+                    contentDescription = stringResource(R.string.location)
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(SPACING_8))
+        Row {
+            FloatingActionButton(onClick = onListClick) {
+                Icon(
+                    imageVector = Icons.Filled.List,
+                    contentDescription = null
+                )
+            }
+            Spacer(modifier = Modifier.width(SPACING_8))
+            FloatingActionButton(onClick = onAddClick) {
+                Icon(
+                    imageVector = Icons.Filled.Create,
+                    contentDescription = null
+                )
+            }
+        }
+    }
 }
 
 @Composable
@@ -177,7 +245,7 @@ private fun UtmCoordSystem(location: Location?) {
     ) {
         Text(
             modifier = Modifier.weight(1f),
-            text = "Northing",
+            text = stringResource(R.string.northing),
             style = MaterialTheme.typography.h5
         )
         Text(
@@ -193,7 +261,7 @@ private fun UtmCoordSystem(location: Location?) {
     ) {
         Text(
             modifier = Modifier.weight(1f),
-            text = "Easting",
+            text = stringResource(R.string.easting),
             style = MaterialTheme.typography.h5
         )
         Text(
@@ -209,7 +277,7 @@ private fun UtmCoordSystem(location: Location?) {
     ) {
         Text(
             modifier = Modifier.weight(1f),
-            text = "Zone",
+            text = stringResource(R.string.zone),
             style = MaterialTheme.typography.h5
         )
         Text(
@@ -274,41 +342,6 @@ private fun getLongitudeString(location: Location?, format: String) = when (loca
             stringResource(id = heading)
         )
     }
-}
-
-@Composable
-fun MapTrackingFab(
-    onClick: OnClick
-) = FloatingActionButton(onClick = onClick) {
-    Icon(
-        painter = painterResource(R.drawable.ic_location),
-        contentDescription = stringResource(R.string.location)
-    )
-}
-
-@Composable
-fun MapPreview(location: Location?, isFocusMode: Boolean, onCameraMoved: () -> Unit) {
-    GoogleMap(
-        modifier = Modifier.fillMaxSize(),
-        onMapLoaded = { map ->
-            if (location != null) {
-                val marker = MarkerOptions().position(LatLng(location.latitude, location.longitude))
-                map.clear()
-                map.addMarker(marker)
-            }
-            if (location != null && isFocusMode) {
-                val cameraUpdate =
-                    CameraUpdateFactory.newLatLngZoom(
-                        LatLng(location.latitude, location.longitude),
-                        DEFAULT_MAP_ZOOM
-                    )
-                map.animateCamera(cameraUpdate)
-            }
-            map.setOnCameraMoveStartedListener { reason ->
-                if (reason == REASON_GESTURE) onCameraMoved()
-            }
-        }
-    )
 }
 
 @Composable

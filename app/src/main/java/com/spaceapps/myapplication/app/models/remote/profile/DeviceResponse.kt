@@ -1,0 +1,12 @@
+package com.spaceapps.myapplication.app.models.remote.profile
+
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+
+@JsonClass(generateAdapter = true)
+data class DeviceResponse(
+    @Json(name = "id")
+    val id: Int,
+    @Json(name = "platform")
+    val platform: Platform
+)

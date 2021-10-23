@@ -5,9 +5,11 @@ import coil.ImageLoader
 import coil.util.CoilUtils
 import com.spaceapps.myapplication.BuildConfig
 import com.spaceapps.myapplication.app.network.AuthInterceptor
+import com.spaceapps.myapplication.app.network.SpaceAppsAuthenticator
 import com.spaceapps.myapplication.app.network.calls.AuthorizationCalls
 import com.spaceapps.myapplication.app.network.calls.LocationsCalls
-import com.spaceapps.myapplication.app.network.SpaceAppsAuthenticator
+import com.spaceapps.myapplication.app.network.calls.NotificationsCalls
+import com.spaceapps.myapplication.app.network.calls.ProfileCalls
 import com.spaceapps.myapplication.utils.QueryEnumConverterFactory
 import com.squareup.moshi.Moshi
 import dagger.Module
@@ -74,11 +76,21 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideAuthorizationApi(retrofit: Retrofit): AuthorizationCalls =
+    fun provideAuthorizationCalls(retrofit: Retrofit): AuthorizationCalls =
         retrofit.create(AuthorizationCalls::class.java)
 
     @Provides
     @Singleton
-    fun provideLocationsApi(retrofit: Retrofit): LocationsCalls =
+    fun provideLocationsCalls(retrofit: Retrofit): LocationsCalls =
         retrofit.create(LocationsCalls::class.java)
+
+    @Provides
+    @Singleton
+    fun provideProfileCalls(retrofit: Retrofit): ProfileCalls =
+        retrofit.create(ProfileCalls::class.java)
+
+    @Provides
+    @Singleton
+    fun provideNotificationsCalls(retrofit: Retrofit): NotificationsCalls =
+        retrofit.create(NotificationsCalls::class.java)
 }

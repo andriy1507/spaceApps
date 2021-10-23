@@ -6,7 +6,7 @@ sealed class Screens(val route: String) {
     object SocialAuth : Screens("socialAuth")
 }
 
-sealed class GeolocationGraph(val route: String) {
+sealed class GeolocationGraph(route: String) : Screens(route) {
     object GeolocationMap : GeolocationGraph("geolocationMap")
 
     object MapSettings : GeolocationGraph("mapSettings")
@@ -20,12 +20,28 @@ sealed class GeolocationGraph(val route: String) {
     }
 }
 
-sealed class AboutGraph(val route: String) {
+sealed class AboutGraph(route: String) : Screens(route) {
     object About : AboutGraph("about")
 
     object TermsPolicy : AboutGraph("termsPolicy")
 
     companion object {
         const val route = "aboutGraph"
+    }
+}
+
+sealed class ProfileGraph(route: String) : Screens(route) {
+    object Profile : ProfileGraph("profile")
+
+    object Notifications : ProfileGraph("notifications")
+
+    object NotificationView : ProfileGraph("notificationView/{notificationId}/{title}") {
+        fun createRoute(id: Int, title: String) = "notificationView/$id/$title"
+    }
+
+    object Devices : ProfileGraph("devices")
+
+    companion object {
+        const val route = "profileGraph"
     }
 }

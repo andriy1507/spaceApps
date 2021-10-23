@@ -1,10 +1,10 @@
 package com.spaceapps.myapplication.app.activity
 
-import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.ui.graphics.vector.ImageVector
 
 data class MenuItem(
     val route: String,
-    @DrawableRes val iconId: Int,
+    val icon: ImageVector,
     @StringRes val labelId: Int
 )

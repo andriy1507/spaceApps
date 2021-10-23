@@ -5,15 +5,17 @@ import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.Data
 import androidx.work.WorkerParameters
+import com.google.firebase.installations.FirebaseInstallations
 import com.spaceapps.myapplication.app.local.DataStoreManager
 import com.spaceapps.myapplication.app.models.remote.auth.DeviceRequest
-import com.spaceapps.myapplication.app.models.remote.auth.DeviceRequest.Platform.Android
+import com.spaceapps.myapplication.app.models.remote.profile.Platform.Android
 import com.spaceapps.myapplication.app.network.calls.AuthorizationCalls
 import com.spaceapps.myapplication.utils.Success
 import com.spaceapps.myapplication.utils.request
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 @HiltWorker
@@ -29,7 +31,8 @@ class FirebaseTokenWorker @AssistedInject constructor(
         token ?: return@withContext Result.failure()
         val device = DeviceRequest(
             token = token,
-            platform = Android
+            platform = Android,
+            installationId = FirebaseInstallations.getInstance().id.await()
         )
         val response = request { calls.addDevice(device = device) }
         return@withContext if (response is Success) Result.success() else Result.retry()
