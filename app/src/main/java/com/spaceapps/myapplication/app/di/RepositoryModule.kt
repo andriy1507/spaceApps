@@ -8,6 +8,8 @@ import com.spaceapps.myapplication.app.repositories.locations.LocationsRepositor
 import com.spaceapps.myapplication.app.repositories.locations.LocationsRepositoryImpl
 import com.spaceapps.myapplication.app.repositories.notifications.NotificationsRepository
 import com.spaceapps.myapplication.app.repositories.notifications.NotificationsRepositoryImpl
+import com.spaceapps.myapplication.app.repositories.signalr.SignalrRepository
+import com.spaceapps.myapplication.app.repositories.signalr.SignalrRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -28,4 +30,7 @@ interface RepositoryModule {
 
     @Binds
     fun bindDevicesRepository(impl: DevicesRepositoryImpl): DevicesRepository
+
+    @Binds
+    fun bindSignalrRepository(impl: SignalrRepositoryImpl): SignalrRepository
 }

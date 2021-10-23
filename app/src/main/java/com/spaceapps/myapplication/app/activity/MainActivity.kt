@@ -1,5 +1,6 @@
 package com.spaceapps.myapplication.app.activity
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
@@ -27,6 +28,8 @@ import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
+import com.google.firebase.dynamiclinks.ktx.dynamicLinks
+import com.google.firebase.ktx.Firebase
 import com.spaceapps.myapplication.R
 import com.spaceapps.myapplication.app.AboutGraph
 import com.spaceapps.myapplication.app.GeolocationGraph
@@ -46,6 +49,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -66,6 +70,7 @@ class MainActivity : AppCompatActivity() {
     @OptIn(ExperimentalMaterialNavigationApi::class, ExperimentalAnimationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Timber.d(intent.data?.toString())
         setupEdgeToEdge()
         installSplashScreen()
         setContent {
@@ -120,6 +125,15 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
+        }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        intent ?: return
+        Firebase.dynamicLinks.getDynamicLink(intent).addOnSuccessListener { data ->
+            val link = data.link ?: return@addOnSuccessListener
+            navDispatcher.emit { it.navigate(link) }
         }
     }
 

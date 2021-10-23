@@ -4,7 +4,9 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class SendResetTokenRequest(
+data class VerifyCodeRequest(
     @Json(name = "email")
-    val email: String
+    val email: String,
+    @Json(name = "reset_code")
+    val resetCode: String
 )

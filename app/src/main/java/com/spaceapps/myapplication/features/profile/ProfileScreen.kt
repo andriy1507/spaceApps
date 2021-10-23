@@ -19,11 +19,11 @@ import com.google.accompanist.insets.rememberInsetsPaddingValues
 import kotlinx.coroutines.flow.collect
 
 @Composable
-fun ProfileScreen(vm: ProfileViewModel) {
+fun ProfileScreen(viewModel: ProfileViewModel) {
     val scaffoldState = rememberScaffoldState()
     val lifecycleOwner = LocalLifecycleOwner.current
-    val events = remember(vm.events, lifecycleOwner) {
-        vm.events.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.RESUMED)
+    val events = remember(viewModel.events, lifecycleOwner) {
+        viewModel.events.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.RESUMED)
     }
     val context = LocalContext.current
     LaunchedEffect(events) {
@@ -40,12 +40,12 @@ fun ProfileScreen(vm: ProfileViewModel) {
     Scaffold(modifier = Modifier.fillMaxSize(), scaffoldState = scaffoldState) {
         LazyColumn(Modifier.fillMaxSize(), contentPadding = statusBarPadding) {
             item {
-                Button(onClick = vm::goDevices) {
+                Button(onClick = viewModel::goDevices) {
                     Text("Devices")
                 }
             }
             item {
-                Button(onClick = vm::goNotifications) {
+                Button(onClick = viewModel::goNotifications) {
                     Text("Notifications")
                 }
             }

@@ -36,22 +36,22 @@ import com.spaceapps.myapplication.utils.plus
 import kotlinx.coroutines.flow.emptyFlow
 
 @Composable
-fun LocationsListScreen(vm: LocationsListViewModel) {
-    val pagingData by vm.locations.collectAsState(initial = emptyFlow())
+fun LocationsListScreen(viewModel: LocationsListViewModel) {
+    val pagingData by viewModel.locations.collectAsState(initial = emptyFlow())
     val locations = pagingData.collectAsLazyPagingItems()
-    val searchQuery by vm.searchQuery.observeAsState()
+    val searchQuery by viewModel.searchQuery.observeAsState()
     val swipeRefreshState =
         rememberSwipeRefreshState(isRefreshing = locations.loadState.refresh is LoadState.Loading)
     val statusBarPadding =
         rememberInsetsPaddingValues(insets = LocalWindowInsets.current.statusBars)
-    val isSearchEnabled by vm.isSearchEnabled.collectAsState()
+    val isSearchEnabled by viewModel.isSearchEnabled.collectAsState()
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
                 contentPadding = AppBarDefaults.ContentPadding + statusBarPadding
             ) {
-                IconButton(onClick = vm::goBack) {
+                IconButton(onClick = viewModel::goBack) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,
                         contentDescription = null
@@ -61,7 +61,7 @@ fun LocationsListScreen(vm: LocationsListViewModel) {
                     TextField(
                         modifier = Modifier.weight(1f),
                         value = searchQuery.orEmpty(),
-                        onValueChange = vm::onSearchQueryEnter,
+                        onValueChange = viewModel::onSearchQueryEnter,
                         colors = TextFieldDefaults.textFieldColors(
                             backgroundColor = Color.Transparent,
                             errorIndicatorColor = Color.Transparent,
@@ -74,7 +74,7 @@ fun LocationsListScreen(vm: LocationsListViewModel) {
                         ),
                         placeholder = { Text(text = stringResource(id = R.string.search)) }
                     )
-                    IconButton(onClick = vm::onCloseSearchClicked) {
+                    IconButton(onClick = viewModel::onCloseSearchClicked) {
                         Icon(
                             imageVector = Icons.Filled.Close,
                             contentDescription = null
@@ -86,7 +86,7 @@ fun LocationsListScreen(vm: LocationsListViewModel) {
                         text = stringResource(id = R.string.locations),
                         style = MaterialTheme.typography.h6
                     )
-                    IconButton(onClick = vm::onSearchClicked) {
+                    IconButton(onClick = viewModel::onSearchClicked) {
                         Icon(
                             imageVector = Icons.Filled.Search,
                             contentDescription = null
@@ -110,7 +110,7 @@ fun LocationsListScreen(vm: LocationsListViewModel) {
             LazyColumn(Modifier.fillMaxSize()) {
                 items(locations, key = { it.id }) {
                     LocationItem(
-                        onDismiss = { it?.let { vm.deleteLocation(it.id) } },
+                        onDismiss = { it?.let { viewModel.deleteLocation(it.id) } },
                         name = it?.name
                     )
                 }

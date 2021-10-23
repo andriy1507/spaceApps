@@ -11,15 +11,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.dialog
 import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.navigation
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.bottomSheet
-import com.spaceapps.myapplication.app.AboutGraph
-import com.spaceapps.myapplication.app.GeolocationGraph
-import com.spaceapps.myapplication.app.ProfileGraph
-import com.spaceapps.myapplication.app.Screens
+import com.spaceapps.myapplication.app.*
 import com.spaceapps.myapplication.features.about.AboutScreen
 import com.spaceapps.myapplication.features.auth.AuthScreen
 import com.spaceapps.myapplication.features.devices.DevicesScreen
@@ -30,6 +28,7 @@ import com.spaceapps.myapplication.features.location.saveLocation.SaveLocationSc
 import com.spaceapps.myapplication.features.notificationView.NotificationViewScreen
 import com.spaceapps.myapplication.features.notifications.NotificationsScreen
 import com.spaceapps.myapplication.features.profile.ProfileScreen
+import com.spaceapps.myapplication.features.resetPassword.ResetPasswordScreen
 import com.spaceapps.myapplication.features.settings.SettingsScreen
 import com.spaceapps.myapplication.features.socialAuth.SocialAuthScreen
 import com.spaceapps.myapplication.features.termsPolicy.TermsPolicyScreen
@@ -52,8 +51,16 @@ fun PopulatedNavHost(
             AuthScreen(hiltViewModel(it))
         }
 
-        composable(Screens.ForgotPassword.route) {
-            ForgotPasswordScreen()
+        composable(route = Screens.ForgotPassword.route) {
+            ForgotPasswordScreen(hiltViewModel(it))
+        }
+
+        composable(
+            route = Screens.ResetPassword.route,
+            deepLinks = listOf(navDeepLink { uriPattern = DeepLinks.ResetPassword.uri }),
+            arguments = DeepLinks.ResetPassword.args
+        ) {
+            ResetPasswordScreen(hiltViewModel(it))
         }
 
         bottomSheet(Screens.SocialAuth.route) {

@@ -37,22 +37,22 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
 @Composable
-fun GeolocationMapScreen(vm: GeolocationMapViewModel) {
+fun GeolocationMapScreen(viewModel: GeolocationMapViewModel) {
     val locationRequest = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions(),
-        onResult = { permissions -> vm.onPermissionsResult(permissions.all { it.value }) }
+        onResult = { permissions -> viewModel.onPermissionsResult(permissions.all { it.value }) }
     )
     val lifecycleOwner = LocalLifecycleOwner.current
-    val events = remember(vm.events, lifecycleOwner) {
-        vm.events.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.RESUMED)
+    val events = remember(viewModel.events, lifecycleOwner) {
+        viewModel.events.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.RESUMED)
     }
     val context = LocalContext.current
-    val location by vm.location.collectAsState()
-    val isFocusMode by vm.isFocusMode.collectAsState()
+    val location by viewModel.location.collectAsState()
+    val isFocusMode by viewModel.isFocusMode.collectAsState()
     val bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Expanded)
     val scaffoldState = rememberBottomSheetScaffoldState(bottomSheetState = bottomSheetState)
-    val degreesFormat by vm.degreesFormat.collectAsState()
-    val coordSystem by vm.coordSystem.collectAsState()
+    val degreesFormat by viewModel.degreesFormat.collectAsState()
+    val coordSystem by viewModel.coordSystem.collectAsState()
     val scope = rememberCoroutineScope()
     LaunchedEffect(Unit) {
         locationRequest.launch(arrayOf(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION))
@@ -77,9 +77,9 @@ fun GeolocationMapScreen(vm: GeolocationMapViewModel) {
         floatingActionButton = {
             MapMultiActionFab(
                 isLocationVisible = isFocusMode,
-                onFocusClick = vm::onFocusClick,
-                onListClick = vm::goLocationsList,
-                onAddClick = { vm.addLocation(location) }
+                onFocusClick = viewModel::onFocusClick,
+                onListClick = viewModel::goLocationsList,
+                onAddClick = { viewModel.addLocation(location) }
             )
         },
         content = {
@@ -87,7 +87,7 @@ fun GeolocationMapScreen(vm: GeolocationMapViewModel) {
                 GoogleMap(
                     modifier = Modifier.fillMaxSize(),
                     onMapLoaded = { map ->
-                        map.setOnCameraMoveStartedListener(vm::onCameraMoved)
+                        map.setOnCameraMoveStartedListener(viewModel::onCameraMoved)
                         scope.launch {
                             events.collect {
                                 when (it) {
@@ -114,7 +114,7 @@ fun GeolocationMapScreen(vm: GeolocationMapViewModel) {
                         .padding(SPACING_16)
                         .size(SPACING_48)
                         .align(Alignment.TopEnd),
-                    onClick = vm::goToSettings,
+                    onClick = viewModel::goToSettings,
                     contentPadding = PaddingValues(SPACING_12),
                     shape = CircleShape
                 ) {

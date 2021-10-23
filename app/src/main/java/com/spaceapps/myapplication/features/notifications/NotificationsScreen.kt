@@ -42,14 +42,14 @@ import com.spaceapps.myapplication.utils.plus
 import kotlinx.coroutines.flow.collect
 
 @Composable
-fun NotificationsScreen(vm: NotificationsViewModel) {
+fun NotificationsScreen(viewModel: NotificationsViewModel) {
     val scaffoldState = rememberScaffoldState()
     val lifecycleOwner = LocalLifecycleOwner.current
-    val events = remember(vm.events, lifecycleOwner) {
-        vm.events.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.RESUMED)
+    val events = remember(viewModel.events, lifecycleOwner) {
+        viewModel.events.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.RESUMED)
     }
     val context = LocalContext.current
-    val notifications = vm.notifications.collectAsLazyPagingItems()
+    val notifications = viewModel.notifications.collectAsLazyPagingItems()
     LaunchedEffect(events) {
         events.collect {
             when (it) {
@@ -70,7 +70,7 @@ fun NotificationsScreen(vm: NotificationsViewModel) {
             TopAppBar(
                 contentPadding = AppBarDefaults.ContentPadding + statusBarPadding
             ) {
-                IconButton(onClick = vm::goBack) {
+                IconButton(onClick = viewModel::goBack) {
                     Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = null)
                 }
                 Text(
@@ -102,8 +102,8 @@ fun NotificationsScreen(vm: NotificationsViewModel) {
                     NotificationItem(
                         title = n?.title,
                         text = n?.text,
-                        onClick = { n?.let { vm.goNotificationView(it.id, it.title) } },
-                        onDismiss = { n?.let { vm.deleteNotification(it.id) } }
+                        onClick = { n?.let { viewModel.goNotificationView(it.id, it.title) } },
+                        onDismiss = { n?.let { viewModel.deleteNotification(it.id) } }
                     )
                     if (i != notifications.itemCount - 1) Divider()
                 }

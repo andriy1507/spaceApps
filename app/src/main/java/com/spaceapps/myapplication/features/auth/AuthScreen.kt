@@ -32,11 +32,11 @@ import com.spaceapps.myapplication.utils.autofill
 @Suppress("LongMethod")
 @OptIn(ExperimentalAnimationApi::class, ExperimentalComposeUiApi::class)
 @Composable
-fun AuthScreen(vm: AuthViewModel) {
-    val email by vm.email.collectAsState()
-    val password by vm.password.collectAsState()
-    val confirmPassword by vm.confirmPassword.collectAsState()
-    val isSignUp by vm.isSignUp.collectAsState()
+fun AuthScreen(viewModel: AuthViewModel) {
+    val email by viewModel.email.collectAsState()
+    val password by viewModel.password.collectAsState()
+    val confirmPassword by viewModel.confirmPassword.collectAsState()
+    val isSignUp by viewModel.isSignUp.collectAsState()
     val titleId = when (isSignUp) {
         true -> R.string.sign_up
         false -> R.string.sign_in
@@ -64,7 +64,7 @@ fun AuthScreen(vm: AuthViewModel) {
             )
             TextButton(
                 modifier = Modifier.padding(bottom = SPACING_64),
-                onClick = vm::onSignInWithSocialClick
+                onClick = viewModel::onSignInWithSocialClick
             ) {
                 Text(text = stringResource(id = R.string.sign_in_with_social))
             }
@@ -72,9 +72,9 @@ fun AuthScreen(vm: AuthViewModel) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = SPACING_16)
-                    .autofill(vm::onEmailEnter, AutofillType.EmailAddress),
+                    .autofill(viewModel::onEmailEnter, AutofillType.EmailAddress),
                 value = email.text,
-                onValueChange = vm::onEmailEnter,
+                onValueChange = viewModel::onEmailEnter,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Email,
                     imeAction = ImeAction.Next
@@ -91,9 +91,9 @@ fun AuthScreen(vm: AuthViewModel) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = SPACING_16)
-                    .autofill(vm::onPasswordEnter, AutofillType.Password),
+                    .autofill(viewModel::onPasswordEnter, AutofillType.Password),
                 value = password.text,
-                onValueChange = vm::onPasswordEnter,
+                onValueChange = viewModel::onPasswordEnter,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Email,
                     imeAction = when (isSignUp) {
@@ -116,9 +116,9 @@ fun AuthScreen(vm: AuthViewModel) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = SPACING_16)
-                        .autofill(vm::onConfirmPasswordEnter, AutofillType.NewPassword),
+                        .autofill(viewModel::onConfirmPasswordEnter, AutofillType.NewPassword),
                     value = confirmPassword.text,
-                    onValueChange = vm::onConfirmPasswordEnter,
+                    onValueChange = viewModel::onConfirmPasswordEnter,
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Email,
                         imeAction = ImeAction.Done
@@ -143,13 +143,13 @@ fun AuthScreen(vm: AuthViewModel) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = SPACING_16),
-                onClick = vm::onAuthClick,
+                onClick = viewModel::onAuthClick,
                 contentPadding = PaddingValues(SPACING_16)
             ) {
                 Text(text = stringResource(id = titleId))
             }
             Spacer(modifier = Modifier.height(SPACING_16))
-            TextButton(onClick = vm::onForgotPasswordClick) {
+            TextButton(onClick = viewModel::onForgotPasswordClick) {
                 Text(text = stringResource(id = R.string.forgot_password))
             }
             Spacer(modifier = Modifier.weight(1f))
@@ -157,7 +157,7 @@ fun AuthScreen(vm: AuthViewModel) {
                 true -> R.string.already_have_an_account
                 false -> R.string.don_t_have_an_account
             }
-            TextButton(onClick = vm::onHaveAccountClick) {
+            TextButton(onClick = viewModel::onHaveAccountClick) {
                 Text(text = stringResource(id = haveAccountTextId))
             }
         }

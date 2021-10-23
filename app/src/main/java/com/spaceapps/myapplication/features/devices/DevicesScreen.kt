@@ -23,14 +23,14 @@ import com.spaceapps.myapplication.utils.plus
 import kotlinx.coroutines.flow.collect
 
 @Composable
-fun DevicesScreen(vm: DevicesViewModel) {
+fun DevicesScreen(viewModel: DevicesViewModel) {
     val scaffoldState = rememberScaffoldState()
     val lifecycleOwner = LocalLifecycleOwner.current
-    val events = remember(vm.events, lifecycleOwner) {
-        vm.events.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.RESUMED)
+    val events = remember(viewModel.events, lifecycleOwner) {
+        viewModel.events.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.RESUMED)
     }
     val context = LocalContext.current
-    val devices = vm.devices.collectAsLazyPagingItems()
+    val devices = viewModel.devices.collectAsLazyPagingItems()
     LaunchedEffect(events) {
         events.collect {
             when (it) {
@@ -51,7 +51,7 @@ fun DevicesScreen(vm: DevicesViewModel) {
             TopAppBar(
                 contentPadding = AppBarDefaults.ContentPadding + statusBarPadding
             ) {
-                IconButton(onClick = vm::goBack) {
+                IconButton(onClick = viewModel::goBack) {
                     Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = null)
                 }
                 Text(

@@ -105,38 +105,30 @@ class AuthRepositoryImpl @Inject constructor(
             }
         }
 
-    override suspend fun sendResetToken(email: String): SendResetTokenResult =
+    override suspend fun sendResetCode(email: String): SendResetCodeResult =
         withContext(dispatchersProvider.io) {
-            when (
-                request {
-                    calls.sendResetToken(
-                        request = SendResetTokenRequest(
-                            email = email
-                        )
-                    )
-                }
-            ) {
-                is Success -> SendResetTokenResult.Success
-                is Error -> SendResetTokenResult.Failure
+            when (request { calls.sendResetCode(request = SendResetCodeRequest(email = email)) }) {
+                is Success -> SendResetCodeResult.Success
+                is Error -> SendResetCodeResult.Failure
             }
         }
 
-    override suspend fun verifyResetToken(email: String, token: String): VerifyResetTokenResult =
+    override suspend fun verifyResetCode(email: String, code: String): VerifyResetCodeResult =
         withContext(dispatchersProvider.io) {
-            val request = VerifyTokenRequest(email = email, resetToken = token)
-            when (request { calls.verifyResetToken(request = request) }) {
-                is Success -> VerifyResetTokenResult.Success
-                is Error -> VerifyResetTokenResult.Failure
+            val request = VerifyCodeRequest(email = email, resetCode = code)
+            when (request { calls.verifyResetCode(request = request) }) {
+                is Success -> VerifyResetCodeResult.Success
+                is Error -> VerifyResetCodeResult.Failure
             }
         }
 
     override suspend fun resetPassword(
         email: String,
-        token: String,
+        code: String,
         password: String
     ): ResetPasswordResult = withContext(dispatchersProvider.io) {
         val request =
-            ResetPasswordRequest(email = email, resetToken = token, newPassword = password)
+            ResetPasswordRequest(email = email, resetCode = code, newPassword = password)
         when (request { calls.resetPassword(request = request) }) {
             is Success -> ResetPasswordResult.Success
             is Error -> ResetPasswordResult.Failure

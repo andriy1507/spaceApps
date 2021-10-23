@@ -39,13 +39,13 @@ import kotlinx.coroutines.flow.collect
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
-fun NotificationViewScreen(vm: NotificationViewViewModel) {
+fun NotificationViewScreen(viewModel: NotificationViewViewModel) {
     val scaffoldState = rememberScaffoldState()
     val lifecycleOwner = LocalLifecycleOwner.current
-    val events = remember(vm.events, lifecycleOwner) {
-        vm.events.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.RESUMED)
+    val events = remember(viewModel.events, lifecycleOwner) {
+        viewModel.events.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.RESUMED)
     }
-    val notification by vm.notification.observeAsState()
+    val notification by viewModel.notification.observeAsState()
     val context = LocalContext.current
     LaunchedEffect(events) {
         events.collect {
@@ -67,11 +67,11 @@ fun NotificationViewScreen(vm: NotificationViewViewModel) {
             TopAppBar(
                 contentPadding = AppBarDefaults.ContentPadding + statusBarPadding
             ) {
-                IconButton(onClick = vm::goBack) {
+                IconButton(onClick = viewModel::goBack) {
                     Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = null)
                 }
                 Text(
-                    text = vm.title.orEmpty(),
+                    text = viewModel.title.orEmpty(),
                     style = MaterialTheme.typography.h6
                 )
             }
@@ -81,7 +81,7 @@ fun NotificationViewScreen(vm: NotificationViewViewModel) {
         SwipeRefresh(
             modifier = Modifier.fillMaxSize(),
             state = swipeRefreshState,
-            onRefresh = vm::refresh,
+            onRefresh = viewModel::refresh,
             indicator = { state, trigger ->
                 SwipeRefreshIndicator(
                     state = state,

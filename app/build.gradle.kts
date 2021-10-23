@@ -201,11 +201,12 @@ dependencies {
     implementation("androidx.hilt:hilt-work:$hiltVersion")
     kapt("androidx.hilt:hilt-compiler:$hiltVersion")
 //    Firebase
-    implementation(platform("com.google.firebase:firebase-bom:28.0.1"))
+    implementation(platform("com.google.firebase:firebase-bom:28.4.2"))
     implementation("com.google.firebase:firebase-crashlytics-ktx")
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("com.google.firebase:firebase-messaging-ktx")
     implementation("com.google.firebase:firebase-installations")
+    implementation("com.google.firebase:firebase-dynamic-links-ktx")
 //    Room database
     val roomVersion = "2.4.0-alpha04"
     implementation("androidx.room:room-runtime:$roomVersion")
@@ -224,6 +225,10 @@ dependencies {
 
 //    WW-geo
     implementation("com.rgi-corp:ww-geo-coords:1.0")
+
+//    SignalR
+    implementation("com.microsoft.signalr:signalr:5.0.11")
+    implementation("org.slf4j:slf4j-jdk14:1.7.25")
 
 //    Testing
     testImplementation("junit:junit:4.13.2")

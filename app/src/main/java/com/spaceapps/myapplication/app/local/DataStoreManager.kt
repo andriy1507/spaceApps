@@ -8,6 +8,8 @@ import com.spaceapps.myapplication.app.DEGREES_DMS
 import com.spaceapps.myapplication.app.SYSTEM_GEO
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -17,6 +19,12 @@ class DataStoreManager @Inject constructor(private val dataStore: DataStore<Pref
     suspend fun getAccessToken() = dataStore.data.first()[ACCESS_TOKEN]
 
     suspend fun getRefreshToken() = dataStore.data.first()[REFRESH_TOKEN]
+
+    suspend fun getAccessTokenExpired(): LocalDateTime =
+        LocalDateTime.parse(
+            dataStore.data.first()[ACCESS_TOKEN],
+            DateTimeFormatter.ISO_LOCAL_DATE_TIME
+        )
 
     fun observeDegreesFormat() = dataStore.data.map { it[DEGREES_FORMAT] ?: DEGREES_DMS }
 
@@ -45,6 +53,7 @@ class DataStoreManager @Inject constructor(private val dataStore: DataStore<Pref
     companion object {
         private val ACCESS_TOKEN = stringPreferencesKey("ACCESS_TOKEN")
         private val REFRESH_TOKEN = stringPreferencesKey("REFRESH_TOKEN")
+        private val ACCESS_TOKEN_EXP = stringPreferencesKey("ACCESS_TOKEN_EXP")
         private val COORD_SYSTEM = stringPreferencesKey("COORD_SYSTEM")
         private val DEGREES_FORMAT = stringPreferencesKey("DEGREES_FORMAT")
     }

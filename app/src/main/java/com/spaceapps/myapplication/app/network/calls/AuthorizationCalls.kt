@@ -29,11 +29,11 @@ interface AuthorizationCalls {
     @POST("/auth/apple-sign-in")
     suspend fun appleSignIn(@Body request: SocialSignInRequest): AuthTokenResponse
 
-    @POST("/auth/send-reset-token")
-    suspend fun sendResetToken(@Body request: SendResetTokenRequest)
+    @POST("/auth/send-reset-code")
+    suspend fun sendResetCode(@Body request: SendResetCodeRequest)
 
-    @POST("/auth/verify-reset-token")
-    suspend fun verifyResetToken(@Body request: VerifyTokenRequest)
+    @POST("/auth/verify-reset-code")
+    suspend fun verifyResetCode(@Body request: VerifyCodeRequest)
 
     @PUT("/auth/reset-password")
     suspend fun resetPassword(@Body request: ResetPasswordRequest)
