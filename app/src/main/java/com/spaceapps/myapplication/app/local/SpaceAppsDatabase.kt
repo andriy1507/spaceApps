@@ -7,7 +7,7 @@ import com.spaceapps.myapplication.app.local.dao.*
 import com.spaceapps.myapplication.app.models.local.*
 
 @Database(
-    version = 2,
+    version = 1,
     entities = [
         LocationEntity::class,
         LocationRemoteKey::class,
