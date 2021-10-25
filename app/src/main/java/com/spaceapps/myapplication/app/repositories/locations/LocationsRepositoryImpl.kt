@@ -7,8 +7,8 @@ import com.spaceapps.myapplication.app.INITIAL_PAGE
 import com.spaceapps.myapplication.app.PAGE_SIZE
 import com.spaceapps.myapplication.app.local.SpaceAppsDatabase
 import com.spaceapps.myapplication.app.local.dao.LocationsDao
-import com.spaceapps.myapplication.app.local.dao.LocationsRemoteKeyDao
-import com.spaceapps.myapplication.app.models.remote.location.LocationRequest
+import com.spaceapps.myapplication.app.local.dao.LocationsRemoteKeysDao
+import com.spaceapps.myapplication.app.models.remote.locations.LocationRequest
 import com.spaceapps.myapplication.app.network.LocationsRemoteMediator
 import com.spaceapps.myapplication.app.network.calls.LocationsCalls
 import com.spaceapps.myapplication.app.repositories.locations.results.CreateLocationResult
@@ -28,11 +28,11 @@ class LocationsRepositoryImpl @Inject constructor(
     private val calls: LocationsCalls,
     private val db: SpaceAppsDatabase,
     private val dao: LocationsDao,
-    private val keysDao: LocationsRemoteKeyDao,
+    private val keysDao: LocationsRemoteKeysDao,
     private val dispatchersProvider: DispatchersProvider
 ) : LocationsRepository {
 
-    override fun getLocationsByName(name: String) = Pager(
+    override fun getLocationsByName(name: String?) = Pager(
         config = PagingConfig(pageSize = PAGE_SIZE),
         initialKey = INITIAL_PAGE,
         remoteMediator = LocationsRemoteMediator(
@@ -48,7 +48,10 @@ class LocationsRepositoryImpl @Inject constructor(
     override suspend fun deleteLocation(id: Int): DeleteLocationResult =
         withContext(dispatchersProvider.io) {
             when (val response = request { calls.deleteLocation(id) }) {
-                is Success -> DeleteLocationResult.Success
+                is Success -> {
+                    dao.deleteById(id)
+                    DeleteLocationResult.Success
+                }
                 is Error -> DeleteLocationResult.Error(response.error)
             }
         }

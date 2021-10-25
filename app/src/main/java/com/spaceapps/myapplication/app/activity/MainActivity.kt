@@ -1,15 +1,19 @@
 package com.spaceapps.myapplication.app.activity
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.MyLocation
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
@@ -24,9 +28,12 @@ import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
+import com.google.firebase.dynamiclinks.ktx.dynamicLinks
+import com.google.firebase.ktx.Firebase
 import com.spaceapps.myapplication.R
 import com.spaceapps.myapplication.app.AboutGraph
 import com.spaceapps.myapplication.app.GeolocationGraph
+import com.spaceapps.myapplication.app.ProfileGraph
 import com.spaceapps.myapplication.app.Screens
 import com.spaceapps.myapplication.app.local.DataStoreManager
 import com.spaceapps.myapplication.app.local.SpaceAppsDatabase
@@ -38,8 +45,7 @@ import com.spaceapps.myapplication.utils.NavigationDispatcher
 import com.spaceapps.myapplication.utils.navigateToRootDestination
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
@@ -73,11 +79,10 @@ class MainActivity : AppCompatActivity() {
             var selectedIndex by remember { mutableStateOf(0) }
             val currentDestination by navController.currentBackStackEntryAsState()
             val isBottomBarVisible = when (currentDestination?.destination?.route) {
-                Screens.Auth.route,
-                Screens.SocialAuth.route,
-                Screens.ForgotPassword.route,
-                GeolocationGraph.MapSettings.route -> false
-                else -> true
+                AboutGraph.About.route,
+                GeolocationGraph.GeolocationMap.route,
+                ProfileGraph.Profile.route -> true
+                else -> false
             }
             SpaceAppsTheme {
                 Scaffold(
@@ -100,8 +105,8 @@ class MainActivity : AppCompatActivity() {
                                         },
                                         icon = {
                                             Icon(
-                                                painter = painterResource(id = menuItem.iconId),
-                                                contentDescription = null
+                                                imageVector = menuItem.icon,
+                                                contentDescription = stringResource(id = menuItem.labelId)
                                             )
                                         },
                                         label = { Text(text = stringResource(id = menuItem.labelId)) }
@@ -120,15 +125,29 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        intent ?: return
+        Firebase.dynamicLinks.getDynamicLink(intent).addOnSuccessListener { data ->
+            val link = data.link ?: return@addOnSuccessListener
+            navDispatcher.emit { it.navigate(link) }
+        }
+    }
+
     private fun provideBottomItems() = listOf(
         MenuItem(
             GeolocationGraph.route,
-            R.drawable.ic_location,
+            Icons.Filled.MyLocation,
             R.string.location
         ),
         MenuItem(
+            ProfileGraph.route,
+            Icons.Filled.Person,
+            R.string.profile
+        ),
+        MenuItem(
             AboutGraph.route,
-            R.drawable.ic_info,
+            Icons.Filled.Info,
             R.string.about
         )
     )
@@ -166,11 +185,10 @@ class MainActivity : AppCompatActivity() {
     private fun setupEdgeToEdge() = WindowCompat.setDecorFitsSystemWindows(window, false)
 
     private fun provideStartDestination() = runBlocking {
-//        when (dataStoreManager.getAccessToken()) {
-//            null -> Screens.Auth.route
-//            else -> GeolocationGraph.route
-//        }
-        return@runBlocking GeolocationGraph.route
+        when (dataStoreManager.getAccessToken()) {
+            null -> Screens.Auth.route
+            else -> GeolocationGraph.route
+        }
     }
 
     @Composable

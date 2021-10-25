@@ -7,18 +7,14 @@ import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.toBitmap
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
-import coil.ImageLoader
-import coil.request.ImageRequest
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.spaceapps.myapplication.R
 import com.spaceapps.myapplication.app.activity.MainActivity
 import com.spaceapps.myapplication.app.workers.FirebaseTokenWorker
-import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import kotlin.random.Random
 
@@ -49,18 +45,24 @@ class SpaceAppsFcmService : FirebaseMessagingService() {
     ): Notification {
         return NotificationCompat.Builder(this, getString(R.string.default_notification_channel_id))
             .apply {
-                setContentText(data["text"])
+                when (data[NOTIFICATION_TYPE]) {
+                    NOTIFICATION_NEW_LOGIN -> {
+                        val manufacturer = data[NOTIFICATION_DEVICE_MANUFACTURER]
+                        val model = data[NOTIFICATION_DEVICE_MODEL]
+                        val osVersion = data[NOTIFICATION_DEVICE_OS_VERSION]
+                        setContentTitle(getString(R.string.new_login))
+                        setContentText(
+                            getString(
+                                R.string.new_login_text,
+                                manufacturer,
+                                model,
+                                osVersion
+                            )
+                        )
+                    }
+                }
                 setSmallIcon(R.drawable.ic_launcher_foreground)
                 color = ContextCompat.getColor(this@SpaceAppsFcmService, R.color.colorPrimary)
-                data["imageUrl"]?.let { imageUrl ->
-                    val request = ImageRequest.Builder(this@SpaceAppsFcmService)
-                        .data(imageUrl)
-                        .build()
-                    val image =
-                        runBlocking { ImageLoader(this@SpaceAppsFcmService).execute(request) }
-                    setLargeIcon(image.drawable?.toBitmap())
-                }
-                setContentTitle(data["title"])
                 priority = NotificationCompat.PRIORITY_MAX
                 setChannelId(getString(R.string.default_notification_channel_id))
                 setAutoCancel(true)

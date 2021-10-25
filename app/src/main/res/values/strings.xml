@@ -3,17 +3,10 @@
     <string name="default_notification_channel_id">spaceApps</string>
     <string name="longitude_label">Longitude:</string>
     <string name="latitude_label">Latitude:</string>
-    <string name="degree_value" translatable="false">%.5f\u00B0</string>
-    <string name="altitude_label">Altitude:</string>
-    <string name="altitude_value">%.0f m over sea level</string>
-    <string name="accuracy_label">Accuracy:</string>
-    <string name="distance_meters">%.0f m</string>
     <string name="north">N</string>
     <string name="south">S</string>
     <string name="west">W</string>
     <string name="east">E</string>
-    <string name="location_unavailable">Location unavailable</string>
-    <string name="notifications">Notifications</string>
     <string name="location">Location</string>
     <string name="settings">Settings</string>
     <string name="continue_with_google">Continue with Google</string>
@@ -29,31 +22,12 @@
     <string name="password_does_not_match">Password does not match</string>
     <string name="facebook_app_id" translatable="false">1053051405183873</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb1053051405183873</string>
-    <string name="log_out">Log Out</string>
-    <string name="Continue">Continue</string>
     <string name="forgot_password">Forgot Password?</string>
     <string name="don_t_have_an_account">Don\'t have an account?</string>
     <string name="already_have_an_account">Already have an account?</string>
     <string name="OR">OR</string>
-    <string name="vert_dash" translatable="false">\u0020|\u0020</string>
     <string name="terms_of_use">Terms of Use</string>
     <string name="privacy_policy">Privacy Policy</string>
-    <string name="sign_in_failed">Sign in failed</string>
-    <string name="sign_up_failed">Sign up failed</string>
-    <string name="google_sign_in_failed">Sign in with Google failed</string>
-    <string name="facebook_sign_in_failed">Sign in with Facebook failed</string>
-    <string name="apple_sign_in_failed">Sign in with Apple ID failed</string>
-    <string name="qr_code">QR-Code</string>
-    <string name="satellite">Satellite</string>
-    <string name="hybrid">Hybrid</string>
-    <string name="normal">Normal</string>
-    <string name="are_you_sure_you_want_to_log_out">Are you sure you want log out?</string>
-    <string name="cancel">Cancel</string>
-    <string name="english">English</string>
-    <string name="ukrainian">Ukrainian</string>
-    <string name="change_language">Change language</string>
-    <string name="select_language">Select language</string>
-    <string name="chat">Chat</string>
     <string name="n_a">N/A</string>
     <string name="coordinate_dms" translatable="false">%1$d\u00B0 %2$d\u0027 %3$.5f\u0022</string>
     <string name="coordinate_decimal" translatable="false">%1$.7f</string>
@@ -70,5 +44,17 @@
     <string name="degrees_dms" translatable="false">DD°MM\'SS.SSSSS\"</string>
     <string name="degrees_decimal" translatable="false">DD.dddddddd°</string>
     <string name="back">Back</string>
-    <string name="map_id" translatable="false">546cb7945ddfd227</string>
+    <string name="zone">Zone</string>
+    <string name="easting">Easting</string>
+    <string name="northing">Northing</string>
+    <string name="not_implemented_yet">Not implemented yet</string>
+    <string name="new_login">New login</string>
+    <string name="new_login_text">Detected new login on %s %s %s</string>
+    <string name="search">Search</string>
+    <string name="profile">Profile</string>
+    <string name="unexpected_error">Unexpected error</string>
+    <string name="notifications">Notifications</string>
+    <string name="locations">Locations</string>
+    <string name="devices">Devices</string>
+    <string name="reset_password">Reset password</string>
 </resources>

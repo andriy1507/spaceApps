@@ -13,11 +13,11 @@ interface AuthRepository {
 
     suspend fun signInWithApple(accessToken: String): SocialSignInResult
 
-    suspend fun sendResetToken(email: String): SendResetTokenResult
+    suspend fun sendResetCode(email: String): SendResetCodeResult
 
-    suspend fun verifyResetToken(email: String, token: String): VerifyResetTokenResult
+    suspend fun verifyResetCode(email: String, code: String): VerifyResetCodeResult
 
-    suspend fun resetPassword(email: String, token: String, password: String): ResetPasswordResult
+    suspend fun resetPassword(email: String, code: String, password: String): ResetPasswordResult
 
     suspend fun logOut(): LogOutResult
 }

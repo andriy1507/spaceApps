@@ -22,6 +22,7 @@ val SPACING_36 = 36.dp
 val SPACING_48 = 48.dp
 val ACTION_BAR_SIZE = 56.dp
 val SPACING_64 = 64.dp
+val SPACING_128 = 128.dp
 
 val FONT_10 = 10.sp
 val FONT_12 = 12.sp

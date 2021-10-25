@@ -2,12 +2,13 @@ package com.spaceapps.myapplication.features.settings
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.navigationBarsPadding
@@ -19,14 +20,14 @@ import com.spaceapps.myapplication.ui.SPACING_4
 import com.spaceapps.myapplication.ui.SPACING_8
 
 @Composable
-fun SettingsScreen(vm: SettingsViewModel) {
+fun SettingsScreen(viewModel: SettingsViewModel) {
     Scaffold(
         topBar = {
             TopAppBar(
                 content = {
-                    IconButton(onClick = vm::goBack) {
+                    IconButton(onClick = viewModel::goBack) {
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_back),
+                            imageVector = Icons.Filled.ArrowBack,
                             contentDescription = stringResource(id = R.string.back)
                         )
                     }
@@ -51,7 +52,7 @@ fun SettingsScreen(vm: SettingsViewModel) {
                 style = MaterialTheme.typography.h6,
                 color = MaterialTheme.colors.primary
             )
-            val coordinatesSystem by vm.system.collectAsState()
+            val coordinatesSystem by viewModel.system.collectAsState()
             val formats = listOf(DEGREES_DMS, DEGREES_DECIMAL)
             val systems = listOf(
                 SYSTEM_GEO,
@@ -73,7 +74,7 @@ fun SettingsScreen(vm: SettingsViewModel) {
                 ) {
                     RadioButton(
                         selected = coordinatesSystem == s,
-                        onClick = { vm.onSystemClick(s) }
+                        onClick = { viewModel.onSystemClick(s) }
                     )
                     Text(
                         modifier = Modifier.padding(start = SPACING_4),
@@ -82,7 +83,7 @@ fun SettingsScreen(vm: SettingsViewModel) {
                     )
                 }
             }
-            val degreesFormat by vm.format.collectAsState()
+            val degreesFormat by viewModel.format.collectAsState()
             Text(
                 modifier = Modifier.padding(vertical = SPACING_16),
                 text = stringResource(R.string.degrees_format),
@@ -99,7 +100,7 @@ fun SettingsScreen(vm: SettingsViewModel) {
                     Modifier.padding(vertical = SPACING_4),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    RadioButton(selected = degreesFormat == f, onClick = { vm.onFormatClick(f) })
+                    RadioButton(selected = degreesFormat == f, onClick = { viewModel.onFormatClick(f) })
                     Text(
                         modifier = Modifier.padding(start = SPACING_4),
                         text = stringResource(id = textId),

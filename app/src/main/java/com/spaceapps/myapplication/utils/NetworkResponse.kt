@@ -13,6 +13,15 @@ inline fun <T> request(request: () -> T): NetworkResponse<T> {
     }
 }
 
+inline fun <T> tryOrNull(action: () -> T): T? {
+    return try {
+        action()
+    } catch (e: Exception) {
+        Timber.e(e)
+        null
+    }
+}
+
 sealed class NetworkResponse<out T> {
 
     inline infix fun onSuccess(action: (T) -> Unit): NetworkResponse<T> {

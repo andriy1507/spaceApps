@@ -8,7 +8,7 @@ import androidx.room.withTransaction
 import com.spaceapps.myapplication.app.INITIAL_PAGE
 import com.spaceapps.myapplication.app.local.SpaceAppsDatabase
 import com.spaceapps.myapplication.app.local.dao.LocationsDao
-import com.spaceapps.myapplication.app.local.dao.LocationsRemoteKeyDao
+import com.spaceapps.myapplication.app.local.dao.LocationsRemoteKeysDao
 import com.spaceapps.myapplication.app.models.local.LocationEntity
 import com.spaceapps.myapplication.app.models.local.LocationRemoteKey
 import com.spaceapps.myapplication.app.network.calls.LocationsCalls
@@ -22,7 +22,7 @@ class LocationsRemoteMediator(
     private val calls: LocationsCalls,
     private val db: SpaceAppsDatabase,
     private val dao: LocationsDao,
-    private val keysDao: LocationsRemoteKeyDao
+    private val keysDao: LocationsRemoteKeysDao
 ) : RemoteMediator<Int, LocationEntity>() {
 
     override suspend fun load(
@@ -48,7 +48,7 @@ class LocationsRemoteMediator(
         }
         val response = request {
             calls.getLocations(
-                pageSize = state.config.pageSize,
+                size = state.config.pageSize,
                 page = loadKey,
                 search = query
             )
@@ -64,7 +64,14 @@ class LocationsRemoteMediator(
                     val page = response.data.page
                     val prevKey = if (page == INITIAL_PAGE) null else page - 1
                     val nextKey = if (response.data.isLast) null else page + 1
-                    val keys = locations.map { LocationRemoteKey(it.id, nextKey, prevKey, query) }
+                    val keys = locations.map {
+                        LocationRemoteKey(
+                            id = it.id,
+                            nextKey = nextKey,
+                            prevKey = prevKey,
+                            query = query
+                        )
+                    }
                     dao.insertAll(
                         locations.map {
                             LocationEntity(

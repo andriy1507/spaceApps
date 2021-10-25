@@ -7,8 +7,8 @@ import com.squareup.moshi.JsonClass
 data class ResetPasswordRequest(
     @Json(name = "email")
     val email: String,
-    @Json(name = "reset_token")
-    val resetToken: String,
+    @Json(name = "reset_code")
+    val resetCode: String,
     @Json(name = "new_password")
     val newPassword: String
 )

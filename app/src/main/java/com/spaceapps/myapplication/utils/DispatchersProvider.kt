@@ -1,9 +1,9 @@
 package com.spaceapps.myapplication.utils
 
-import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.CoroutineDispatcher
 
 interface DispatchersProvider {
-    val main: CoroutineContext
-    val io: CoroutineContext
-    val default: CoroutineContext
+    val main: CoroutineDispatcher
+    val io: CoroutineDispatcher
+    val default: CoroutineDispatcher
 }

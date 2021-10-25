@@ -1,9 +1,9 @@
 package com.spaceapps.myapplication.app.repositories.auth
 
+import com.google.firebase.installations.FirebaseInstallations
 import com.google.firebase.messaging.FirebaseMessaging
 import com.spaceapps.myapplication.app.local.DataStoreManager
 import com.spaceapps.myapplication.app.models.remote.auth.*
-import com.spaceapps.myapplication.app.models.remote.auth.DeviceRequest.Platform.Android
 import com.spaceapps.myapplication.app.network.calls.AuthorizationCalls
 import com.spaceapps.myapplication.app.repositories.auth.results.*
 import com.spaceapps.myapplication.utils.DispatchersProvider
@@ -27,17 +27,11 @@ class AuthRepositoryImpl @Inject constructor(
             val request = AuthRequest(
                 email = email,
                 password = password,
-                device = DeviceRequest(
-                    token = FirebaseMessaging.getInstance().token.await(),
-                    platform = Android
-                )
+                device = provideDeviceModel()
             )
             when (val response = request { calls.signIn(request = request) }) {
                 is Success -> {
-                    dataStoreManager.storeTokens(
-                        accessToken = response.data.accessToken,
-                        refreshToken = response.data.refreshToken
-                    )
+                    dataStoreManager.storeTokens(response = response.data)
                     SignInResult.Success
                 }
                 is Error -> SignInResult.Failure
@@ -49,17 +43,11 @@ class AuthRepositoryImpl @Inject constructor(
             val request = AuthRequest(
                 email = email,
                 password = password,
-                device = DeviceRequest(
-                    token = FirebaseMessaging.getInstance().token.await(),
-                    platform = Android
-                )
+                device = provideDeviceModel()
             )
             when (val response = request { calls.signUp(request = request) }) {
                 is Success -> {
-                    dataStoreManager.storeTokens(
-                        accessToken = response.data.accessToken,
-                        refreshToken = response.data.refreshToken
-                    )
+                    dataStoreManager.storeTokens(response = response.data)
                     SignUpResult.Success
                 }
                 is Error -> SignUpResult.Failure
@@ -70,20 +58,14 @@ class AuthRepositoryImpl @Inject constructor(
         withContext(dispatchersProvider.io) {
             val request = SocialSignInRequest(
                 accessToken = accessToken,
-                device = DeviceRequest(
-                    token = FirebaseMessaging.getInstance().token.await(),
-                    platform = Android
-                )
+                device = provideDeviceModel()
             )
             when (
                 val response =
                     request { calls.googleSignIn(request = request) }
             ) {
                 is Success -> {
-                    dataStoreManager.storeTokens(
-                        accessToken = response.data.accessToken,
-                        refreshToken = response.data.refreshToken
-                    )
+                    dataStoreManager.storeTokens(response = response.data)
                     SocialSignInResult.Success
                 }
                 is Error -> SocialSignInResult.Failure
@@ -94,20 +76,14 @@ class AuthRepositoryImpl @Inject constructor(
         withContext(dispatchersProvider.io) {
             val request = SocialSignInRequest(
                 accessToken = accessToken,
-                device = DeviceRequest(
-                    token = FirebaseMessaging.getInstance().token.await(),
-                    platform = Android
-                )
+                device = provideDeviceModel()
             )
             when (
                 val response =
                     request { calls.facebookSignIn(request = request) }
             ) {
                 is Success -> {
-                    dataStoreManager.storeTokens(
-                        accessToken = response.data.accessToken,
-                        refreshToken = response.data.refreshToken
-                    )
+                    dataStoreManager.storeTokens(response = response.data)
                     SocialSignInResult.Success
                 }
                 is Error -> SocialSignInResult.Failure
@@ -118,58 +94,41 @@ class AuthRepositoryImpl @Inject constructor(
         withContext(dispatchersProvider.io) {
             val request = SocialSignInRequest(
                 accessToken = accessToken,
-                device = DeviceRequest(
-                    token = FirebaseMessaging.getInstance().token.await(),
-                    platform = Android
-                )
+                device = provideDeviceModel()
             )
-            when (
-                val response =
-                    request { calls.appleSignIn(request = request) }
-            ) {
+            when (val response = request { calls.appleSignIn(request = request) }) {
                 is Success -> {
-                    dataStoreManager.storeTokens(
-                        accessToken = response.data.accessToken,
-                        refreshToken = response.data.refreshToken
-                    )
+                    dataStoreManager.storeTokens(response = response.data)
                     SocialSignInResult.Success
                 }
                 is Error -> SocialSignInResult.Failure
             }
         }
 
-    override suspend fun sendResetToken(email: String): SendResetTokenResult =
+    override suspend fun sendResetCode(email: String): SendResetCodeResult =
         withContext(dispatchersProvider.io) {
-            when (
-                request {
-                    calls.sendResetToken(
-                        request = SendResetTokenRequest(
-                            email = email
-                        )
-                    )
-                }
-            ) {
-                is Success -> SendResetTokenResult.Success
-                is Error -> SendResetTokenResult.Failure
+            when (request { calls.sendResetCode(request = SendResetCodeRequest(email = email)) }) {
+                is Success -> SendResetCodeResult.Success
+                is Error -> SendResetCodeResult.Failure
             }
         }
 
-    override suspend fun verifyResetToken(email: String, token: String): VerifyResetTokenResult =
+    override suspend fun verifyResetCode(email: String, code: String): VerifyResetCodeResult =
         withContext(dispatchersProvider.io) {
-            val request = VerifyTokenRequest(email = email, resetToken = token)
-            when (request { calls.verifyResetToken(request = request) }) {
-                is Success -> VerifyResetTokenResult.Success
-                is Error -> VerifyResetTokenResult.Failure
+            val request = VerifyCodeRequest(email = email, resetCode = code)
+            when (request { calls.verifyResetCode(request = request) }) {
+                is Success -> VerifyResetCodeResult.Success
+                is Error -> VerifyResetCodeResult.Failure
             }
         }
 
     override suspend fun resetPassword(
         email: String,
-        token: String,
+        code: String,
         password: String
     ): ResetPasswordResult = withContext(dispatchersProvider.io) {
         val request =
-            ResetPasswordRequest(email = email, resetToken = token, newPassword = password)
+            ResetPasswordRequest(email = email, resetCode = code, newPassword = password)
         when (request { calls.resetPassword(request = request) }) {
             is Success -> ResetPasswordResult.Success
             is Error -> ResetPasswordResult.Failure
@@ -178,11 +137,16 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun logOut(): LogOutResult = withContext(dispatchersProvider.io) {
         val response = request {
-            calls.logOut(deviceToken = FirebaseMessaging.getInstance().token.await())
+            calls.logOut(installationId = FirebaseInstallations.getInstance().id.await())
         }
         when (response) {
             is Success -> LogOutResult.Success
             is Error -> LogOutResult.Failure
         }
     }
+
+    private suspend fun provideDeviceModel() = DeviceRequest(
+        token = FirebaseMessaging.getInstance().token.await(),
+        installationId = FirebaseInstallations.getInstance().id.await()
+    )
 }

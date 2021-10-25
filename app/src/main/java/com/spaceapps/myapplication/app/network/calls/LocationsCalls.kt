@@ -1,8 +1,8 @@
 package com.spaceapps.myapplication.app.network.calls
 
 import com.spaceapps.myapplication.app.models.remote.PaginationResponse
-import com.spaceapps.myapplication.app.models.remote.location.LocationRequest
-import com.spaceapps.myapplication.app.models.remote.location.LocationResponse
+import com.spaceapps.myapplication.app.models.remote.locations.LocationRequest
+import com.spaceapps.myapplication.app.models.remote.locations.LocationResponse
 import retrofit2.http.*
 
 interface LocationsCalls {
@@ -10,8 +10,8 @@ interface LocationsCalls {
     @GET("/locations")
     suspend fun getLocations(
         @Query("search") search: String? = null,
-        @Query("pageSize") pageSize: Int?,
-        @Query("pageIndex") page: Int?
+        @Query("size") size: Int?,
+        @Query("page") page: Int?
     ): PaginationResponse<LocationResponse>
 
     @POST("/locations")
