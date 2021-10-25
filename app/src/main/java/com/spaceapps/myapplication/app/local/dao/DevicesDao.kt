@@ -18,4 +18,7 @@ interface DevicesDao {
 
     @Query("DELETE FROM Devices")
     suspend fun clearAll()
+
+    @Query("DELETE FROM Devices WHERE id = :id")
+    suspend fun deleteById(id: Int)
 }

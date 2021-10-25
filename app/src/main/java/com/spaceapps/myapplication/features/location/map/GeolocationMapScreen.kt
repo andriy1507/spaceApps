@@ -15,7 +15,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.Create
+import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.MyLocation
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -95,19 +98,13 @@ fun GeolocationMapScreen(viewModel: GeolocationMapViewModel) {
                                         map.clear()
                                         map.addMarker(it.options)
                                     }
-                                    is GeolocationMapEvents.UpdateCamera -> {
-                                        map.animateCamera(it.update)
-                                    }
+                                    is GeolocationMapEvents.UpdateCamera -> map.animateCamera(it.update)
                                     else -> Unit
                                 }
                             }
                         }
                     }
                 )
-                DisposableEffect(Unit) {
-                    onDispose {
-                    }
-                }
                 Button(
                     modifier = Modifier
                         .statusBarsPadding()
@@ -190,8 +187,8 @@ fun BottomSheetContent(location: Location?, degreesFormat: String, coordSystem: 
         when (coordSystem) {
             SYSTEM_GEO -> GeoCoordSystem(location = location, degreesFormat = degreesFormat)
             SYSTEM_UTM -> UtmCoordSystem(location = location)
-            SYSTEM_S43 -> S43CoordSystem(location = location)
-            SYSTEM_S63 -> S63CoordSystem(location = location)
+            SYSTEM_S43 -> S43CoordSystem()
+            SYSTEM_S63 -> S63CoordSystem()
             else -> throw IllegalArgumentException("Format is not supported")
         }
     }
@@ -289,12 +286,12 @@ private fun UtmCoordSystem(location: Location?) {
 }
 
 @Composable
-private fun S43CoordSystem(location: Location?) {
+private fun S43CoordSystem() {
     // TODO 9/28/2021
 }
 
 @Composable
-private fun S63CoordSystem(location: Location?) {
+private fun S63CoordSystem() {
     // TODO 9/28/2021
 }
 

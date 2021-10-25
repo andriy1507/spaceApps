@@ -10,7 +10,12 @@ import com.spaceapps.myapplication.app.local.dao.DevicesDao
 import com.spaceapps.myapplication.app.local.dao.DevicesRemoteKeysDao
 import com.spaceapps.myapplication.app.network.DevicesRemoteMediator
 import com.spaceapps.myapplication.app.network.calls.ProfileCalls
+import com.spaceapps.myapplication.app.repositories.devices.results.DeleteDeviceResult
 import com.spaceapps.myapplication.utils.DispatchersProvider
+import com.spaceapps.myapplication.utils.Error
+import com.spaceapps.myapplication.utils.Success
+import com.spaceapps.myapplication.utils.request
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -35,4 +40,15 @@ class DevicesRepositoryImpl @Inject constructor(
         ),
         pagingSourceFactory = { dao.pagingSource() }
     )
+
+    override suspend fun deleteDevice(id: Int): DeleteDeviceResult =
+        withContext(dispatchersProvider.io) {
+            when (request { calls.deleteProfileDeviceById(id) }) {
+                is Success -> {
+                    dao.deleteById(id)
+                    DeleteDeviceResult.Success
+                }
+                is Error -> DeleteDeviceResult.Failure
+            }
+        }
 }

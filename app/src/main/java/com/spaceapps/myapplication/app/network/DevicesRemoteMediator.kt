@@ -72,7 +72,11 @@ class DevicesRemoteMediator(
                     dao.insertAll(
                         devices.map {
                             DeviceEntity(
-                                id = it.id
+                                id = it.id,
+                                manufacturer = it.manufacturer,
+                                model = it.model,
+                                osVersion = it.osVersion,
+                                platform = it.platform
                             )
                         }
                     )

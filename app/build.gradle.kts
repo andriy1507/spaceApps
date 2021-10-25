@@ -131,6 +131,8 @@ dependencies {
     implementation("com.google.accompanist:accompanist-swiperefresh:$accompanistVersion")
     implementation("com.google.accompanist:accompanist-insets:$accompanistVersion")
     implementation("com.google.accompanist:accompanist-systemuicontroller:$accompanistVersion")
+    implementation("com.google.accompanist:accompanist-permissions:$accompanistVersion")
+
 //    Coil
     val coilVersion = "1.3.2"
     implementation("io.coil-kt:coil:$coilVersion")
@@ -229,6 +231,13 @@ dependencies {
 //    SignalR
     implementation("com.microsoft.signalr:signalr:5.0.11")
     implementation("org.slf4j:slf4j-jdk14:1.7.25")
+
+//    CameraX
+    val cameraxVersion = "1.0.2"
+    implementation("androidx.camera:camera-core:$cameraxVersion")
+    implementation("androidx.camera:camera-camera2:$cameraxVersion")
+    implementation("androidx.camera:camera-lifecycle:$cameraxVersion")
+    implementation("androidx.camera:camera-view:1.0.0-alpha30")
 
 //    Testing
     testImplementation("junit:junit:4.13.2")

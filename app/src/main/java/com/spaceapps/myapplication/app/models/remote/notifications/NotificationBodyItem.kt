@@ -8,7 +8,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 @JsonClass(generateAdapter = true)
 data class NotificationBodyItem(
-    @Json(name = "imageUrl")
+    @Json(name = "image_url")
     val imageUrl: String?,
     @Json(name = "text")
     val text: String?,

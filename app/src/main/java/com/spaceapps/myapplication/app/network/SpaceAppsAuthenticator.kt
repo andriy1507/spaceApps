@@ -53,10 +53,7 @@ class SpaceAppsAuthenticator @Inject constructor(
         val request = RefreshTokenRequest(refreshToken = refreshToken)
         return when (val response = request { authCalls.get().refreshToken(request = request) }) {
             is Success -> {
-                dataStoreManager.storeTokens(
-                    accessToken = response.data.accessToken,
-                    refreshToken = response.data.refreshToken
-                )
+                dataStoreManager.storeTokens(response = response.data)
                 response.data.accessToken
             }
             is Error -> null

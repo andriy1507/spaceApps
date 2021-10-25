@@ -23,6 +23,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.spaceapps.myapplication.R
+import com.spaceapps.myapplication.ui.OnClick
 import com.spaceapps.myapplication.ui.SPACING_16
 import com.spaceapps.myapplication.utils.autofill
 import kotlinx.coroutines.flow.collect
@@ -47,13 +48,7 @@ fun ResetPasswordScreen(viewModel: ResetPasswordViewModel) {
             }
         }
     }
-    if (showErrorDialog) {
-        Dialog(onDismissRequest = { /*TODO*/ }) {
-            Box {
-                Text(text = "Error")
-            }
-        }
-    }
+    if (showErrorDialog) ErrorDialog(onDismiss = {})
     Scaffold(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -118,6 +113,15 @@ fun ResetPasswordScreen(viewModel: ResetPasswordViewModel) {
             ) {
                 Text(text = stringResource(id = R.string.reset_password))
             }
+        }
+    }
+}
+
+@Composable
+fun ErrorDialog(onDismiss: OnClick) {
+    Dialog(onDismissRequest = onDismiss) {
+        Box {
+            Text(text = "Error")
         }
     }
 }

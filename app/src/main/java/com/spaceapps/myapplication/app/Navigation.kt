@@ -21,6 +21,14 @@ sealed class DeepLinks(val uri: String, val args: List<NamedNavArgument>) {
             navArgument("code") { type = NavType.StringType }
         )
     )
+
+    object NotificationView : DeepLinks(
+        uri = "$DEEP_LINK_URI/notifications/{notificationId}/{title}",
+        args = listOf(
+            navArgument("notificationId") { type = NavType.IntType },
+            navArgument("title") { type = NavType.StringType }
+        )
+    )
 }
 
 sealed class GeolocationGraph(route: String) : Screens(route) {

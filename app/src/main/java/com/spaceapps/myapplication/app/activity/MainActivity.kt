@@ -45,11 +45,9 @@ import com.spaceapps.myapplication.utils.NavigationDispatcher
 import com.spaceapps.myapplication.utils.navigateToRootDestination
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -70,7 +68,6 @@ class MainActivity : AppCompatActivity() {
     @OptIn(ExperimentalMaterialNavigationApi::class, ExperimentalAnimationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Timber.d(intent.data?.toString())
         setupEdgeToEdge()
         installSplashScreen()
         setContent {

@@ -8,5 +8,11 @@ data class DeviceResponse(
     @Json(name = "id")
     val id: Int,
     @Json(name = "platform")
-    val platform: Platform
+    val platform: Platform,
+    @Json(name = "manufacturer")
+    val manufacturer: String,
+    @Json(name = "model")
+    val model: String,
+    @Json(name = "os_version")
+    val osVersion: String
 )

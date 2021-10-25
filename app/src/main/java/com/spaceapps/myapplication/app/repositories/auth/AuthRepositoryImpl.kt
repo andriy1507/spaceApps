@@ -31,7 +31,7 @@ class AuthRepositoryImpl @Inject constructor(
             )
             when (val response = request { calls.signIn(request = request) }) {
                 is Success -> {
-                    storeResponse(response = response.data)
+                    dataStoreManager.storeTokens(response = response.data)
                     SignInResult.Success
                 }
                 is Error -> SignInResult.Failure
@@ -47,7 +47,7 @@ class AuthRepositoryImpl @Inject constructor(
             )
             when (val response = request { calls.signUp(request = request) }) {
                 is Success -> {
-                    storeResponse(response = response.data)
+                    dataStoreManager.storeTokens(response = response.data)
                     SignUpResult.Success
                 }
                 is Error -> SignUpResult.Failure
@@ -65,7 +65,7 @@ class AuthRepositoryImpl @Inject constructor(
                     request { calls.googleSignIn(request = request) }
             ) {
                 is Success -> {
-                    storeResponse(response = response.data)
+                    dataStoreManager.storeTokens(response = response.data)
                     SocialSignInResult.Success
                 }
                 is Error -> SocialSignInResult.Failure
@@ -83,7 +83,7 @@ class AuthRepositoryImpl @Inject constructor(
                     request { calls.facebookSignIn(request = request) }
             ) {
                 is Success -> {
-                    storeResponse(response = response.data)
+                    dataStoreManager.storeTokens(response = response.data)
                     SocialSignInResult.Success
                 }
                 is Error -> SocialSignInResult.Failure
@@ -98,7 +98,7 @@ class AuthRepositoryImpl @Inject constructor(
             )
             when (val response = request { calls.appleSignIn(request = request) }) {
                 is Success -> {
-                    storeResponse(response = response.data)
+                    dataStoreManager.storeTokens(response = response.data)
                     SocialSignInResult.Success
                 }
                 is Error -> SocialSignInResult.Failure
@@ -143,13 +143,6 @@ class AuthRepositoryImpl @Inject constructor(
             is Success -> LogOutResult.Success
             is Error -> LogOutResult.Failure
         }
-    }
-
-    private suspend fun storeResponse(response: AuthTokenResponse) {
-        dataStoreManager.storeTokens(
-            accessToken = response.accessToken,
-            refreshToken = response.refreshToken
-        )
     }
 
     private suspend fun provideDeviceModel() = DeviceRequest(

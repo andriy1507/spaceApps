@@ -1,10 +1,7 @@
 package com.spaceapps.myapplication.features.notificationView
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
@@ -32,6 +29,7 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.spaceapps.myapplication.app.models.remote.notifications.NotificationBodyItem
+import com.spaceapps.myapplication.ui.SPACING_128
 import com.spaceapps.myapplication.ui.SPACING_16
 import com.spaceapps.myapplication.ui.SPACING_8
 import com.spaceapps.myapplication.utils.plus
@@ -98,33 +96,8 @@ fun NotificationViewScreen(viewModel: NotificationViewViewModel) {
                 ) {
                     items(items) {
                         when (it.type) {
-                            NotificationBodyItem.Type.Text -> {
-                                Text(
-                                    modifier = Modifier.padding(
-                                        horizontal = SPACING_16,
-                                        vertical = SPACING_8
-                                    ),
-                                    text = it.text.orEmpty(),
-                                    style = MaterialTheme.typography.body1
-                                )
-                            }
-                            NotificationBodyItem.Type.Image -> {
-                                Image(
-                                    modifier = Modifier
-                                        .padding(
-                                            horizontal = SPACING_16,
-                                            vertical = SPACING_8
-                                        )
-                                        .fillMaxWidth(),
-                                    painter = rememberImagePainter(data = it.imageUrl) {
-                                        with(LocalDensity.current) {
-                                            transformations(RoundedCornersTransformation(SPACING_16.toPx()))
-                                        }
-                                    },
-                                    contentDescription = null,
-                                    contentScale = ContentScale.FillWidth
-                                )
-                            }
+                            NotificationBodyItem.Type.Text -> TextNotificationItem(text = it.text.orEmpty())
+                            NotificationBodyItem.Type.Image -> ImageNotificationItem(it.imageUrl)
                         }
                     }
                 }
@@ -135,4 +108,37 @@ fun NotificationViewScreen(viewModel: NotificationViewViewModel) {
             }
         }
     }
+}
+
+@OptIn(ExperimentalCoilApi::class)
+@Composable
+fun ImageNotificationItem(imageUrl: String?) {
+    Image(
+        modifier = Modifier
+            .padding(
+                horizontal = SPACING_16,
+                vertical = SPACING_8
+            )
+            .height(SPACING_128)
+            .fillMaxWidth(),
+        painter = rememberImagePainter(data = imageUrl) {
+            with(LocalDensity.current) {
+                transformations(RoundedCornersTransformation(SPACING_16.toPx()))
+            }
+        },
+        contentDescription = null,
+        contentScale = ContentScale.FillWidth
+    )
+}
+
+@Composable
+fun TextNotificationItem(text: String) {
+    Text(
+        modifier = Modifier.padding(
+            horizontal = SPACING_16,
+            vertical = SPACING_8
+        ),
+        text = text,
+        style = MaterialTheme.typography.body1
+    )
 }

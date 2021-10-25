@@ -7,10 +7,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.dialog
-import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
@@ -47,7 +46,7 @@ fun PopulatedNavHost(
         startDestination = startDestination
     ) {
 
-        composable(Screens.Auth.route) {
+        composable(route = Screens.Auth.route) {
             AuthScreen(hiltViewModel(it))
         }
 
@@ -63,64 +62,77 @@ fun PopulatedNavHost(
             ResetPasswordScreen(hiltViewModel(it))
         }
 
-        bottomSheet(Screens.SocialAuth.route) {
+        bottomSheet(route = Screens.SocialAuth.route) {
             SocialAuthScreen()
         }
 
-        navigation(
-            startDestination = GeolocationGraph.GeolocationMap.route,
-            route = GeolocationGraph.route
-        ) {
-            composable(GeolocationGraph.GeolocationMap.route) {
-                GeolocationMapScreen(hiltViewModel(it))
-            }
-            composable(GeolocationGraph.MapSettings.route) {
-                SettingsScreen(hiltViewModel(it))
-            }
-            dialog(GeolocationGraph.SaveLocation.route) {
-                SaveLocationScreen()
-            }
-            composable(GeolocationGraph.LocationsList.route) {
-                LocationsListScreen(hiltViewModel(it))
-            }
-        }
+        geolocationGraph()
 
-        navigation(
-            startDestination = ProfileGraph.Profile.route,
-            route = ProfileGraph.route
-        ) {
-            composable(ProfileGraph.Profile.route) {
-                onBackPressIntercepted?.let { onBack -> BackHandler(onBack = onBack) }
-                ProfileScreen(hiltViewModel(it))
-            }
-            composable(ProfileGraph.Notifications.route) {
-                NotificationsScreen(hiltViewModel(it))
-            }
-            composable(
-                ProfileGraph.NotificationView.route,
-                listOf(
-                    navArgument("notificationId") { type = NavType.IntType },
-                    navArgument("title") { type = NavType.StringType }
-                )
-            ) {
-                NotificationViewScreen(hiltViewModel(it))
-            }
-            composable(ProfileGraph.Devices.route) {
-                DevicesScreen(hiltViewModel(it))
-            }
-        }
+        profileGraph(onBackPressIntercepted)
 
-        navigation(
-            startDestination = AboutGraph.About.route,
-            route = AboutGraph.route
+        aboutGraph(onBackPressIntercepted)
+    }
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+private fun NavGraphBuilder.geolocationGraph() {
+    navigation(
+        startDestination = GeolocationGraph.GeolocationMap.route,
+        route = GeolocationGraph.route
+    ) {
+        composable(route = GeolocationGraph.GeolocationMap.route) {
+            GeolocationMapScreen(hiltViewModel(it))
+        }
+        composable(route = GeolocationGraph.MapSettings.route) {
+            SettingsScreen(hiltViewModel(it))
+        }
+        dialog(route = GeolocationGraph.SaveLocation.route) {
+            SaveLocationScreen()
+        }
+        composable(route = GeolocationGraph.LocationsList.route) {
+            LocationsListScreen(hiltViewModel(it))
+        }
+    }
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+private fun NavGraphBuilder.aboutGraph(onBackPressIntercepted: (() -> Unit)?) {
+    navigation(
+        startDestination = AboutGraph.About.route,
+        route = AboutGraph.route
+    ) {
+        composable(route = AboutGraph.About.route) {
+            onBackPressIntercepted?.let { onBack -> BackHandler(onBack = onBack) }
+            AboutScreen()
+        }
+        composable(route = AboutGraph.TermsPolicy.route) {
+            TermsPolicyScreen()
+        }
+    }
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+private fun NavGraphBuilder.profileGraph(onBackPressIntercepted: (() -> Unit)?) {
+    navigation(
+        startDestination = ProfileGraph.Profile.route,
+        route = ProfileGraph.route
+    ) {
+        composable(route = ProfileGraph.Profile.route) {
+            onBackPressIntercepted?.let { onBack -> BackHandler(onBack = onBack) }
+            ProfileScreen(hiltViewModel(it))
+        }
+        composable(route = ProfileGraph.Notifications.route) {
+            NotificationsScreen(hiltViewModel(it))
+        }
+        composable(
+            route = ProfileGraph.NotificationView.route,
+            arguments = DeepLinks.NotificationView.args,
+            deepLinks = listOf(navDeepLink { uriPattern = DeepLinks.NotificationView.uri })
         ) {
-            composable(AboutGraph.About.route) {
-                onBackPressIntercepted?.let { onBack -> BackHandler(onBack = onBack) }
-                AboutScreen()
-            }
-            composable(AboutGraph.TermsPolicy.route) {
-                TermsPolicyScreen()
-            }
+            NotificationViewScreen(hiltViewModel(it))
+        }
+        composable(route = ProfileGraph.Devices.route) {
+            DevicesScreen(hiltViewModel(it))
         }
     }
 }
