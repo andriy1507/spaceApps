@@ -3,6 +3,7 @@ name: Android CD Release
 on:
   push:
     tags: [ v* ]
+  repository_dispatch:
 jobs:
   build-aab:
     name: Build signed AAB

@@ -3,6 +3,7 @@ name: Android CD Internal
 on:
   push:
     branches:  [ master ]
+  repository_dispatch:
 jobs:
   build-apk:
     name: Build signed APK
