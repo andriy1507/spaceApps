@@ -2,7 +2,8 @@ name: Android CI
 
 on:
   pull_request:
-    branches: [ master ]
+      branches: [ master ]
+  repository_dispatch:
 jobs:
   ktlint-check:
     name: Ktlint code check
