@@ -145,7 +145,7 @@ fun DeviceItem(
     if (dismissState.isDismissed(DismissDirection.EndToStart)) SideEffect(onDismiss)
     AnimatedVisibility(
         visible = !dismissState.isDismissed(DismissDirection.EndToStart),
-        exit = shrinkVertically(Alignment.CenterVertically)
+        exit = shrinkVertically(shrinkTowards = Alignment.CenterVertically)
     ) {
         SwipeToDismiss(
             state = dismissState,
