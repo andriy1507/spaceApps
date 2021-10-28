@@ -75,6 +75,9 @@
                 android:name="com.spaceapps.myapplication.app.initializers.FirebaseAppInitializer"
                 android:value="androidx.startup" />
             <meta-data
+                android:name="com.spaceapps.myapplication.app.initializers.GoogleMapsInitializer"
+                android:value="androidx.startup" />
+            <meta-data
                 android:name="com.spaceapps.myapplication.app.initializers.VenomInitializer"
                 android:value="androidx.startup" />
             <meta-data

@@ -137,7 +137,7 @@ fun LocationItem(
     AnimatedVisibility(
         visible = !dismissState.isDismissed(DismissDirection.EndToStart),
         enter = EnterTransition.None,
-        exit = shrinkVertically(Alignment.CenterVertically)
+        exit = shrinkVertically(shrinkTowards = Alignment.CenterVertically)
     ) {
         SwipeToDismiss(
             state = dismissState,

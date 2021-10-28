@@ -89,8 +89,8 @@ class MainActivity : AppCompatActivity() {
                     bottomBar = {
                         AnimatedVisibility(
                             visible = isBottomBarVisible,
-                            enter = fadeIn() + expandVertically(Alignment.Top),
-                            exit = fadeOut() + shrinkVertically(Alignment.Top)
+                            enter = fadeIn() + expandVertically(expandFrom = Alignment.Top),
+                            exit = fadeOut() + shrinkVertically(shrinkTowards = Alignment.Top)
                         ) {
                             BottomNavigation(
                                 modifier = Modifier.navigationBarsHeight(ACTION_BAR_SIZE)

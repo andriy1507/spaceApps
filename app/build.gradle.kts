@@ -120,7 +120,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
 //    Accompanist
-    val accompanistVersion = "0.20.0"
+    val accompanistVersion = "0.21.0-beta"
     implementation("com.google.accompanist:accompanist-drawablepainter:$accompanistVersion")
     implementation("com.google.accompanist:accompanist-insets:$accompanistVersion")
     implementation("com.google.accompanist:accompanist-navigation-material:$accompanistVersion")
@@ -156,21 +156,22 @@ dependencies {
 //    Google play services
     implementation("com.google.android.gms:play-services-location:18.0.0")
     implementation("com.google.android.gms:play-services-auth:19.2.0")
-    implementation("com.google.android.gms:play-services-maps:17.0.1")
+    implementation("com.google.android.gms:play-services-maps:18.0.0")
     implementation("com.google.maps.android:maps-ktx:3.2.0")
     implementation("com.google.maps.android:maps-utils-ktx:3.2.0")
 //    AndroidX
-    implementation("androidx.core:core-ktx:1.7.0-rc01")
-    implementation("androidx.appcompat:appcompat:1.4.0-beta01")
-    implementation("androidx.activity:activity-ktx:1.3.1")
-    implementation("androidx.activity:activity-compose:1.3.1")
+    val lifecycleVersion = "2.4.0"
+    val activityVersion = "1.4.0"
+    implementation("androidx.core:core-ktx:1.7.0")
+    implementation("androidx.appcompat:appcompat:1.4.0-rc01")
+    implementation("androidx.activity:activity-ktx:$activityVersion")
+    implementation("androidx.activity:activity-compose:$activityVersion")
     implementation("androidx.startup:startup-runtime:1.1.0")
     implementation("androidx.browser:browser:1.3.0")
-    implementation("androidx.fragment:fragment-ktx:1.3.6")
     implementation("androidx.core:core-splashscreen:1.0.0-alpha02")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0-rc01")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.4.0-rc01")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0-rc01")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
 
 //    Paging
     val pagingVersion = "3.0.1"
@@ -191,7 +192,7 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended:$composeVersion")
     implementation("androidx.compose.foundation:foundation:$composeVersion")
     implementation("androidx.compose.ui:ui-tooling:$composeVersion")
-    implementation("androidx.navigation:navigation-compose:2.4.0-alpha10")
+    implementation("androidx.navigation:navigation-compose:2.4.0-beta01")
     runtimeOnly("androidx.compose.animation:animation:$composeVersion")
 //    Dagger-Hilt
     val daggerVersion = "2.39.1"
@@ -278,7 +279,7 @@ dependencies {
 //    Coroutines test
     androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
 //    Venom
-    val venomVersion = "0.3.1"
+    val venomVersion = "0.4.1"
     debugImplementation("com.github.YarikSOffice.Venom:venom:$venomVersion")
     releaseImplementation("com.github.YarikSOffice.Venom:venom-no-op:$venomVersion")
 
