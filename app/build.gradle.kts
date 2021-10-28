@@ -211,7 +211,7 @@ dependencies {
     implementation("com.google.firebase:firebase-installations")
     implementation("com.google.firebase:firebase-dynamic-links-ktx")
 //    Room database
-    val roomVersion = "2.4.0-alpha04"
+    val roomVersion = "2.4.0-beta01"
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
     implementation("androidx.room:room-paging:$roomVersion")
