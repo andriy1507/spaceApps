@@ -7,7 +7,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.os.BuildCompat
 import com.google.accompanist.insets.ProvideWindowInsets
 
-
 @Composable
 fun SpaceAppsMaterial3Theme(
     isDarkTheme: Boolean = isSystemInDarkTheme(),
@@ -16,11 +15,11 @@ fun SpaceAppsMaterial3Theme(
     typography: Typography = RubikTypography,
     content: @Composable () -> Unit
 ) {
-    val context = LocalContext.current
-    val colorScheme = if (BuildCompat.isAtLeastS()) {
-        if (isDarkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-    } else {
-        if (isDarkTheme) darkColorScheme else lightColorScheme
+    val colorScheme = when {
+        BuildCompat.isAtLeastS() && isDarkTheme -> dynamicDarkColorScheme(LocalContext.current)
+        BuildCompat.isAtLeastS() && !isDarkTheme -> dynamicLightColorScheme(LocalContext.current)
+        isDarkTheme -> darkColorScheme
+        else -> lightColorScheme
     }
     MaterialTheme(
         colorScheme = colorScheme,
