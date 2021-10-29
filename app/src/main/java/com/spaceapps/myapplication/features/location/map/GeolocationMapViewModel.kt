@@ -3,7 +3,6 @@ package com.spaceapps.myapplication.features.location.map
 import android.annotation.SuppressLint
 import android.location.Location
 import android.os.Looper
-import androidx.annotation.RequiresPermission
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -25,7 +24,6 @@ import com.spaceapps.myapplication.utils.getStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -55,8 +53,8 @@ class GeolocationMapViewModel @Inject constructor(
     val coordSystem = dataStoreManager.observeCoordSystem()
         .stateIn(viewModelScope, SharingStarted.Lazily, SYSTEM_GEO)
 
-    @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION)
-    private fun trackLocation() {
+    @SuppressLint("MissingPermission")
+    fun trackLocation() {
         val request = LocationRequest.create().apply {
             fastestInterval = 1500
             interval = 3000
@@ -109,13 +107,5 @@ class GeolocationMapViewModel @Inject constructor(
 
     fun addLocation(location: Location?) = viewModelScope.launch {
         _events.emit(GeolocationMapEvents.ShowSnackBar(R.string.not_implemented_yet))
-    }
-
-    @SuppressLint("MissingPermission")
-    fun onPermissionsResult(granted: Boolean) {
-        when (granted) {
-            true -> trackLocation()
-            false -> Timber.e("PermissionsNotGranted")
-        }
     }
 }

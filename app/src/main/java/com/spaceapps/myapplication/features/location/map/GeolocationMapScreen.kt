@@ -1,10 +1,6 @@
 package com.spaceapps.myapplication.features.location.map
 
-import android.Manifest.permission.ACCESS_COARSE_LOCATION
-import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.location.Location
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
@@ -25,10 +21,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.statusBarsPadding
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionRequired
+import com.google.accompanist.permissions.rememberPermissionState
 import com.spaceapps.myapplication.R
 import com.spaceapps.myapplication.app.*
 import com.spaceapps.myapplication.ui.*
@@ -38,13 +38,15 @@ import gov.nasa.worldwind.geom.coords.UTMCoord
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
+@OptIn(
+    ExperimentalMaterialApi::class,
+    ExperimentalAnimationApi::class,
+    ExperimentalPermissionsApi::class
+)
 @Composable
 fun GeolocationMapScreen(viewModel: GeolocationMapViewModel) {
-    val locationRequest = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestMultiplePermissions(),
-        onResult = { permissions -> viewModel.onPermissionsResult(permissions.all { it.value }) }
-    )
+    val locationPermissionState =
+        rememberPermissionState(android.Manifest.permission.ACCESS_FINE_LOCATION)
     val lifecycleOwner = LocalLifecycleOwner.current
     val events = remember(viewModel.events, lifecycleOwner) {
         viewModel.events.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.RESUMED)
@@ -58,76 +60,102 @@ fun GeolocationMapScreen(viewModel: GeolocationMapViewModel) {
     val coordSystem by viewModel.coordSystem.collectAsState()
     val scope = rememberCoroutineScope()
     LaunchedEffect(Unit) {
-        locationRequest.launch(arrayOf(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION))
         events.collect { event ->
             when (event) {
                 is GeolocationMapEvents.ShowSnackBar ->
-                    scaffoldState.snackbarHostState
-                        .showSnackbar(context.getString(event.messageId))
+                    scaffoldState.snackbarHostState.showSnackbar(context.getString(event.messageId))
                 else -> Unit
             }
         }
     }
-    BottomSheetScaffold(
-        sheetContent = {
-            BottomSheetContent(
-                location = location,
-                degreesFormat = degreesFormat,
-                coordSystem = coordSystem
+    PermissionRequired(
+        permissionState = locationPermissionState,
+        permissionNotGrantedContent = {
+            AlertDialog(
+                onDismissRequest = locationPermissionState::launchPermissionRequest,
+                confirmButton = {
+                    TextButton(onClick = locationPermissionState::launchPermissionRequest) {
+                        Text(text = stringResource(id = android.R.string.ok))
+                    }
+                },
+                title = { Text(text = stringResource(R.string.access_to_location)) },
+                text = { Text(text = stringResource(R.string.location_permission_rationale_message)) },
+                properties = DialogProperties(
+                    dismissOnBackPress = false,
+                    dismissOnClickOutside = false
+                )
             )
         },
-        scaffoldState = scaffoldState,
-        floatingActionButton = {
-            MapMultiActionFab(
-                isLocationVisible = isFocusMode,
-                onFocusClick = viewModel::onFocusClick,
-                onListClick = viewModel::goLocationsList,
-                onAddClick = { viewModel.addLocation(location) }
-            )
-        },
-        content = {
-            Box(Modifier.fillMaxSize()) {
-                GoogleMap(
-                    modifier = Modifier.fillMaxSize(),
-                    onMapLoaded = { map ->
-                        map.setOnCameraMoveStartedListener(viewModel::onCameraMoved)
-                        scope.launch {
-                            events.collect {
-                                when (it) {
-                                    is GeolocationMapEvents.AddMarker -> {
-                                        map.clear()
-                                        map.addMarker(it.options)
+        permissionNotAvailableContent = {
+            Box(modifier = Modifier.fillMaxSize()) {
+                Text(modifier = Modifier.align(Alignment.Center), text = stringResource(R.string.location_not_available))
+            }
+        }
+    ) {
+        LaunchedEffect(Unit) {
+            viewModel.trackLocation()
+        }
+        BottomSheetScaffold(
+            sheetContent = {
+                BottomSheetContent(
+                    location = location,
+                    degreesFormat = degreesFormat,
+                    coordSystem = coordSystem
+                )
+            },
+            scaffoldState = scaffoldState,
+            floatingActionButton = {
+                MapMultiActionFab(
+                    isLocationVisible = isFocusMode,
+                    onFocusClick = viewModel::onFocusClick,
+                    onListClick = viewModel::goLocationsList,
+                    onAddClick = { viewModel.addLocation(location) }
+                )
+            },
+            content = {
+                Box(Modifier.fillMaxSize()) {
+                    GoogleMap(
+                        modifier = Modifier.fillMaxSize(),
+                        onMapLoaded = { map ->
+                            map.setOnCameraMoveStartedListener(viewModel::onCameraMoved)
+                            scope.launch {
+                                events.collect {
+                                    when (it) {
+                                        is GeolocationMapEvents.AddMarker -> {
+                                            map.clear()
+                                            map.addMarker(it.options)
+                                        }
+                                        is GeolocationMapEvents.UpdateCamera -> map.animateCamera(it.update)
+                                        else -> Unit
                                     }
-                                    is GeolocationMapEvents.UpdateCamera -> map.animateCamera(it.update)
-                                    else -> Unit
                                 }
                             }
                         }
-                    }
-                )
-                Button(
-                    modifier = Modifier
-                        .statusBarsPadding()
-                        .padding(SPACING_16)
-                        .size(SPACING_48)
-                        .align(Alignment.TopEnd),
-                    onClick = viewModel::goToSettings,
-                    contentPadding = PaddingValues(SPACING_12),
-                    shape = CircleShape
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Settings,
-                        contentDescription = null
                     )
+                    Button(
+                        modifier = Modifier
+                            .statusBarsPadding()
+                            .padding(SPACING_16)
+                            .size(SPACING_48)
+                            .align(Alignment.TopEnd),
+                        onClick = viewModel::goToSettings,
+                        contentPadding = PaddingValues(SPACING_12),
+                        shape = CircleShape
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Settings,
+                            contentDescription = null
+                        )
+                    }
                 }
-            }
-        },
-        sheetPeekHeight = SPACING_64,
-        sheetShape = MaterialTheme.shapes.large.copy(
-            bottomEnd = CornerSize(SPACING_0),
-            bottomStart = CornerSize(SPACING_0)
+            },
+            sheetPeekHeight = SPACING_64,
+            sheetShape = MaterialTheme.shapes.large.copy(
+                bottomEnd = CornerSize(SPACING_0),
+                bottomStart = CornerSize(SPACING_0)
+            )
         )
-    )
+    }
 }
 
 @OptIn(ExperimentalAnimationApi::class)
