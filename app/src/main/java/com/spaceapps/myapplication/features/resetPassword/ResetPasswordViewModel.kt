@@ -4,12 +4,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.spaceapps.myapplication.R
-import com.spaceapps.myapplication.app.models.InputWrapper
-import com.spaceapps.myapplication.app.repositories.auth.AuthRepository
-import com.spaceapps.myapplication.app.repositories.auth.results.ResetPasswordResult
-import com.spaceapps.myapplication.app.repositories.auth.results.VerifyResetCodeResult
+import com.spaceapps.myapplication.core.models.InputWrapper
+import com.spaceapps.myapplication.core.repositories.auth.AuthRepository
+import com.spaceapps.myapplication.core.repositories.auth.results.ResetPasswordResult
+import com.spaceapps.myapplication.core.repositories.auth.results.VerifyResetCodeResult
 import com.spaceapps.myapplication.utils.getStateFlow
-import com.spaceapps.myapplication.utils.isPassword
+import com.spaceapps.myapplication.core.utils.isPassword
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow

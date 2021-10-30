@@ -3,6 +3,7 @@ package com.spaceapps.myapplication.app
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import com.spaceapps.myapplication.core.DEEP_LINK_URI
 
 sealed class Screens(val route: String) {
     object Auth : Screens("auth")

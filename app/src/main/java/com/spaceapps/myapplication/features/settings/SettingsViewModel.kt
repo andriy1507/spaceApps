@@ -2,10 +2,10 @@ package com.spaceapps.myapplication.features.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.spaceapps.myapplication.app.DEGREES_DMS
-import com.spaceapps.myapplication.app.SYSTEM_GEO
-import com.spaceapps.myapplication.app.local.DataStoreManager
-import com.spaceapps.myapplication.utils.DispatchersProvider
+import com.spaceapps.myapplication.core.DEGREES_DMS
+import com.spaceapps.myapplication.core.SYSTEM_GEO
+import com.spaceapps.myapplication.core.local.DataStoreManager
+import com.spaceapps.myapplication.core.utils.DispatchersProvider
 import com.spaceapps.myapplication.utils.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
