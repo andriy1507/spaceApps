@@ -28,7 +28,7 @@ import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import com.spaceapps.myapplication.app.models.remote.notifications.NotificationBodyItem
+import com.spaceapps.myapplication.core.models.remote.notifications.NotificationBodyItem
 import com.spaceapps.myapplication.ui.SPACING_128
 import com.spaceapps.myapplication.ui.SPACING_16
 import com.spaceapps.myapplication.ui.SPACING_8

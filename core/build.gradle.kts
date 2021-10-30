@@ -2,7 +2,10 @@ plugins {
     id("com.android.library")
     kotlin("android")
     kotlin("kapt")
+    id("kotlin-parcelize")
     id("dagger.hilt.android.plugin")
+    id("org.jlleitschuh.gradle.ktlint") version "10.1.0"
+    id("io.gitlab.arturbosch.detekt") version "1.18.1"
 }
 
 android {
@@ -13,6 +16,15 @@ android {
         targetSdk = 31
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += mapOf(
+                    "room.schemaLocation" to "$projectDir/schemas",
+                    "room.incremental" to "true",
+                    "room.expandProjection" to "true"
+                )
+            }
+        }
     }
     buildTypes {
         release {
@@ -49,6 +61,23 @@ android {
     }
 }
 
+configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
+    verbose.set(true)
+    android.set(true)
+    outputToConsole.set(true)
+    outputColorName.set("RED")
+    ignoreFailures.set(false)
+    enableExperimentalRules.set(false)
+    disabledRules.set(setOf("no-wildcard-imports", "max-line-length", "import-ordering"))
+    filter {
+        exclude("**/generated/**")
+        include("**/kotlin/**")
+    }
+}
+detekt {
+    config = files("$rootDir/.detekt/config.yml")
+}
+
 dependencies {
     //    Kotlin
     implementation(Jetbrains.Kotlin.StdLib)
@@ -56,4 +85,39 @@ dependencies {
     // Dagger-Hilt
     implementation(Google.Dagger.HiltAndroid)
     kapt(Google.Dagger.HiltAndroidCompiler)
+    //    Retrofit
+    implementation(SquareUp.Retrofit.Retrofit)
+    implementation(SquareUp.Retrofit.MoshiConverter)
+    //    OkHttp client
+    implementation(platform(SquareUp.OkHttp.Bom))
+    implementation(SquareUp.OkHttp.OkHttp)
+    implementation(SquareUp.OkHttp.LoggingInterceptor)
+    //    Timber logging
+    implementation(Timber.Timber)
+    //    Room database
+    implementation(AndroidX.Room.Runtime)
+    implementation(AndroidX.Room.Ktx)
+    implementation(AndroidX.Room.Paging)
+    kapt(AndroidX.Room.Compiler)
+    //    Datastore
+    implementation(AndroidX.DataStore.DataStore)
+    implementation(AndroidX.DataStore.Preferences)
+    implementation(Google.ProtoBuf.JavaLite)
+    //    SignalR
+    implementation(Microsoft.SignalR.SignalR)
+    //    Moshi
+    implementation(SquareUp.Moshi.Moshi)
+    kapt(SquareUp.Moshi.CodeGen)
+    //    Paging
+    implementation(AndroidX.Paging.Runtime)
+    //    Coroutines
+    implementation(Jetbrains.KotlinX.Coroutines.Core)
+    implementation(Jetbrains.KotlinX.Coroutines.PlayServices)
+    implementation(Jetbrains.KotlinX.Coroutines.Rx2)
+    //    Firebase
+    implementation(platform(Google.Firebase.Bom))
+    implementation(Google.Firebase.Messaging)
+    implementation(Google.Firebase.Installations)
+    //    Google play services
+    implementation(Google.Android.PlayServices.Location)
 }

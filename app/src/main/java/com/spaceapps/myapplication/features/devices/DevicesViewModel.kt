@@ -2,7 +2,7 @@ package com.spaceapps.myapplication.features.devices
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.spaceapps.myapplication.app.repositories.devices.DevicesRepository
+import com.spaceapps.myapplication.core.repositories.devices.DevicesRepository
 import com.spaceapps.myapplication.utils.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow

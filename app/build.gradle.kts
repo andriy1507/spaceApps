@@ -23,26 +23,10 @@ android {
         targetSdk = 31
         versionCode = 1
         versionName = "1.0"
-        testInstrumentationRunner = "com.spaceapps.myapplication.runner.SpaceAppsHiltRunner"
-        testInstrumentationRunnerArguments += mapOf("clearPackageData" to "true")
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments += mapOf(
-                    "room.schemaLocation" to "$projectDir/schemas",
-                    "room.incremental" to "true",
-                    "room.expandProjection" to "true"
-                )
-            }
-        }
     }
     buildTypes {
         release {
             isMinifyEnabled = true
-            buildConfigField(
-                "String",
-                "SERVER_URL",
-                "\"https://develop-space-apps-backend.herokuapp.com\""
-            )
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -50,11 +34,6 @@ android {
         }
         debug {
             isMinifyEnabled = false
-            buildConfigField(
-                "String",
-                "SERVER_URL",
-                "\"https://develop-space-apps-backend.herokuapp.com\""
-            )
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"

@@ -1,5 +1,5 @@
-const val KotlinVersion = "1.5.30"
-const val ComposeVersion = "1.0.3"
+const val KotlinVersion = "1.5.31"
+const val ComposeVersion = "1.1.0-beta01"
 
 object AndroidX {
     object Wear {
@@ -23,6 +23,7 @@ object AndroidX {
         const val UiTooling = "androidx.compose.ui:ui-tooling:$ComposeVersion"
         const val Ui = "androidx.compose.ui:ui:$ComposeVersion"
         const val LiveData = "androidx.compose.runtime:runtime-livedata:$ComposeVersion"
+        const val Runtime = "androidx.compose.runtime:runtime:$ComposeVersion"
         const val Material = "androidx.compose.material:material:$ComposeVersion"
         const val Material3 = "androidx.compose.material3:material3:1.0.0-alpha01"
         const val Icons = "androidx.compose.material:material-icons-extended:$ComposeVersion"
@@ -147,8 +148,8 @@ object Google {
     }
 
     object Firebase {
-        const val CrashlyticsGradlePlugin = "com.google.firebase:firebase-crashlytics-gradle:2.7.1"
-        const val Bom = "com.google.firebase:firebase-bom:28.4.2"
+        const val CrashlyticsGradlePlugin = "com.google.firebase:firebase-crashlytics-gradle:2.8.0"
+        const val Bom = "com.google.firebase:firebase-bom:29.0.0"
         const val Crashlytics = "com.google.firebase:firebase-crashlytics-ktx"
         const val Analytics = "com.google.firebase:firebase-analytics-ktx"
         const val Messaging = "com.google.firebase:firebase-messaging-ktx"
@@ -209,6 +210,7 @@ object Jetbrains {
                 "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
             const val PlayServices =
                 "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$coroutinesVersion"
+            const val Rx2 = "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:$coroutinesVersion"
         }
     }
 }
