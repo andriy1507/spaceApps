@@ -58,4 +58,7 @@
     <string name="devices">Devices</string>
     <string name="reset_password">Reset password</string>
     <string name="map_id" translatable="false">546cb7945ddfd227</string>
+    <string name="location_permission_rationale_message">Application needs access to your location to work properly. Please grant permission.</string>
+    <string name="access_to_location">Access to location</string>
+    <string name="location_not_available">Location not available</string>
 </resources>
