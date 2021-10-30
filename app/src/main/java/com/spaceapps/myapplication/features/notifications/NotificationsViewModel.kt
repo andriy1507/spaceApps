@@ -3,7 +3,7 @@ package com.spaceapps.myapplication.features.notifications
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.spaceapps.myapplication.app.ProfileGraph
-import com.spaceapps.myapplication.app.repositories.notifications.NotificationsRepository
+import com.spaceapps.myapplication.core.repositories.notifications.NotificationsRepository
 import com.spaceapps.myapplication.utils.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow

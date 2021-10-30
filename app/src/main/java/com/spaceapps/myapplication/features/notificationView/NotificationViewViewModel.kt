@@ -4,9 +4,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.spaceapps.myapplication.R
-import com.spaceapps.myapplication.app.models.remote.notifications.NotificationFullResponse
-import com.spaceapps.myapplication.app.repositories.notifications.NotificationsRepository
-import com.spaceapps.myapplication.app.repositories.notifications.results.GetNotificationResult
+import com.spaceapps.myapplication.core.models.remote.notifications.NotificationFullResponse
+import com.spaceapps.myapplication.core.repositories.notifications.NotificationsRepository
+import com.spaceapps.myapplication.core.repositories.notifications.results.GetNotificationResult
 import com.spaceapps.myapplication.utils.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow

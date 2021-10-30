@@ -15,6 +15,7 @@ import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.spaceapps.myapplication.R
 import com.spaceapps.myapplication.app.*
+import com.spaceapps.myapplication.core.*
 import com.spaceapps.myapplication.ui.SPACING_16
 import com.spaceapps.myapplication.ui.SPACING_4
 import com.spaceapps.myapplication.ui.SPACING_8

@@ -37,11 +37,11 @@ import com.spaceapps.myapplication.app.AboutGraph
 import com.spaceapps.myapplication.app.GeolocationGraph
 import com.spaceapps.myapplication.app.ProfileGraph
 import com.spaceapps.myapplication.app.Screens
-import com.spaceapps.myapplication.app.local.DataStoreManager
-import com.spaceapps.myapplication.app.local.SpaceAppsDatabase
+import com.spaceapps.myapplication.core.local.DataStoreManager
+import com.spaceapps.myapplication.core.local.SpaceAppsDatabase
 import com.spaceapps.myapplication.ui.ACTION_BAR_SIZE
 import com.spaceapps.myapplication.ui.SpaceAppsTheme
-import com.spaceapps.myapplication.utils.AuthDispatcher
+import com.spaceapps.myapplication.core.utils.AuthDispatcher
 import com.spaceapps.myapplication.utils.NavigationCommand
 import com.spaceapps.myapplication.utils.NavigationDispatcher
 import com.spaceapps.myapplication.utils.navigateToRootDestination

@@ -31,6 +31,7 @@ import com.google.accompanist.permissions.PermissionRequired
 import com.google.accompanist.permissions.rememberPermissionState
 import com.spaceapps.myapplication.R
 import com.spaceapps.myapplication.app.*
+import com.spaceapps.myapplication.core.*
 import com.spaceapps.myapplication.ui.*
 import com.spaceapps.myapplication.ui.views.GoogleMap
 import gov.nasa.worldwind.geom.Angle

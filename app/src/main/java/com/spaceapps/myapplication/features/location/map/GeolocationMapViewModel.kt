@@ -14,11 +14,11 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.ktx.model.cameraPosition
 import com.google.maps.android.ktx.model.markerOptions
 import com.spaceapps.myapplication.R
-import com.spaceapps.myapplication.app.DEFAULT_MAP_ZOOM
-import com.spaceapps.myapplication.app.DEGREES_DMS
 import com.spaceapps.myapplication.app.GeolocationGraph
-import com.spaceapps.myapplication.app.SYSTEM_GEO
-import com.spaceapps.myapplication.app.local.DataStoreManager
+import com.spaceapps.myapplication.core.DEFAULT_MAP_ZOOM
+import com.spaceapps.myapplication.core.DEGREES_DMS
+import com.spaceapps.myapplication.core.SYSTEM_GEO
+import com.spaceapps.myapplication.core.local.DataStoreManager
 import com.spaceapps.myapplication.utils.NavigationDispatcher
 import com.spaceapps.myapplication.utils.getStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel

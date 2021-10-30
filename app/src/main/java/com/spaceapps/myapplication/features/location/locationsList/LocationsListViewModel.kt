@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
-import com.spaceapps.myapplication.app.repositories.locations.LocationsRepository
+import com.spaceapps.myapplication.core.repositories.locations.LocationsRepository
 import com.spaceapps.myapplication.utils.NavigationDispatcher
 import com.spaceapps.myapplication.utils.getStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel

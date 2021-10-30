@@ -2,8 +2,6 @@ import com.google.protobuf.gradle.generateProtoTasks
 import com.google.protobuf.gradle.protobuf
 import com.google.protobuf.gradle.protoc
 
-val kotlinVersion by extra("1.5.21")
-val composeVersion by extra("1.0.3")
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -25,26 +23,10 @@ android {
         targetSdk = 31
         versionCode = 1
         versionName = "1.0"
-        testInstrumentationRunner = "com.spaceapps.myapplication.runner.SpaceAppsHiltRunner"
-        testInstrumentationRunnerArguments += mapOf("clearPackageData" to "true")
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments += mapOf(
-                    "room.schemaLocation" to "$projectDir/schemas",
-                    "room.incremental" to "true",
-                    "room.expandProjection" to "true"
-                )
-            }
-        }
     }
     buildTypes {
         release {
             isMinifyEnabled = true
-            buildConfigField(
-                "String",
-                "SERVER_URL",
-                "\"https://develop-space-apps-backend.herokuapp.com\""
-            )
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -52,11 +34,6 @@ android {
         }
         debug {
             isMinifyEnabled = false
-            buildConfigField(
-                "String",
-                "SERVER_URL",
-                "\"https://develop-space-apps-backend.herokuapp.com\""
-            )
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -74,7 +51,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = composeVersion
+        kotlinCompilerExtensionVersion = ComposeVersion
     }
     lint {
         isAbortOnError = false
@@ -84,18 +61,7 @@ android {
     }
     packagingOptions {
         resources {
-            excludes += listOf(
-                "META-INF/DEPENDENCIES",
-                "META-INF/NOTICE",
-                "META-INF/LICENSE",
-                "META-INF/LICENSE.txt",
-                "META-INF/NOTICE.txt",
-                "META-INF/license.txt",
-                "META-INF/notice.txt",
-                "META-INF/ASL2.0",
-                "META-INF/LGPL2.1",
-                "META-INF/AL2.0"
-            )
+            excludes += listOf("/META-INF/{AL2.0,LGPL2.1}")
         }
     }
 }
@@ -117,175 +83,119 @@ detekt {
 }
 dependencies {
 //    Kotlin
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
+    implementation(Jetbrains.Kotlin.StdLib)
+    coreLibraryDesugaring(Android.Tools.Desugar)
+    implementation(project(":core"))
 //    Accompanist
-    val accompanistVersion = "0.21.0-beta"
-    implementation("com.google.accompanist:accompanist-drawablepainter:$accompanistVersion")
-    implementation("com.google.accompanist:accompanist-insets:$accompanistVersion")
-    implementation("com.google.accompanist:accompanist-navigation-material:$accompanistVersion")
-    implementation("com.google.accompanist:accompanist-navigation-animation:$accompanistVersion")
-    implementation("com.google.accompanist:accompanist-pager:$accompanistVersion")
-    implementation("com.google.accompanist:accompanist-pager-indicators:$accompanistVersion")
-    implementation("com.google.accompanist:accompanist-placeholder-material:$accompanistVersion")
-    implementation("com.google.accompanist:accompanist-swiperefresh:$accompanistVersion")
-    implementation("com.google.accompanist:accompanist-insets:$accompanistVersion")
-    implementation("com.google.accompanist:accompanist-systemuicontroller:$accompanistVersion")
-    implementation("com.google.accompanist:accompanist-permissions:$accompanistVersion")
+    implementation(Google.Accompanist.DrawablePainter)
+    implementation(Google.Accompanist.Insets)
+    implementation(Google.Accompanist.NavigationMaterial)
+    implementation(Google.Accompanist.NavigationAnimation)
+    implementation(Google.Accompanist.Pager)
+    implementation(Google.Accompanist.PagerIndicators)
+    implementation(Google.Accompanist.PlaceholderMaterial)
+    implementation(Google.Accompanist.SwipeRefresh)
+    implementation(Google.Accompanist.SystemUiController)
+    implementation(Google.Accompanist.Permissions)
 
 //    Coil
-    val coilVersion = "1.3.2"
-    implementation("io.coil-kt:coil:$coilVersion")
-    implementation("io.coil-kt:coil-compose:$coilVersion")
+    implementation(Coil.Coil)
+    implementation(Coil.Compose)
 //    Coroutines
-    val coroutinesVersion = "1.5.2"
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$coroutinesVersion")
+    implementation(Jetbrains.KotlinX.Coroutines.Core)
+    implementation(Jetbrains.KotlinX.Coroutines.Android)
+    implementation(Jetbrains.KotlinX.Coroutines.PlayServices)
 
 //    Retrofit
-    val retrofitVersion = "2.9.0"
-    implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
-    implementation("com.squareup.retrofit2:converter-moshi:$retrofitVersion")
+    implementation(SquareUp.Retrofit.Retrofit)
+    implementation(SquareUp.Retrofit.MoshiConverter)
 //    OkHttp client
-    implementation(platform("com.squareup.okhttp3:okhttp-bom:5.0.0-alpha.2"))
-    implementation("com.squareup.okhttp3:okhttp")
-    implementation("com.squareup.okhttp3:logging-interceptor")
+    implementation(platform(SquareUp.OkHttp.Bom))
+    implementation(SquareUp.OkHttp.OkHttp)
+    implementation(SquareUp.OkHttp.LoggingInterceptor)
 //    Timber logging
-    implementation("com.jakewharton.timber:timber:5.0.1")
+    implementation(Timber.Timber)
 //    Google play services
-    implementation("com.google.android.gms:play-services-location:18.0.0")
-    implementation("com.google.android.gms:play-services-auth:19.2.0")
-    implementation("com.google.android.gms:play-services-maps:18.0.0")
-    implementation("com.google.maps.android:maps-ktx:3.2.0")
-    implementation("com.google.maps.android:maps-utils-ktx:3.2.0")
+    implementation(Google.Android.PlayServices.Location)
+    implementation(Google.Android.PlayServices.Auth)
+    implementation(Google.Android.PlayServices.Maps)
+    implementation(Google.Maps.Maps)
+    implementation(Google.Maps.Utils)
 //    AndroidX
-    val lifecycleVersion = "2.4.0"
-    val activityVersion = "1.4.0"
-    implementation("androidx.core:core-ktx:1.7.0")
-    implementation("androidx.appcompat:appcompat:1.4.0-rc01")
-    implementation("androidx.activity:activity-ktx:$activityVersion")
-    implementation("androidx.activity:activity-compose:$activityVersion")
-    implementation("androidx.startup:startup-runtime:1.1.0")
-    implementation("androidx.browser:browser:1.3.0")
-    implementation("androidx.core:core-splashscreen:1.0.0-alpha02")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycleVersion")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
+    implementation(AndroidX.Core.Ktx)
+    implementation(AndroidX.AppCompat.AppCompat)
+    implementation(AndroidX.Activity.Ktx)
+    implementation(AndroidX.Activity.Compose)
+    implementation(AndroidX.StartUp.Runtime)
+    implementation(AndroidX.Browser.Browser)
+    implementation(AndroidX.Core.SplashScreen)
+    implementation(AndroidX.Lifecycle.ViewModelCompose)
+    implementation(AndroidX.Lifecycle.LiveData)
+    implementation(AndroidX.Lifecycle.Runtime)
 
 //    Paging
-    val pagingVersion = "3.0.1"
-    val pagingComposeVersion = "1.0.0-alpha13"
-    implementation("androidx.paging:paging-runtime-ktx:$pagingVersion")
-    implementation("androidx.paging:paging-compose:$pagingComposeVersion")
+    implementation(AndroidX.Paging.Runtime)
+    implementation(AndroidX.Paging.Compose)
 //    Moshi
-    val moshiVersion = "1.12.0"
-    implementation("com.squareup.moshi:moshi:$moshiVersion")
-    kapt("com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion")
+    implementation(SquareUp.Moshi.Moshi)
+    kapt(SquareUp.Moshi.CodeGen)
 //    WorkManager
-    val workVersion = "2.7.0"
-    implementation("androidx.work:work-runtime-ktx:$workVersion")
+    implementation(AndroidX.Work.Runtime)
 //    Jetpack Compose
-    implementation("androidx.compose.ui:ui:$composeVersion")
-    implementation("androidx.compose.runtime:runtime-livedata:$composeVersion")
-    implementation("androidx.compose.material:material:$composeVersion")
-    implementation("androidx.compose.material3:material3:1.0.0-alpha01")
-    implementation("androidx.compose.material:material-icons-extended:$composeVersion")
-    implementation("androidx.compose.foundation:foundation:$composeVersion")
-    implementation("androidx.compose.ui:ui-tooling:$composeVersion")
-    implementation("androidx.navigation:navigation-compose:2.4.0-beta01")
-    runtimeOnly("androidx.compose.animation:animation:$composeVersion")
+    implementation(AndroidX.Compose.Ui)
+    implementation(AndroidX.Compose.LiveData)
+    implementation(AndroidX.Compose.Material)
+    implementation(AndroidX.Compose.Material3)
+    implementation(AndroidX.Compose.Icons)
+    implementation(AndroidX.Compose.Foundation)
+    implementation(AndroidX.Navigation.Compose)
+    runtimeOnly(AndroidX.Compose.Animation)
 //    Dagger-Hilt
-    val daggerVersion = "2.39.1"
-    implementation("com.google.dagger:hilt-android:$daggerVersion")
-    kapt("com.google.dagger:hilt-android-compiler:$daggerVersion")
-    val hiltVersion = "1.0.0"
-    implementation("androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03")
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0-alpha03")
-    implementation("androidx.hilt:hilt-work:$hiltVersion")
-    kapt("androidx.hilt:hilt-compiler:$hiltVersion")
+    implementation(Google.Dagger.HiltAndroid)
+    kapt(Google.Dagger.HiltAndroidCompiler)
+
+    implementation(AndroidX.Hilt.ViewModel)
+    implementation(AndroidX.Hilt.NavigationCompose)
+    implementation(AndroidX.Hilt.Work)
+    kapt(AndroidX.Hilt.Compiler)
 //    Firebase
-    implementation(platform("com.google.firebase:firebase-bom:28.4.2"))
-    implementation("com.google.firebase:firebase-crashlytics-ktx")
-    implementation("com.google.firebase:firebase-analytics-ktx")
-    implementation("com.google.firebase:firebase-messaging-ktx")
-    implementation("com.google.firebase:firebase-installations")
-    implementation("com.google.firebase:firebase-dynamic-links-ktx")
+    implementation(platform(Google.Firebase.Bom))
+    implementation(Google.Firebase.Crashlytics)
+    implementation(Google.Firebase.Analytics)
+    implementation(Google.Firebase.Messaging)
+    implementation(Google.Firebase.Installations)
+    implementation(Google.Firebase.DynamicLinks)
 //    Room database
-    val roomVersion = "2.4.0-beta01"
-    implementation("androidx.room:room-runtime:$roomVersion")
-    implementation("androidx.room:room-ktx:$roomVersion")
-    implementation("androidx.room:room-paging:$roomVersion")
-    kapt("androidx.room:room-compiler:$roomVersion")
+    implementation(AndroidX.Room.Runtime)
+    implementation(AndroidX.Room.Ktx)
+    implementation(AndroidX.Room.Paging)
+    kapt(AndroidX.Room.Compiler)
 
 //    Datastore
-    val datastoreVersion = "1.0.0"
-    implementation("androidx.datastore:datastore:$datastoreVersion")
-    implementation("androidx.datastore:datastore-preferences:$datastoreVersion")
-    implementation("com.google.protobuf:protobuf-javalite:3.11.1")
+    implementation(AndroidX.DataStore.DataStore)
+    implementation(AndroidX.DataStore.Preferences)
+    implementation(Google.ProtoBuf.JavaLite)
 
 //    Facebook SDK
-    implementation("com.facebook.android:facebook-android-sdk:12.0.1")
+    implementation(Facebook.Android.Sdk)
 
 //    WW-geo
-    implementation("com.rgi-corp:ww-geo-coords:1.0")
+    implementation(RgiCorp.GeoCords)
 
 //    SignalR
-    implementation("com.microsoft.signalr:signalr:5.0.11")
-    implementation("org.slf4j:slf4j-jdk14:1.7.25")
-
+    implementation(Microsoft.SignalR.SignalR)
 //    CameraX
-    val cameraxVersion = "1.0.2"
-    implementation("androidx.camera:camera-core:$cameraxVersion")
-    implementation("androidx.camera:camera-camera2:$cameraxVersion")
-    implementation("androidx.camera:camera-lifecycle:$cameraxVersion")
-    implementation("androidx.camera:camera-view:1.0.0-alpha30")
+    implementation(AndroidX.CameraX.Core)
+    implementation(AndroidX.CameraX.Camera2)
+    implementation(AndroidX.CameraX.Lifecycle)
+    implementation(AndroidX.CameraX.View)
 
-//    Testing
-    testImplementation("junit:junit:4.13.2")
-    testImplementation("com.google.truth:truth:1.1.3")
-
-//    Assertions
-    testImplementation("androidx.test.ext:junit:1.1.3")
-    testImplementation("androidx.test.ext:truth:1.4.0")
-    testImplementation("com.google.truth:truth:1.1.3")
-
-//   AndroidJUnitRunner and JUnit Rules
-    testImplementation("androidx.test:runner:1.4.0")
-    testImplementation("androidx.test:rules:1.4.0")
-//    OkHttp MockWebServer
-    testImplementation("com.squareup.okhttp3:mockwebserver")
-//    Mockito
-    val mockitoVersion = "4.0.0"
-    testImplementation("org.mockito:mockito-core:$mockitoVersion")
-    testImplementation("org.mockito:mockito-inline:$mockitoVersion")
-//    Coroutines test
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
-//    Instrumentation testing
-    androidTestImplementation("androidx.test:core:1.4.0")
-
-//   AndroidJUnitRunner and JUnit Rules
-    androidTestImplementation("androidx.test:runner:1.4.0")
-    androidTestImplementation("androidx.test:rules:1.4.0")
-    androidTestUtil("androidx.test:orchestrator:1.4.0")
-
-//    Hilt testing
-    androidTestImplementation("com.google.dagger:hilt-android-testing:$daggerVersion")
-    kaptAndroidTest("com.google.dagger:hilt-android-compiler:$daggerVersion")
-//   Assertions
-    androidTestImplementation("androidx.test.ext:junit:1.1.3")
-    androidTestImplementation("androidx.test.ext:truth:1.4.0")
-    androidTestImplementation("com.google.truth:truth:1.1.3")
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:$composeVersion")
-//    Coroutines test
-    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
 //    Venom
-    val venomVersion = "0.4.1"
-    debugImplementation("com.github.YarikSOffice.Venom:venom:$venomVersion")
-    releaseImplementation("com.github.YarikSOffice.Venom:venom-no-op:$venomVersion")
+    debugImplementation(Venom.Debug)
+    releaseImplementation(Venom.NoOps)
 
-    debugImplementation("androidx.compose.ui:ui-tooling:$composeVersion")
-    debugImplementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
+    debugImplementation(AndroidX.Compose.UiTooling)
+    debugImplementation(Jetbrains.Kotlin.Reflect)
 }
 
 // Generates the java Protobuf-lite code for the Protobufs in this project.
