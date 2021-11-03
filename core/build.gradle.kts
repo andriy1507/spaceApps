@@ -32,7 +32,7 @@ android {
             buildConfigField(
                 "String",
                 "SERVER_URL",
-                "\"https://develop-space-apps-backend.herokuapp.com\""
+                "\"http://spaceappsbackend-env.eba-aatwtqjz.eu-central-1.elasticbeanstalk.com\""
             )
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -44,7 +44,7 @@ android {
             buildConfigField(
                 "String",
                 "SERVER_URL",
-                "\"https://develop-space-apps-backend.herokuapp.com\""
+                "\"http://spaceappsbackend-env.eba-aatwtqjz.eu-central-1.elasticbeanstalk.com\""
             )
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),

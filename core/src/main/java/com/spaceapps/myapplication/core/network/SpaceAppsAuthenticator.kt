@@ -4,11 +4,10 @@ import com.spaceapps.myapplication.core.AUTH_HEADER
 import com.spaceapps.myapplication.core.AUTH_HEADER_PREFIX
 import com.spaceapps.myapplication.core.local.DataStoreManager
 import com.spaceapps.myapplication.core.models.remote.profile.Platform.*
-import com.spaceapps.myapplication.core.models.remote.auth.RefreshTokenRequest
 import com.spaceapps.myapplication.core.network.calls.AuthorizationCalls
 import com.spaceapps.myapplication.core.utils.AuthDispatcher
-import com.spaceapps.myapplication.core.utils.Success
 import com.spaceapps.myapplication.core.utils.Error
+import com.spaceapps.myapplication.core.utils.Success
 import com.spaceapps.myapplication.core.utils.request
 import dagger.Lazy
 import kotlinx.coroutines.runBlocking
@@ -50,8 +49,7 @@ class SpaceAppsAuthenticator @Inject constructor(
     private suspend fun getAccessToken(): String? {
         val refreshToken = dataStoreManager.getRefreshToken()
         refreshToken ?: return null
-        val request = RefreshTokenRequest(refreshToken = refreshToken)
-        return when (val response = request { authCalls.get().refreshToken(request = request) }) {
+        return when (val response = request { authCalls.get().refreshToken(refreshToken) }) {
             is Success -> {
                 dataStoreManager.storeTokens(response = response.data)
                 response.data.accessToken

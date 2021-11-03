@@ -3,12 +3,15 @@ package com.spaceapps.myapplication.core.repositories.auth
 import com.google.firebase.installations.FirebaseInstallations
 import com.google.firebase.messaging.FirebaseMessaging
 import com.spaceapps.myapplication.core.local.DataStoreManager
-import com.spaceapps.myapplication.core.models.remote.auth.*
+import com.spaceapps.myapplication.core.models.remote.auth.AuthRequest
+import com.spaceapps.myapplication.core.models.remote.auth.DeviceRequest
+import com.spaceapps.myapplication.core.models.remote.auth.ResetPasswordRequest
+import com.spaceapps.myapplication.core.models.remote.auth.SocialSignInRequest
 import com.spaceapps.myapplication.core.network.calls.AuthorizationCalls
 import com.spaceapps.myapplication.core.repositories.auth.results.*
 import com.spaceapps.myapplication.core.utils.DispatchersProvider
-import com.spaceapps.myapplication.core.utils.Success
 import com.spaceapps.myapplication.core.utils.Error
+import com.spaceapps.myapplication.core.utils.Success
 import com.spaceapps.myapplication.core.utils.request
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -107,7 +110,7 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun sendResetCode(email: String): SendResetCodeResult =
         withContext(dispatchersProvider.io) {
-            when (request { calls.sendResetCode(request = SendResetCodeRequest(email = email)) }) {
+            when (request { calls.sendResetCode(email = email) }) {
                 is Success -> SendResetCodeResult.Success
                 is Error -> SendResetCodeResult.Failure
             }
@@ -115,8 +118,7 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun verifyResetCode(email: String, code: String): VerifyResetCodeResult =
         withContext(dispatchersProvider.io) {
-            val request = VerifyCodeRequest(email = email, resetCode = code)
-            when (request { calls.verifyResetCode(request = request) }) {
+            when (request { calls.verifyResetCode(email = email, resetCode = code) }) {
                 is Success -> VerifyResetCodeResult.Success
                 is Error -> VerifyResetCodeResult.Failure
             }

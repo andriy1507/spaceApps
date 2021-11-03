@@ -17,9 +17,6 @@ interface AuthorizationCalls {
     @DELETE("/auth/log-out/{installationId}")
     suspend fun logOut(@Path("installationId") installationId: String)
 
-    @POST("/auth/refresh-token")
-    suspend fun refreshToken(@Body request: RefreshTokenRequest): AuthTokenResponse
-
     @POST("/auth/google-sign-in")
     suspend fun googleSignIn(@Body request: SocialSignInRequest): AuthTokenResponse
 
@@ -29,11 +26,14 @@ interface AuthorizationCalls {
     @POST("/auth/apple-sign-in")
     suspend fun appleSignIn(@Body request: SocialSignInRequest): AuthTokenResponse
 
-    @POST("/auth/send-reset-code")
-    suspend fun sendResetCode(@Body request: SendResetCodeRequest)
+    @GET("/auth/refresh-token/{refreshToken}")
+    suspend fun refreshToken(@Path("refreshToken") refreshToken: String): AuthTokenResponse
 
-    @POST("/auth/verify-reset-code")
-    suspend fun verifyResetCode(@Body request: VerifyCodeRequest)
+    @POST("/auth/send-reset-code/{email}")
+    suspend fun sendResetCode(@Path("email") email: String)
+
+    @GET("/auth/verify-reset-code/{email}/{resetCode}")
+    suspend fun verifyResetCode(@Path("email") email: String, @Path("resetCode") resetCode: String)
 
     @PUT("/auth/reset-password")
     suspend fun resetPassword(@Body request: ResetPasswordRequest)
