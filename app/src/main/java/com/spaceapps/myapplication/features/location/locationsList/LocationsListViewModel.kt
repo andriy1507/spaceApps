@@ -6,7 +6,7 @@ import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import com.spaceapps.myapplication.core.repositories.locations.LocationsRepository
 import com.spaceapps.myapplication.utils.NavigationDispatcher
-import com.spaceapps.myapplication.utils.getStateFlow
+import com.spaceapps.myapplication.core.utils.getStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.distinctUntilChanged

@@ -20,7 +20,7 @@ import com.spaceapps.myapplication.core.DEGREES_DMS
 import com.spaceapps.myapplication.core.SYSTEM_GEO
 import com.spaceapps.myapplication.core.local.DataStoreManager
 import com.spaceapps.myapplication.utils.NavigationDispatcher
-import com.spaceapps.myapplication.utils.getStateFlow
+import com.spaceapps.myapplication.core.utils.getStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch

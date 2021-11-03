@@ -1,49 +1,41 @@
 package com.spaceapps.myapplication.app.activity
 
 import android.os.Bundle
-import android.os.PersistableBundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.runtime.LaunchedEffect
 import androidx.wear.compose.material.ExperimentalWearMaterialApi
-import androidx.wear.compose.navigation.SwipeDismissableNavHost
-import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.spaceapps.myapplication.ui.SpaceAppsTheme
+import com.spaceapps.myapplication.utils.NavigationDispatcher
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import javax.inject.Inject
 
 @ExperimentalWearMaterialApi
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
+    @Inject
+    lateinit var navigationDispatcher: NavigationDispatcher
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         setContent {
-            SpaceAppsTheme {
-                val navController = rememberSwipeDismissableNavController()
-                SwipeDismissableNavHost(navController = navController, startDestination = "start") {
-                    composable("start") {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .background(Color.Red)
-                                .clickable { navController.navigate("second") }
-                        )
-                    }
-                    composable("second") {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .background(Color.Green)
-                        )
-                    }
-                }
+            val navController = rememberSwipeDismissableNavController()
+            LaunchedEffect(Unit) {
+                navigationDispatcher.emitter.collect { event -> event(navController) }
+            }
+            SpaceAppsTheme(darkTheme = true) {
+                PopulatedNavHost(
+                    navController = navController,
+                    startDestination = provideStartDestination()
+                )
             }
         }
+    }
+
+    private fun provideStartDestination(): String {
+        return Screen.Home.route
     }
 }

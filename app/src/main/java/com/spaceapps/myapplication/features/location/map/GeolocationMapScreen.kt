@@ -29,6 +29,7 @@ import com.google.accompanist.insets.statusBarsPadding
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionRequired
 import com.google.accompanist.permissions.rememberPermissionState
+import com.google.android.gms.maps.GoogleMap
 import com.spaceapps.myapplication.R
 import com.spaceapps.myapplication.app.*
 import com.spaceapps.myapplication.core.*
@@ -36,6 +37,8 @@ import com.spaceapps.myapplication.ui.*
 import com.spaceapps.myapplication.ui.views.GoogleMap
 import gov.nasa.worldwind.geom.Angle
 import gov.nasa.worldwind.geom.coords.UTMCoord
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -72,20 +75,7 @@ fun GeolocationMapScreen(viewModel: GeolocationMapViewModel) {
     PermissionRequired(
         permissionState = locationPermissionState,
         permissionNotGrantedContent = {
-            AlertDialog(
-                onDismissRequest = locationPermissionState::launchPermissionRequest,
-                confirmButton = {
-                    TextButton(onClick = locationPermissionState::launchPermissionRequest) {
-                        Text(text = stringResource(id = android.R.string.ok))
-                    }
-                },
-                title = { Text(text = stringResource(R.string.access_to_location)) },
-                text = { Text(text = stringResource(R.string.location_permission_rationale_message)) },
-                properties = DialogProperties(
-                    dismissOnBackPress = false,
-                    dismissOnClickOutside = false
-                )
-            )
+            PermissionRationaleDialog(onDismiss = locationPermissionState::launchPermissionRequest)
         },
         permissionNotAvailableContent = {
             Box(modifier = Modifier.fillMaxSize()) {
@@ -119,18 +109,7 @@ fun GeolocationMapScreen(viewModel: GeolocationMapViewModel) {
                         modifier = Modifier.fillMaxSize(),
                         onMapLoaded = { map ->
                             map.setOnCameraMoveStartedListener(viewModel::onCameraMoved)
-                            scope.launch {
-                                events.collect {
-                                    when (it) {
-                                        is GeolocationMapEvents.AddMarker -> {
-                                            map.clear()
-                                            map.addMarker(it.options)
-                                        }
-                                        is GeolocationMapEvents.UpdateCamera -> map.animateCamera(it.update)
-                                        else -> Unit
-                                    }
-                                }
-                            }
+                            observeMapEvents(map, events, scope)
                         }
                     )
                     Button(
@@ -157,6 +136,39 @@ fun GeolocationMapScreen(viewModel: GeolocationMapViewModel) {
             )
         )
     }
+}
+
+fun observeMapEvents(map: GoogleMap, events: Flow<GeolocationMapEvents>, scope: CoroutineScope) {
+    scope.launch {
+        events.collect {
+            when (it) {
+                is GeolocationMapEvents.AddMarker -> {
+                    map.clear()
+                    map.addMarker(it.options)
+                }
+                is GeolocationMapEvents.UpdateCamera -> map.animateCamera(it.update)
+                else -> Unit
+            }
+        }
+    }
+}
+
+@Composable
+fun PermissionRationaleDialog(onDismiss: OnClick) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        confirmButton = {
+            TextButton(onClick = onDismiss) {
+                Text(text = stringResource(id = android.R.string.ok))
+            }
+        },
+        title = { Text(text = stringResource(R.string.access_to_location)) },
+        text = { Text(text = stringResource(R.string.location_permission_rationale_message)) },
+        properties = DialogProperties(
+            dismissOnBackPress = false,
+            dismissOnClickOutside = false
+        )
+    )
 }
 
 @OptIn(ExperimentalAnimationApi::class)
