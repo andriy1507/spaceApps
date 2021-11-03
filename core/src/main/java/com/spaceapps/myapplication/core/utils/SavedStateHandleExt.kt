@@ -1,4 +1,4 @@
-package com.spaceapps.myapplication.utils
+package com.spaceapps.myapplication.core.utils
 
 import androidx.lifecycle.Observer
 import androidx.lifecycle.SavedStateHandle

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">spaceApps</string>
+    <string name="notifications">Notifications</string>
 </resources>

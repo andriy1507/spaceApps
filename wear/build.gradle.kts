@@ -85,10 +85,11 @@ dependencies {
     implementation(Google.Android.PlayServices.Wearable)
     //    Compose
     implementation(AndroidX.Wear.Compose.Material)
-    implementation(AndroidX.Wear.Compose.Foundation)
     implementation(AndroidX.Wear.Compose.Navigation)
+    implementation(AndroidX.Wear.Compose.Foundation)
     implementation(AndroidX.Compose.Foundation)
     implementation(AndroidX.Compose.Ui)
+    debugImplementation(AndroidX.Compose.UiTooling)
     implementation(AndroidX.Compose.Runtime)
     runtimeOnly(AndroidX.Compose.Animation)
 

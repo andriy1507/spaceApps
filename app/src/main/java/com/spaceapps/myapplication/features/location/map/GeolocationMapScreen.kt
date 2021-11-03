@@ -109,7 +109,7 @@ fun GeolocationMapScreen(viewModel: GeolocationMapViewModel) {
                         modifier = Modifier.fillMaxSize(),
                         onMapLoaded = { map ->
                             map.setOnCameraMoveStartedListener(viewModel::onCameraMoved)
-                            observeMapEvents(map, events,scope)
+                            observeMapEvents(map, events, scope)
                         }
                     )
                     Button(
