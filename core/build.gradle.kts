@@ -102,7 +102,6 @@ dependencies {
     //    Datastore
     implementation(AndroidX.DataStore.DataStore)
     implementation(AndroidX.DataStore.Preferences)
-    implementation(Google.ProtoBuf.JavaLite)
     //    SignalR
     implementation(Microsoft.SignalR.SignalR)
     //    Moshi

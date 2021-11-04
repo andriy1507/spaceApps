@@ -14,7 +14,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.ktx.model.cameraPosition
 import com.google.maps.android.ktx.model.markerOptions
 import com.spaceapps.myapplication.R
-import com.spaceapps.myapplication.app.GeolocationGraph
+import com.spaceapps.myapplication.app.Screens.*
 import com.spaceapps.myapplication.core.DEFAULT_MAP_ZOOM
 import com.spaceapps.myapplication.core.DEGREES_DMS
 import com.spaceapps.myapplication.core.SYSTEM_GEO
@@ -100,10 +100,10 @@ class GeolocationMapViewModel @Inject constructor(
     }
 
     fun goToSettings() =
-        navigationDispatcher.emit { it.navigate(GeolocationGraph.MapSettings.route) }
+        navigationDispatcher.emit { it.navigate(MapSettings.route) }
 
     fun goLocationsList() =
-        navigationDispatcher.emit { it.navigate(GeolocationGraph.LocationsList.route) }
+        navigationDispatcher.emit { it.navigate(LocationsList.route) }
 
     fun addLocation(location: Location?) = viewModelScope.launch {
         _events.emit(GeolocationMapEvents.ShowSnackBar(R.string.not_implemented_yet))

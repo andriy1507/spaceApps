@@ -7,16 +7,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.dialog
 import androidx.navigation.navDeepLink
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
-import com.google.accompanist.navigation.animation.navigation
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.bottomSheet
-import com.spaceapps.myapplication.app.*
+import com.spaceapps.myapplication.app.DeepLinks
+import com.spaceapps.myapplication.app.Screens
 import com.spaceapps.myapplication.features.about.AboutScreen
 import com.spaceapps.myapplication.features.auth.AuthScreen
 import com.spaceapps.myapplication.features.devices.DevicesScreen
@@ -66,73 +65,43 @@ fun PopulatedNavHost(
             SocialAuthScreen()
         }
 
-        geolocationGraph()
-
-        profileGraph(onBackPressIntercepted)
-
-        aboutGraph(onBackPressIntercepted)
-    }
-}
-
-@OptIn(ExperimentalAnimationApi::class)
-private fun NavGraphBuilder.geolocationGraph() {
-    navigation(
-        startDestination = GeolocationGraph.GeolocationMap.route,
-        route = GeolocationGraph.route
-    ) {
-        composable(route = GeolocationGraph.GeolocationMap.route) {
+        composable(route = Screens.GeolocationMap.route) {
             GeolocationMapScreen(hiltViewModel(it))
         }
-        composable(route = GeolocationGraph.MapSettings.route) {
+        composable(route = Screens.MapSettings.route) {
             SettingsScreen(hiltViewModel(it))
         }
-        dialog(route = GeolocationGraph.SaveLocation.route) {
+        dialog(route = Screens.SaveLocation.route) {
             SaveLocationScreen()
         }
-        composable(route = GeolocationGraph.LocationsList.route) {
+        composable(route = Screens.LocationsList.route) {
             LocationsListScreen(hiltViewModel(it))
         }
-    }
-}
 
-@OptIn(ExperimentalAnimationApi::class)
-private fun NavGraphBuilder.aboutGraph(onBackPressIntercepted: (() -> Unit)?) {
-    navigation(
-        startDestination = AboutGraph.About.route,
-        route = AboutGraph.route
-    ) {
-        composable(route = AboutGraph.About.route) {
-            onBackPressIntercepted?.let { onBack -> BackHandler(onBack = onBack) }
-            AboutScreen()
-        }
-        composable(route = AboutGraph.TermsPolicy.route) {
-            TermsPolicyScreen()
-        }
-    }
-}
-
-@OptIn(ExperimentalAnimationApi::class)
-private fun NavGraphBuilder.profileGraph(onBackPressIntercepted: (() -> Unit)?) {
-    navigation(
-        startDestination = ProfileGraph.Profile.route,
-        route = ProfileGraph.route
-    ) {
-        composable(route = ProfileGraph.Profile.route) {
+        composable(route = Screens.Profile.route) {
             onBackPressIntercepted?.let { onBack -> BackHandler(onBack = onBack) }
             ProfileScreen(hiltViewModel(it))
         }
-        composable(route = ProfileGraph.Notifications.route) {
+        composable(route = Screens.Notifications.route) {
             NotificationsScreen(hiltViewModel(it))
         }
         composable(
-            route = ProfileGraph.NotificationView.route,
+            route = Screens.NotificationView.route,
             arguments = DeepLinks.NotificationView.args,
             deepLinks = listOf(navDeepLink { uriPattern = DeepLinks.NotificationView.uri })
         ) {
             NotificationViewScreen(hiltViewModel(it))
         }
-        composable(route = ProfileGraph.Devices.route) {
+        composable(route = Screens.Devices.route) {
             DevicesScreen(hiltViewModel(it))
+        }
+
+        composable(route = Screens.About.route) {
+            onBackPressIntercepted?.let { onBack -> BackHandler(onBack = onBack) }
+            AboutScreen()
+        }
+        composable(route = Screens.TermsPolicy.route) {
+            TermsPolicyScreen()
         }
     }
 }

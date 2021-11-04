@@ -33,10 +33,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import com.spaceapps.myapplication.R
-import com.spaceapps.myapplication.app.AboutGraph
-import com.spaceapps.myapplication.app.GeolocationGraph
-import com.spaceapps.myapplication.app.ProfileGraph
-import com.spaceapps.myapplication.app.Screens
+import com.spaceapps.myapplication.app.Screens.*
 import com.spaceapps.myapplication.core.local.DataStoreManager
 import com.spaceapps.myapplication.core.local.SpaceAppsDatabase
 import com.spaceapps.myapplication.ui.ACTION_BAR_SIZE
@@ -81,9 +78,9 @@ class MainActivity : AppCompatActivity() {
             var selectedIndex by remember { mutableStateOf(0) }
             val currentDestination by navController.currentBackStackEntryAsState()
             val isBottomBarVisible = when (currentDestination?.destination?.route) {
-                AboutGraph.About.route,
-                GeolocationGraph.GeolocationMap.route,
-                ProfileGraph.Profile.route -> true
+                About.route,
+                GeolocationMap.route,
+                Profile.route -> true
                 else -> false
             }
             val systemUiController = rememberSystemUiController()
@@ -125,7 +122,7 @@ class MainActivity : AppCompatActivity() {
                 ) {
                     PopulatedNavHost(navController, provideStartDestination(), it) {
                         selectedIndex = 0
-                        navController.navigateToRootDestination(GeolocationGraph.route)
+                        navController.navigateToRootDestination(GeolocationMap.route)
                     }
                 }
             }
@@ -143,17 +140,17 @@ class MainActivity : AppCompatActivity() {
 
     private fun provideBottomItems() = listOf(
         MenuItem(
-            GeolocationGraph.route,
+            GeolocationMap.route,
             Icons.Filled.MyLocation,
             R.string.location
         ),
         MenuItem(
-            ProfileGraph.route,
+            Profile.route,
             Icons.Filled.Person,
             R.string.profile
         ),
         MenuItem(
-            AboutGraph.route,
+            About.route,
             Icons.Filled.Info,
             R.string.about
         )
@@ -193,8 +190,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun provideStartDestination() = runBlocking {
         when (dataStoreManager.getAccessToken()) {
-            null -> Screens.Auth.route
-            else -> GeolocationGraph.route
+//            null -> Auth.route
+            else -> GeolocationMap.route
         }
     }
 

@@ -23,5 +23,4 @@ interface FilesCalls {
 
     @DELETE("/files/{fileName}")
     suspend fun deleteFile(@Path("fileName") fileName: String)
-
 }

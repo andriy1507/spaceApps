@@ -6,12 +6,28 @@ import androidx.navigation.navArgument
 import com.spaceapps.myapplication.core.DEEP_LINK_URI
 
 sealed class Screens(val route: String) {
+//    Authorization
     object Auth : Screens("auth")
     object ForgotPassword : Screens("forgotPassword")
     object ResetPassword : Screens("resetPassword?email={email}&code={code}") {
         fun createRoute(email: String, code: String) = "resetPassword?email=$email&code=$code"
     }
     object SocialAuth : Screens("socialAuth")
+//    Geolocation
+    object GeolocationMap : Screens("geolocationMap")
+    object MapSettings : Screens("mapSettings")
+    object SaveLocation : Screens("saveLocation")
+    object LocationsList : Screens("locationsList")
+//    About
+    object About : Screens("about")
+    object TermsPolicy : Screens("termsPolicy")
+//    Profile
+    object Profile : Screens("profile")
+    object Notifications : Screens("notifications")
+    object NotificationView : Screens("notificationView/{notificationId}/{title}") {
+        fun createRoute(id: Int, title: String) = "notificationView/$id/$title"
+    }
+    object Devices : Screens("devices")
 }
 
 sealed class DeepLinks(val uri: String, val args: List<NamedNavArgument>) {
@@ -30,44 +46,4 @@ sealed class DeepLinks(val uri: String, val args: List<NamedNavArgument>) {
             navArgument("title") { type = NavType.StringType }
         )
     )
-}
-
-sealed class GeolocationGraph(route: String) : Screens(route) {
-    object GeolocationMap : GeolocationGraph("geolocationMap")
-
-    object MapSettings : GeolocationGraph("mapSettings")
-
-    object SaveLocation : GeolocationGraph("saveLocation")
-
-    object LocationsList : GeolocationGraph("locationsList")
-
-    companion object {
-        const val route = "geolocation"
-    }
-}
-
-sealed class AboutGraph(route: String) : Screens(route) {
-    object About : AboutGraph("about")
-
-    object TermsPolicy : AboutGraph("termsPolicy")
-
-    companion object {
-        const val route = "aboutGraph"
-    }
-}
-
-sealed class ProfileGraph(route: String) : Screens(route) {
-    object Profile : ProfileGraph("profile")
-
-    object Notifications : ProfileGraph("notifications")
-
-    object NotificationView : ProfileGraph("notificationView/{notificationId}/{title}") {
-        fun createRoute(id: Int, title: String) = "notificationView/$id/$title"
-    }
-
-    object Devices : ProfileGraph("devices")
-
-    companion object {
-        const val route = "profileGraph"
-    }
 }

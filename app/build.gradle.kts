@@ -1,7 +1,3 @@
-import com.google.protobuf.gradle.generateProtoTasks
-import com.google.protobuf.gradle.protobuf
-import com.google.protobuf.gradle.protoc
-
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -10,7 +6,6 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
-    id("com.google.protobuf") version "0.8.15"
     id("org.jlleitschuh.gradle.ktlint") version "10.1.0"
     id("io.gitlab.arturbosch.detekt") version "1.18.1"
 }
@@ -174,7 +169,6 @@ dependencies {
 //    Datastore
     implementation(AndroidX.DataStore.DataStore)
     implementation(AndroidX.DataStore.Preferences)
-    implementation(Google.ProtoBuf.JavaLite)
 
 //    Facebook SDK
     implementation(Facebook.Android.Sdk)
@@ -196,18 +190,4 @@ dependencies {
 
     debugImplementation(AndroidX.Compose.UiTooling)
     debugImplementation(Jetbrains.Kotlin.Reflect)
-}
-
-// Generates the java Protobuf-lite code for the Protobufs in this project.
-protobuf {
-    protoc {
-        artifact = "com.google.protobuf:protoc:3.10.0"
-    }
-    generateProtoTasks {
-        all().forEach { task ->
-            task.plugins.create("java") {
-                option("lite")
-            }
-        }
-    }
 }

@@ -4,8 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.spaceapps.myapplication.R
-import com.spaceapps.myapplication.app.GeolocationGraph
-import com.spaceapps.myapplication.app.Screens
+import com.spaceapps.myapplication.app.Screens.*
 import com.spaceapps.myapplication.core.models.InputWrapper
 import com.spaceapps.myapplication.core.repositories.auth.AuthRepository
 import com.spaceapps.myapplication.core.repositories.auth.results.LogOutResult
@@ -92,10 +91,10 @@ class AuthViewModel @Inject constructor(
     }
 
     fun onSignInWithSocialClick() =
-        navigationDispatcher.emit { it.navigate(Screens.SocialAuth.route) }
+        navigationDispatcher.emit { it.navigate(SocialAuth.route) }
 
     fun onForgotPasswordClick() =
-        navigationDispatcher.emit { it.navigate(Screens.ForgotPassword.route) }
+        navigationDispatcher.emit { it.navigate(ForgotPassword.route) }
 
     fun onAuthClick() = when (isSignUp.value) {
         true -> signUp()
@@ -119,9 +118,9 @@ class AuthViewModel @Inject constructor(
     }
 
     private fun goGeolocationScreen() = navigationDispatcher.emit {
-        it.navigate(GeolocationGraph.route) {
+        it.navigate(GeolocationMap.route) {
             launchSingleTop = true
-            popUpTo(Screens.Auth.route) {
+            popUpTo(Auth.route) {
                 inclusive = true
             }
         }
@@ -131,7 +130,7 @@ class AuthViewModel @Inject constructor(
         when (repository.signInWithGoogle(accessToken = accessToken)) {
             SocialSignInResult.Success -> navigationDispatcher.emit {
                 it.navigate(
-                    GeolocationGraph.route
+                    GeolocationMap.route
                 )
             }
             SocialSignInResult.Failure -> Timber.e("ERROR")
@@ -142,7 +141,7 @@ class AuthViewModel @Inject constructor(
         when (repository.signInWithFacebook(accessToken = accessToken)) {
             SocialSignInResult.Success -> navigationDispatcher.emit {
                 it.navigate(
-                    GeolocationGraph.route
+                    GeolocationMap.route
                 )
             }
             SocialSignInResult.Failure -> Timber.e("ERROR")
@@ -153,7 +152,7 @@ class AuthViewModel @Inject constructor(
         when (repository.signInWithApple(accessToken = accessToken)) {
             SocialSignInResult.Success -> navigationDispatcher.emit {
                 it.navigate(
-                    GeolocationGraph.route
+                    GeolocationMap.route
                 )
             }
             SocialSignInResult.Failure -> Timber.e("ERROR")
