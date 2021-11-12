@@ -25,6 +25,7 @@ import com.spaceapps.myapplication.features.location.map.GeolocationMapScreen
 import com.spaceapps.myapplication.features.location.saveLocation.SaveLocationScreen
 import com.spaceapps.myapplication.features.notificationView.NotificationViewScreen
 import com.spaceapps.myapplication.features.notifications.NotificationsScreen
+import com.spaceapps.myapplication.features.player.PlayerScreen
 import com.spaceapps.myapplication.features.profile.ProfileScreen
 import com.spaceapps.myapplication.features.resetPassword.ResetPasswordScreen
 import com.spaceapps.myapplication.features.settings.SettingsScreen
@@ -95,7 +96,9 @@ fun PopulatedNavHost(
         composable(route = Screens.Devices.route) {
             DevicesScreen(hiltViewModel(it))
         }
-
+        composable(route = Screens.Player.route) {
+            PlayerScreen(hiltViewModel(it))
+        }
         composable(route = Screens.About.route) {
             onBackPressIntercepted?.let { onBack -> BackHandler(onBack = onBack) }
             AboutScreen()

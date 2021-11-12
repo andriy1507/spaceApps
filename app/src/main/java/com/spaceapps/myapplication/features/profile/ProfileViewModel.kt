@@ -22,4 +22,6 @@ class ProfileViewModel @Inject constructor(
 
     fun goNotifications() =
         navigationDispatcher.emit { it.navigate(Notifications.route) }
+
+    fun goPlayer() = navigationDispatcher.emit { it.navigate(Player.route) }
 }

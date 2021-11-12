@@ -184,6 +184,10 @@ dependencies {
     implementation(AndroidX.CameraX.Lifecycle)
     implementation(AndroidX.CameraX.View)
 
+    implementation(AndroidX.Media3.Ui)
+    implementation(AndroidX.Media3.ExoPlayer)
+    implementation(AndroidX.Media3.Sessions)
+
 //    Venom
     debugImplementation(Venom.Debug)
     releaseImplementation(Venom.NoOps)

@@ -91,12 +91,19 @@ object AndroidX {
 
     object Lifecycle {
         private const val lifecycleVersion = "2.4.0"
-        const val ViewModelCompose = "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycleVersion"
+        const val ViewModelCompose =
+            "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycleVersion"
         const val LiveData = "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
         const val Runtime = "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
     }
-}
 
+    object Media3 {
+        private const val media3Version = "1.0.0-alpha01"
+        const val Ui = "androidx.media3:media3-ui:$media3Version"
+        const val Sessions = "androidx.media3:media3-session:$media3Version"
+        const val ExoPlayer = "androidx.media3:media3-exoplayer:$media3Version"
+    }
+}
 
 object Android {
     object Tools {

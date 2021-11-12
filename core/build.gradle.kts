@@ -32,7 +32,7 @@ android {
             buildConfigField(
                 "String",
                 "SERVER_URL",
-                "\"https://api.spaceapps.xyz\""
+                "\"http://api.spaceapps.xyz\""
             )
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -44,7 +44,7 @@ android {
             buildConfigField(
                 "String",
                 "SERVER_URL",
-                "\"https://api.spaceapps.xyz\""
+                "\"http://api.spaceapps.xyz\""
             )
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),

@@ -28,6 +28,7 @@ sealed class Screens(val route: String) {
         fun createRoute(id: Int, title: String) = "notificationView/$id/$title"
     }
     object Devices : Screens("devices")
+    object Player : Screens("player")
 }
 
 sealed class DeepLinks(val uri: String, val args: List<NamedNavArgument>) {

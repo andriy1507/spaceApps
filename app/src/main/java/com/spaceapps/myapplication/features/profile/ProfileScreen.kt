@@ -49,6 +49,11 @@ fun ProfileScreen(viewModel: ProfileViewModel) {
                     Text("Notifications")
                 }
             }
+            item {
+                Button(onClick = viewModel::goPlayer) {
+                    Text("Player")
+                }
+            }
         }
     }
 }

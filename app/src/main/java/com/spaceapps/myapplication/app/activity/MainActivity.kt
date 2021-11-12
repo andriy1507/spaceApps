@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.MyLocation
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -75,7 +76,7 @@ class MainActivity : AppCompatActivity() {
             navController.navigatorProvider += bottomSheetNavigator
             ObserveEvents(navController)
             val bottomItems = provideBottomItems()
-            var selectedIndex by remember { mutableStateOf(0) }
+            var selectedIndex by rememberSaveable(key = "selectedIndex") { mutableStateOf(0) }
             val currentDestination by navController.currentBackStackEntryAsState()
             val isBottomBarVisible = when (currentDestination?.destination?.route) {
                 About.route,
@@ -190,7 +191,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun provideStartDestination() = runBlocking {
         when (dataStoreManager.getAccessToken()) {
-//            null -> Auth.route
+            null -> Auth.route
             else -> GeolocationMap.route
         }
     }
