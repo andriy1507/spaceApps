@@ -26,7 +26,7 @@ class AuthRepositoryImpl @Inject constructor(
 ) : AuthRepository {
 
     override suspend fun signIn(email: String, password: String): SignInResult =
-        withContext(dispatchersProvider.io) {
+        withContext(dispatchersProvider.IO) {
             val request = AuthRequest(
                 email = email,
                 password = password,
@@ -42,7 +42,7 @@ class AuthRepositoryImpl @Inject constructor(
         }
 
     override suspend fun signUp(email: String, password: String): SignUpResult =
-        withContext(dispatchersProvider.io) {
+        withContext(dispatchersProvider.IO) {
             val request = AuthRequest(
                 email = email,
                 password = password,
@@ -58,7 +58,7 @@ class AuthRepositoryImpl @Inject constructor(
         }
 
     override suspend fun signInWithGoogle(accessToken: String): SocialSignInResult =
-        withContext(dispatchersProvider.io) {
+        withContext(dispatchersProvider.IO) {
             val request = SocialSignInRequest(
                 accessToken = accessToken,
                 device = provideDeviceModel()
@@ -76,7 +76,7 @@ class AuthRepositoryImpl @Inject constructor(
         }
 
     override suspend fun signInWithFacebook(accessToken: String): SocialSignInResult =
-        withContext(dispatchersProvider.io) {
+        withContext(dispatchersProvider.IO) {
             val request = SocialSignInRequest(
                 accessToken = accessToken,
                 device = provideDeviceModel()
@@ -94,7 +94,7 @@ class AuthRepositoryImpl @Inject constructor(
         }
 
     override suspend fun signInWithApple(accessToken: String): SocialSignInResult =
-        withContext(dispatchersProvider.io) {
+        withContext(dispatchersProvider.IO) {
             val request = SocialSignInRequest(
                 accessToken = accessToken,
                 device = provideDeviceModel()
@@ -109,7 +109,7 @@ class AuthRepositoryImpl @Inject constructor(
         }
 
     override suspend fun sendResetCode(email: String): SendResetCodeResult =
-        withContext(dispatchersProvider.io) {
+        withContext(dispatchersProvider.IO) {
             when (request { calls.sendResetCode(email = email) }) {
                 is Success -> SendResetCodeResult.Success
                 is Error -> SendResetCodeResult.Failure
@@ -117,7 +117,7 @@ class AuthRepositoryImpl @Inject constructor(
         }
 
     override suspend fun verifyResetCode(email: String, code: String): VerifyResetCodeResult =
-        withContext(dispatchersProvider.io) {
+        withContext(dispatchersProvider.IO) {
             when (request { calls.verifyResetCode(email = email, resetCode = code) }) {
                 is Success -> VerifyResetCodeResult.Success
                 is Error -> VerifyResetCodeResult.Failure
@@ -128,7 +128,7 @@ class AuthRepositoryImpl @Inject constructor(
         email: String,
         code: String,
         password: String
-    ): ResetPasswordResult = withContext(dispatchersProvider.io) {
+    ): ResetPasswordResult = withContext(dispatchersProvider.IO) {
         val request =
             ResetPasswordRequest(email = email, resetCode = code, newPassword = password)
         when (request { calls.resetPassword(request = request) }) {
@@ -137,7 +137,7 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun logOut(): LogOutResult = withContext(dispatchersProvider.io) {
+    override suspend fun logOut(): LogOutResult = withContext(dispatchersProvider.IO) {
         val response = request {
             calls.logOut(installationId = FirebaseInstallations.getInstance().id.await())
         }

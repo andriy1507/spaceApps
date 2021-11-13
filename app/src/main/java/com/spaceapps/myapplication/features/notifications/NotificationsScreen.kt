@@ -98,14 +98,51 @@ fun NotificationsScreen(viewModel: NotificationsViewModel) {
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = navigationBarPadding
             ) {
+                if (notifications.loadState.prepend !is LoadState.NotLoading) {
+                    item {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = SPACING_16),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            when (notifications.loadState.prepend) {
+                                is LoadState.Loading -> CircularProgressIndicator()
+                                is LoadState.Error -> Button(onClick = notifications::retry) {
+                                    Text(text = stringResource(R.string.retry))
+                                }
+                                else -> Unit
+                            }
+                        }
+                    }
+                }
                 itemsIndexed(notifications, key = { _, n -> n.id }) { i, n ->
                     NotificationItem(
                         title = n?.title,
                         text = n?.text,
-                        onClick = { n?.let { viewModel.goNotificationView(it.id, it.title) } },
-                        onDismiss = { n?.let { viewModel.deleteNotification(it.id) } }
-                    )
+                        onClick = {
+                            n?.let { viewModel.goNotificationView(it.id, it.title) }
+                        }
+                    ) { n?.let { viewModel.deleteNotification(it.id) } }
                     if (i != notifications.itemCount - 1) Divider()
+                }
+                if (notifications.loadState.append !is LoadState.NotLoading) {
+                    item {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = SPACING_16),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            when (notifications.loadState.append) {
+                                is LoadState.Loading -> CircularProgressIndicator()
+                                is LoadState.Error -> Button(onClick = notifications::retry) {
+                                    Text(text = stringResource(R.string.retry))
+                                }
+                                else -> Unit
+                            }
+                        }
+                    }
                 }
             }
         }

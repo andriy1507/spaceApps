@@ -80,6 +80,7 @@ detekt {
 
 dependencies {
     //    Kotlin
+    implementation(platform(Jetbrains.Kotlin.Bom))
     implementation(Jetbrains.Kotlin.StdLib)
     coreLibraryDesugaring(Android.Tools.Desugar)
     // Dagger-Hilt
@@ -110,6 +111,7 @@ dependencies {
     //    Paging
     implementation(AndroidX.Paging.Runtime)
     //    Coroutines
+    implementation(platform(Jetbrains.KotlinX.Coroutines.Bom))
     implementation(Jetbrains.KotlinX.Coroutines.Core)
     implementation(Jetbrains.KotlinX.Coroutines.PlayServices)
     implementation(Jetbrains.KotlinX.Coroutines.Rx2)

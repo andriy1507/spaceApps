@@ -42,7 +42,7 @@ class DevicesRepositoryImpl @Inject constructor(
     )
 
     override suspend fun deleteDevice(id: Int): DeleteDeviceResult =
-        withContext(dispatchersProvider.io) {
+        withContext(dispatchersProvider.IO) {
             when (request { calls.deleteProfileDeviceById(id) }) {
                 is Success -> {
                     dao.deleteById(id)

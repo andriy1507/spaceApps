@@ -78,6 +78,7 @@ detekt {
 }
 dependencies {
 //    Kotlin
+    implementation(platform(Jetbrains.Kotlin.Bom))
     implementation(Jetbrains.Kotlin.StdLib)
     coreLibraryDesugaring(Android.Tools.Desugar)
     implementation(project(":core"))
@@ -97,6 +98,7 @@ dependencies {
     implementation(Coil.Coil)
     implementation(Coil.Compose)
 //    Coroutines
+    implementation(platform(Jetbrains.KotlinX.Coroutines.Bom))
     implementation(Jetbrains.KotlinX.Coroutines.Core)
     implementation(Jetbrains.KotlinX.Coroutines.Android)
     implementation(Jetbrains.KotlinX.Coroutines.PlayServices)

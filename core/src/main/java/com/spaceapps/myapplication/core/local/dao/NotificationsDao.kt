@@ -21,4 +21,7 @@ interface NotificationsDao {
 
     @Query("DELETE FROM Notifications WHERE id = :id")
     suspend fun deleteById(id: Int)
+
+    @Query("UPDATE Notifications SET is_viewed = 1 WHERE id = :id")
+    suspend fun updateViewedById(id: Int)
 }

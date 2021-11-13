@@ -46,7 +46,7 @@ class LocationsRepositoryImpl @Inject constructor(
     )
 
     override suspend fun deleteLocation(id: Int): DeleteLocationResult =
-        withContext(dispatchersProvider.io) {
+        withContext(dispatchersProvider.IO) {
             when (val response = request { calls.deleteLocation(id) }) {
                 is Success -> {
                     dao.deleteById(id)
@@ -57,7 +57,7 @@ class LocationsRepositoryImpl @Inject constructor(
         }
 
     override suspend fun updateLocation(id: Int, request: LocationRequest): UpdateLocationResult =
-        withContext(dispatchersProvider.io) {
+        withContext(dispatchersProvider.IO) {
             when (val response = request { calls.updateLocation(id, request) }) {
                 is Success -> UpdateLocationResult.Success(response.data)
                 is Error -> UpdateLocationResult.Error(response.error)
@@ -65,7 +65,7 @@ class LocationsRepositoryImpl @Inject constructor(
         }
 
     override suspend fun createLocation(request: LocationRequest): CreateLocationResult =
-        withContext(dispatchersProvider.io) {
+        withContext(dispatchersProvider.IO) {
             when (val response = request { calls.postLocation(request) }) {
                 is Success -> CreateLocationResult.Success(response.data)
                 is Error -> CreateLocationResult.Error(response.error)

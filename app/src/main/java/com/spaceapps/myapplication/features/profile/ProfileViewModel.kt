@@ -14,8 +14,8 @@ class ProfileViewModel @Inject constructor(
     private val navigationDispatcher: NavigationDispatcher,
 ) : ViewModel() {
 
-    private val _events = MutableSharedFlow<ProfileEvents>()
-    val events: SharedFlow<ProfileEvents>
+    private val _events = MutableSharedFlow<ProfileEvent>()
+    val events: SharedFlow<ProfileEvent>
         get() = _events.asSharedFlow()
 
     fun goDevices() = navigationDispatcher.emit { it.navigate(Devices.route) }

@@ -25,11 +25,11 @@ class SettingsViewModel @Inject constructor(
     val system = dataStoreManager.observeCoordSystem()
         .stateIn(viewModelScope, SharingStarted.Lazily, SYSTEM_GEO)
 
-    fun onFormatClick(format: String) = viewModelScope.launch(dispatchersProvider.io) {
+    fun onFormatClick(format: String) = viewModelScope.launch(dispatchersProvider.IO) {
         dataStoreManager.setDegreesFormat(format)
     }
 
-    fun onSystemClick(system: String) = viewModelScope.launch(dispatchersProvider.io) {
+    fun onSystemClick(system: String) = viewModelScope.launch(dispatchersProvider.IO) {
         dataStoreManager.setCoordinatesSystem(system)
     }
     fun goBack() = navigationDispatcher.emit { it.navigateUp() }

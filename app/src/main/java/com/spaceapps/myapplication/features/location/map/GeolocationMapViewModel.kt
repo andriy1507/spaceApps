@@ -44,8 +44,8 @@ class GeolocationMapViewModel @Inject constructor(
         key = "location",
         initialValue = null
     )
-    private val _events = MutableSharedFlow<GeolocationMapEvents>()
-    val events: SharedFlow<GeolocationMapEvents>
+    private val _events = MutableSharedFlow<GeolocationMapEvent>()
+    val events: SharedFlow<GeolocationMapEvent>
         get() = _events.asSharedFlow()
 
     val degreesFormat = dataStoreManager.observeDegreesFormat()
@@ -83,12 +83,12 @@ class GeolocationMapViewModel @Inject constructor(
                 zoom(DEFAULT_MAP_ZOOM)
             }
         )
-        _events.emit(GeolocationMapEvents.UpdateCamera(update))
+        _events.emit(GeolocationMapEvent.UpdateCamera(update))
     }
 
     private fun updateMarker(lastLocation: Location) = viewModelScope.launch {
         val latLng = LatLng(lastLocation.latitude, lastLocation.longitude)
-        _events.emit(GeolocationMapEvents.AddMarker(markerOptions { position(latLng) }))
+        _events.emit(GeolocationMapEvent.AddMarker(markerOptions { position(latLng) }))
     }
 
     fun onCameraMoved(reason: Int) =
@@ -106,6 +106,6 @@ class GeolocationMapViewModel @Inject constructor(
         navigationDispatcher.emit { it.navigate(LocationsList.route) }
 
     fun addLocation(location: Location?) = viewModelScope.launch {
-        _events.emit(GeolocationMapEvents.ShowSnackBar(R.string.not_implemented_yet))
+        _events.emit(GeolocationMapEvent.ShowSnackBar(R.string.not_implemented_yet))
     }
 }

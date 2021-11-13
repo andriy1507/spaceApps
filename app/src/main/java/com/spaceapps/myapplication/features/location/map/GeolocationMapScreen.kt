@@ -31,7 +31,6 @@ import com.google.accompanist.permissions.PermissionRequired
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.android.gms.maps.GoogleMap
 import com.spaceapps.myapplication.R
-import com.spaceapps.myapplication.app.*
 import com.spaceapps.myapplication.core.*
 import com.spaceapps.myapplication.ui.*
 import com.spaceapps.myapplication.ui.views.GoogleMap
@@ -66,7 +65,7 @@ fun GeolocationMapScreen(viewModel: GeolocationMapViewModel) {
     LaunchedEffect(Unit) {
         events.collect { event ->
             when (event) {
-                is GeolocationMapEvents.ShowSnackBar ->
+                is GeolocationMapEvent.ShowSnackBar ->
                     scaffoldState.snackbarHostState.showSnackbar(context.getString(event.messageId))
                 else -> Unit
             }
@@ -138,15 +137,15 @@ fun GeolocationMapScreen(viewModel: GeolocationMapViewModel) {
     }
 }
 
-fun observeMapEvents(map: GoogleMap, events: Flow<GeolocationMapEvents>, scope: CoroutineScope) {
+fun observeMapEvents(map: GoogleMap, events: Flow<GeolocationMapEvent>, scope: CoroutineScope) {
     scope.launch {
         events.collect {
             when (it) {
-                is GeolocationMapEvents.AddMarker -> {
+                is GeolocationMapEvent.AddMarker -> {
                     map.clear()
                     map.addMarker(it.options)
                 }
-                is GeolocationMapEvents.UpdateCamera -> map.animateCamera(it.update)
+                is GeolocationMapEvent.UpdateCamera -> map.animateCamera(it.update)
                 else -> Unit
             }
         }

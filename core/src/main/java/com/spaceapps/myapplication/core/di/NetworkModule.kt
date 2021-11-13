@@ -3,10 +3,7 @@ package com.spaceapps.myapplication.core.di
 import com.spaceapps.myapplication.core.BuildConfig
 import com.spaceapps.myapplication.core.network.AuthInterceptor
 import com.spaceapps.myapplication.core.network.SpaceAppsAuthenticator
-import com.spaceapps.myapplication.core.network.calls.AuthorizationCalls
-import com.spaceapps.myapplication.core.network.calls.LocationsCalls
-import com.spaceapps.myapplication.core.network.calls.NotificationsCalls
-import com.spaceapps.myapplication.core.network.calls.ProfileCalls
+import com.spaceapps.myapplication.core.network.calls.*
 import com.spaceapps.myapplication.core.utils.QueryEnumConverterFactory
 import com.squareup.moshi.Moshi
 import dagger.Module
@@ -75,4 +72,9 @@ object NetworkModule {
     @Singleton
     fun provideNotificationsCalls(retrofit: Retrofit): NotificationsCalls =
         retrofit.create(NotificationsCalls::class.java)
+
+    @Provides
+    @Singleton
+    fun provideFilesCalls(retrofit: Retrofit): FilesCalls =
+        retrofit.create(FilesCalls::class.java)
 }
