@@ -102,14 +102,6 @@ dependencies {
     implementation(Jetbrains.KotlinX.Coroutines.Core)
     implementation(Jetbrains.KotlinX.Coroutines.Android)
     implementation(Jetbrains.KotlinX.Coroutines.PlayServices)
-
-//    Retrofit
-    implementation(SquareUp.Retrofit.Retrofit)
-    implementation(SquareUp.Retrofit.MoshiConverter)
-//    OkHttp client
-    implementation(platform(SquareUp.OkHttp.Bom))
-    implementation(SquareUp.OkHttp.OkHttp)
-    implementation(SquareUp.OkHttp.LoggingInterceptor)
 //    Timber logging
     implementation(Timber.Timber)
 //    Google play services
@@ -133,9 +125,6 @@ dependencies {
 //    Paging
     implementation(AndroidX.Paging.Runtime)
     implementation(AndroidX.Paging.Compose)
-//    Moshi
-    implementation(SquareUp.Moshi.Moshi)
-    kapt(SquareUp.Moshi.CodeGen)
 //    WorkManager
     implementation(AndroidX.Work.Runtime)
 //    Jetpack Compose
@@ -162,15 +151,6 @@ dependencies {
     implementation(Google.Firebase.Messaging)
     implementation(Google.Firebase.Installations)
     implementation(Google.Firebase.DynamicLinks)
-//    Room database
-    implementation(AndroidX.Room.Runtime)
-    implementation(AndroidX.Room.Ktx)
-    implementation(AndroidX.Room.Paging)
-    kapt(AndroidX.Room.Compiler)
-
-//    Datastore
-    implementation(AndroidX.DataStore.DataStore)
-    implementation(AndroidX.DataStore.Preferences)
 
 //    Facebook SDK
     implementation(Facebook.Android.Sdk)

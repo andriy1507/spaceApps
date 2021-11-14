@@ -6,8 +6,11 @@ import com.spaceapps.myapplication.core.local.DataStoreManager
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class AuthInterceptor constructor(
+@Singleton
+class AuthInterceptor @Inject constructor(
     private val dataStoreManager: DataStoreManager
 ) : Interceptor {
 

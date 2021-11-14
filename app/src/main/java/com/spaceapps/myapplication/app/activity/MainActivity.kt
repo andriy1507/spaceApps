@@ -35,7 +35,8 @@ import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import com.spaceapps.myapplication.R
 import com.spaceapps.myapplication.app.Screens.*
-import com.spaceapps.myapplication.core.local.StorageManager
+import com.spaceapps.myapplication.core.local.DataStoreManager
+import com.spaceapps.myapplication.core.local.DatabaseManager
 import com.spaceapps.myapplication.core.utils.AuthDispatcher
 import com.spaceapps.myapplication.ui.ACTION_BAR_SIZE
 import com.spaceapps.myapplication.ui.SpaceAppsTheme
@@ -59,7 +60,10 @@ class MainActivity : AppCompatActivity() {
     lateinit var navDispatcher: NavigationDispatcher
 
     @Inject
-    lateinit var storageManager: StorageManager
+    lateinit var databaseManager: DatabaseManager
+
+    @Inject
+    lateinit var dataStoreManager: DataStoreManager
 
     @OptIn(ExperimentalMaterialNavigationApi::class, ExperimentalAnimationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -173,7 +177,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun logOut() = lifecycleScope.launch(Dispatchers.IO) {
-        storageManager.clear()
+        databaseManager.clear()
+        dataStoreManager.clearData()
         restart()
     }
 
@@ -185,7 +190,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupEdgeToEdge() = WindowCompat.setDecorFitsSystemWindows(window, false)
 
     private fun provideStartDestination() = runBlocking {
-        when (storageManager.getAccessToken()) {
+        when (dataStoreManager.getAccessToken()) {
             null -> Auth.route
             else -> GeolocationMap.route
         }

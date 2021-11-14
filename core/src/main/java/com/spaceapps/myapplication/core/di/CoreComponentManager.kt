@@ -2,7 +2,8 @@ package com.spaceapps.myapplication.core.di
 
 import android.content.Context
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.spaceapps.myapplication.core.local.StorageManager
+import com.spaceapps.myapplication.core.local.DataStoreManager
+import com.spaceapps.myapplication.core.local.DatabaseManager
 import com.spaceapps.myapplication.core.repositories.auth.AuthRepository
 import com.spaceapps.myapplication.core.repositories.devices.DevicesRepository
 import com.spaceapps.myapplication.core.repositories.locations.LocationsRepository
@@ -63,6 +64,11 @@ class CoreComponentManager {
 
     @Provides
     @Singleton
-    fun provideStorageManager(entryPoint: CoreEntryPoint): StorageManager =
-        entryPoint.provideStorageManager()
+    fun provideStorageManager(entryPoint: CoreEntryPoint): DatabaseManager =
+        entryPoint.provideDatabaseManager()
+
+    @Provides
+    @Singleton
+    fun provideDataStoreManager(entryPoint: CoreEntryPoint): DataStoreManager =
+        entryPoint.provideDataStoreManager()
 }
