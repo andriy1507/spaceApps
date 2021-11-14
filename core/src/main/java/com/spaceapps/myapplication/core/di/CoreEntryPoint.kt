@@ -1,5 +1,7 @@
 package com.spaceapps.myapplication.core.di
 
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.spaceapps.myapplication.core.local.StorageManager
 import com.spaceapps.myapplication.core.repositories.auth.AuthRepository
 import com.spaceapps.myapplication.core.repositories.auth.AuthRepositoryImpl
 import com.spaceapps.myapplication.core.repositories.devices.DevicesRepository
@@ -10,27 +12,27 @@ import com.spaceapps.myapplication.core.repositories.notifications.Notifications
 import com.spaceapps.myapplication.core.repositories.notifications.NotificationsRepositoryImpl
 import com.spaceapps.myapplication.core.repositories.signalr.SignalrRepository
 import com.spaceapps.myapplication.core.repositories.signalr.SignalrRepositoryImpl
-import dagger.Binds
-import dagger.Module
+import com.spaceapps.myapplication.core.utils.DispatchersProvider
+import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
 
-@Module
-@InstallIn(SingletonComponent::class)
-interface RepositoryModule {
+@EntryPoint
+@InstallIn(CoreComponent::class)
+interface CoreEntryPoint {
 
-    @Binds
-    fun bindAuthRepository(impl: AuthRepositoryImpl): AuthRepository
+    fun provideAuthRepository(): AuthRepository
 
-    @Binds
-    fun bindLocationsRepository(impl: LocationsRepositoryImpl): LocationsRepository
+    fun provideLocationsRepository(): LocationsRepository
 
-    @Binds
-    fun bindNotificationsRepository(impl: NotificationsRepositoryImpl): NotificationsRepository
+    fun provideNotificationsRepository(): NotificationsRepository
 
-    @Binds
-    fun bindDevicesRepository(impl: DevicesRepositoryImpl): DevicesRepository
+    fun provideDevicesRepository(): DevicesRepository
 
-    @Binds
-    fun bindSignalrRepository(impl: SignalrRepositoryImpl): SignalrRepository
+    fun provideSignalrRepository(): SignalrRepository
+
+    fun provideLocationProviderClient(): FusedLocationProviderClient
+
+    fun provideDispatchersProvider(): DispatchersProvider
+
+    fun provideStorageManager(): StorageManager
 }

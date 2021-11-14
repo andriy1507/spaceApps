@@ -6,10 +6,8 @@ import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import coil.ImageLoader
 import coil.ImageLoaderFactory
-import coil.util.CoilUtils
 import coil.util.Logger
 import dagger.hilt.android.HiltAndroidApp
-import okhttp3.OkHttpClient
 import javax.inject.Inject
 
 @HiltAndroidApp
@@ -18,15 +16,11 @@ class SpaceAppsApplication : Application(), Configuration.Provider, ImageLoaderF
     @Inject
     lateinit var workerFactory: HiltWorkerFactory
 
-    @Inject
-    lateinit var okHttpClient: OkHttpClient
-
     override fun getWorkManagerConfiguration() = Configuration.Builder()
         .setWorkerFactory(workerFactory)
         .build()
 
     override fun newImageLoader(): ImageLoader = ImageLoader.Builder(this)
-        .okHttpClient(okHttpClient.newBuilder().cache(CoilUtils.createDefaultCache(this)).build())
         .logger(
             object : Logger {
                 override var level: Int = Log.DEBUG

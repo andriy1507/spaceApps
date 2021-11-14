@@ -1,15 +1,18 @@
-package com.spaceapps.myapplication.core.di
+package com.spaceapps.myapplication.core.di.modules
 
 import com.spaceapps.myapplication.core.BuildConfig
+import com.spaceapps.myapplication.core.di.CoreComponent
+import com.spaceapps.myapplication.core.local.DataStoreManager
 import com.spaceapps.myapplication.core.network.AuthInterceptor
 import com.spaceapps.myapplication.core.network.SpaceAppsAuthenticator
 import com.spaceapps.myapplication.core.network.calls.*
+import com.spaceapps.myapplication.core.utils.AuthDispatcher
 import com.spaceapps.myapplication.core.utils.QueryEnumConverterFactory
 import com.squareup.moshi.Moshi
+import dagger.Lazy
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -18,10 +21,27 @@ import timber.log.Timber
 import javax.inject.Singleton
 
 @Module
-@InstallIn(SingletonComponent::class)
+@InstallIn(CoreComponent::class)
 object NetworkModule {
 
     private const val OKHTTP_LOGGING_TAG = "OkHttp"
+
+    @Provides
+    @Singleton
+    fun provideAuthInterceptor(dataStoreManager: DataStoreManager): AuthInterceptor =
+        AuthInterceptor(dataStoreManager)
+
+    @Provides
+    @Singleton
+    fun provideAuthenticator(
+        authCalls: Lazy<AuthorizationCalls>,
+        dataStoreManager: DataStoreManager,
+        authDispatcher: AuthDispatcher
+    ): SpaceAppsAuthenticator = SpaceAppsAuthenticator(
+        authCalls = authCalls,
+        dataStoreManager = dataStoreManager,
+        authDispatcher = authDispatcher
+    )
 
     @Provides
     @Singleton

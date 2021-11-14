@@ -147,6 +147,17 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun addDevice(token: String): AddDeviceResult {
+        val device = DeviceRequest(
+            token = token,
+            installationId = FirebaseInstallations.getInstance().id.await()
+        )
+        return when (request { calls.addDevice(device = device) }) {
+            is Success -> AddDeviceResult.Success
+            is Error -> AddDeviceResult.Failure
+        }
+    }
+
     private suspend fun provideDeviceModel() = DeviceRequest(
         token = FirebaseMessaging.getInstance().token.await(),
         installationId = FirebaseInstallations.getInstance().id.await()

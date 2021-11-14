@@ -20,4 +20,6 @@ interface AuthRepository {
     suspend fun resetPassword(email: String, code: String, password: String): ResetPasswordResult
 
     suspend fun logOut(): LogOutResult
+
+    suspend fun addDevice(token: String): AddDeviceResult
 }

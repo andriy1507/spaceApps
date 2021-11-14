@@ -15,11 +15,8 @@ import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class SpaceAppsAuthenticator @Inject constructor(
+class SpaceAppsAuthenticator constructor(
     private val authCalls: Lazy<AuthorizationCalls>,
     private val dataStoreManager: DataStoreManager,
     private val authDispatcher: AuthDispatcher

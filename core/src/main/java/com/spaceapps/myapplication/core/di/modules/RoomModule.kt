@@ -1,8 +1,9 @@
-package com.spaceapps.myapplication.core.di
+package com.spaceapps.myapplication.core.di.modules
 
 import android.content.Context
 import androidx.room.Room
 import com.spaceapps.myapplication.core.DATABASE_NAME
+import com.spaceapps.myapplication.core.di.CoreComponent
 import com.spaceapps.myapplication.core.local.SpaceAppsDatabase
 import com.spaceapps.myapplication.core.local.dao.*
 import com.spaceapps.myapplication.core.utils.DispatchersProvider
@@ -15,7 +16,7 @@ import kotlinx.coroutines.asExecutor
 import javax.inject.Singleton
 
 @Module
-@InstallIn(SingletonComponent::class)
+@InstallIn(CoreComponent::class)
 object RoomModule {
 
     @Provides

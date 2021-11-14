@@ -1,8 +1,13 @@
-package com.spaceapps.myapplication.core.di
+package com.spaceapps.myapplication.core.di.modules
 
 import android.content.Context
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.spaceapps.myapplication.core.di.CoreComponent
+import com.spaceapps.myapplication.core.local.DataStoreManager
+import com.spaceapps.myapplication.core.local.SpaceAppsDatabase
+import com.spaceapps.myapplication.core.local.StorageManager
+import com.spaceapps.myapplication.core.local.StorageManagerImpl
 import com.spaceapps.myapplication.core.utils.DispatchersProvider
 import com.spaceapps.myapplication.core.utils.DispatchersProviderImpl
 import com.spaceapps.myapplication.core.utils.MoshiConverters
@@ -11,11 +16,10 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
-@InstallIn(SingletonComponent::class)
+@InstallIn(CoreComponent::class)
 object UtilsModule {
 
     @Provides
@@ -31,4 +35,13 @@ object UtilsModule {
     @Provides
     @Singleton
     fun provideDispatchersProvider(): DispatchersProvider = DispatchersProviderImpl
+
+    @Provides
+    @Singleton
+    fun provideStorageManager(
+        db: SpaceAppsDatabase,
+        dataStoreManager: DataStoreManager
+    ): StorageManager {
+        return StorageManagerImpl(db, dataStoreManager)
+    }
 }
