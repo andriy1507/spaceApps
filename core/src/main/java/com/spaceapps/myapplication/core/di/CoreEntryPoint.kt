@@ -5,15 +5,12 @@ import com.spaceapps.myapplication.core.local.DataStoreManager
 import com.spaceapps.myapplication.core.local.DatabaseManager
 import com.spaceapps.myapplication.core.repositories.auth.AuthRepository
 import com.spaceapps.myapplication.core.repositories.devices.DevicesRepository
+import com.spaceapps.myapplication.core.repositories.files.FilesRepository
 import com.spaceapps.myapplication.core.repositories.locations.LocationsRepository
 import com.spaceapps.myapplication.core.repositories.notifications.NotificationsRepository
 import com.spaceapps.myapplication.core.repositories.signalr.SignalrRepository
 import com.spaceapps.myapplication.core.utils.DispatchersProvider
-import dagger.hilt.EntryPoint
-import dagger.hilt.InstallIn
 
-@EntryPoint
-@InstallIn(CoreComponent::class)
 interface CoreEntryPoint {
 
     fun provideAuthRepository(): AuthRepository
@@ -25,6 +22,8 @@ interface CoreEntryPoint {
     fun provideDevicesRepository(): DevicesRepository
 
     fun provideSignalrRepository(): SignalrRepository
+
+    fun provideFilesRepository(): FilesRepository
 
     fun provideLocationProviderClient(): FusedLocationProviderClient
 

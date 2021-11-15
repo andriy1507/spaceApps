@@ -1,11 +1,14 @@
-package com.spaceapps.myapplication.core.di
+package com.spaceapps.myapplication.app.di
 
 import android.content.Context
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.spaceapps.myapplication.core.di.CoreComponent
+import com.spaceapps.myapplication.core.di.CoreEntryPoint
 import com.spaceapps.myapplication.core.local.DataStoreManager
 import com.spaceapps.myapplication.core.local.DatabaseManager
 import com.spaceapps.myapplication.core.repositories.auth.AuthRepository
 import com.spaceapps.myapplication.core.repositories.devices.DevicesRepository
+import com.spaceapps.myapplication.core.repositories.files.FilesRepository
 import com.spaceapps.myapplication.core.repositories.locations.LocationsRepository
 import com.spaceapps.myapplication.core.repositories.notifications.NotificationsRepository
 import com.spaceapps.myapplication.core.repositories.signalr.SignalrRepository
@@ -13,19 +16,19 @@ import com.spaceapps.myapplication.core.utils.DispatchersProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class CoreComponentManager {
+object CoreBridgeModule {
 
     @Provides
     @Singleton
-    fun provideCoreEntryPoint(@ApplicationContext context: Context): CoreEntryPoint =
-        EntryPointAccessors.fromApplication(context, CoreEntryPoint::class.java)
+    fun provideCoreEntryPoint(@ApplicationContext context: Context): CoreEntryPoint {
+        return CoreComponent.getInstance(context)
+    }
 
     @Provides
     @Singleton
@@ -54,6 +57,11 @@ class CoreComponentManager {
 
     @Provides
     @Singleton
+    fun provideFilesRepository(entryPoint: CoreEntryPoint): FilesRepository =
+        entryPoint.provideFilesRepository()
+
+    @Provides
+    @Singleton
     fun provideLocationProviderClient(entryPoint: CoreEntryPoint): FusedLocationProviderClient =
         entryPoint.provideLocationProviderClient()
 
@@ -64,7 +72,7 @@ class CoreComponentManager {
 
     @Provides
     @Singleton
-    fun provideStorageManager(entryPoint: CoreEntryPoint): DatabaseManager =
+    fun provideDatabaseManager(entryPoint: CoreEntryPoint): DatabaseManager =
         entryPoint.provideDatabaseManager()
 
     @Provides
