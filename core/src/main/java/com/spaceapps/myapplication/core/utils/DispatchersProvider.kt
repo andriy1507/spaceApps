@@ -2,7 +2,7 @@ package com.spaceapps.myapplication.core.utils
 
 import kotlinx.coroutines.CoroutineDispatcher
 
-@Suppress("PropertyName")
+@Suppress("PropertyName", "VariableNaming")
 interface DispatchersProvider {
     val Main: CoroutineDispatcher
     val IO: CoroutineDispatcher

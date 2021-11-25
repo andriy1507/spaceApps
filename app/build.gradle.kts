@@ -40,7 +40,7 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
-        freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn","-Xjvm-default=all")
+        freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn", "-Xjvm-default=all")
     }
     buildFeatures {
         compose = true
@@ -58,6 +58,9 @@ android {
         resources {
             excludes += listOf("/META-INF/{AL2.0,LGPL2.1}")
         }
+    }
+    hilt {
+        enableAggregatingTask = true
     }
 }
 configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {

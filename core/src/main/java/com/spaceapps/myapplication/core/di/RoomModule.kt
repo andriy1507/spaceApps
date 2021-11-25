@@ -1,4 +1,4 @@
-package com.spaceapps.myapplication.core.di.modules
+package com.spaceapps.myapplication.core.di
 
 import android.content.Context
 import androidx.room.Room
@@ -8,18 +8,20 @@ import com.spaceapps.myapplication.core.local.dao.*
 import com.spaceapps.myapplication.core.utils.DispatchersProvider
 import dagger.Module
 import dagger.Provides
-import dagger.hilt.migration.DisableInstallInCheck
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.asExecutor
 import javax.inject.Singleton
 
 @Module
-@DisableInstallInCheck
+@InstallIn(SingletonComponent::class)
 object RoomModule {
 
     @Provides
     @Singleton
     fun provideRoom(
-        context: Context,
+        @ApplicationContext context: Context,
         dispatchersProvider: DispatchersProvider
     ): SpaceAppsDatabase {
         val executor = dispatchersProvider.IO.asExecutor()

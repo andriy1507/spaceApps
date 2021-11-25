@@ -129,8 +129,14 @@ fun PopulatedNavHost(
     }
 }
 
-private typealias EnterTrans = AnimatedContentScope<String>.(initial: NavBackStackEntry, target: NavBackStackEntry) -> EnterTransition
-private typealias ExitTrans = AnimatedContentScope<String>.(initial: NavBackStackEntry, target: NavBackStackEntry) -> ExitTransition
+private typealias EnterTrans = AnimatedContentScope<String>.(
+    initial: NavBackStackEntry,
+    target: NavBackStackEntry
+) -> EnterTransition
+private typealias ExitTrans = AnimatedContentScope<String>.(
+    initial: NavBackStackEntry,
+    target: NavBackStackEntry
+) -> ExitTransition
 
 private object Transitions {
     val EnterTransition: EnterTrans = { _, _ ->

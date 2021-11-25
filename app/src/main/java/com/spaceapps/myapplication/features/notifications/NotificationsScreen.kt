@@ -1,5 +1,6 @@
 package com.spaceapps.myapplication.features.notifications
 
+import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -24,11 +25,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemsIndexed
 import com.google.accompanist.insets.LocalWindowInsets
@@ -40,11 +40,13 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.spaceapps.myapplication.R
+import com.spaceapps.myapplication.core.models.local.NotificationEntity
 import com.spaceapps.myapplication.ui.OnClick
 import com.spaceapps.myapplication.ui.SPACING_128
 import com.spaceapps.myapplication.ui.SPACING_16
 import com.spaceapps.myapplication.ui.SPACING_4
 import com.spaceapps.myapplication.utils.plus
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 
 @Composable
@@ -56,97 +58,120 @@ fun NotificationsScreen(viewModel: NotificationsViewModel) {
     }
     val context = LocalContext.current
     val notifications = viewModel.notifications.collectAsLazyPagingItems()
-    LaunchedEffect(events) {
-        events.collect {
-            when (it) {
-                is NotificationsEvent.ShowSnackBar ->
-                    scaffoldState.snackbarHostState
-                        .showSnackbar(context.getString(it.messageId))
-            }
-        }
-    }
-    val statusBarPadding =
-        rememberInsetsPaddingValues(insets = LocalWindowInsets.current.statusBars)
-    val navigationBarPadding =
-        rememberInsetsPaddingValues(insets = LocalWindowInsets.current.navigationBars)
+    ObserveEvents(events, scaffoldState, context)
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         scaffoldState = scaffoldState,
-        topBar = {
-            TopAppBar(
-                contentPadding = AppBarDefaults.ContentPadding + statusBarPadding
-            ) {
-                IconButton(onClick = viewModel::goBack) {
-                    Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = null)
-                }
-                Text(
-                    text = stringResource(id = R.string.notifications),
-                    style = MaterialTheme.typography.h6
-                )
+        topBar = { NotificationsTopBar(viewModel::goBack) }
+    ) {
+        NotificationsContent(
+            notificationsPagingItems = notifications,
+            onNotificationClick = viewModel::goNotificationView,
+            onDelete = viewModel::deleteNotification
+        )
+    }
+}
+
+@Composable
+private fun NotificationsTopBar(onNavigationClick: OnClick) {
+    val statusBarPadding =
+        rememberInsetsPaddingValues(insets = LocalWindowInsets.current.statusBars)
+    TopAppBar(contentPadding = AppBarDefaults.ContentPadding + statusBarPadding) {
+        IconButton(onClick = onNavigationClick) {
+            Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = null)
+        }
+        Text(
+            text = stringResource(id = R.string.notifications),
+            style = MaterialTheme.typography.h6
+        )
+    }
+}
+
+@Composable
+private fun ObserveEvents(
+    events: Flow<NotificationsEvent>,
+    scaffoldState: ScaffoldState,
+    context: Context
+) {
+    LaunchedEffect(events) {
+        events.collect { event ->
+            when (event) {
+                is NotificationsEvent.ShowSnackBar ->
+                    scaffoldState.snackbarHostState
+                        .showSnackbar(context.getString(event.messageId))
             }
         }
+    }
+}
+
+@Composable
+fun NotificationsContent(
+    notificationsPagingItems: LazyPagingItems<NotificationEntity>,
+    onNotificationClick: (Int, String) -> Unit,
+    onDelete: (Int) -> Unit
+) {
+    val swipeRefreshState =
+        rememberSwipeRefreshState(isRefreshing = notificationsPagingItems.loadState.refresh is LoadState.Loading)
+    val navigationBarPadding =
+        rememberInsetsPaddingValues(insets = LocalWindowInsets.current.navigationBars)
+    SwipeRefresh(
+        modifier = Modifier.fillMaxSize(),
+        state = swipeRefreshState,
+        onRefresh = notificationsPagingItems::refresh,
+        indicator = { state, trigger ->
+            SwipeRefreshIndicator(
+                state = state,
+                refreshTriggerDistance = trigger,
+                contentColor = MaterialTheme.colors.primary
+            )
+        }
     ) {
-        val swipeRefreshState =
-            rememberSwipeRefreshState(isRefreshing = notifications.loadState.refresh is LoadState.Loading)
-        SwipeRefresh(
+        LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            state = swipeRefreshState,
-            onRefresh = notifications::refresh,
-            indicator = { state, trigger ->
-                SwipeRefreshIndicator(
-                    state = state,
-                    refreshTriggerDistance = trigger,
-                    contentColor = MaterialTheme.colors.primary
-                )
-            }
+            contentPadding = navigationBarPadding
         ) {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = navigationBarPadding
-            ) {
-                if (notifications.loadState.prepend !is LoadState.NotLoading) {
-                    item {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = SPACING_16),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            when (notifications.loadState.prepend) {
-                                is LoadState.Loading -> CircularProgressIndicator()
-                                is LoadState.Error -> Button(onClick = notifications::retry) {
-                                    Text(text = stringResource(R.string.retry))
-                                }
-                                else -> Unit
+            if (notificationsPagingItems.loadState.prepend !is LoadState.NotLoading) {
+                item {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = SPACING_16),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        when (notificationsPagingItems.loadState.prepend) {
+                            is LoadState.Loading -> CircularProgressIndicator()
+                            is LoadState.Error -> Button(onClick = notificationsPagingItems::retry) {
+                                Text(text = stringResource(R.string.retry))
                             }
+                            else -> Unit
                         }
                     }
                 }
-                itemsIndexed(notifications, key = { _, n -> n.id }) { i, n ->
-                    NotificationItem(
-                        title = n?.title,
-                        text = n?.text,
-                        onClick = {
-                            n?.let { viewModel.goNotificationView(it.id, it.title) }
-                        }
-                    ) { n?.let { viewModel.deleteNotification(it.id) } }
-                    if (i != notifications.itemCount - 1) Divider()
-                }
-                if (notifications.loadState.append !is LoadState.NotLoading) {
-                    item {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = SPACING_16),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            when (notifications.loadState.append) {
-                                is LoadState.Loading -> CircularProgressIndicator()
-                                is LoadState.Error -> Button(onClick = notifications::retry) {
-                                    Text(text = stringResource(R.string.retry))
-                                }
-                                else -> Unit
+            }
+            itemsIndexed(notificationsPagingItems, key = { _, n -> n.id }) { i, n ->
+                NotificationItem(
+                    title = n?.title,
+                    text = n?.text,
+                    onClick = {
+                        n?.let { onNotificationClick(it.id, it.title) }
+                    }
+                ) { n?.let { onDelete(it.id) } }
+                if (i != notificationsPagingItems.itemCount - 1) Divider()
+            }
+            if (notificationsPagingItems.loadState.append !is LoadState.NotLoading) {
+                item {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = SPACING_16),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        when (notificationsPagingItems.loadState.append) {
+                            is LoadState.Loading -> CircularProgressIndicator()
+                            is LoadState.Error -> Button(onClick = notificationsPagingItems::retry) {
+                                Text(text = stringResource(R.string.retry))
                             }
+                            else -> Unit
                         }
                     }
                 }
@@ -164,6 +189,7 @@ fun NotificationItem(
     onClick: OnClick,
     onDismiss: OnClick
 ) {
+    val notificationTitleWidth = .75f
     val dismissState = rememberDismissState()
     val backgroundColor = when (dismissState.dismissDirection) {
         DismissDirection.EndToStart -> Color.Red
@@ -211,7 +237,7 @@ fun NotificationItem(
                                 highlight = PlaceholderHighlight.fade(),
                                 shape = RoundedCornerShape(SPACING_4)
                             )
-                            .fillMaxWidth(.75f),
+                            .fillMaxWidth(notificationTitleWidth),
                         text = title.orEmpty(),
                         style = MaterialTheme.typography.subtitle1,
                         overflow = TextOverflow.Ellipsis,
@@ -235,26 +261,4 @@ fun NotificationItem(
             }
         )
     }
-}
-
-@Preview
-@Composable
-fun NotificationLoadingPreview() {
-    NotificationItem(
-        title = null,
-        text = null,
-        onClick = {},
-        onDismiss = {}
-    )
-}
-
-@Preview()
-@Composable
-fun NotificationPreview() {
-    NotificationItem(
-        title = LoremIpsum(15).values.joinToString(),
-        text = LoremIpsum(50).values.joinToString(),
-        onClick = {},
-        onDismiss = {}
-    )
 }

@@ -1,4 +1,4 @@
-package com.spaceapps.myapplication.core.di.modules
+package com.spaceapps.myapplication.core.di
 
 import com.spaceapps.myapplication.core.repositories.auth.AuthRepository
 import com.spaceapps.myapplication.core.repositories.auth.AuthRepositoryImpl
@@ -14,10 +14,11 @@ import com.spaceapps.myapplication.core.repositories.signalr.SignalrRepository
 import com.spaceapps.myapplication.core.repositories.signalr.SignalrRepositoryImpl
 import dagger.Binds
 import dagger.Module
-import dagger.hilt.migration.DisableInstallInCheck
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 
 @Module
-@DisableInstallInCheck
+@InstallIn(SingletonComponent::class)
 interface RepositoryModule {
 
     @Binds

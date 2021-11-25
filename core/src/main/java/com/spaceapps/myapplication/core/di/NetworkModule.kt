@@ -1,4 +1,4 @@
-package com.spaceapps.myapplication.core.di.modules
+package com.spaceapps.myapplication.core.di
 
 import com.spaceapps.myapplication.core.BuildConfig
 import com.spaceapps.myapplication.core.network.AuthInterceptor
@@ -8,7 +8,8 @@ import com.spaceapps.myapplication.core.utils.QueryEnumConverterFactory
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
-import dagger.hilt.migration.DisableInstallInCheck
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -17,7 +18,7 @@ import timber.log.Timber
 import javax.inject.Singleton
 
 @Module
-@DisableInstallInCheck
+@InstallIn(SingletonComponent::class)
 object NetworkModule {
 
     private const val OKHTTP_LOGGING_TAG = "OkHttp"

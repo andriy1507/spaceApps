@@ -32,7 +32,7 @@ android {
             buildConfigField(
                 "String",
                 "SERVER_URL",
-                "\"http://api.spaceapps.xyz\""
+                "\"http://spaceapps.xyz\""
             )
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -44,7 +44,7 @@ android {
             buildConfigField(
                 "String",
                 "SERVER_URL",
-                "\"http://api.spaceapps.xyz\""
+                "\"http://spaceapps.xyz\""
             )
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -58,6 +58,9 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
         freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn")
+    }
+    hilt {
+        enableAggregatingTask = true
     }
 }
 
