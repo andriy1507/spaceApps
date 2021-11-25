@@ -13,14 +13,13 @@ import com.google.android.gms.maps.GoogleMap.OnCameraMoveStartedListener.REASON_
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.ktx.model.cameraPosition
 import com.google.maps.android.ktx.model.markerOptions
-import com.spaceapps.myapplication.R
 import com.spaceapps.myapplication.app.Screens.*
 import com.spaceapps.myapplication.core.DEFAULT_MAP_ZOOM
 import com.spaceapps.myapplication.core.DEGREES_DMS
 import com.spaceapps.myapplication.core.SYSTEM_GEO
 import com.spaceapps.myapplication.core.local.DataStoreManager
-import com.spaceapps.myapplication.utils.NavigationDispatcher
 import com.spaceapps.myapplication.core.utils.getStateFlow
+import com.spaceapps.myapplication.utils.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -30,7 +29,7 @@ import javax.inject.Inject
 class GeolocationMapViewModel @Inject constructor(
     private val locationClient: FusedLocationProviderClient,
     private val navigationDispatcher: NavigationDispatcher,
-    private val savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle,
     dataStoreManager: DataStoreManager
 ) : ViewModel() {
 
@@ -106,6 +105,6 @@ class GeolocationMapViewModel @Inject constructor(
         navigationDispatcher.emit { it.navigate(LocationsList.route) }
 
     fun addLocation(location: Location?) = viewModelScope.launch {
-        _events.emit(GeolocationMapEvent.ShowSnackBar(R.string.not_implemented_yet))
+        navigationDispatcher.emit { it.navigate(SaveLocation.route) }
     }
 }

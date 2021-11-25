@@ -43,6 +43,11 @@ object AndroidX {
         const val Compiler = "androidx.room:room-compiler:$RoomVersion"
     }
 
+    object Emoji2 {
+        private const val Emoji2Version = "1.0.0-rc01"
+        const val Emoji2 = "androidx.emoji2:emoji2:$Emoji2Version"
+    }
+
     object DataStore {
         private const val DatastoreVersion = "1.0.0"
         const val DataStore = "androidx.datastore:datastore:$DatastoreVersion"
@@ -119,6 +124,7 @@ object Google {
             const val Location = "com.google.android.gms:play-services-location:18.0.0"
             const val Auth = "com.google.android.gms:play-services-auth:19.2.0"
             const val Maps = "com.google.android.gms:play-services-maps:18.0.0"
+            const val Wallet = "com.google.android.gms:play-services-wallet:18.1.3"
         }
     }
 
@@ -172,8 +178,8 @@ object Google {
 }
 
 object Coil {
-    private const val CoilVersion = "1.4.0"
-//    const val Bom =  "io.coil-kt:coil-bom:$CoilVersion"
+    private const val CoilVersion = "2.0.0-alpha03"
+    const val Bom = "io.coil-kt:coil-bom:$CoilVersion"
     const val Coil = "io.coil-kt:coil:$CoilVersion"
     const val Compose = "io.coil-kt:coil-compose:$CoilVersion"
 }
@@ -243,4 +249,17 @@ object Microsoft {
     object SignalR {
         const val SignalR = "com.microsoft.signalr:signalr:5.0.11"
     }
+}
+
+object Grpc {
+    private const val GrpcVersion = "1.42.1"
+    const val Bom = "io.grpc:grpc-bom:$GrpcVersion"
+    const val Gen = "io.grpc:protoc-gen-grpc-kotlin:1.2.0"
+    const val Auth = "io.grpc:grpc-auth:1.42.1"
+    const val OkHttp = "io.grpc:grpc-okhttp:1.42.1"
+    const val Android = "io.grpc:grpc-android:1.42.1"
+    const val KotlinStub = "io.grpc:grpc-kotlin-stub:1.2.0"
+    const val KotlinStubLite = "io.grpc:grpc-kotlin-stub-lite:1.0.0"
+    const val ProtobufNano = "io.grpc:grpc-protobuf-nano:1.21.1"
+    const val ProtobufLite = "io.grpc:grpc-protobuf-lite:1.42.1"
 }

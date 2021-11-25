@@ -26,7 +26,7 @@ class MainActivity : ComponentActivity() {
             LaunchedEffect(Unit) {
                 navigationDispatcher.emitter.collect { event -> event(navController) }
             }
-            SpaceAppsTheme(darkTheme = true) {
+            SpaceAppsTheme {
                 PopulatedNavHost(
                     navController = navController,
                     startDestination = provideStartDestination()

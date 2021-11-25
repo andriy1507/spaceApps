@@ -40,7 +40,7 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
-        freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn")
+        freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn","-Xjvm-default=all")
     }
     buildFeatures {
         compose = true
@@ -95,6 +95,7 @@ dependencies {
     implementation(Google.Accompanist.Permissions)
 
 //    Coil
+//    implementation(platform(Coil.Bom))
     implementation(Coil.Coil)
     implementation(Coil.Compose)
 //    Coroutines
@@ -108,10 +109,15 @@ dependencies {
     implementation(Google.Android.PlayServices.Location)
     implementation(Google.Android.PlayServices.Auth)
     implementation(Google.Android.PlayServices.Maps)
+    implementation(Google.Android.PlayServices.Wallet)
     implementation(Google.Maps.Maps)
     implementation(Google.Maps.Utils)
+//    Moshi
+    implementation(SquareUp.Moshi.Moshi)
+    kapt(SquareUp.Moshi.CodeGen)
 //    AndroidX
     implementation(AndroidX.Core.Ktx)
+    implementation(AndroidX.Emoji2.Emoji2)
     implementation(AndroidX.AppCompat.AppCompat)
     implementation(AndroidX.Activity.Ktx)
     implementation(AndroidX.Activity.Compose)

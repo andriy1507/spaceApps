@@ -8,6 +8,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -22,6 +23,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.paging.LoadState
@@ -29,6 +33,8 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemsIndexed
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
+import com.google.accompanist.placeholder.PlaceholderHighlight
+import com.google.accompanist.placeholder.material.fade
 import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
@@ -185,7 +191,10 @@ fun NotificationItem(
                     )
                 }
             },
-            directions = setOf(DismissDirection.EndToStart),
+            directions = when {
+                title == null || text == null -> emptySet()
+                else -> setOf(DismissDirection.EndToStart)
+            },
             dismissContent = {
                 Column(
                     modifier = modifier
@@ -196,19 +205,56 @@ fun NotificationItem(
                         .padding(horizontal = SPACING_16, vertical = SPACING_4)
                 ) {
                     Text(
-                        modifier = Modifier.placeholder(title.isNullOrEmpty()),
+                        modifier = Modifier
+                            .placeholder(
+                                visible = title == null,
+                                highlight = PlaceholderHighlight.fade(),
+                                shape = RoundedCornerShape(SPACING_4)
+                            )
+                            .fillMaxWidth(.75f),
                         text = title.orEmpty(),
-                        style = MaterialTheme.typography.subtitle1
+                        style = MaterialTheme.typography.subtitle1,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1
                     )
+                    Spacer(modifier = Modifier.height(SPACING_4))
                     Text(
                         modifier = Modifier
-                            .placeholder(text.isNullOrEmpty())
-                            .weight(1f),
+                            .placeholder(
+                                visible = text == null,
+                                highlight = PlaceholderHighlight.fade(),
+                                shape = RoundedCornerShape(SPACING_4)
+                            )
+                            .wrapContentHeight(),
                         text = text.orEmpty(),
-                        style = MaterialTheme.typography.body2
+                        style = MaterialTheme.typography.body2,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 5
                     )
                 }
             }
         )
     }
+}
+
+@Preview
+@Composable
+fun NotificationLoadingPreview() {
+    NotificationItem(
+        title = null,
+        text = null,
+        onClick = {},
+        onDismiss = {}
+    )
+}
+
+@Preview()
+@Composable
+fun NotificationPreview() {
+    NotificationItem(
+        title = LoremIpsum(15).values.joinToString(),
+        text = LoremIpsum(50).values.joinToString(),
+        onClick = {},
+        onDismiss = {}
+    )
 }

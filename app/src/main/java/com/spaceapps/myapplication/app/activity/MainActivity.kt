@@ -11,12 +11,8 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.MyLocation
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.res.stringResource
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
@@ -25,8 +21,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.plusAssign
-import com.google.accompanist.insets.navigationBarsHeight
-import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
@@ -38,11 +32,8 @@ import com.spaceapps.myapplication.app.Screens.*
 import com.spaceapps.myapplication.core.local.DataStoreManager
 import com.spaceapps.myapplication.core.local.DatabaseManager
 import com.spaceapps.myapplication.core.utils.AuthDispatcher
-import com.spaceapps.myapplication.ui.ACTION_BAR_SIZE
-import com.spaceapps.myapplication.ui.SpaceAppsTheme
 import com.spaceapps.myapplication.utils.NavigationCommand
 import com.spaceapps.myapplication.utils.NavigationDispatcher
-import com.spaceapps.myapplication.utils.navigateToRootDestination
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -76,12 +67,12 @@ class MainActivity : AppCompatActivity() {
             navController.navigatorProvider += bottomSheetNavigator
             ObserveEvents(navController)
             val bottomItems = provideBottomItems()
-            var selectedIndex by rememberSaveable(key = "selectedIndex") { mutableStateOf(0) }
             val currentDestination by navController.currentBackStackEntryAsState()
             val isBottomBarVisible = when (currentDestination?.destination?.route) {
                 About.route,
                 GeolocationMap.route,
-                Profile.route -> true
+                Profile.route,
+                SaveLocation.route -> true
                 else -> false
             }
             val systemUiController = rememberSystemUiController()
@@ -89,46 +80,15 @@ class MainActivity : AppCompatActivity() {
             SideEffect {
                 systemUiController.setSystemBarsColor(Color.Transparent, useDarkIcons)
             }
-            SpaceAppsTheme {
-                Scaffold(
-                    bottomBar = {
-                        AnimatedVisibility(
-                            visible = isBottomBarVisible,
-                            enter = fadeIn() + expandVertically(expandFrom = Alignment.Top),
-                            exit = fadeOut() + shrinkVertically(shrinkTowards = Alignment.Top)
-                        ) {
-                            BottomNavigation(
-                                modifier = Modifier.navigationBarsHeight(ACTION_BAR_SIZE)
-                            ) {
-                                bottomItems.forEachIndexed { index, menuItem ->
-                                    BottomNavigationItem(
-                                        modifier = Modifier.navigationBarsPadding(),
-                                        selected = selectedIndex == index,
-                                        onClick = {
-                                            selectedIndex = index
-                                            navController.navigateToRootDestination(menuItem.route)
-                                        },
-                                        icon = {
-                                            Icon(
-                                                imageVector = menuItem.icon,
-                                                contentDescription = stringResource(id = menuItem.labelId)
-                                            )
-                                        },
-                                        label = { Text(text = stringResource(id = menuItem.labelId)) }
-                                    )
-                                }
-                            }
-                        }
-                    }
-                ) {
-                    PopulatedNavHost(navController, provideStartDestination(), it) {
-                        selectedIndex = 0
-                        navController.navigateToRootDestination(GeolocationMap.route)
-                    }
-                }
-            }
+            MainScreen(
+                isBottomBarVisible = isBottomBarVisible,
+                bottomItems = bottomItems,
+                navController = navController,
+                startDestination = provideStartDestination()
+            )
         }
     }
+
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
