@@ -24,7 +24,7 @@ object RoomModule {
         @ApplicationContext context: Context,
         dispatchersProvider: DispatchersProvider
     ): SpaceAppsDatabase {
-        val executor = dispatchersProvider.io.asExecutor()
+        val executor = dispatchersProvider.IO.asExecutor()
         return Room
             .databaseBuilder(context, SpaceAppsDatabase::class.java, DATABASE_NAME)
             .fallbackToDestructiveMigration()

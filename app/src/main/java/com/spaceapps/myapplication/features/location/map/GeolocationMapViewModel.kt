@@ -13,14 +13,13 @@ import com.google.android.gms.maps.GoogleMap.OnCameraMoveStartedListener.REASON_
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.ktx.model.cameraPosition
 import com.google.maps.android.ktx.model.markerOptions
-import com.spaceapps.myapplication.R
-import com.spaceapps.myapplication.app.GeolocationGraph
+import com.spaceapps.myapplication.app.Screens.*
 import com.spaceapps.myapplication.core.DEFAULT_MAP_ZOOM
 import com.spaceapps.myapplication.core.DEGREES_DMS
 import com.spaceapps.myapplication.core.SYSTEM_GEO
 import com.spaceapps.myapplication.core.local.DataStoreManager
-import com.spaceapps.myapplication.utils.NavigationDispatcher
 import com.spaceapps.myapplication.core.utils.getStateFlow
+import com.spaceapps.myapplication.utils.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -30,7 +29,7 @@ import javax.inject.Inject
 class GeolocationMapViewModel @Inject constructor(
     private val locationClient: FusedLocationProviderClient,
     private val navigationDispatcher: NavigationDispatcher,
-    private val savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle,
     dataStoreManager: DataStoreManager
 ) : ViewModel() {
 
@@ -44,8 +43,8 @@ class GeolocationMapViewModel @Inject constructor(
         key = "location",
         initialValue = null
     )
-    private val _events = MutableSharedFlow<GeolocationMapEvents>()
-    val events: SharedFlow<GeolocationMapEvents>
+    private val _events = MutableSharedFlow<GeolocationMapEvent>()
+    val events: SharedFlow<GeolocationMapEvent>
         get() = _events.asSharedFlow()
 
     val degreesFormat = dataStoreManager.observeDegreesFormat()
@@ -83,12 +82,12 @@ class GeolocationMapViewModel @Inject constructor(
                 zoom(DEFAULT_MAP_ZOOM)
             }
         )
-        _events.emit(GeolocationMapEvents.UpdateCamera(update))
+        _events.emit(GeolocationMapEvent.UpdateCamera(update))
     }
 
     private fun updateMarker(lastLocation: Location) = viewModelScope.launch {
         val latLng = LatLng(lastLocation.latitude, lastLocation.longitude)
-        _events.emit(GeolocationMapEvents.AddMarker(markerOptions { position(latLng) }))
+        _events.emit(GeolocationMapEvent.AddMarker(markerOptions { position(latLng) }))
     }
 
     fun onCameraMoved(reason: Int) =
@@ -100,12 +99,12 @@ class GeolocationMapViewModel @Inject constructor(
     }
 
     fun goToSettings() =
-        navigationDispatcher.emit { it.navigate(GeolocationGraph.MapSettings.route) }
+        navigationDispatcher.emit { it.navigate(MapSettings.route) }
 
     fun goLocationsList() =
-        navigationDispatcher.emit { it.navigate(GeolocationGraph.LocationsList.route) }
+        navigationDispatcher.emit { it.navigate(LocationsList.route) }
 
     fun addLocation(location: Location?) = viewModelScope.launch {
-        _events.emit(GeolocationMapEvents.ShowSnackBar(R.string.not_implemented_yet))
+        navigationDispatcher.emit { it.navigate(SaveLocation.route) }
     }
 }

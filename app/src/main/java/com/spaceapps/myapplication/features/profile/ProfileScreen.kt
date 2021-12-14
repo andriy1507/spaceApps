@@ -29,7 +29,7 @@ fun ProfileScreen(viewModel: ProfileViewModel) {
     LaunchedEffect(events) {
         events.collect {
             when (it) {
-                is ProfileEvents.ShowSnackBar ->
+                is ProfileEvent.ShowSnackBar ->
                     scaffoldState.snackbarHostState
                         .showSnackbar(context.getString(it.messageId))
             }
@@ -47,6 +47,11 @@ fun ProfileScreen(viewModel: ProfileViewModel) {
             item {
                 Button(onClick = viewModel::goNotifications) {
                     Text("Notifications")
+                }
+            }
+            item {
+                Button(onClick = viewModel::goPlayer) {
+                    Text("Player")
                 }
             }
         }

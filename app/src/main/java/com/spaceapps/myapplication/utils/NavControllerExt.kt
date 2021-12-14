@@ -5,7 +5,7 @@ import androidx.lifecycle.asFlow
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigator
-import com.spaceapps.myapplication.app.GeolocationGraph
+import com.spaceapps.myapplication.app.Screens.*
 
 // sets value to previous savedStateHandle unless route is specified
 fun <T> NavController.setNavigationResult(route: String? = null, key: String, result: T) {
@@ -28,7 +28,7 @@ fun <T> NavController.observeNavigationResult(key: String) =
 // popUpToRoute - should always be the start destination of the bottomBar, not app
 fun NavController.navigateToRootDestination(
     route: String,
-    popUpToRoute: String = GeolocationGraph.GeolocationMap.route
+    popUpToRoute: String = GeolocationMap.route
 ) {
     navigate(route) {
         popUpTo(popUpToRoute) { saveState = true }

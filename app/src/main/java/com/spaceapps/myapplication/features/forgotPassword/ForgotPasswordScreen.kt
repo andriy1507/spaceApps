@@ -6,5 +6,6 @@ import androidx.compose.runtime.Composable
 @Composable
 fun ForgotPasswordScreen(viewModel: ForgotPasswordViewModel) {
     Column {
+        viewModel
     }
 }

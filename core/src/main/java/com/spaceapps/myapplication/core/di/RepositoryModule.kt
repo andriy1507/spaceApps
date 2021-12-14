@@ -4,6 +4,8 @@ import com.spaceapps.myapplication.core.repositories.auth.AuthRepository
 import com.spaceapps.myapplication.core.repositories.auth.AuthRepositoryImpl
 import com.spaceapps.myapplication.core.repositories.devices.DevicesRepository
 import com.spaceapps.myapplication.core.repositories.devices.DevicesRepositoryImpl
+import com.spaceapps.myapplication.core.repositories.files.FilesRepository
+import com.spaceapps.myapplication.core.repositories.files.FilesRepositoryImpl
 import com.spaceapps.myapplication.core.repositories.locations.LocationsRepository
 import com.spaceapps.myapplication.core.repositories.locations.LocationsRepositoryImpl
 import com.spaceapps.myapplication.core.repositories.notifications.NotificationsRepository
@@ -33,4 +35,7 @@ interface RepositoryModule {
 
     @Binds
     fun bindSignalrRepository(impl: SignalrRepositoryImpl): SignalrRepository
+
+    @Binds
+    fun bindFilesRepository(impl: FilesRepositoryImpl): FilesRepository
 }

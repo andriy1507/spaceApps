@@ -1,4 +1,4 @@
-package com.spaceapps.myapplication.app
+package com.spaceapps.myapplication.app.services
 
 import android.app.Notification
 import android.app.PendingIntent

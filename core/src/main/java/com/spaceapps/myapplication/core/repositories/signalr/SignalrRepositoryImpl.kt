@@ -44,7 +44,7 @@ class SignalrRepositoryImpl @Inject constructor(
         if (connectionState != HubConnectionState.CONNECTED) start().blockingAwait()
     }
 
-    private fun provideAccessToken() = CoroutineScope(dispatchersProvider.io)
+    private fun provideAccessToken() = CoroutineScope(dispatchersProvider.IO)
         .async { dataStoreManager.getAccessToken().orEmpty() }
-        .asSingle(dispatchersProvider.io)
+        .asSingle(dispatchersProvider.IO)
 }

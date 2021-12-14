@@ -12,6 +12,7 @@ import com.spaceapps.myapplication.core.network.NotificationsRemoteMediator
 import com.spaceapps.myapplication.core.network.calls.NotificationsCalls
 import com.spaceapps.myapplication.core.repositories.notifications.results.DeleteNotificationResult
 import com.spaceapps.myapplication.core.repositories.notifications.results.GetNotificationResult
+import com.spaceapps.myapplication.core.repositories.notifications.results.UpdateNotificationViewedResult
 import com.spaceapps.myapplication.core.utils.DispatchersProvider
 import com.spaceapps.myapplication.core.utils.Success
 import com.spaceapps.myapplication.core.utils.Error
@@ -44,7 +45,7 @@ class NotificationsRepositoryImpl @Inject constructor(
     )
 
     override suspend fun deleteNotification(id: Int): DeleteNotificationResult =
-        withContext(dispatchersProvider.io) {
+        withContext(dispatchersProvider.IO) {
             return@withContext when (val response = request { calls.deleteNotification(id) }) {
                 is Success -> {
                     dao.deleteById(id)
@@ -58,10 +59,21 @@ class NotificationsRepositoryImpl @Inject constructor(
         }
 
     override suspend fun getNotificationById(id: Int): GetNotificationResult =
-        withContext(dispatchersProvider.io) {
+        withContext(dispatchersProvider.IO) {
             return@withContext when (val response = request { calls.getNotificationById(id) }) {
                 is Success -> GetNotificationResult.Success(response.data)
                 is Error -> GetNotificationResult.Error(response.error)
+            }
+        }
+
+    override suspend fun updateViewedById(id: Int): UpdateNotificationViewedResult =
+        withContext(dispatchersProvider.IO) {
+            return@withContext when (val response = request { calls.updateNotificationViewed(id) }) {
+                is Success -> {
+                    dao.updateViewedById(id)
+                    UpdateNotificationViewedResult.Success
+                }
+                is Error -> UpdateNotificationViewedResult.Error(response.error)
             }
         }
 }

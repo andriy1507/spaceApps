@@ -49,7 +49,7 @@
     <string name="northing">Northing</string>
     <string name="not_implemented_yet">Not implemented yet</string>
     <string name="new_login">New login</string>
-    <string name="new_login_text">Detected new login on %s %s %s</string>
+    <string name="new_login_text">Detected new login on %1$s %2$s %3$s</string>
     <string name="search">Search</string>
     <string name="profile">Profile</string>
     <string name="unexpected_error">Unexpected error</string>
@@ -61,4 +61,5 @@
     <string name="location_permission_rationale_message">Application needs access to your location to work properly. Please grant permission.</string>
     <string name="access_to_location">Access to location</string>
     <string name="location_not_available">Location not available</string>
+    <string name="retry">Retry</string>
 </resources>

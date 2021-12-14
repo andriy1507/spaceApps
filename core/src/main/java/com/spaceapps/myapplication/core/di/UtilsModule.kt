@@ -3,6 +3,7 @@ package com.spaceapps.myapplication.core.di
 import android.content.Context
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.spaceapps.myapplication.core.local.*
 import com.spaceapps.myapplication.core.utils.DispatchersProvider
 import com.spaceapps.myapplication.core.utils.DispatchersProviderImpl
 import com.spaceapps.myapplication.core.utils.MoshiConverters
@@ -24,11 +25,22 @@ object UtilsModule {
 
     @Provides
     @Singleton
-    fun provideLocationProviderClient(
-        @ApplicationContext context: Context
-    ): FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
+    fun provideLocationProviderClient(@ApplicationContext context: Context): FusedLocationProviderClient =
+        LocationServices.getFusedLocationProviderClient(context)
 
     @Provides
     @Singleton
     fun provideDispatchersProvider(): DispatchersProvider = DispatchersProviderImpl
+
+    @Provides
+    @Singleton
+    fun provideDatabaseManager(db: SpaceAppsDatabase): DatabaseManager {
+        return DatabaseManagerImpl(db)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDataStoreManager(@ApplicationContext context: Context): DataStoreManager {
+        return DataStoreManagerImpl(context)
+    }
 }

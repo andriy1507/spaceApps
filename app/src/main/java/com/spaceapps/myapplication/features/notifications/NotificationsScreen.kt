@@ -1,16 +1,16 @@
 package com.spaceapps.myapplication.features.notifications
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.shrinkVertically
+import android.content.Context
+import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -22,23 +22,29 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemsIndexed
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
+import com.google.accompanist.placeholder.PlaceholderHighlight
+import com.google.accompanist.placeholder.material.fade
 import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.spaceapps.myapplication.R
+import com.spaceapps.myapplication.core.models.local.NotificationEntity
 import com.spaceapps.myapplication.ui.OnClick
 import com.spaceapps.myapplication.ui.SPACING_128
 import com.spaceapps.myapplication.ui.SPACING_16
 import com.spaceapps.myapplication.ui.SPACING_4
 import com.spaceapps.myapplication.utils.plus
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 
 @Composable
@@ -50,63 +56,132 @@ fun NotificationsScreen(viewModel: NotificationsViewModel) {
     }
     val context = LocalContext.current
     val notifications = viewModel.notifications.collectAsLazyPagingItems()
-    LaunchedEffect(events) {
-        events.collect {
-            when (it) {
-                is NotificationsEvent.ShowSnackBar ->
-                    scaffoldState.snackbarHostState
-                        .showSnackbar(context.getString(it.messageId))
-            }
-        }
-    }
-    val statusBarPadding =
-        rememberInsetsPaddingValues(insets = LocalWindowInsets.current.statusBars)
-    val navigationBarPadding =
-        rememberInsetsPaddingValues(insets = LocalWindowInsets.current.navigationBars)
+    ObserveEvents(events, scaffoldState, context)
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         scaffoldState = scaffoldState,
-        topBar = {
-            TopAppBar(
-                contentPadding = AppBarDefaults.ContentPadding + statusBarPadding
-            ) {
-                IconButton(onClick = viewModel::goBack) {
-                    Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = null)
-                }
-                Text(
-                    text = stringResource(id = R.string.notifications),
-                    style = MaterialTheme.typography.h6
-                )
+        topBar = { NotificationsTopBar(viewModel::goBack) }
+    ) {
+        NotificationsContent(
+            notificationsPagingItems = notifications,
+            onNotificationClick = viewModel::goNotificationView,
+            onDelete = viewModel::deleteNotification
+        )
+    }
+}
+
+@Composable
+private fun NotificationsTopBar(onNavigationClick: OnClick) {
+    val statusBarPadding =
+        rememberInsetsPaddingValues(insets = LocalWindowInsets.current.statusBars)
+    TopAppBar(contentPadding = AppBarDefaults.ContentPadding + statusBarPadding) {
+        IconButton(onClick = onNavigationClick) {
+            Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = null)
+        }
+        Text(
+            text = stringResource(id = R.string.notifications),
+            style = MaterialTheme.typography.h6
+        )
+    }
+}
+
+@Composable
+private fun ObserveEvents(
+    events: Flow<NotificationsEvent>,
+    scaffoldState: ScaffoldState,
+    context: Context
+) {
+    LaunchedEffect(events) {
+        events.collect { event ->
+            when (event) {
+                is NotificationsEvent.ShowSnackBar ->
+                    scaffoldState.snackbarHostState
+                        .showSnackbar(context.getString(event.messageId))
             }
         }
+    }
+}
+
+@Composable
+fun NotificationsContent(
+    notificationsPagingItems: LazyPagingItems<NotificationEntity>,
+    onNotificationClick: (Int, String) -> Unit,
+    onDelete: (Int) -> Unit
+) {
+    val isRefreshing = notificationsPagingItems.loadState.refresh is LoadState.Loading
+    val swipeRefreshState =
+        rememberSwipeRefreshState(isRefreshing = isRefreshing && notificationsPagingItems.itemCount > 0)
+    val navigationBarPadding =
+        rememberInsetsPaddingValues(insets = LocalWindowInsets.current.navigationBars)
+    SwipeRefresh(
+        modifier = Modifier.fillMaxSize(),
+        state = swipeRefreshState,
+        onRefresh = notificationsPagingItems::refresh,
+        indicator = { state, trigger ->
+            SwipeRefreshIndicator(
+                state = state,
+                refreshTriggerDistance = trigger,
+                contentColor = MaterialTheme.colors.primary
+            )
+        }
     ) {
-        val swipeRefreshState =
-            rememberSwipeRefreshState(isRefreshing = notifications.loadState.refresh is LoadState.Loading)
-        SwipeRefresh(
-            modifier = Modifier.fillMaxSize(),
-            state = swipeRefreshState,
-            onRefresh = notifications::refresh,
-            indicator = { state, trigger ->
-                SwipeRefreshIndicator(
-                    state = state,
-                    refreshTriggerDistance = trigger,
-                    contentColor = MaterialTheme.colors.primary
-                )
-            }
-        ) {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = navigationBarPadding
-            ) {
-                itemsIndexed(notifications, key = { _, n -> n.id }) { i, n ->
-                    NotificationItem(
-                        title = n?.title,
-                        text = n?.text,
-                        onClick = { n?.let { viewModel.goNotificationView(it.id, it.title) } },
-                        onDismiss = { n?.let { viewModel.deleteNotification(it.id) } }
-                    )
-                    if (i != notifications.itemCount - 1) Divider()
+        Crossfade(isRefreshing && notificationsPagingItems.itemCount == 0) {
+            when (it) {
+                true -> {
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                    }
                 }
+                false -> {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = navigationBarPadding
+                    ) {
+                        item {
+                            NotificationListRetryItem(
+                                state = notificationsPagingItems.loadState.prepend,
+                                onRetry = notificationsPagingItems::refresh
+                            )
+                        }
+                        itemsIndexed(notificationsPagingItems, key = { _, n -> n.id }) { i, n ->
+                            NotificationItem(
+                                title = n?.title,
+                                text = n?.text,
+                                onClick = {
+                                    n?.let { onNotificationClick(n.id, n.title) }
+                                }
+                            ) { n?.let { onDelete(n.id) } }
+                            if (i != notificationsPagingItems.itemCount - 1) Divider()
+                        }
+                        item {
+                            NotificationListRetryItem(
+                                state = notificationsPagingItems.loadState.append,
+                                onRetry = notificationsPagingItems::refresh
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun NotificationListRetryItem(state: LoadState, onRetry: OnClick) {
+    if (state !is LoadState.NotLoading) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = SPACING_16),
+            contentAlignment = Alignment.Center
+        ) {
+            when (state) {
+                is LoadState.Loading -> CircularProgressIndicator()
+                is LoadState.Error -> Button(onClick = onRetry) {
+                    Text(text = stringResource(R.string.retry))
+                    Icon(imageVector = Icons.Filled.Refresh, contentDescription = null)
+                }
+                else -> Unit
             }
         }
     }
@@ -121,6 +196,7 @@ fun NotificationItem(
     onClick: OnClick,
     onDismiss: OnClick
 ) {
+    val notificationTitleWidth = .75f
     val dismissState = rememberDismissState()
     val backgroundColor = when (dismissState.dismissDirection) {
         DismissDirection.EndToStart -> Color.Red
@@ -148,7 +224,10 @@ fun NotificationItem(
                     )
                 }
             },
-            directions = setOf(DismissDirection.EndToStart),
+            directions = when {
+                title == null || text == null -> emptySet()
+                else -> setOf(DismissDirection.EndToStart)
+            },
             dismissContent = {
                 Column(
                     modifier = modifier
@@ -159,16 +238,31 @@ fun NotificationItem(
                         .padding(horizontal = SPACING_16, vertical = SPACING_4)
                 ) {
                     Text(
-                        modifier = Modifier.placeholder(title.isNullOrEmpty()),
+                        modifier = Modifier
+                            .placeholder(
+                                visible = title == null,
+                                highlight = PlaceholderHighlight.fade(),
+                                shape = RoundedCornerShape(SPACING_4)
+                            )
+                            .fillMaxWidth(notificationTitleWidth),
                         text = title.orEmpty(),
-                        style = MaterialTheme.typography.subtitle1
+                        style = MaterialTheme.typography.subtitle1,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1
                     )
+                    Spacer(modifier = Modifier.height(SPACING_4))
                     Text(
                         modifier = Modifier
-                            .placeholder(text.isNullOrEmpty())
-                            .weight(1f),
+                            .placeholder(
+                                visible = text == null,
+                                highlight = PlaceholderHighlight.fade(),
+                                shape = RoundedCornerShape(SPACING_4)
+                            )
+                            .wrapContentHeight(),
                         text = text.orEmpty(),
-                        style = MaterialTheme.typography.body2
+                        style = MaterialTheme.typography.body2,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 5
                     )
                 }
             }

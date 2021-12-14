@@ -1,7 +1,3 @@
-import com.google.protobuf.gradle.generateProtoTasks
-import com.google.protobuf.gradle.protobuf
-import com.google.protobuf.gradle.protoc
-
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -10,7 +6,6 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
-    id("com.google.protobuf") version "0.8.15"
     id("org.jlleitschuh.gradle.ktlint") version "10.1.0"
     id("io.gitlab.arturbosch.detekt") version "1.18.1"
 }
@@ -45,7 +40,7 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
-        freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn")
+        freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn", "-Xjvm-default=all")
     }
     buildFeatures {
         compose = true
@@ -63,6 +58,9 @@ android {
         resources {
             excludes += listOf("/META-INF/{AL2.0,LGPL2.1}")
         }
+    }
+    hilt {
+        enableAggregatingTask = true
     }
 }
 configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
@@ -83,6 +81,7 @@ detekt {
 }
 dependencies {
 //    Kotlin
+    implementation(platform(Jetbrains.Kotlin.Bom))
     implementation(Jetbrains.Kotlin.StdLib)
     coreLibraryDesugaring(Android.Tools.Desugar)
     implementation(project(":core"))
@@ -99,30 +98,26 @@ dependencies {
     implementation(Google.Accompanist.Permissions)
 
 //    Coil
+//    implementation(platform(Coil.Bom))
     implementation(Coil.Coil)
     implementation(Coil.Compose)
 //    Coroutines
+    implementation(platform(Jetbrains.KotlinX.Coroutines.Bom))
     implementation(Jetbrains.KotlinX.Coroutines.Core)
     implementation(Jetbrains.KotlinX.Coroutines.Android)
     implementation(Jetbrains.KotlinX.Coroutines.PlayServices)
-
-//    Retrofit
-    implementation(SquareUp.Retrofit.Retrofit)
-    implementation(SquareUp.Retrofit.MoshiConverter)
-//    OkHttp client
-    implementation(platform(SquareUp.OkHttp.Bom))
-    implementation(SquareUp.OkHttp.OkHttp)
-    implementation(SquareUp.OkHttp.LoggingInterceptor)
 //    Timber logging
     implementation(Timber.Timber)
 //    Google play services
     implementation(Google.Android.PlayServices.Location)
     implementation(Google.Android.PlayServices.Auth)
     implementation(Google.Android.PlayServices.Maps)
+    implementation(Google.Android.PlayServices.Wallet)
     implementation(Google.Maps.Maps)
     implementation(Google.Maps.Utils)
 //    AndroidX
     implementation(AndroidX.Core.Ktx)
+    implementation(AndroidX.Emoji2.Emoji2)
     implementation(AndroidX.AppCompat.AppCompat)
     implementation(AndroidX.Activity.Ktx)
     implementation(AndroidX.Activity.Compose)
@@ -136,13 +131,11 @@ dependencies {
 //    Paging
     implementation(AndroidX.Paging.Runtime)
     implementation(AndroidX.Paging.Compose)
-//    Moshi
-    implementation(SquareUp.Moshi.Moshi)
-    kapt(SquareUp.Moshi.CodeGen)
 //    WorkManager
     implementation(AndroidX.Work.Runtime)
 //    Jetpack Compose
     implementation(AndroidX.Compose.Ui)
+    implementation(AndroidX.Compose.UiUtil)
     implementation(AndroidX.Compose.LiveData)
     implementation(AndroidX.Compose.Material)
     implementation(AndroidX.Compose.Material3)
@@ -165,16 +158,6 @@ dependencies {
     implementation(Google.Firebase.Messaging)
     implementation(Google.Firebase.Installations)
     implementation(Google.Firebase.DynamicLinks)
-//    Room database
-    implementation(AndroidX.Room.Runtime)
-    implementation(AndroidX.Room.Ktx)
-    implementation(AndroidX.Room.Paging)
-    kapt(AndroidX.Room.Compiler)
-
-//    Datastore
-    implementation(AndroidX.DataStore.DataStore)
-    implementation(AndroidX.DataStore.Preferences)
-    implementation(Google.ProtoBuf.JavaLite)
 
 //    Facebook SDK
     implementation(Facebook.Android.Sdk)
@@ -190,24 +173,14 @@ dependencies {
     implementation(AndroidX.CameraX.Lifecycle)
     implementation(AndroidX.CameraX.View)
 
+    implementation(AndroidX.Media3.Ui)
+    implementation(AndroidX.Media3.ExoPlayer)
+    implementation(AndroidX.Media3.Sessions)
+
 //    Venom
     debugImplementation(Venom.Debug)
     releaseImplementation(Venom.NoOps)
 
     debugImplementation(AndroidX.Compose.UiTooling)
     debugImplementation(Jetbrains.Kotlin.Reflect)
-}
-
-// Generates the java Protobuf-lite code for the Protobufs in this project.
-protobuf {
-    protoc {
-        artifact = "com.google.protobuf:protoc:3.10.0"
-    }
-    generateProtoTasks {
-        all().forEach { task ->
-            task.plugins.create("java") {
-                option("lite")
-            }
-        }
-    }
 }

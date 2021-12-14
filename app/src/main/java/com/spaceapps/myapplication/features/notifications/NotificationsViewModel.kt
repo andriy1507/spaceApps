@@ -2,7 +2,7 @@ package com.spaceapps.myapplication.features.notifications
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.spaceapps.myapplication.app.ProfileGraph
+import com.spaceapps.myapplication.app.Screens.NotificationView
 import com.spaceapps.myapplication.core.repositories.notifications.NotificationsRepository
 import com.spaceapps.myapplication.utils.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,7 +24,7 @@ class NotificationsViewModel @Inject constructor(
     val notifications = repository.getNotifications().flow
 
     fun goNotificationView(id: Int, title: String) = navigationDispatcher.emit {
-        it.navigate(ProfileGraph.NotificationView.createRoute(id, title))
+        it.navigate(NotificationView.createRoute(id, title))
     }
 
     fun goBack() = navigationDispatcher.emit { it.navigateUp() }
