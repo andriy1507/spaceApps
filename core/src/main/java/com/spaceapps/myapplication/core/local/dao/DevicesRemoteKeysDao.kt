@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.spaceapps.myapplication.core.models.local.DeviceRemoteKey
+import com.spaceapps.myapplication.core.models.local.devices.DeviceRemoteKey
 
 @Dao
 interface DevicesRemoteKeysDao {

@@ -1,4 +1,4 @@
-package com.spaceapps.myapplication.core.models.local
+package com.spaceapps.myapplication.core.models.local.locations
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

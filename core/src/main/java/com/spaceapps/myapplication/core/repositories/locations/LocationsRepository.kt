@@ -1,7 +1,7 @@
 package com.spaceapps.myapplication.core.repositories.locations
 
 import androidx.paging.Pager
-import com.spaceapps.myapplication.core.models.local.LocationEntity
+import com.spaceapps.myapplication.core.models.local.locations.LocationEntity
 import com.spaceapps.myapplication.core.models.remote.locations.LocationRequest
 import com.spaceapps.myapplication.core.repositories.locations.results.CreateLocationResult
 import com.spaceapps.myapplication.core.repositories.locations.results.DeleteLocationResult

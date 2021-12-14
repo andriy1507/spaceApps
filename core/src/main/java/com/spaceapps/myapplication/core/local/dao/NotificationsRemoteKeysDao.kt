@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.spaceapps.myapplication.core.models.local.NotificationRemoteKey
+import com.spaceapps.myapplication.core.models.local.notifications.NotificationRemoteKey
 
 @Dao
 interface NotificationsRemoteKeysDao {

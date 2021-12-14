@@ -1,4 +1,4 @@
-package com.spaceapps.myapplication.core.models.local
+package com.spaceapps.myapplication.core.models.local.devices
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

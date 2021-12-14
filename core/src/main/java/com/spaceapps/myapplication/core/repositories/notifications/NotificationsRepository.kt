@@ -1,7 +1,7 @@
 package com.spaceapps.myapplication.core.repositories.notifications
 
 import androidx.paging.Pager
-import com.spaceapps.myapplication.core.models.local.NotificationEntity
+import com.spaceapps.myapplication.core.models.local.notifications.NotificationEntity
 import com.spaceapps.myapplication.core.repositories.notifications.results.DeleteNotificationResult
 import com.spaceapps.myapplication.core.repositories.notifications.results.GetNotificationResult
 import com.spaceapps.myapplication.core.repositories.notifications.results.UpdateNotificationViewedResult

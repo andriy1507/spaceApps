@@ -9,8 +9,8 @@ import com.spaceapps.myapplication.core.INITIAL_PAGE
 import com.spaceapps.myapplication.core.local.SpaceAppsDatabase
 import com.spaceapps.myapplication.core.local.dao.DevicesDao
 import com.spaceapps.myapplication.core.local.dao.DevicesRemoteKeysDao
-import com.spaceapps.myapplication.core.models.local.DeviceEntity
-import com.spaceapps.myapplication.core.models.local.DeviceRemoteKey
+import com.spaceapps.myapplication.core.models.local.devices.DeviceEntity
+import com.spaceapps.myapplication.core.models.local.devices.DeviceRemoteKey
 import com.spaceapps.myapplication.core.network.calls.ProfileCalls
 import com.spaceapps.myapplication.core.utils.Error
 import com.spaceapps.myapplication.core.utils.Success

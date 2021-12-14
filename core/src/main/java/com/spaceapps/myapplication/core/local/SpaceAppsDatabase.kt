@@ -4,7 +4,12 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.spaceapps.myapplication.core.local.dao.*
-import com.spaceapps.myapplication.core.models.local.*
+import com.spaceapps.myapplication.core.models.local.devices.DeviceEntity
+import com.spaceapps.myapplication.core.models.local.devices.DeviceRemoteKey
+import com.spaceapps.myapplication.core.models.local.locations.LocationEntity
+import com.spaceapps.myapplication.core.models.local.locations.LocationRemoteKey
+import com.spaceapps.myapplication.core.models.local.notifications.NotificationEntity
+import com.spaceapps.myapplication.core.models.local.notifications.NotificationRemoteKey
 
 @Database(
     version = 1,

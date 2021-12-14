@@ -9,8 +9,8 @@ import com.spaceapps.myapplication.core.INITIAL_PAGE
 import com.spaceapps.myapplication.core.local.SpaceAppsDatabase
 import com.spaceapps.myapplication.core.local.dao.NotificationsDao
 import com.spaceapps.myapplication.core.local.dao.NotificationsRemoteKeysDao
-import com.spaceapps.myapplication.core.models.local.NotificationEntity
-import com.spaceapps.myapplication.core.models.local.NotificationRemoteKey
+import com.spaceapps.myapplication.core.models.local.notifications.NotificationEntity
+import com.spaceapps.myapplication.core.models.local.notifications.NotificationRemoteKey
 import com.spaceapps.myapplication.core.network.calls.NotificationsCalls
 import com.spaceapps.myapplication.core.utils.Error
 import com.spaceapps.myapplication.core.utils.Success

@@ -9,8 +9,8 @@ import com.spaceapps.myapplication.core.INITIAL_PAGE
 import com.spaceapps.myapplication.core.local.SpaceAppsDatabase
 import com.spaceapps.myapplication.core.local.dao.LocationsDao
 import com.spaceapps.myapplication.core.local.dao.LocationsRemoteKeysDao
-import com.spaceapps.myapplication.core.models.local.LocationEntity
-import com.spaceapps.myapplication.core.models.local.LocationRemoteKey
+import com.spaceapps.myapplication.core.models.local.locations.LocationEntity
+import com.spaceapps.myapplication.core.models.local.locations.LocationRemoteKey
 import com.spaceapps.myapplication.core.network.calls.LocationsCalls
 import com.spaceapps.myapplication.core.utils.Error
 import com.spaceapps.myapplication.core.utils.Success
