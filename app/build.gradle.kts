@@ -115,9 +115,6 @@ dependencies {
     implementation(Google.Android.PlayServices.Wallet)
     implementation(Google.Maps.Maps)
     implementation(Google.Maps.Utils)
-//    Moshi
-    implementation(SquareUp.Moshi.Moshi)
-    kapt(SquareUp.Moshi.CodeGen)
 //    AndroidX
     implementation(AndroidX.Core.Ktx)
     implementation(AndroidX.Emoji2.Emoji2)
@@ -138,6 +135,7 @@ dependencies {
     implementation(AndroidX.Work.Runtime)
 //    Jetpack Compose
     implementation(AndroidX.Compose.Ui)
+    implementation(AndroidX.Compose.UiUtil)
     implementation(AndroidX.Compose.LiveData)
     implementation(AndroidX.Compose.Material)
     implementation(AndroidX.Compose.Material3)

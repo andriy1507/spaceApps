@@ -6,6 +6,7 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("org.jlleitschuh.gradle.ktlint") version "10.1.0"
     id("io.gitlab.arturbosch.detekt") version "1.18.1"
+    id("com.google.devtools.ksp") version "1.6.0-1.0.2"
 }
 
 android {
@@ -16,15 +17,6 @@ android {
         targetSdk = 31
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments += mapOf(
-                    "room.schemaLocation" to "$projectDir/schemas",
-                    "room.incremental" to "true",
-                    "room.expandProjection" to "true"
-                )
-            }
-        }
     }
     buildTypes {
         release {
@@ -62,6 +54,12 @@ android {
     hilt {
         enableAggregatingTask = true
     }
+}
+
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+    arg("room.incremental", "true")
+    arg("room.expandProjection", "true")
 }
 
 configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
@@ -102,7 +100,7 @@ dependencies {
     implementation(AndroidX.Room.Runtime)
     implementation(AndroidX.Room.Ktx)
     implementation(AndroidX.Room.Paging)
-    kapt(AndroidX.Room.Compiler)
+    ksp(AndroidX.Room.Compiler)
     //    Datastore
     implementation(AndroidX.DataStore.DataStore)
     implementation(AndroidX.DataStore.Preferences)
@@ -110,7 +108,7 @@ dependencies {
     implementation(Microsoft.SignalR.SignalR)
     //    Moshi
     implementation(SquareUp.Moshi.Moshi)
-    kapt(SquareUp.Moshi.CodeGen)
+    ksp(SquareUp.Moshi.CodeGen)
     //    Paging
     implementation(AndroidX.Paging.Runtime)
     //    Coroutines

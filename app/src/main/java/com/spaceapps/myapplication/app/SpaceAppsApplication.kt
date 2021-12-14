@@ -1,12 +1,11 @@
 package com.spaceapps.myapplication.app
 
 import android.app.Application
-import android.util.Log
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import coil.ImageLoader
 import coil.ImageLoaderFactory
-import coil.util.Logger
+import com.spaceapps.myapplication.R
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 
@@ -21,18 +20,9 @@ class SpaceAppsApplication : Application(), Configuration.Provider, ImageLoaderF
         .build()
 
     override fun newImageLoader(): ImageLoader = ImageLoader.Builder(this)
-        .logger(
-            object : Logger {
-                override var level: Int = Log.DEBUG
-
-                override fun log(
-                    tag: String,
-                    priority: Int,
-                    message: String?,
-                    throwable: Throwable?
-                ) {
-                    Log.println(priority, tag, message.orEmpty())
-                }
-            }
-        ).build()
+        .crossfade(true)
+        .placeholder(R.drawable.img_placeholder)
+        .fallback(R.drawable.img_placeholder)
+        .error(R.drawable.img_placeholder)
+        .build()
 }

@@ -49,7 +49,7 @@
     <string name="northing">Northing</string>
     <string name="not_implemented_yet">Not implemented yet</string>
     <string name="new_login">New login</string>
-    <string name="new_login_text">Detected new login on %s %s %s</string>
+    <string name="new_login_text">Detected new login on %1$s %2$s %3$s</string>
     <string name="search">Search</string>
     <string name="profile">Profile</string>
     <string name="unexpected_error">Unexpected error</string>

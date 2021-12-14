@@ -26,7 +26,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import coil.annotation.ExperimentalCoilApi
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import coil.size.Scale
 import coil.transform.RoundedCornersTransformation
 import com.google.accompanist.insets.LocalWindowInsets
@@ -115,9 +116,21 @@ fun NotificationViewScreen(viewModel: NotificationViewViewModel) {
     }
 }
 
-@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun ImageNotificationItem(imageUrl: String?) {
+    val screenWidth = LocalConfiguration.current.screenWidthDp
+    val screenHeight = LocalConfiguration.current.screenHeightDp
+    val imageRequest = with(LocalDensity.current) {
+        ImageRequest.Builder(LocalContext.current)
+            .size(
+                width = screenWidth.dp.roundToPx() - (SPACING_16 * 2).roundToPx(),
+                height = screenHeight.dp.roundToPx()
+            )
+            .scale(Scale.FIT)
+            .data(imageUrl)
+            .transformations(RoundedCornersTransformation(SPACING_16.toPx()))
+            .build()
+    }
     Image(
         modifier = Modifier
             .padding(
@@ -125,19 +138,7 @@ fun ImageNotificationItem(imageUrl: String?) {
                 vertical = SPACING_8
             )
             .fillMaxWidth(),
-        painter = rememberImagePainter(data = imageUrl) {
-            val screenWidth = LocalConfiguration.current.screenWidthDp
-            val screenHeight = LocalConfiguration.current.screenHeightDp
-            with(LocalDensity.current) {
-                transformations(RoundedCornersTransformation(SPACING_16.toPx()))
-                size(
-                    width = screenWidth.dp.roundToPx() - (SPACING_16 * 2).roundToPx(),
-                    height = screenHeight.dp.roundToPx()
-                )
-                scale(Scale.FIT)
-                crossfade(true)
-            }
-        },
+        painter = rememberAsyncImagePainter(model = imageRequest),
         contentDescription = null,
         contentScale = ContentScale.FillWidth
     )

@@ -1,10 +1,7 @@
 package com.spaceapps.myapplication.features.notifications
 
 import android.content.Context
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -13,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -110,8 +108,9 @@ fun NotificationsContent(
     onNotificationClick: (Int, String) -> Unit,
     onDelete: (Int) -> Unit
 ) {
+    val isRefreshing = notificationsPagingItems.loadState.refresh is LoadState.Loading
     val swipeRefreshState =
-        rememberSwipeRefreshState(isRefreshing = notificationsPagingItems.loadState.refresh is LoadState.Loading)
+        rememberSwipeRefreshState(isRefreshing = isRefreshing && notificationsPagingItems.itemCount > 0)
     val navigationBarPadding =
         rememberInsetsPaddingValues(insets = LocalWindowInsets.current.navigationBars)
     SwipeRefresh(
@@ -126,55 +125,63 @@ fun NotificationsContent(
             )
         }
     ) {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = navigationBarPadding
+        Crossfade(isRefreshing && notificationsPagingItems.itemCount == 0) {
+            when (it) {
+                true -> {
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                    }
+                }
+                false -> {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = navigationBarPadding
+                    ) {
+                        item {
+                            NotificationListRetryItem(
+                                state = notificationsPagingItems.loadState.prepend,
+                                onRetry = notificationsPagingItems::refresh
+                            )
+                        }
+                        itemsIndexed(notificationsPagingItems, key = { _, n -> n.id }) { i, n ->
+                            NotificationItem(
+                                title = n?.title,
+                                text = n?.text,
+                                onClick = {
+                                    n?.let { onNotificationClick(n.id, n.title) }
+                                }
+                            ) { n?.let { onDelete(n.id) } }
+                            if (i != notificationsPagingItems.itemCount - 1) Divider()
+                        }
+                        item {
+                            NotificationListRetryItem(
+                                state = notificationsPagingItems.loadState.append,
+                                onRetry = notificationsPagingItems::refresh
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun NotificationListRetryItem(state: LoadState, onRetry: OnClick) {
+    if (state !is LoadState.NotLoading) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = SPACING_16),
+            contentAlignment = Alignment.Center
         ) {
-            if (notificationsPagingItems.loadState.prepend !is LoadState.NotLoading) {
-                item {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = SPACING_16),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        when (notificationsPagingItems.loadState.prepend) {
-                            is LoadState.Loading -> CircularProgressIndicator()
-                            is LoadState.Error -> Button(onClick = notificationsPagingItems::retry) {
-                                Text(text = stringResource(R.string.retry))
-                            }
-                            else -> Unit
-                        }
-                    }
+            when (state) {
+                is LoadState.Loading -> CircularProgressIndicator()
+                is LoadState.Error -> Button(onClick = onRetry) {
+                    Text(text = stringResource(R.string.retry))
+                    Icon(imageVector = Icons.Filled.Refresh, contentDescription = null)
                 }
-            }
-            itemsIndexed(notificationsPagingItems, key = { _, n -> n.id }) { i, n ->
-                NotificationItem(
-                    title = n?.title,
-                    text = n?.text,
-                    onClick = {
-                        n?.let { onNotificationClick(it.id, it.title) }
-                    }
-                ) { n?.let { onDelete(it.id) } }
-                if (i != notificationsPagingItems.itemCount - 1) Divider()
-            }
-            if (notificationsPagingItems.loadState.append !is LoadState.NotLoading) {
-                item {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = SPACING_16),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        when (notificationsPagingItems.loadState.append) {
-                            is LoadState.Loading -> CircularProgressIndicator()
-                            is LoadState.Error -> Button(onClick = notificationsPagingItems::retry) {
-                                Text(text = stringResource(R.string.retry))
-                            }
-                            else -> Unit
-                        }
-                    }
-                }
+                else -> Unit
             }
         }
     }

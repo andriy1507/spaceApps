@@ -80,8 +80,8 @@ fun PopulatedNavHost(
         composable(
             route = Screens.Profile.route,
             popEnterTransition = Transitions.PopEnterTransition,
-            exitTransition = { _, target ->
-                when (target.destination.route) {
+            exitTransition = {
+                when (targetState.destination.route) {
                     Screens.Notifications.route,
                     Screens.Devices.route -> slideOutOfContainer(Start)
                     else -> null
@@ -129,26 +129,12 @@ fun PopulatedNavHost(
     }
 }
 
-private typealias EnterTrans = AnimatedContentScope<String>.(
-    initial: NavBackStackEntry,
-    target: NavBackStackEntry
-) -> EnterTransition
-private typealias ExitTrans = AnimatedContentScope<String>.(
-    initial: NavBackStackEntry,
-    target: NavBackStackEntry
-) -> ExitTransition
+private typealias EnterTrans = AnimatedContentScope<NavBackStackEntry>.() -> EnterTransition
+private typealias ExitTrans = AnimatedContentScope<NavBackStackEntry>.() -> ExitTransition
 
 private object Transitions {
-    val EnterTransition: EnterTrans = { _, _ ->
-        slideIntoContainer(Start) + fadeIn(initialAlpha = .5f)
-    }
-    val PopEnterTransition: EnterTrans = { _, _ ->
-        slideIntoContainer(End)
-    }
-    val ExitTransition: ExitTrans = { _, _ ->
-        slideOutOfContainer(Start)
-    }
-    val PopExitTransition: ExitTrans = { _, _ ->
-        slideOutOfContainer(End) + fadeOut(targetAlpha = .5f)
-    }
+    val EnterTransition: EnterTrans = { slideIntoContainer(Start) + fadeIn(initialAlpha = .5f) }
+    val PopEnterTransition: EnterTrans = { slideIntoContainer(End) }
+    val ExitTransition: ExitTrans = { slideOutOfContainer(Start) }
+    val PopExitTransition: ExitTrans = { slideOutOfContainer(End) + fadeOut(targetAlpha = .5f) }
 }

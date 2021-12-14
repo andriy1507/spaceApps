@@ -9,6 +9,8 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
+import kotlin.properties.ReadWriteProperty
+import kotlin.reflect.KProperty
 
 fun <T> SavedStateHandle.getStateFlow(
     scope: CoroutineScope,
@@ -38,4 +40,13 @@ fun <T> SavedStateHandle.getStateFlow(
     }.launchIn(scope)
 
     return stateFlow
+}
+
+fun <T> SavedStateHandle.getValue(key: String): ReadWriteProperty<Any, T?> {
+    return object : ReadWriteProperty<Any, T?> {
+        override fun getValue(thisRef: Any, property: KProperty<*>) = get<T>(key)
+
+        override fun setValue(thisRef: Any, property: KProperty<*>, value: T?) =
+            set(key, value)
+    }
 }

@@ -1,5 +1,5 @@
-const val KotlinVersion = "1.5.31"
-const val ComposeVersion = "1.1.0-beta02"
+const val KotlinVersion = "1.6.0"
+const val ComposeVersion = "1.1.0-beta04"
 
 object AndroidX {
     object Wear {
@@ -21,11 +21,12 @@ object AndroidX {
 
     object Compose {
         const val UiTooling = "androidx.compose.ui:ui-tooling:$ComposeVersion"
+        const val UiUtil = "androidx.compose.ui:ui-util:$ComposeVersion"
         const val Ui = "androidx.compose.ui:ui:$ComposeVersion"
         const val LiveData = "androidx.compose.runtime:runtime-livedata:$ComposeVersion"
         const val Runtime = "androidx.compose.runtime:runtime:$ComposeVersion"
         const val Material = "androidx.compose.material:material:$ComposeVersion"
-        const val Material3 = "androidx.compose.material3:material3:1.0.0-alpha01"
+        const val Material3 = "androidx.compose.material3:material3:1.0.0-alpha02"
         const val Icons = "androidx.compose.material:material-icons-extended:$ComposeVersion"
         const val Foundation = "androidx.compose.foundation:foundation:$ComposeVersion"
         const val Animation = "androidx.compose.animation:animation:$ComposeVersion"
@@ -36,7 +37,7 @@ object AndroidX {
     }
 
     object Room {
-        private const val RoomVersion = "2.4.0-beta01"
+        private const val RoomVersion = "2.4.0-rc01"
         const val Runtime = "androidx.room:room-runtime:$RoomVersion"
         const val Ktx = "androidx.room:room-ktx:$RoomVersion"
         const val Paging = "androidx.room:room-paging:$RoomVersion"
@@ -113,7 +114,7 @@ object AndroidX {
 object Android {
     object Tools {
         const val Desugar = "com.android.tools:desugar_jdk_libs:1.1.5"
-        const val GradlePlugin = "com.android.tools.build:gradle:7.0.3"
+        const val GradlePlugin = "com.android.tools.build:gradle:7.0.4"
     }
 }
 
@@ -129,7 +130,7 @@ object Google {
     }
 
     object Accompanist {
-        private const val AccompanistVersion = "0.21.0-beta"
+        private const val AccompanistVersion = "0.21.4-beta"
         const val DrawablePainter =
             "com.google.accompanist:accompanist-drawablepainter:$AccompanistVersion"
         const val Insets = "com.google.accompanist:accompanist-insets:$AccompanistVersion"
@@ -150,7 +151,7 @@ object Google {
     }
 
     object Dagger {
-        private const val DaggerVersion = "2.39.1"
+        private const val DaggerVersion = "2.40.5"
         const val HiltAndroid = "com.google.dagger:hilt-android:$DaggerVersion"
         const val HiltAndroidCompiler = "com.google.dagger:hilt-android-compiler:$DaggerVersion"
         const val GradlePlugin = "com.google.dagger:hilt-android-gradle-plugin:$DaggerVersion"
@@ -178,7 +179,7 @@ object Google {
 }
 
 object Coil {
-    private const val CoilVersion = "2.0.0-alpha03"
+    private const val CoilVersion = "2.0.0-alpha05"
     const val Bom = "io.coil-kt:coil-bom:$CoilVersion"
     const val Coil = "io.coil-kt:coil:$CoilVersion"
     const val Compose = "io.coil-kt:coil-compose:$CoilVersion"
@@ -186,7 +187,7 @@ object Coil {
 
 object SquareUp {
     object Moshi {
-        private const val MoshiVersion = "1.12.0"
+        private const val MoshiVersion = "1.13.0"
         const val Moshi = "com.squareup.moshi:moshi:$MoshiVersion"
         const val CodeGen = "com.squareup.moshi:moshi-kotlin-codegen:$MoshiVersion"
     }
@@ -198,7 +199,7 @@ object SquareUp {
     }
 
     object OkHttp {
-        private const val OkHttpVersion = "5.0.0-alpha.2"
+        private const val OkHttpVersion = "5.0.0-alpha.3"
         const val Bom = "com.squareup.okhttp3:okhttp-bom:$OkHttpVersion"
         const val OkHttp = "com.squareup.okhttp3:okhttp"
         const val LoggingInterceptor = "com.squareup.okhttp3:logging-interceptor"
@@ -232,7 +233,7 @@ object Facebook {
 }
 
 object Venom {
-    private const val VenomVersion = "0.4.1"
+    private const val VenomVersion = "0.5.0"
     const val Debug = "com.github.YarikSOffice.Venom:venom:$VenomVersion"
     const val NoOps = "com.github.YarikSOffice.Venom:venom-no-op:$VenomVersion"
 }

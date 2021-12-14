@@ -46,11 +46,12 @@
     <string name="unexpected_error">Неочікувана помилка</string>
     <string name="profile">Профіль</string>
     <string name="search">Пошук</string>
-    <string name="new_login_text">Виявлено новий вхід на пристрої %s %s %s</string>
+    <string name="new_login_text">Виявлено новий вхід на пристрої %1$s %2$s %3$s</string>
     <string name="new_login">Новий вхід</string>
     <string name="not_implemented_yet">Не реалізовано</string>
     <string name="zone">Зона</string>
     <string name="easting">Зміщення на Сх</string>
     <string name="northing">Зміщення на Пн</string>
     <string name="location_not_available">Місцезнаходження не доступне</string>
+    <string name="retry">Спробувати ще раз</string>
 </resources>
