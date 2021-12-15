@@ -264,3 +264,18 @@ object Grpc {
     const val ProtobufNano = "io.grpc:grpc-protobuf-nano:1.21.1"
     const val ProtobufLite = "io.grpc:grpc-protobuf-lite:1.42.1"
 }
+
+object Ktlint {
+    const val Version = "10.1.0"
+    const val Plugin = "org.jlleitschuh.gradle.ktlint"
+}
+
+object Detekt {
+    const val Version = "1.18.1"
+    const val Plugin = "io.gitlab.arturbosch.detekt"
+}
+
+object Ksp {
+    const val Version = "1.6.0-1.0.2"
+    const val Plugin = "com.google.devtools.ksp"
+}
