@@ -25,9 +25,9 @@ body:
         4. See error
     validations:
       required: true
-    - type: markdown
-      id: additional-information
-      attributes:
-        label: Additional Information
-        description: |
-          Provide any additional information such as logs, screenshots, likes, scenarios in which the bug occurs so that it facilitates resolving the issue.
+  - type: textarea
+    id: additional-information
+    attributes:
+      label: Additional Information
+      description: |
+        Provide any additional information such as logs, screenshots, likes, scenarios in which the bug occurs so that it facilitates resolving the issue.
