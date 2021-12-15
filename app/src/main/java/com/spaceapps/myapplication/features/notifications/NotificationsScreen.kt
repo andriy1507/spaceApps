@@ -45,7 +45,8 @@ import com.spaceapps.myapplication.ui.SPACING_16
 import com.spaceapps.myapplication.ui.SPACING_4
 import com.spaceapps.myapplication.utils.plus
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 @Composable
 fun NotificationsScreen(viewModel: NotificationsViewModel) {
@@ -92,13 +93,13 @@ private fun ObserveEvents(
     context: Context
 ) {
     LaunchedEffect(events) {
-        events.collect { event ->
+        events.onEach { event ->
             when (event) {
                 is NotificationsEvent.ShowSnackBar ->
                     scaffoldState.snackbarHostState
                         .showSnackbar(context.getString(event.messageId))
             }
-        }
+        }.launchIn(this)
     }
 }
 

@@ -36,7 +36,9 @@ import com.spaceapps.myapplication.utils.NavigationCommand
 import com.spaceapps.myapplication.utils.NavigationDispatcher
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
@@ -121,17 +123,13 @@ class MainActivity : AppCompatActivity() {
         val navigationEvents = rememberNavigationEmitter()
         val unauthorizedEvents = rememberUnauthorizedEvents()
         LaunchedEffect(Unit) {
-            launch {
-                navigationEvents.collect { event -> event(navController) }
-            }
-            launch {
-                unauthorizedEvents.collect {
-                    when (it) {
-                        true -> logOut()
-                        false -> restart()
-                    }
+            navigationEvents.onEach { event -> event(navController) }.launchIn(this)
+            unauthorizedEvents.onEach {
+                when (it) {
+                    true -> logOut()
+                    false -> restart()
                 }
-            }
+            }.launchIn(this)
         }
     }
 

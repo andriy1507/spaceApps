@@ -38,7 +38,8 @@ import gov.nasa.worldwind.geom.Angle
 import gov.nasa.worldwind.geom.coords.UTMCoord
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 @OptIn(
@@ -63,13 +64,13 @@ fun GeolocationMapScreen(viewModel: GeolocationMapViewModel) {
     val coordSystem by viewModel.coordSystem.collectAsState()
     val scope = rememberCoroutineScope()
     LaunchedEffect(Unit) {
-        events.collect { event ->
+        events.onEach { event ->
             when (event) {
                 is GeolocationMapEvent.ShowSnackBar ->
                     scaffoldState.snackbarHostState.showSnackbar(context.getString(event.messageId))
                 else -> Unit
             }
-        }
+        }.launchIn(this)
     }
     PermissionRequired(
         permissionState = locationPermissionState,
@@ -139,7 +140,7 @@ fun GeolocationMapScreen(viewModel: GeolocationMapViewModel) {
 
 fun observeMapEvents(map: GoogleMap, events: Flow<GeolocationMapEvent>, scope: CoroutineScope) {
     scope.launch {
-        events.collect {
+        events.onEach {
             when (it) {
                 is GeolocationMapEvent.AddMarker -> {
                     map.clear()
@@ -148,7 +149,7 @@ fun observeMapEvents(map: GoogleMap, events: Flow<GeolocationMapEvent>, scope: C
                 is GeolocationMapEvent.UpdateCamera -> map.animateCamera(it.update)
                 else -> Unit
             }
-        }
+        }.launchIn(scope)
     }
 }
 

@@ -4,7 +4,7 @@ const val ComposeVersion = "1.1.0-beta04"
 object AndroidX {
     object Wear {
         object Compose {
-            private const val Version = "1.0.0-alpha09"
+            private const val Version = "1.0.0-alpha12"
             const val Material = "androidx.wear.compose:compose-material:$Version"
             const val Foundation = "androidx.wear.compose:compose-foundation:$Version"
             const val Navigation = "androidx.wear.compose:compose-navigation:$Version"
@@ -14,7 +14,7 @@ object AndroidX {
     object Hilt {
         private const val HiltVersion = "1.0.0"
         const val ViewModel = "androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03"
-        const val NavigationCompose = "androidx.hilt:hilt-navigation-compose:1.0.0-alpha03"
+        const val NavigationCompose = "androidx.hilt:hilt-navigation-compose:1.0.0-beta01"
         const val Work = "androidx.hilt:hilt-work:$HiltVersion"
         const val Compiler = "androidx.hilt:hilt-compiler:$HiltVersion"
     }
@@ -33,7 +33,7 @@ object AndroidX {
     }
 
     object Navigation {
-        const val Compose = "androidx.navigation:navigation-compose:2.4.0-beta01"
+        const val Compose = "androidx.navigation:navigation-compose:2.4.0-beta02"
     }
 
     object Room {
@@ -45,7 +45,7 @@ object AndroidX {
     }
 
     object Emoji2 {
-        private const val Emoji2Version = "1.0.0-rc01"
+        private const val Emoji2Version = "1.0.0"
         const val Emoji2 = "androidx.emoji2:emoji2:$Emoji2Version"
     }
 
@@ -162,8 +162,8 @@ object Google {
     }
 
     object Firebase {
-        const val CrashlyticsGradlePlugin = "com.google.firebase:firebase-crashlytics-gradle:2.8.0"
-        const val Bom = "com.google.firebase:firebase-bom:29.0.0"
+        const val CrashlyticsGradlePlugin = "com.google.firebase:firebase-crashlytics-gradle:2.8.1"
+        const val Bom = "com.google.firebase:firebase-bom:29.0.2"
         const val Crashlytics = "com.google.firebase:firebase-crashlytics-ktx"
         const val Analytics = "com.google.firebase:firebase-analytics-ktx"
         const val Messaging = "com.google.firebase:firebase-messaging-ktx"
@@ -216,7 +216,7 @@ object Jetbrains {
 
     object KotlinX {
         object Coroutines {
-            private const val CoroutinesVersion = "1.5.2"
+            private const val CoroutinesVersion = "1.6.0-RC2"
             const val Bom = "org.jetbrains.kotlinx:kotlinx-coroutines-bom:$CoroutinesVersion"
             const val Core = "org.jetbrains.kotlinx:kotlinx-coroutines-core"
             const val Android = "org.jetbrains.kotlinx:kotlinx-coroutines-android"

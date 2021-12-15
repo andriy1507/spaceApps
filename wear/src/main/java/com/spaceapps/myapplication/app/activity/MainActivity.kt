@@ -9,7 +9,8 @@ import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.spaceapps.myapplication.ui.SpaceAppsTheme
 import com.spaceapps.myapplication.utils.NavigationDispatcher
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @ExperimentalWearMaterialApi
@@ -24,7 +25,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navController = rememberSwipeDismissableNavController()
             LaunchedEffect(Unit) {
-                navigationDispatcher.emitter.collect { event -> event(navController) }
+                navigationDispatcher.emitter.onEach { event -> event(navController) }.launchIn(this)
             }
             SpaceAppsTheme {
                 PopulatedNavHost(
