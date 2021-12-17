@@ -26,8 +26,7 @@ import com.spaceapps.myapplication.R
 import com.spaceapps.myapplication.ui.OnClick
 import com.spaceapps.myapplication.ui.SPACING_16
 import com.spaceapps.myapplication.utils.autofill
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.collect
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -43,11 +42,11 @@ fun ResetPasswordScreen(viewModel: ResetPasswordViewModel) {
     val confirmPassword by viewModel.confirmPassword.collectAsState()
     val keyboardController = LocalSoftwareKeyboardController.current
     LaunchedEffect(Unit) {
-        events.onEach { event ->
+        events.collect { event ->
             when (event) {
                 is ResetPasswordEvent.CodeVerificationError -> showErrorDialog = true
             }
-        }.launchIn(this)
+        }
     }
     if (showErrorDialog) ErrorDialog(onDismiss = {})
     Scaffold(

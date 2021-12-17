@@ -140,7 +140,7 @@ fun GeolocationMapScreen(viewModel: GeolocationMapViewModel) {
 
 fun observeMapEvents(map: GoogleMap, events: Flow<GeolocationMapEvent>, scope: CoroutineScope) {
     scope.launch {
-        events.onEach {
+        events.collect {
             when (it) {
                 is GeolocationMapEvent.AddMarker -> {
                     map.clear()
@@ -149,7 +149,7 @@ fun observeMapEvents(map: GoogleMap, events: Flow<GeolocationMapEvent>, scope: C
                 is GeolocationMapEvent.UpdateCamera -> map.animateCamera(it.update)
                 else -> Unit
             }
-        }.launchIn(scope)
+        }
     }
 }
 
