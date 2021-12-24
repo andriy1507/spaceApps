@@ -47,7 +47,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = ComposeVersion
+        kotlinCompilerExtensionVersion = AndroidX.Compose.CompilerVersion
     }
     packagingOptions {
         resources {
@@ -92,6 +92,7 @@ dependencies {
     implementation(AndroidX.Compose.Ui)
     debugImplementation(AndroidX.Compose.UiTooling)
     implementation(AndroidX.Compose.Runtime)
+    implementation(AndroidX.Compose.Compiler)
     runtimeOnly(AndroidX.Compose.Animation)
 
     //    Firebase

@@ -1,5 +1,5 @@
-const val KotlinVersion = "1.6.0"
-const val ComposeVersion = "1.1.0-beta04"
+const val KotlinVersion = "1.6.10"
+const val ComposeVersion = "1.1.0-rc01"
 
 object AndroidX {
     object Wear {
@@ -20,9 +20,11 @@ object AndroidX {
     }
 
     object Compose {
+        const val CompilerVersion = "1.1.0-rc02"
         const val UiTooling = "androidx.compose.ui:ui-tooling:$ComposeVersion"
         const val UiUtil = "androidx.compose.ui:ui-util:$ComposeVersion"
         const val Ui = "androidx.compose.ui:ui:$ComposeVersion"
+        const val Compiler = "androidx.compose.compiler:compiler:$CompilerVersion"
         const val LiveData = "androidx.compose.runtime:runtime-livedata:$ComposeVersion"
         const val Runtime = "androidx.compose.runtime:runtime:$ComposeVersion"
         const val Material = "androidx.compose.material:material:$ComposeVersion"
@@ -216,7 +218,7 @@ object Jetbrains {
 
     object KotlinX {
         object Coroutines {
-            private const val CoroutinesVersion = "1.6.0-RC3"
+            private const val CoroutinesVersion = "1.6.0"
             const val Bom = "org.jetbrains.kotlinx:kotlinx-coroutines-bom:$CoroutinesVersion"
             const val Core = "org.jetbrains.kotlinx:kotlinx-coroutines-core"
             const val Android = "org.jetbrains.kotlinx:kotlinx-coroutines-android"
@@ -276,6 +278,6 @@ object Detekt {
 }
 
 object Ksp {
-    const val Version = "1.6.0-1.0.2"
+    const val Version = "1.6.10-1.0.2"
     const val Plugin = "com.google.devtools.ksp"
 }

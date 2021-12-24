@@ -46,7 +46,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = ComposeVersion
+        kotlinCompilerExtensionVersion = AndroidX.Compose.CompilerVersion
     }
     lint {
         isAbortOnError = false
@@ -142,6 +142,8 @@ dependencies {
     implementation(AndroidX.Compose.Icons)
     implementation(AndroidX.Compose.Foundation)
     implementation(AndroidX.Navigation.Compose)
+    implementation(AndroidX.Compose.Runtime)
+    implementation(AndroidX.Compose.Compiler)
     runtimeOnly(AndroidX.Compose.Animation)
 //    Dagger-Hilt
     implementation(Google.Dagger.HiltAndroid)
