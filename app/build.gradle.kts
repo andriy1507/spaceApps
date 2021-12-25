@@ -98,7 +98,7 @@ dependencies {
     implementation(Google.Accompanist.Permissions)
 
 //    Coil
-//    implementation(platform(Coil.Bom))
+    implementation(platform(Coil.Bom))
     implementation(Coil.Coil)
     implementation(Coil.Compose)
 //    Coroutines

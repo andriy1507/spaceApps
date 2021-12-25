@@ -14,7 +14,7 @@ object AndroidX {
     object Hilt {
         private const val HiltVersion = "1.0.0"
         const val ViewModel = "androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03"
-        const val NavigationCompose = "androidx.hilt:hilt-navigation-compose:1.0.0-beta01"
+        const val NavigationCompose = "androidx.hilt:hilt-navigation-compose:1.0.0-rc01"
         const val Work = "androidx.hilt:hilt-work:$HiltVersion"
         const val Compiler = "androidx.hilt:hilt-compiler:$HiltVersion"
     }
@@ -35,11 +35,11 @@ object AndroidX {
     }
 
     object Navigation {
-        const val Compose = "androidx.navigation:navigation-compose:2.4.0-beta02"
+        const val Compose = "androidx.navigation:navigation-compose:2.4.0-rc01"
     }
 
     object Room {
-        private const val RoomVersion = "2.4.0-rc01"
+        private const val RoomVersion = "2.4.0"
         const val Runtime = "androidx.room:room-runtime:$RoomVersion"
         const val Ktx = "androidx.room:room-ktx:$RoomVersion"
         const val Paging = "androidx.room:room-paging:$RoomVersion"
@@ -47,7 +47,7 @@ object AndroidX {
     }
 
     object Emoji2 {
-        private const val Emoji2Version = "1.0.0"
+        private const val Emoji2Version = "1.0.1"
         const val Emoji2 = "androidx.emoji2:emoji2:$Emoji2Version"
     }
 
@@ -66,12 +66,12 @@ object AndroidX {
     }
 
     object Paging {
-        const val Runtime = "androidx.paging:paging-runtime-ktx:3.0.1"
-        const val Compose = "androidx.paging:paging-compose:1.0.0-alpha13"
+        const val Runtime = "androidx.paging:paging-runtime-ktx:3.1.0"
+        const val Compose = "androidx.paging:paging-compose:1.0.0-alpha14"
     }
 
     object Work {
-        const val Runtime = "androidx.work:work-runtime-ktx:2.7.0"
+        const val Runtime = "androidx.work:work-runtime-ktx:2.7.1"
     }
 
     object Core {
@@ -80,7 +80,7 @@ object AndroidX {
     }
 
     object AppCompat {
-        const val AppCompat = "androidx.appcompat:appcompat:1.4.0-rc01"
+        const val AppCompat = "androidx.appcompat:appcompat:1.4.0"
     }
 
     object Activity {
@@ -94,7 +94,7 @@ object AndroidX {
     }
 
     object Browser {
-        const val Browser = "androidx.browser:browser:1.3.0"
+        const val Browser = "androidx.browser:browser:1.4.0"
     }
 
     object Lifecycle {
@@ -124,15 +124,15 @@ object Google {
     object Android {
         object PlayServices {
             const val Wearable = "com.google.android.gms:play-services-wearable:17.1.0"
-            const val Location = "com.google.android.gms:play-services-location:18.0.0"
-            const val Auth = "com.google.android.gms:play-services-auth:19.2.0"
-            const val Maps = "com.google.android.gms:play-services-maps:18.0.0"
-            const val Wallet = "com.google.android.gms:play-services-wallet:18.1.3"
+            const val Location = "com.google.android.gms:play-services-location:19.0.0"
+            const val Auth = "com.google.android.gms:play-services-auth:20.0.0"
+            const val Maps = "com.google.android.gms:play-services-maps:18.0.1"
+            const val Wallet = "com.google.android.gms:play-services-wallet:19.0.0"
         }
     }
 
     object Accompanist {
-        private const val AccompanistVersion = "0.21.4-beta"
+        private const val AccompanistVersion = "0.22.0-rc"
         const val DrawablePainter =
             "com.google.accompanist:accompanist-drawablepainter:$AccompanistVersion"
         const val Insets = "com.google.accompanist:accompanist-insets:$AccompanistVersion"
@@ -165,7 +165,7 @@ object Google {
 
     object Firebase {
         const val CrashlyticsGradlePlugin = "com.google.firebase:firebase-crashlytics-gradle:2.8.1"
-        const val Bom = "com.google.firebase:firebase-bom:29.0.2"
+        const val Bom = "com.google.firebase:firebase-bom:29.0.3"
         const val Crashlytics = "com.google.firebase:firebase-crashlytics-ktx"
         const val Analytics = "com.google.firebase:firebase-analytics-ktx"
         const val Messaging = "com.google.firebase:firebase-messaging-ktx"
@@ -174,17 +174,20 @@ object Google {
     }
 
     object Maps {
-        private const val MapsVersion = "3.2.0"
+        private const val MapsVersion = "3.3.0"
         const val Maps = "com.google.maps.android:maps-ktx:$MapsVersion"
         const val Utils = "com.google.maps.android:maps-utils-ktx:$MapsVersion"
     }
 }
 
 object Coil {
-    private const val CoilVersion = "2.0.0-alpha05"
+    private const val CoilVersion = "2.0.0-alpha06"
     const val Bom = "io.coil-kt:coil-bom:$CoilVersion"
-    const val Coil = "io.coil-kt:coil:$CoilVersion"
-    const val Compose = "io.coil-kt:coil-compose:$CoilVersion"
+    const val Coil = "io.coil-kt:coil"
+    const val Compose = "io.coil-kt:coil-compose"
+    const val Gif = "io.coil-kt:coil-gif"
+    const val Svg = "io.coil-kt:coil-svg"
+    const val Video = "io.coil-kt:coil-video"
 }
 
 object SquareUp {
@@ -230,7 +233,7 @@ object Jetbrains {
 
 object Facebook {
     object Android {
-        const val Sdk = "com.facebook.android:facebook-android-sdk:12.0.1"
+        const val Sdk = "com.facebook.android:facebook-android-sdk:12.2.0"
     }
 }
 

@@ -12,15 +12,6 @@ buildscript {
     }
 }
 
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-        maven(url = "https://jitpack.io")
-        maven(url = "https://kotlin.bintray.com/kotlinx")
-    }
-}
-
 tasks.register("clean", Delete::class) {
     delete(rootProject.buildDir)
 }
