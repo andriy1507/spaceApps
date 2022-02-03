@@ -7,16 +7,17 @@ import com.spaceapps.myapplication.R
 import com.spaceapps.myapplication.app.Screens.*
 import com.spaceapps.myapplication.core.models.InputWrapper
 import com.spaceapps.myapplication.core.repositories.auth.AuthRepository
-import com.spaceapps.myapplication.core.repositories.auth.results.LogOutResult
 import com.spaceapps.myapplication.core.repositories.auth.results.SignInResult
 import com.spaceapps.myapplication.core.repositories.auth.results.SignUpResult
-import com.spaceapps.myapplication.core.repositories.auth.results.SocialSignInResult
-import com.spaceapps.myapplication.core.utils.AuthDispatcher
 import com.spaceapps.myapplication.core.utils.getStateFlow
 import com.spaceapps.myapplication.core.utils.isEmail
 import com.spaceapps.myapplication.core.utils.isPassword
-import com.spaceapps.myapplication.utils.*
+import com.spaceapps.myapplication.utils.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -25,33 +26,71 @@ import javax.inject.Inject
 class AuthViewModel @Inject constructor(
     private val repository: AuthRepository,
     private val navigationDispatcher: NavigationDispatcher,
-    private val authDispatcher: AuthDispatcher,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    val email = savedStateHandle.getStateFlow(
+    private val email = savedStateHandle.getStateFlow(
         scope = viewModelScope,
         key = "email",
         initialValue = InputWrapper()
     )
 
-    val password = savedStateHandle.getStateFlow(
+    private val password = savedStateHandle.getStateFlow(
         scope = viewModelScope,
         key = "password",
         initialValue = InputWrapper()
     )
 
-    val confirmPassword = savedStateHandle.getStateFlow(
+    private val confirmPassword = savedStateHandle.getStateFlow(
         scope = viewModelScope,
         key = "confirmPassword",
         initialValue = InputWrapper()
     )
 
-    val isSignUp = savedStateHandle.getStateFlow(
+    private val screenState = savedStateHandle.getStateFlow(
         scope = viewModelScope,
         key = "isSignUp",
-        initialValue = false
+        initialValue = AuthViewState.ScreenState.SignIn
     )
+
+    private val pendingActions = MutableSharedFlow<AuthAction>()
+
+    val state = combine(
+        email,
+        password,
+        confirmPassword,
+        screenState
+    ) { email, password, confirmPassword, screenState ->
+        AuthViewState(
+            email = email,
+            password = password,
+            confirmPassword = confirmPassword,
+            screenState = screenState
+        )
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = AuthViewState.Empty
+    )
+
+    init {
+        collectActions()
+    }
+
+    private fun collectActions() = viewModelScope.launch {
+        pendingActions.collect { action ->
+            when (action) {
+                is AuthAction.AuthButtonClick -> onAuthClick()
+                is AuthAction.ForgotPasswordClick -> onForgotPasswordClick()
+                is AuthAction.HaveAccountClick -> onHaveAccountClick()
+                is AuthAction.SignInWithSocialClick -> onSignInWithSocialClick()
+            }
+        }
+    }
+
+    fun submitAction(action: AuthAction) = viewModelScope.launch {
+        pendingActions.emit(action)
+    }
 
     fun onEmailEnter(input: String) = viewModelScope.launch {
         email.emit(
@@ -90,18 +129,24 @@ class AuthViewModel @Inject constructor(
         )
     }
 
-    fun onSignInWithSocialClick() =
+    private fun onSignInWithSocialClick() =
         navigationDispatcher.emit { it.navigate(SocialAuth.route) }
 
-    fun onForgotPasswordClick() =
+    private fun onForgotPasswordClick() =
         navigationDispatcher.emit { it.navigate(ForgotPassword.route) }
 
-    fun onAuthClick() = when (isSignUp.value) {
-        true -> signUp()
-        false -> signIn()
+    private fun onAuthClick() = when (screenState.value) {
+        AuthViewState.ScreenState.SignIn -> signIn()
+        AuthViewState.ScreenState.SignUp -> signUp()
     }
 
-    fun onHaveAccountClick() = viewModelScope.launch { isSignUp.emit(!isSignUp.value) }
+    private fun onHaveAccountClick() = viewModelScope.launch {
+        val newAuthState = when (screenState.value) {
+            AuthViewState.ScreenState.SignIn -> AuthViewState.ScreenState.SignUp
+            AuthViewState.ScreenState.SignUp -> AuthViewState.ScreenState.SignIn
+        }
+        screenState.emit(newAuthState)
+    }
 
     private fun signIn() = viewModelScope.launch {
         when (repository.signIn(email = email.value.text, password = password.value.text)) {
@@ -123,46 +168,6 @@ class AuthViewModel @Inject constructor(
             popUpTo(Auth.route) {
                 inclusive = true
             }
-        }
-    }
-
-    private fun signInWithGoogle(accessToken: String) = viewModelScope.launch {
-        when (repository.signInWithGoogle(accessToken = accessToken)) {
-            SocialSignInResult.Success -> navigationDispatcher.emit {
-                it.navigate(
-                    GeolocationMap.route
-                )
-            }
-            SocialSignInResult.Failure -> Timber.e("ERROR")
-        }
-    }
-
-    private fun signInWithFacebook(accessToken: String) = viewModelScope.launch {
-        when (repository.signInWithFacebook(accessToken = accessToken)) {
-            SocialSignInResult.Success -> navigationDispatcher.emit {
-                it.navigate(
-                    GeolocationMap.route
-                )
-            }
-            SocialSignInResult.Failure -> Timber.e("ERROR")
-        }
-    }
-
-    private fun signInWithApple(accessToken: String) = viewModelScope.launch {
-        when (repository.signInWithApple(accessToken = accessToken)) {
-            SocialSignInResult.Success -> navigationDispatcher.emit {
-                it.navigate(
-                    GeolocationMap.route
-                )
-            }
-            SocialSignInResult.Failure -> Timber.e("ERROR")
-        }
-    }
-
-    private fun logOut() = viewModelScope.launch {
-        when (repository.logOut()) {
-            LogOutResult.Success -> authDispatcher.requestLogOut()
-            LogOutResult.Failure -> Timber.e("ERROR")
         }
     }
 }

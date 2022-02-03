@@ -4,9 +4,9 @@ plugins {
     kotlin("kapt")
     id("kotlin-parcelize")
     id("dagger.hilt.android.plugin")
-    id("org.jlleitschuh.gradle.ktlint") version "10.1.0"
-    id("io.gitlab.arturbosch.detekt") version "1.18.1"
-    id("com.google.devtools.ksp") version "1.6.0-1.0.2"
+    id(Ktlint.Plugin) version Ktlint.Version
+    id(Detekt.Plugin) version Detekt.Version
+    id(Ksp.Plugin) version Ksp.Version
 }
 
 android {

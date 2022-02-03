@@ -1,5 +1,6 @@
 package com.spaceapps.myapplication.features.location.map
 
+import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.location.Location
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -29,15 +30,18 @@ import com.google.accompanist.insets.statusBarsPadding
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionRequired
 import com.google.accompanist.permissions.rememberPermissionState
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
+import com.google.maps.android.ktx.model.cameraPosition
 import com.spaceapps.myapplication.R
 import com.spaceapps.myapplication.core.*
+import com.spaceapps.myapplication.features.location.map.GeolocationMapAction.*
 import com.spaceapps.myapplication.ui.*
 import com.spaceapps.myapplication.ui.views.GoogleMap
 import gov.nasa.worldwind.geom.Angle
 import gov.nasa.worldwind.geom.coords.UTMCoord
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -49,26 +53,22 @@ import kotlinx.coroutines.launch
 )
 @Composable
 fun GeolocationMapScreen(viewModel: GeolocationMapViewModel) {
-    val locationPermissionState =
-        rememberPermissionState(android.Manifest.permission.ACCESS_FINE_LOCATION)
+    val state by viewModel.state.collectAsState()
+    val locationPermissionState = rememberPermissionState(ACCESS_FINE_LOCATION)
     val lifecycleOwner = LocalLifecycleOwner.current
     val events = remember(viewModel.events, lifecycleOwner) {
         viewModel.events.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.RESUMED)
     }
     val context = LocalContext.current
-    val location by viewModel.location.collectAsState()
-    val isFocusMode by viewModel.isFocusMode.collectAsState()
     val bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Expanded)
     val scaffoldState = rememberBottomSheetScaffoldState(bottomSheetState = bottomSheetState)
-    val degreesFormat by viewModel.degreesFormat.collectAsState()
-    val coordSystem by viewModel.coordSystem.collectAsState()
-    val scope = rememberCoroutineScope()
     LaunchedEffect(Unit) {
         events.onEach { event ->
             when (event) {
-                is GeolocationMapEvent.ShowSnackBar ->
-                    scaffoldState.snackbarHostState.showSnackbar(context.getString(event.messageId))
-                else -> Unit
+                is GeolocationMapEvent.ShowSnackBar -> {
+                    val message = context.getString(event.messageId)
+                    scaffoldState.snackbarHostState.showSnackbar(message)
+                }
             }
         }.launchIn(this)
     }
@@ -84,32 +84,35 @@ fun GeolocationMapScreen(viewModel: GeolocationMapViewModel) {
         }
     ) {
         LaunchedEffect(Unit) {
-            viewModel.trackLocation()
+            viewModel.submitAction(TrackLocation)
         }
         BottomSheetScaffold(
             sheetContent = {
                 BottomSheetContent(
-                    location = location,
-                    degreesFormat = degreesFormat,
-                    coordSystem = coordSystem
+                    location = state.location,
+                    degreesFormat = state.degreesFormat,
+                    coordSystem = state.coordSystem
                 )
             },
             scaffoldState = scaffoldState,
             floatingActionButton = {
                 MapMultiActionFab(
-                    isLocationVisible = isFocusMode,
-                    onFocusClick = viewModel::onFocusClick,
-                    onListClick = viewModel::goLocationsList,
-                    onAddClick = { viewModel.addLocation(location) }
+                    isLocationVisible = state.isFocusMode,
+                    onFocusClick = { viewModel.submitAction(FocusClicked) },
+                    onListClick = { viewModel.submitAction(GoToLocationsList) },
+                    onAddClick = { viewModel.submitAction(AddLocation(state.location)) }
                 )
             },
             content = {
+                val scope = rememberCoroutineScope()
                 Box(Modifier.fillMaxSize()) {
                     GoogleMap(
                         modifier = Modifier.fillMaxSize(),
                         onMapLoaded = { map ->
-                            map.setOnCameraMoveStartedListener(viewModel::onCameraMoved)
-                            observeMapEvents(map, events, scope)
+                            map.setOnCameraMoveStartedListener { reason ->
+                                viewModel.submitAction(CameraMoved(reason))
+                            }
+                            scope.launch { observeCurrentLocation(viewModel, map) }
                         }
                     )
                     Button(
@@ -118,7 +121,7 @@ fun GeolocationMapScreen(viewModel: GeolocationMapViewModel) {
                             .padding(SPACING_16)
                             .size(SPACING_48)
                             .align(Alignment.TopEnd),
-                        onClick = viewModel::goToSettings,
+                        onClick = { viewModel.submitAction(GoToSettings) },
                         contentPadding = PaddingValues(SPACING_12),
                         shape = CircleShape
                     ) {
@@ -138,18 +141,29 @@ fun GeolocationMapScreen(viewModel: GeolocationMapViewModel) {
     }
 }
 
-fun observeMapEvents(map: GoogleMap, events: Flow<GeolocationMapEvent>, scope: CoroutineScope) {
-    scope.launch {
-        events.onEach {
-            when (it) {
-                is GeolocationMapEvent.AddMarker -> {
-                    map.clear()
-                    map.addMarker(it.options)
+private suspend fun observeCurrentLocation(
+    viewModel: GeolocationMapViewModel,
+    map: GoogleMap
+) {
+    viewModel.state.collect { state ->
+        val location = state.location
+        if (location != null) {
+            val latLng = LatLng(location.latitude, location.longitude)
+            val marker = MarkerOptions().position(latLng)
+            map.clear()
+            map.addMarker(marker)
+            if (state.isFocusMode) {
+                val position = cameraPosition {
+                    target(latLng)
+                    zoom(DEFAULT_MAP_ZOOM)
                 }
-                is GeolocationMapEvent.UpdateCamera -> map.animateCamera(it.update)
-                else -> Unit
+                map.animateCamera(
+                    CameraUpdateFactory.newCameraPosition(
+                        position
+                    )
+                )
             }
-        }.launchIn(scope)
+        }
     }
 }
 

@@ -1,10 +1,10 @@
-const val KotlinVersion = "1.6.0"
-const val ComposeVersion = "1.1.0-beta04"
+const val KotlinVersion = "1.6.10"
+const val ComposeVersion = "1.1.0-rc03"
 
 object AndroidX {
     object Wear {
         object Compose {
-            private const val Version = "1.0.0-alpha12"
+            private const val Version = "1.0.0-alpha15"
             const val Material = "androidx.wear.compose:compose-material:$Version"
             const val Foundation = "androidx.wear.compose:compose-foundation:$Version"
             const val Navigation = "androidx.wear.compose:compose-navigation:$Version"
@@ -14,7 +14,7 @@ object AndroidX {
     object Hilt {
         private const val HiltVersion = "1.0.0"
         const val ViewModel = "androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03"
-        const val NavigationCompose = "androidx.hilt:hilt-navigation-compose:1.0.0-beta01"
+        const val NavigationCompose = "androidx.hilt:hilt-navigation-compose:$HiltVersion"
         const val Work = "androidx.hilt:hilt-work:$HiltVersion"
         const val Compiler = "androidx.hilt:hilt-compiler:$HiltVersion"
     }
@@ -23,21 +23,22 @@ object AndroidX {
         const val UiTooling = "androidx.compose.ui:ui-tooling:$ComposeVersion"
         const val UiUtil = "androidx.compose.ui:ui-util:$ComposeVersion"
         const val Ui = "androidx.compose.ui:ui:$ComposeVersion"
+        const val Compiler = "androidx.compose.compiler:compiler:$ComposeVersion"
         const val LiveData = "androidx.compose.runtime:runtime-livedata:$ComposeVersion"
         const val Runtime = "androidx.compose.runtime:runtime:$ComposeVersion"
         const val Material = "androidx.compose.material:material:$ComposeVersion"
-        const val Material3 = "androidx.compose.material3:material3:1.0.0-alpha02"
+        const val Material3 = "androidx.compose.material3:material3:1.0.0-alpha04"
         const val Icons = "androidx.compose.material:material-icons-extended:$ComposeVersion"
         const val Foundation = "androidx.compose.foundation:foundation:$ComposeVersion"
         const val Animation = "androidx.compose.animation:animation:$ComposeVersion"
     }
 
     object Navigation {
-        const val Compose = "androidx.navigation:navigation-compose:2.4.0-beta02"
+        const val Compose = "androidx.navigation:navigation-compose:2.4.0-rc01"
     }
 
     object Room {
-        private const val RoomVersion = "2.4.0-rc01"
+        private const val RoomVersion = "2.4.1"
         const val Runtime = "androidx.room:room-runtime:$RoomVersion"
         const val Ktx = "androidx.room:room-ktx:$RoomVersion"
         const val Paging = "androidx.room:room-paging:$RoomVersion"
@@ -45,7 +46,7 @@ object AndroidX {
     }
 
     object Emoji2 {
-        private const val Emoji2Version = "1.0.0"
+        private const val Emoji2Version = "1.0.1"
         const val Emoji2 = "androidx.emoji2:emoji2:$Emoji2Version"
     }
 
@@ -60,25 +61,25 @@ object AndroidX {
         const val Core = "androidx.camera:camera-core:$CameraxVersion"
         const val Camera2 = "androidx.camera:camera-camera2:$CameraxVersion"
         const val Lifecycle = "androidx.camera:camera-lifecycle:$CameraxVersion"
-        const val View = "androidx.camera:camera-view:1.0.0-alpha30"
+        const val View = "androidx.camera:camera-view:1.1.0-beta01"
     }
 
     object Paging {
-        const val Runtime = "androidx.paging:paging-runtime-ktx:3.0.1"
-        const val Compose = "androidx.paging:paging-compose:1.0.0-alpha13"
+        const val Runtime = "androidx.paging:paging-runtime-ktx:3.1.0"
+        const val Compose = "androidx.paging:paging-compose:1.0.0-alpha14"
     }
 
     object Work {
-        const val Runtime = "androidx.work:work-runtime-ktx:2.7.0"
+        const val Runtime = "androidx.work:work-runtime-ktx:2.7.1"
     }
 
     object Core {
         const val Ktx = "androidx.core:core-ktx:1.7.0"
-        const val SplashScreen = "androidx.core:core-splashscreen:1.0.0-alpha02"
+        const val SplashScreen = "androidx.core:core-splashscreen:1.0.0-beta01"
     }
 
     object AppCompat {
-        const val AppCompat = "androidx.appcompat:appcompat:1.4.0-rc01"
+        const val AppCompat = "androidx.appcompat:appcompat:1.4.1"
     }
 
     object Activity {
@@ -92,7 +93,7 @@ object AndroidX {
     }
 
     object Browser {
-        const val Browser = "androidx.browser:browser:1.3.0"
+        const val Browser = "androidx.browser:browser:1.4.0"
     }
 
     object Lifecycle {
@@ -114,7 +115,7 @@ object AndroidX {
 object Android {
     object Tools {
         const val Desugar = "com.android.tools:desugar_jdk_libs:1.1.5"
-        const val GradlePlugin = "com.android.tools.build:gradle:7.0.4"
+        const val GradlePlugin = "com.android.tools.build:gradle:7.1.0-rc01"
     }
 }
 
@@ -122,15 +123,15 @@ object Google {
     object Android {
         object PlayServices {
             const val Wearable = "com.google.android.gms:play-services-wearable:17.1.0"
-            const val Location = "com.google.android.gms:play-services-location:18.0.0"
-            const val Auth = "com.google.android.gms:play-services-auth:19.2.0"
-            const val Maps = "com.google.android.gms:play-services-maps:18.0.0"
-            const val Wallet = "com.google.android.gms:play-services-wallet:18.1.3"
+            const val Location = "com.google.android.gms:play-services-location:19.0.0"
+            const val Auth = "com.google.android.gms:play-services-auth:20.0.0"
+            const val Maps = "com.google.android.gms:play-services-maps:18.0.1"
+            const val Wallet = "com.google.android.gms:play-services-wallet:19.0.0"
         }
     }
 
     object Accompanist {
-        private const val AccompanistVersion = "0.21.4-beta"
+        private const val AccompanistVersion = "0.22.1-rc"
         const val DrawablePainter =
             "com.google.accompanist:accompanist-drawablepainter:$AccompanistVersion"
         const val Insets = "com.google.accompanist:accompanist-insets:$AccompanistVersion"
@@ -163,7 +164,7 @@ object Google {
 
     object Firebase {
         const val CrashlyticsGradlePlugin = "com.google.firebase:firebase-crashlytics-gradle:2.8.1"
-        const val Bom = "com.google.firebase:firebase-bom:29.0.2"
+        const val Bom = "com.google.firebase:firebase-bom:29.0.4"
         const val Crashlytics = "com.google.firebase:firebase-crashlytics-ktx"
         const val Analytics = "com.google.firebase:firebase-analytics-ktx"
         const val Messaging = "com.google.firebase:firebase-messaging-ktx"
@@ -172,17 +173,20 @@ object Google {
     }
 
     object Maps {
-        private const val MapsVersion = "3.2.0"
+        private const val MapsVersion = "3.3.0"
         const val Maps = "com.google.maps.android:maps-ktx:$MapsVersion"
         const val Utils = "com.google.maps.android:maps-utils-ktx:$MapsVersion"
     }
 }
 
 object Coil {
-    private const val CoilVersion = "2.0.0-alpha05"
+    private const val CoilVersion = "2.0.0-alpha07"
     const val Bom = "io.coil-kt:coil-bom:$CoilVersion"
-    const val Coil = "io.coil-kt:coil:$CoilVersion"
-    const val Compose = "io.coil-kt:coil-compose:$CoilVersion"
+    const val Coil = "io.coil-kt:coil"
+    const val Compose = "io.coil-kt:coil-compose"
+    const val Gif = "io.coil-kt:coil-gif"
+    const val Svg = "io.coil-kt:coil-svg"
+    const val Video = "io.coil-kt:coil-video"
 }
 
 object SquareUp {
@@ -199,7 +203,7 @@ object SquareUp {
     }
 
     object OkHttp {
-        private const val OkHttpVersion = "5.0.0-alpha.3"
+        private const val OkHttpVersion = "5.0.0-alpha.4"
         const val Bom = "com.squareup.okhttp3:okhttp-bom:$OkHttpVersion"
         const val OkHttp = "com.squareup.okhttp3:okhttp"
         const val LoggingInterceptor = "com.squareup.okhttp3:logging-interceptor"
@@ -216,7 +220,7 @@ object Jetbrains {
 
     object KotlinX {
         object Coroutines {
-            private const val CoroutinesVersion = "1.6.0-RC2"
+            private const val CoroutinesVersion = "1.6.0"
             const val Bom = "org.jetbrains.kotlinx:kotlinx-coroutines-bom:$CoroutinesVersion"
             const val Core = "org.jetbrains.kotlinx:kotlinx-coroutines-core"
             const val Android = "org.jetbrains.kotlinx:kotlinx-coroutines-android"
@@ -228,7 +232,7 @@ object Jetbrains {
 
 object Facebook {
     object Android {
-        const val Sdk = "com.facebook.android:facebook-android-sdk:12.0.1"
+        const val Sdk = "com.facebook.android:facebook-android-sdk:12.3.0"
     }
 }
 
@@ -263,4 +267,19 @@ object Grpc {
     const val KotlinStubLite = "io.grpc:grpc-kotlin-stub-lite:1.0.0"
     const val ProtobufNano = "io.grpc:grpc-protobuf-nano:1.21.1"
     const val ProtobufLite = "io.grpc:grpc-protobuf-lite:1.42.1"
+}
+
+object Ktlint {
+    const val Version = "10.2.1"
+    const val Plugin = "org.jlleitschuh.gradle.ktlint"
+}
+
+object Detekt {
+    const val Version = "1.19.0"
+    const val Plugin = "io.gitlab.arturbosch.detekt"
+}
+
+object Ksp {
+    const val Version = "1.6.10-1.0.2"
+    const val Plugin = "com.google.devtools.ksp"
 }

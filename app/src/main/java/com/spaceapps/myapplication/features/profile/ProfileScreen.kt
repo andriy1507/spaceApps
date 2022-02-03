@@ -16,8 +16,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.collect
 
 @Composable
 fun ProfileScreen(viewModel: ProfileViewModel) {
@@ -28,13 +27,13 @@ fun ProfileScreen(viewModel: ProfileViewModel) {
     }
     val context = LocalContext.current
     LaunchedEffect(events) {
-        events.onEach {
+        events.collect {
             when (it) {
                 is ProfileEvent.ShowSnackBar ->
                     scaffoldState.snackbarHostState
                         .showSnackbar(context.getString(it.messageId))
             }
-        }.launchIn(this)
+        }
     }
     val statusBarPadding =
         rememberInsetsPaddingValues(insets = LocalWindowInsets.current.statusBars)

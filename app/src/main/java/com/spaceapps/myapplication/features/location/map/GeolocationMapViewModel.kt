@@ -8,17 +8,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.location.*
 import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE
-import com.google.android.gms.maps.model.LatLng
-import com.google.maps.android.ktx.model.cameraPosition
-import com.google.maps.android.ktx.model.markerOptions
 import com.spaceapps.myapplication.app.Screens.*
-import com.spaceapps.myapplication.core.DEFAULT_MAP_ZOOM
 import com.spaceapps.myapplication.core.DEGREES_DMS
 import com.spaceapps.myapplication.core.SYSTEM_GEO
 import com.spaceapps.myapplication.core.local.DataStoreManager
 import com.spaceapps.myapplication.core.utils.getStateFlow
+import com.spaceapps.myapplication.features.location.map.GeolocationMapAction.*
 import com.spaceapps.myapplication.utils.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -33,27 +29,63 @@ class GeolocationMapViewModel @Inject constructor(
     dataStoreManager: DataStoreManager
 ) : ViewModel() {
 
-    val isFocusMode = savedStateHandle.getStateFlow(
+    private val isFocusMode = savedStateHandle.getStateFlow(
         scope = viewModelScope,
         key = "isFocusMode",
         initialValue = true
     )
-    val location = savedStateHandle.getStateFlow<Location?>(
+    private val location = savedStateHandle.getStateFlow<Location?>(
         scope = viewModelScope,
         key = "location",
         initialValue = null
     )
     private val _events = MutableSharedFlow<GeolocationMapEvent>()
+
+    private val pendingActions = MutableSharedFlow<GeolocationMapAction>()
     val events: SharedFlow<GeolocationMapEvent>
         get() = _events.asSharedFlow()
 
-    val degreesFormat = dataStoreManager.observeDegreesFormat()
+    private val degreesFormat = dataStoreManager.observeDegreesFormat()
         .stateIn(viewModelScope, SharingStarted.Lazily, DEGREES_DMS)
-    val coordSystem = dataStoreManager.observeCoordSystem()
+    private val coordSystem = dataStoreManager.observeCoordSystem()
         .stateIn(viewModelScope, SharingStarted.Lazily, SYSTEM_GEO)
 
+    val state = combine(
+        location,
+        isFocusMode,
+        degreesFormat,
+        coordSystem
+    ) { location, isFocusMode, degreesFormat, coordSystem ->
+        GeolocationMapViewState(location, isFocusMode, degreesFormat, coordSystem)
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = GeolocationMapViewState.Empty
+    )
+
+    init {
+        collectActions()
+    }
+
+    private fun collectActions() = viewModelScope.launch {
+        pendingActions.collect { action ->
+            when (action) {
+                is AddLocation -> addLocation(action.location)
+                is CameraMoved -> onCameraMoved(action.reason)
+                is FocusClicked -> onFocusClick()
+                is GoToLocationsList -> goLocationsList()
+                is GoToSettings -> goToSettings()
+                is TrackLocation -> trackLocation()
+            }
+        }
+    }
+
+    fun submitAction(action: GeolocationMapAction) = viewModelScope.launch {
+        pendingActions.emit(action)
+    }
+
     @SuppressLint("MissingPermission")
-    fun trackLocation() {
+    private fun trackLocation() {
         val request = LocationRequest.create().apply {
             fastestInterval = 1500
             interval = 3000
@@ -64,8 +96,6 @@ class GeolocationMapViewModel @Inject constructor(
             object : LocationCallback() {
                 override fun onLocationResult(result: LocationResult) {
                     viewModelScope.launch { location.emit(result.lastLocation) }
-                    updateMarker(result.lastLocation)
-                    updateCamera(result.lastLocation)
                 }
 
                 override fun onLocationAvailability(availability: LocationAvailability) = Unit
@@ -74,37 +104,20 @@ class GeolocationMapViewModel @Inject constructor(
         )
     }
 
-    private fun updateCamera(lastLocation: Location) = viewModelScope.launch {
-        if (!isFocusMode.value) return@launch
-        val update = CameraUpdateFactory.newCameraPosition(
-            cameraPosition {
-                target(LatLng(lastLocation.latitude, lastLocation.longitude))
-                zoom(DEFAULT_MAP_ZOOM)
-            }
-        )
-        _events.emit(GeolocationMapEvent.UpdateCamera(update))
-    }
-
-    private fun updateMarker(lastLocation: Location) = viewModelScope.launch {
-        val latLng = LatLng(lastLocation.latitude, lastLocation.longitude)
-        _events.emit(GeolocationMapEvent.AddMarker(markerOptions { position(latLng) }))
-    }
-
-    fun onCameraMoved(reason: Int) =
+    private fun onCameraMoved(reason: Int) =
         viewModelScope.launch { if (reason == REASON_GESTURE) isFocusMode.emit(false) }
 
-    fun onFocusClick() = viewModelScope.launch {
+    private fun onFocusClick() = viewModelScope.launch {
         isFocusMode.emit(true)
-        location.value?.let { updateCamera(it) }
     }
 
-    fun goToSettings() =
+    private fun goToSettings() =
         navigationDispatcher.emit { it.navigate(MapSettings.route) }
 
-    fun goLocationsList() =
+    private fun goLocationsList() =
         navigationDispatcher.emit { it.navigate(LocationsList.route) }
 
-    fun addLocation(location: Location?) = viewModelScope.launch {
+    private fun addLocation(location: Location?) = viewModelScope.launch {
         navigationDispatcher.emit { it.navigate(SaveLocation.route) }
     }
 }

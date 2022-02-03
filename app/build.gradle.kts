@@ -6,8 +6,8 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
-    id("org.jlleitschuh.gradle.ktlint") version "10.1.0"
-    id("io.gitlab.arturbosch.detekt") version "1.18.1"
+    id(Ktlint.Plugin) version Ktlint.Version
+    id(Detekt.Plugin) version Detekt.Version
 }
 
 android {
@@ -49,7 +49,7 @@ android {
         kotlinCompilerExtensionVersion = ComposeVersion
     }
     lint {
-        isAbortOnError = false
+        abortOnError = false
     }
     testOptions {
         unitTests.isReturnDefaultValues = true
@@ -98,9 +98,12 @@ dependencies {
     implementation(Google.Accompanist.Permissions)
 
 //    Coil
-//    implementation(platform(Coil.Bom))
+    implementation(Coil.Bom)
     implementation(Coil.Coil)
     implementation(Coil.Compose)
+    implementation(Coil.Gif)
+    implementation(Coil.Svg)
+    implementation(Coil.Video)
 //    Coroutines
     implementation(platform(Jetbrains.KotlinX.Coroutines.Bom))
     implementation(Jetbrains.KotlinX.Coroutines.Core)
@@ -142,6 +145,8 @@ dependencies {
     implementation(AndroidX.Compose.Icons)
     implementation(AndroidX.Compose.Foundation)
     implementation(AndroidX.Navigation.Compose)
+    implementation(AndroidX.Compose.Runtime)
+    implementation(AndroidX.Compose.Compiler)
     runtimeOnly(AndroidX.Compose.Animation)
 //    Dagger-Hilt
     implementation(Google.Dagger.HiltAndroid)

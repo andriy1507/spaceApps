@@ -6,8 +6,8 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
-    id("org.jlleitschuh.gradle.ktlint") version "10.1.0"
-    id("io.gitlab.arturbosch.detekt") version "1.18.1"
+    id(Ktlint.Plugin) version Ktlint.Version
+    id(Detekt.Plugin) version Detekt.Version
 }
 
 android {
@@ -92,6 +92,7 @@ dependencies {
     implementation(AndroidX.Compose.Ui)
     debugImplementation(AndroidX.Compose.UiTooling)
     implementation(AndroidX.Compose.Runtime)
+    implementation(AndroidX.Compose.Compiler)
     runtimeOnly(AndroidX.Compose.Animation)
 
     //    Firebase

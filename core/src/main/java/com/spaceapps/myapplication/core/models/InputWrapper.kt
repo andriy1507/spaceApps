@@ -7,4 +7,9 @@ import kotlinx.parcelize.Parcelize
 data class InputWrapper(
     val text: String = "",
     val errorId: Int? = null
-) : Parcelable
+) : Parcelable {
+
+    companion object {
+        val Empty = InputWrapper()
+    }
+}

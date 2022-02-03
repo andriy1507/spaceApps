@@ -39,8 +39,7 @@ import com.spaceapps.myapplication.core.models.remote.notifications.Notification
 import com.spaceapps.myapplication.ui.SPACING_16
 import com.spaceapps.myapplication.ui.SPACING_8
 import com.spaceapps.myapplication.utils.plus
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.collect
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
@@ -53,13 +52,13 @@ fun NotificationViewScreen(viewModel: NotificationViewViewModel) {
     val notification by viewModel.notification.observeAsState()
     val context = LocalContext.current
     LaunchedEffect(events) {
-        events.onEach {
+        events.collect {
             when (it) {
                 is NotificationViewEvent.ShowSnackBar ->
                     scaffoldState.snackbarHostState
                         .showSnackbar(context.getString(it.messageId))
             }
-        }.launchIn(this)
+        }
     }
     val statusBarPadding =
         rememberInsetsPaddingValues(insets = LocalWindowInsets.current.statusBars)

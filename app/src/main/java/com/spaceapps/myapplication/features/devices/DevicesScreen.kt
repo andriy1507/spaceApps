@@ -38,8 +38,6 @@ import com.spaceapps.myapplication.core.models.remote.profile.Platform
 import com.spaceapps.myapplication.ui.OnClick
 import com.spaceapps.myapplication.ui.SPACING_16
 import com.spaceapps.myapplication.utils.plus
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
 @Composable
@@ -52,13 +50,13 @@ fun DevicesScreen(viewModel: DevicesViewModel) {
     val context = LocalContext.current
     val devices = viewModel.devices.collectAsLazyPagingItems()
     LaunchedEffect(events) {
-        events.onEach {
+        events.collect {
             when (it) {
                 is DevicesEvent.ShowSnackBar ->
                     scaffoldState.snackbarHostState
                         .showSnackbar(context.getString(it.messageId))
             }
-        }.launchIn(this)
+        }
     }
     val statusBarPadding =
         rememberInsetsPaddingValues(insets = LocalWindowInsets.current.statusBars)
