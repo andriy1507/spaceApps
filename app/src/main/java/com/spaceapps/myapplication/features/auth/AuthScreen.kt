@@ -33,13 +33,10 @@ import com.spaceapps.myapplication.utils.autofill
 @OptIn(ExperimentalAnimationApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun AuthScreen(viewModel: AuthViewModel) {
-    val email by viewModel.email.collectAsState()
-    val password by viewModel.password.collectAsState()
-    val confirmPassword by viewModel.confirmPassword.collectAsState()
-    val isSignUp by viewModel.isSignUp.collectAsState()
-    val titleId = when (isSignUp) {
-        true -> R.string.sign_up
-        false -> R.string.sign_in
+    val state by viewModel.state.collectAsState()
+    val titleId = when (state.screenState) {
+        AuthViewState.ScreenState.SignUp -> R.string.sign_up
+        AuthViewState.ScreenState.SignIn -> R.string.sign_in
     }
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -64,7 +61,7 @@ fun AuthScreen(viewModel: AuthViewModel) {
             )
             TextButton(
                 modifier = Modifier.padding(bottom = SPACING_64),
-                onClick = viewModel::onSignInWithSocialClick
+                onClick = { viewModel.submitAction(AuthAction.SignInWithSocialClick) }
             ) {
                 Text(text = stringResource(id = R.string.sign_in_with_social))
             }
@@ -73,7 +70,7 @@ fun AuthScreen(viewModel: AuthViewModel) {
                     .fillMaxWidth()
                     .padding(horizontal = SPACING_16)
                     .autofill(viewModel::onEmailEnter, AutofillType.EmailAddress),
-                value = email.text,
+                value = state.email.text,
                 onValueChange = viewModel::onEmailEnter,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Email,
@@ -83,8 +80,8 @@ fun AuthScreen(viewModel: AuthViewModel) {
                     onNext = { focusManager.moveFocus(FocusDirection.Down) }
                 ),
                 singleLine = true,
-                isError = email.errorId != null,
-                label = { Text(text = stringResource(id = email.errorId ?: R.string.email)) }
+                isError = state.email.errorId != null,
+                label = { Text(text = stringResource(id = state.email.errorId ?: R.string.email)) }
             )
             Spacer(modifier = Modifier.height(SPACING_16))
             OutlinedTextField(
@@ -92,13 +89,13 @@ fun AuthScreen(viewModel: AuthViewModel) {
                     .fillMaxWidth()
                     .padding(horizontal = SPACING_16)
                     .autofill(viewModel::onPasswordEnter, AutofillType.Password),
-                value = password.text,
+                value = state.password.text,
                 onValueChange = viewModel::onPasswordEnter,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Email,
-                    imeAction = when (isSignUp) {
-                        true -> ImeAction.Next
-                        false -> ImeAction.Done
+                    imeAction = when (state.screenState) {
+                        AuthViewState.ScreenState.SignUp -> ImeAction.Next
+                        AuthViewState.ScreenState.SignIn -> ImeAction.Done
                     }
                 ),
                 keyboardActions = KeyboardActions(
@@ -107,17 +104,23 @@ fun AuthScreen(viewModel: AuthViewModel) {
                 ),
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
-                isError = password.errorId != null,
-                label = { Text(text = stringResource(id = password.errorId ?: R.string.password)) }
+                isError = state.password.errorId != null,
+                label = {
+                    Text(
+                        text = stringResource(
+                            id = state.password.errorId ?: R.string.password
+                        )
+                    )
+                }
             )
-            if (isSignUp) Spacer(modifier = Modifier.height(SPACING_16))
-            AnimatedVisibility(visible = isSignUp) {
+            if (state.isSignUp) Spacer(modifier = Modifier.height(SPACING_16))
+            AnimatedVisibility(visible = state.isSignUp) {
                 OutlinedTextField(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = SPACING_16)
                         .autofill(viewModel::onConfirmPasswordEnter, AutofillType.NewPassword),
-                    value = confirmPassword.text,
+                    value = state.confirmPassword.text,
                     onValueChange = viewModel::onConfirmPasswordEnter,
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Email,
@@ -128,11 +131,11 @@ fun AuthScreen(viewModel: AuthViewModel) {
                     ),
                     singleLine = true,
                     visualTransformation = PasswordVisualTransformation(),
-                    isError = confirmPassword.errorId != null,
+                    isError = state.confirmPassword.errorId != null,
                     label = {
                         Text(
                             text = stringResource(
-                                id = confirmPassword.errorId ?: R.string.confirm_password
+                                id = state.confirmPassword.errorId ?: R.string.confirm_password
                             )
                         )
                     }
@@ -143,21 +146,21 @@ fun AuthScreen(viewModel: AuthViewModel) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = SPACING_16),
-                onClick = viewModel::onAuthClick,
+                onClick = { viewModel.submitAction(AuthAction.AuthButtonClick) },
                 contentPadding = PaddingValues(SPACING_16)
             ) {
                 Text(text = stringResource(id = titleId))
             }
             Spacer(modifier = Modifier.height(SPACING_16))
-            TextButton(onClick = viewModel::onForgotPasswordClick) {
+            TextButton(onClick = { viewModel.submitAction(AuthAction.ForgotPasswordClick) }) {
                 Text(text = stringResource(id = R.string.forgot_password))
             }
             Spacer(modifier = Modifier.weight(1f))
-            val haveAccountTextId = when (isSignUp) {
-                true -> R.string.already_have_an_account
-                false -> R.string.don_t_have_an_account
+            val haveAccountTextId = when (state.screenState) {
+                AuthViewState.ScreenState.SignUp -> R.string.already_have_an_account
+                AuthViewState.ScreenState.SignIn -> R.string.don_t_have_an_account
             }
-            TextButton(onClick = viewModel::onHaveAccountClick) {
+            TextButton(onClick = { viewModel.submitAction(AuthAction.HaveAccountClick) }) {
                 Text(text = stringResource(id = haveAccountTextId))
             }
         }

@@ -7,6 +7,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "spaceApps-android"
-include(":app")
-include(":core")
-include(":wear")
+include(":app", ":core", ":wear")

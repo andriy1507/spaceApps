@@ -6,6 +6,7 @@ import com.spaceapps.myapplication.core.network.SpaceAppsAuthenticator
 import com.spaceapps.myapplication.core.network.calls.*
 import com.spaceapps.myapplication.core.utils.QueryEnumConverterFactory
 import com.squareup.moshi.Moshi
+import dagger.Lazy
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -44,13 +45,13 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideRetrofit(
-        client: OkHttpClient,
+        client: Lazy<OkHttpClient>,
         moshi: Moshi
     ): Retrofit = Retrofit.Builder().apply {
         baseUrl(BuildConfig.SERVER_URL)
         addConverterFactory(MoshiConverterFactory.create(moshi))
         addConverterFactory(QueryEnumConverterFactory)
-        callFactory { client.newCall(it) }
+        callFactory { client.get().newCall(it) }
     }.build()
 
     @Provides

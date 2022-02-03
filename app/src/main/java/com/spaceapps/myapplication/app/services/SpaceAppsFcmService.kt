@@ -40,47 +40,43 @@ class SpaceAppsFcmService : FirebaseMessagingService() {
             .enqueueUniqueWork(FCM_TOKEN_WORK, ExistingWorkPolicy.REPLACE, request)
     }
 
-    private fun buildCustomNotification(
-        data: Map<String, String>,
-        intent: PendingIntent
-    ): Notification {
+    private fun buildNotification(data: Map<String, String>): Notification {
         return NotificationCompat.Builder(this, getString(R.string.default_notification_channel_id))
             .apply {
                 when (data[NOTIFICATION_TYPE]) {
-                    NOTIFICATION_NEW_LOGIN -> {
-                        val manufacturer = data[NOTIFICATION_DEVICE_MANUFACTURER]
-                        val model = data[NOTIFICATION_DEVICE_MODEL]
-                        val osVersion = data[NOTIFICATION_DEVICE_OS_VERSION]
-                        setContentTitle(getString(R.string.new_login))
-                        setContentText(
-                            getString(
-                                R.string.new_login_text,
-                                manufacturer,
-                                model,
-                                osVersion
-                            )
-                        )
-                    }
+                    NOTIFICATION_NEW_LOGIN -> buildNewLoginNotification(data)
                 }
                 setSmallIcon(R.drawable.ic_launcher_foreground)
                 color = ContextCompat.getColor(this@SpaceAppsFcmService, R.color.colorPrimary)
                 priority = NotificationCompat.PRIORITY_MAX
                 setChannelId(getString(R.string.default_notification_channel_id))
                 setAutoCancel(true)
-                setContentIntent(intent)
             }.build()
+    }
+
+    private fun NotificationCompat.Builder.buildNewLoginNotification(data: Map<String, String>) {
+        setContentIntent(
+            PendingIntent.getActivity(
+                this@SpaceAppsFcmService,
+                Random.nextInt(),
+                Intent(this@SpaceAppsFcmService, MainActivity::class.java),
+                PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
+            )
+        )
+        setContentTitle(getString(R.string.new_login))
+        setContentText(
+            getString(
+                R.string.new_login_text,
+                data[NOTIFICATION_DEVICE_MANUFACTURER],
+                data[NOTIFICATION_DEVICE_MODEL],
+                data[NOTIFICATION_DEVICE_OS_VERSION]
+            )
+        )
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
         Timber.d(message.data.toString())
-        val intent = PendingIntent.getActivity(
-            this@SpaceAppsFcmService,
-            Random.nextInt(),
-            Intent(this, MainActivity::class.java),
-            PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
-        )
-        val notification = buildCustomNotification(message.data, intent)
-        NotificationManagerCompat.from(this).notify(Random.nextInt(), notification)
+        NotificationManagerCompat.from(this).notify(Random.nextInt(), buildNotification(message.data))
     }
 
     companion object {

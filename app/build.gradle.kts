@@ -46,10 +46,10 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = AndroidX.Compose.CompilerVersion
+        kotlinCompilerExtensionVersion = ComposeVersion
     }
     lint {
-        isAbortOnError = false
+        abortOnError = false
     }
     testOptions {
         unitTests.isReturnDefaultValues = true
@@ -98,9 +98,12 @@ dependencies {
     implementation(Google.Accompanist.Permissions)
 
 //    Coil
-    implementation(platform(Coil.Bom))
+    implementation(Coil.Bom)
     implementation(Coil.Coil)
     implementation(Coil.Compose)
+    implementation(Coil.Gif)
+    implementation(Coil.Svg)
+    implementation(Coil.Video)
 //    Coroutines
     implementation(platform(Jetbrains.KotlinX.Coroutines.Bom))
     implementation(Jetbrains.KotlinX.Coroutines.Core)
