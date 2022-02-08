@@ -9,6 +9,7 @@ import com.spaceapps.myapplication.core.models.InputWrapper
 import com.spaceapps.myapplication.core.repositories.auth.AuthRepository
 import com.spaceapps.myapplication.core.repositories.auth.results.SignInResult
 import com.spaceapps.myapplication.core.repositories.auth.results.SignUpResult
+import com.spaceapps.myapplication.core.utils.combine
 import com.spaceapps.myapplication.core.utils.getStateFlow
 import com.spaceapps.myapplication.core.utils.isEmail
 import com.spaceapps.myapplication.core.utils.isPassword
@@ -16,10 +17,9 @@ import com.spaceapps.myapplication.utils.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -53,23 +53,42 @@ class AuthViewModel @Inject constructor(
         initialValue = AuthViewState.ScreenState.SignIn
     )
 
+    private val isPasswordHidden = savedStateHandle.getStateFlow(
+        scope = viewModelScope,
+        key = "isPasswordHidden",
+        initialValue = true
+    )
+
+    private val isConfirmPasswordHidden = savedStateHandle.getStateFlow(
+        scope = viewModelScope,
+        key = "isConfirmPasswordHidden",
+        initialValue = true
+    )
+
     private val pendingActions = MutableSharedFlow<AuthAction>()
+
+    private val _events = MutableSharedFlow<AuthScreenEvent>()
+    val events = _events.asSharedFlow()
 
     val state = combine(
         email,
         password,
         confirmPassword,
-        screenState
-    ) { email, password, confirmPassword, screenState ->
+        screenState,
+        isPasswordHidden,
+        isConfirmPasswordHidden
+    ) { email, password, confirmPassword, screenState, isPasswordHidden, isConfirmPasswordHidden ->
         AuthViewState(
             email = email,
             password = password,
             confirmPassword = confirmPassword,
-            screenState = screenState
+            screenState = screenState,
+            isPasswordHidden = isPasswordHidden,
+            isConfirmPasswordHidden = isConfirmPasswordHidden
         )
     }.stateIn(
         scope = viewModelScope,
-        started = SharingStarted.Eagerly,
+        started = SharingStarted.WhileSubscribed(5),
         initialValue = AuthViewState.Empty
     )
 
@@ -84,6 +103,11 @@ class AuthViewModel @Inject constructor(
                 is AuthAction.ForgotPasswordClick -> onForgotPasswordClick()
                 is AuthAction.HaveAccountClick -> onHaveAccountClick()
                 is AuthAction.SignInWithSocialClick -> onSignInWithSocialClick()
+                is AuthAction.TogglePasswordHidden -> toggleIsPasswordHidden()
+                is AuthAction.ToggleConfirmPasswordHidden -> toggleIsConfirmPasswordHidden()
+                is AuthAction.EmailEntered -> onEmailEnter(action.input)
+                is AuthAction.PasswordEntered -> onPasswordEnter(action.input)
+                is AuthAction.ConfirmPasswordEntered -> onConfirmPasswordEnter(action.input)
             }
         }
     }
@@ -92,7 +116,7 @@ class AuthViewModel @Inject constructor(
         pendingActions.emit(action)
     }
 
-    fun onEmailEnter(input: String) = viewModelScope.launch {
+    private fun onEmailEnter(input: String) = viewModelScope.launch {
         email.emit(
             InputWrapper(
                 text = input,
@@ -104,7 +128,7 @@ class AuthViewModel @Inject constructor(
         )
     }
 
-    fun onPasswordEnter(input: String) = viewModelScope.launch {
+    private fun onPasswordEnter(input: String) = viewModelScope.launch {
         password.emit(
             InputWrapper(
                 text = input,
@@ -116,7 +140,7 @@ class AuthViewModel @Inject constructor(
         )
     }
 
-    fun onConfirmPasswordEnter(input: String) = viewModelScope.launch {
+    private fun onConfirmPasswordEnter(input: String) = viewModelScope.launch {
         confirmPassword.emit(
             InputWrapper(
                 text = input,
@@ -151,14 +175,14 @@ class AuthViewModel @Inject constructor(
     private fun signIn() = viewModelScope.launch {
         when (repository.signIn(email = email.value.text, password = password.value.text)) {
             SignInResult.Success -> goGeolocationScreen()
-            SignInResult.Failure -> Timber.e("ERROR")
+            SignInResult.Failure -> _events.emit(AuthScreenEvent.ShowSnackBar(R.string.unexpected_error))
         }
     }
 
     private fun signUp() = viewModelScope.launch {
         when (repository.signUp(email = email.value.text, password = password.value.text)) {
             SignUpResult.Success -> goGeolocationScreen()
-            SignUpResult.Failure -> Timber.e("ERROR")
+            SignUpResult.Failure -> _events.emit(AuthScreenEvent.ShowSnackBar(R.string.unexpected_error))
         }
     }
 
@@ -169,5 +193,13 @@ class AuthViewModel @Inject constructor(
                 inclusive = true
             }
         }
+    }
+
+    private fun toggleIsPasswordHidden() = viewModelScope.launch {
+        isPasswordHidden.emit(!isPasswordHidden.value)
+    }
+
+    private fun toggleIsConfirmPasswordHidden() = viewModelScope.launch {
+        isConfirmPasswordHidden.emit(!isConfirmPasswordHidden.value)
     }
 }

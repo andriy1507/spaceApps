@@ -9,7 +9,9 @@ data class AuthViewState(
     val email: InputWrapper = InputWrapper.Empty,
     val password: InputWrapper = InputWrapper.Empty,
     val confirmPassword: InputWrapper = InputWrapper.Empty,
-    val screenState: ScreenState = ScreenState.SignIn
+    val screenState: ScreenState = ScreenState.SignIn,
+    val isPasswordHidden: Boolean = true,
+    val isConfirmPasswordHidden: Boolean = true
 ) : Parcelable {
 
     @Parcelize
