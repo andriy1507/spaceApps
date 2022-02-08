@@ -2,10 +2,12 @@ package com.spaceapps.myapplication.app.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.view.ViewTreeObserver
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.animation.*
-import androidx.compose.material.*
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.MyLocation
@@ -16,9 +18,9 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.plusAssign
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -37,9 +39,9 @@ import com.spaceapps.myapplication.utils.NavigationDispatcher
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -57,36 +59,64 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var dataStoreManager: DataStoreManager
 
+    private var startDestination: String? = null
+
     @OptIn(ExperimentalMaterialNavigationApi::class, ExperimentalAnimationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setupEdgeToEdge()
         installSplashScreen()
-        setContent {
-            val bottomSheetNavigator = rememberBottomSheetNavigator()
-            val navController = rememberAnimatedNavController()
-            navController.navigatorProvider += bottomSheetNavigator
-            ObserveEvents(navController)
-            val bottomItems = provideBottomItems()
-            val currentDestination by navController.currentBackStackEntryAsState()
-            val isBottomBarVisible = when (currentDestination?.destination?.route) {
-                About.route,
-                GeolocationMap.route,
-                Profile.route,
-                SaveLocation.route -> true
-                else -> false
+        setupEdgeToEdge()
+        observeSplashScreenVisibility {
+            setContent {
+                val lifecycleOwner = LocalLifecycleOwner.current
+                val systemUiController = rememberSystemUiController()
+                val navController = rememberAnimatedNavController()
+                val bottomSheetNavigator = rememberBottomSheetNavigator()
+
+                navController.navigatorProvider += bottomSheetNavigator
+
+                val navigationEvents = rememberNavigationEmitter(lifecycleOwner)
+                val unauthorizedEvents = rememberUnauthorizedEvents(lifecycleOwner)
+
+                LaunchedEffect(Unit) {
+                    launch {
+                        navigationEvents.collect { event -> event(navController) }
+                    }
+                    launch {
+                        unauthorizedEvents.collect {
+                            when (it) {
+                                true -> logOut()
+                                false -> restart()
+                            }
+                        }
+                    }
+                }
+
+                val bottomItems = provideBottomItems()
+                val currentDestination by navController.currentBackStackEntryAsState()
+                val isBottomBarVisible = when (currentDestination?.destination?.route) {
+                    About.route,
+                    GeolocationMap.route,
+                    Profile.route,
+                    SaveLocation.route -> true
+                    else -> false
+                }
+
+                val useDarkIcons = MaterialTheme.colors.isLight
+                SideEffect {
+                    systemUiController.setSystemBarsColor(Color.Transparent, useDarkIcons)
+                }
+
+                MainScreen(
+                    isBottomBarVisible = isBottomBarVisible,
+                    bottomItems = bottomItems,
+                    navController = navController,
+                    startDestination = provideStartDestination()
+                )
             }
-            val systemUiController = rememberSystemUiController()
-            val useDarkIcons = MaterialTheme.colors.isLight
-            SideEffect {
-                systemUiController.setSystemBarsColor(Color.Transparent, useDarkIcons)
-            }
-            MainScreen(
-                isBottomBarVisible = isBottomBarVisible,
-                bottomItems = bottomItems,
-                navController = navController,
-                startDestination = provideStartDestination()
-            )
+        }
+        lifecycleScope.launch {
+            withContext(Dispatchers.IO) { startDestination = provideStartDestination() }
         }
     }
 
@@ -117,21 +147,6 @@ class MainActivity : AppCompatActivity() {
         )
     )
 
-    @Composable
-    private fun ObserveEvents(navController: NavHostController) {
-        val navigationEvents = rememberNavigationEmitter()
-        val unauthorizedEvents = rememberUnauthorizedEvents()
-        LaunchedEffect(Unit) {
-            navigationEvents.collect { event -> event(navController) }
-            unauthorizedEvents.collect {
-                when (it) {
-                    true -> logOut()
-                    false -> restart()
-                }
-            }
-        }
-    }
-
     private fun logOut() = lifecycleScope.launch(Dispatchers.IO) {
         databaseManager.clear()
         dataStoreManager.clearData()
@@ -153,8 +168,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     @Composable
-    private fun rememberNavigationEmitter(): Flow<NavigationCommand> {
-        val lifecycleOwner = LocalLifecycleOwner.current
+    private fun rememberNavigationEmitter(lifecycleOwner: LifecycleOwner): Flow<NavigationCommand> {
         return remember(navDispatcher.emitter, lifecycleOwner) {
             navDispatcher.emitter.flowWithLifecycle(
                 lifecycleOwner.lifecycle,
@@ -164,13 +178,27 @@ class MainActivity : AppCompatActivity() {
     }
 
     @Composable
-    private fun rememberUnauthorizedEvents(): Flow<Boolean> {
-        val lifecycleOwner = LocalLifecycleOwner.current
+    private fun rememberUnauthorizedEvents(lifecycleOwner: LifecycleOwner): Flow<Boolean> {
         return remember(authDispatcher.emitter, lifecycleOwner) {
             authDispatcher.emitter.flowWithLifecycle(
                 lifecycleOwner.lifecycle,
                 Lifecycle.State.STARTED
             )
         }
+    }
+
+    private fun observeSplashScreenVisibility(onReadyToDraw: () -> Unit) {
+        val content: View = findViewById(android.R.id.content)
+        content.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+            override fun onPreDraw(): Boolean {
+                return if (startDestination != null) {
+                    content.viewTreeObserver.removeOnPreDrawListener(this)
+                    onReadyToDraw()
+                    true
+                } else {
+                    false
+                }
+            }
+        })
     }
 }
