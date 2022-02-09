@@ -74,3 +74,5 @@ jobs:
         run: chmod +x ./gradlew
       - name: Run detekt check
         run: ./gradlew detekt
+  tests:
+    uses: andriy1507/spaceApps-android/.github/workflows/android-ci-tests@v1
