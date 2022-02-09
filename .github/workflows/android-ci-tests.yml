@@ -1,6 +1,7 @@
 name: Android CI Tests
 
 on:
+  workflow_call:
   workflow_run:
     workflows:
       - Android CI Checks
