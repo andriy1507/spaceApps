@@ -1,22 +1,17 @@
 package com.spaceapps.myapplication.core.local
 
-import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
 import com.spaceapps.myapplication.core.DEGREES_DMS
-import com.spaceapps.myapplication.core.PREFERENCES_DATA_STORE
 import com.spaceapps.myapplication.core.SYSTEM_GEO
 import com.spaceapps.myapplication.core.models.remote.auth.AuthTokenResponse
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import java.time.format.DateTimeFormatter
 
-class DataStoreManagerImpl(context: Context) : DataStoreManager {
-
-    private val Context.preferencesDataStore by preferencesDataStore(PREFERENCES_DATA_STORE)
-
-    private val dataStore = context.preferencesDataStore
+class DataStoreManagerImpl(private val dataStore: DataStore<Preferences>) : DataStoreManager {
 
     private val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
 
