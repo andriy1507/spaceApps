@@ -31,6 +31,12 @@ object AndroidX {
         const val Icons = "androidx.compose.material:material-icons-extended:$ComposeVersion"
         const val Foundation = "androidx.compose.foundation:foundation:$ComposeVersion"
         const val Animation = "androidx.compose.animation:animation:$ComposeVersion"
+
+        object Test {
+            const val Test = "androidx.compose.ui:ui-test:$ComposeVersion"
+            const val JUnit4 = "androidx.compose.ui:ui-test-junit4:$ComposeVersion"
+            const val Manifest = "androidx.compose.ui:ui-test-manifest:$ComposeVersion"
+        }
     }
 
     object Navigation {
@@ -110,12 +116,19 @@ object AndroidX {
         const val Sessions = "androidx.media3:media3-session:$Media3Version"
         const val ExoPlayer = "androidx.media3:media3-exoplayer:$Media3Version"
     }
+
+    object Test {
+        private const val TestVersion = "1.4.0"
+        const val Core = "androidx.test:core-ktx:$TestVersion"
+        const val Runner = "androidx.test:runner:$TestVersion"
+        const val Rules = "androidx.test:rules:$TestVersion"
+    }
 }
 
 object Android {
     object Tools {
         const val Desugar = "com.android.tools:desugar_jdk_libs:1.1.5"
-        const val GradlePlugin = "com.android.tools.build:gradle:7.1.0-rc01"
+        const val GradlePlugin = "com.android.tools.build:gradle:7.1.1"
     }
 }
 
@@ -176,6 +189,10 @@ object Google {
         private const val MapsVersion = "3.3.0"
         const val Maps = "com.google.maps.android:maps-ktx:$MapsVersion"
         const val Utils = "com.google.maps.android:maps-utils-ktx:$MapsVersion"
+    }
+    object Truth {
+        private const val TruthVersion = "1.1.3"
+        const val Truth = "com.google.truth:truth:$TruthVersion"
     }
 }
 
