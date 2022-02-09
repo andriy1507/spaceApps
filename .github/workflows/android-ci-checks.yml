@@ -75,4 +75,4 @@ jobs:
       - name: Run detekt check
         run: ./gradlew detekt
   tests:
-    uses: andriy1507/spaceApps-android/.github/workflows/android-ci-tests@v1
+    uses: andriy1507/spaceApps-android/.github/workflows/android-ci-tests.yml@v1
