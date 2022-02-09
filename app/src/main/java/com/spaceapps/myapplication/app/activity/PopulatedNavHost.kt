@@ -37,6 +37,8 @@ import com.spaceapps.myapplication.features.location.map.GeolocationMapScreen
 import com.spaceapps.myapplication.features.location.saveLocation.SaveLocationScreen
 import com.spaceapps.myapplication.features.notificationView.NotificationViewScreen
 import com.spaceapps.myapplication.features.notifications.NotificationsScreen
+import com.spaceapps.myapplication.features.onBoarding.OnBoardingScreen
+import com.spaceapps.myapplication.features.onBoarding.OnBoardingViewModel
 import com.spaceapps.myapplication.features.player.PlayerScreen
 import com.spaceapps.myapplication.features.profile.ProfileScreen
 import com.spaceapps.myapplication.features.resetPassword.ResetPasswordScreen
@@ -88,6 +90,10 @@ private fun NavGraphBuilder.authScreens() {
             onActionSubmit = viewModel::submitAction,
             events = events
         )
+    }
+    composable(route = Screens.OnBoarding.route) {
+        val viewModel = hiltViewModel<OnBoardingViewModel>(it)
+        OnBoardingScreen(onActionSubmit = viewModel::onActionSubmit)
     }
     composable(route = Screens.ForgotPassword.route) {
         ForgotPasswordScreen(hiltViewModel(it))

@@ -22,4 +22,8 @@ interface DataStoreManager {
     suspend fun removeTokens()
 
     suspend fun clearData()
+
+    suspend fun setOnBoardingPassed(passed: Boolean)
+
+    suspend fun getOnBoardingPassed(): Boolean
 }
