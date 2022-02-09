@@ -1,8 +1,15 @@
 package com.spaceapps.myapplication.core.di
 
 import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.emptyPreferences
+import androidx.datastore.preferences.preferencesDataStoreFile
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.spaceapps.myapplication.core.PREFERENCES_DATA_STORE
 import com.spaceapps.myapplication.core.local.*
 import com.spaceapps.myapplication.core.utils.DispatchersProvider
 import com.spaceapps.myapplication.core.utils.DispatchersProviderImpl
@@ -13,6 +20,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
 import javax.inject.Singleton
 
 @Module
@@ -40,7 +49,22 @@ object UtilsModule {
 
     @Provides
     @Singleton
-    fun provideDataStoreManager(@ApplicationContext context: Context): DataStoreManager {
-        return DataStoreManagerImpl(context)
+    fun providePreferencesDataStore(
+        @ApplicationContext context: Context,
+        dispatchersProvider: DispatchersProvider
+    ): DataStore<Preferences> {
+        return PreferenceDataStoreFactory.create(
+            corruptionHandler = ReplaceFileCorruptionHandler(
+                produceNewData = { emptyPreferences() }
+            ),
+            scope = CoroutineScope(dispatchersProvider.IO + SupervisorJob()),
+            produceFile = { context.preferencesDataStoreFile(PREFERENCES_DATA_STORE) }
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideDataStoreManager(dataStore: DataStore<Preferences>): DataStoreManager {
+        return DataStoreManagerImpl(dataStore)
     }
 }
