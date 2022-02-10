@@ -130,6 +130,7 @@ dependencies {
     implementation(AndroidX.Lifecycle.ViewModelCompose)
     implementation(AndroidX.Lifecycle.LiveData)
     implementation(AndroidX.Lifecycle.Runtime)
+    implementation(AndroidX.ConstraintLayout.ConstraintLayout)
 
 //    Paging
     implementation(AndroidX.Paging.Runtime)
