@@ -187,7 +187,7 @@ fun NotificationListRetryItem(state: LoadState, onRetry: OnClick) {
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun NotificationItem(
     modifier: Modifier = Modifier,

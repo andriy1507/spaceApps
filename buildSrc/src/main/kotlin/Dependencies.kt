@@ -1,5 +1,5 @@
 const val KotlinVersion = "1.6.10"
-const val ComposeVersion = "1.1.0-rc03"
+const val ComposeVersion = "1.1.0"
 
 object AndroidX {
     object Wear {

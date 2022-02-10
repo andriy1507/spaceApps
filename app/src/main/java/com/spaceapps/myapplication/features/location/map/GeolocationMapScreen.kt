@@ -3,7 +3,6 @@ package com.spaceapps.myapplication.features.location.map
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.location.Location
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
@@ -48,7 +47,6 @@ import kotlinx.coroutines.launch
 
 @OptIn(
     ExperimentalMaterialApi::class,
-    ExperimentalAnimationApi::class,
     ExperimentalPermissionsApi::class
 )
 @Composable
@@ -185,7 +183,6 @@ fun PermissionRationaleDialog(onDismiss: OnClick) {
     )
 }
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun MapMultiActionFab(
     isLocationVisible: Boolean,
