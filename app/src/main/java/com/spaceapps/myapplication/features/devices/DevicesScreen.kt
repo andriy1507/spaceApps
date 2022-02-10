@@ -2,7 +2,6 @@ package com.spaceapps.myapplication.features.devices
 
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -39,7 +38,6 @@ import com.spaceapps.myapplication.ui.OnClick
 import com.spaceapps.myapplication.ui.SPACING_16
 import com.spaceapps.myapplication.utils.plus
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun DevicesScreen(viewModel: DevicesViewModel) {
     val scaffoldState = rememberScaffoldState()
@@ -124,7 +122,7 @@ fun DevicesScreen(viewModel: DevicesViewModel) {
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun DeviceItem(
     modifier: Modifier = Modifier,

@@ -25,7 +25,6 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
-import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Scale
@@ -39,9 +38,7 @@ import com.spaceapps.myapplication.core.models.remote.notifications.Notification
 import com.spaceapps.myapplication.ui.SPACING_16
 import com.spaceapps.myapplication.ui.SPACING_8
 import com.spaceapps.myapplication.utils.plus
-import kotlinx.coroutines.flow.collect
 
-@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun NotificationViewScreen(viewModel: NotificationViewViewModel) {
     val scaffoldState = rememberScaffoldState()
