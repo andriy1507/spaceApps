@@ -119,7 +119,7 @@ fun LocationsListScreen(viewModel: LocationsListViewModel) {
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun LocationItem(
     modifier: Modifier = Modifier,
