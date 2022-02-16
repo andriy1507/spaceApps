@@ -12,6 +12,14 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * Repository responsible for all authentication logic.
+ * @property [calls] Executes network operations.
+ * @property [dataStoreManager] Stores authentication data.
+ * @property [dispatchersProvider] Provides coroutines dispatchers.
+ * @property [deviceInfoProvider] Provides information about device.
+ * @constructor Creates instance of repository.
+ */
 @Singleton
 class AuthRepositoryImpl @Inject constructor(
     private val calls: AuthorizationCalls,
@@ -20,6 +28,14 @@ class AuthRepositoryImpl @Inject constructor(
     private val deviceInfoProvider: DeviceInfoProvider
 ) : AuthRepository {
 
+    /**
+     * Authenticates already registered user.
+     * @param [email] Email used during registration.
+     * @param [password] Current user's password.
+     * @return Sealed class [SignInResult].
+     * On successful authentication [SignInResult.Success] is returned.
+     * On failed authentication [SignInResult.Failure] is returned.
+     */
     override suspend fun signIn(email: String, password: String): SignInResult =
         withContext(dispatchersProvider.IO) {
             val request = AuthRequest(
@@ -36,6 +52,14 @@ class AuthRepositoryImpl @Inject constructor(
             }
         }
 
+    /**
+     * Registers and authenticates non-registered user.
+     * @param [email] Email of new user.
+     * @param [password] Password of new user.
+     * @return Sealed class [SignUpResult].
+     * On successful registration and authentication [SignUpResult.Success] is returned.
+     * On failed registration or authentication [SignUpResult.Failure] is returned.
+     */
     override suspend fun signUp(email: String, password: String): SignUpResult =
         withContext(dispatchersProvider.IO) {
             val request = AuthRequest(
@@ -52,6 +76,13 @@ class AuthRepositoryImpl @Inject constructor(
             }
         }
 
+    /**
+     * Authenticates registered or non-registered user with Google [accessToken].
+     * @param [accessToken] Google access token.
+     * @return Sealed class [SocialSignInResult].
+     * On successful authentication [SocialSignInResult.Success] is returned.
+     * On failed authentication [SocialSignInResult.Failure] is returned.
+     */
     override suspend fun signInWithGoogle(accessToken: String): SocialSignInResult =
         withContext(dispatchersProvider.IO) {
             val request = SocialSignInRequest(
@@ -70,6 +101,13 @@ class AuthRepositoryImpl @Inject constructor(
             }
         }
 
+    /**
+     * Authenticates registered or non-registered user with Facebook [accessToken].
+     * @param [accessToken] Facebook access token.
+     * @return Sealed class [SocialSignInResult].
+     * On successful authentication [SocialSignInResult.Success] is returned.
+     * On failed authentication [SocialSignInResult.Failure] is returned.
+     */
     override suspend fun signInWithFacebook(accessToken: String): SocialSignInResult =
         withContext(dispatchersProvider.IO) {
             val request = SocialSignInRequest(
@@ -88,6 +126,13 @@ class AuthRepositoryImpl @Inject constructor(
             }
         }
 
+    /**
+     * Authenticates registered or non-registered user with Apple [accessToken].
+     * @param [accessToken] Apple access token.
+     * @return Sealed class [SocialSignInResult].
+     * On successful authentication [SocialSignInResult.Success] is returned.
+     * On failed authentication [SocialSignInResult.Failure] is returned.
+     */
     override suspend fun signInWithApple(accessToken: String): SocialSignInResult =
         withContext(dispatchersProvider.IO) {
             val request = SocialSignInRequest(

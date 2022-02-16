@@ -7,6 +7,7 @@ plugins {
     id(Ktlint.Plugin) version Ktlint.Version
     id(Detekt.Plugin) version Detekt.Version
     id(Ksp.Plugin) version Ksp.Version
+    id(Jetbrains.Dokka.Plugin) version KotlinVersion
 }
 
 android {
@@ -126,6 +127,8 @@ dependencies {
     //    Testing
     testImplementation(AndroidX.Test.Core)
     testImplementation(AndroidX.Test.Rules)
-    testImplementation(SquareUp.Retrofit.Mock)
+    testImplementation(Google.Truth.Truth)
+    testImplementation (Mockito.Core)
+    testImplementation (SquareUp.OkHttp.MockWebServer)
     testImplementation(Jetbrains.KotlinX.Coroutines.Test)
 }

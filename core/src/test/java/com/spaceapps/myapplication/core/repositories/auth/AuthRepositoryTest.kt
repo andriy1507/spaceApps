@@ -1,234 +1,299 @@
 package com.spaceapps.myapplication.core.repositories.auth
 
 import androidx.test.filters.SmallTest
-import assertk.assertThat
-import assertk.assertions.isInstanceOf
-import com.spaceapps.myapplication.core.BuildConfig
-import com.spaceapps.myapplication.core.local.TestDataStoreManager
+import com.google.common.truth.Truth.assertThat
+import com.spaceapps.myapplication.MainCoroutineRule
+import com.spaceapps.myapplication.core.local.DataStoreManager
 import com.spaceapps.myapplication.core.models.remote.auth.AuthTokenResponse
 import com.spaceapps.myapplication.core.network.calls.AuthorizationCalls
 import com.spaceapps.myapplication.core.repositories.auth.results.*
-import com.spaceapps.myapplication.core.utils.TestDeviceInfoProvider
-import com.spaceapps.myapplication.core.utils.TestDispatchersProvider
+import com.spaceapps.myapplication.core.utils.DeviceInfoProvider
+import com.spaceapps.myapplication.core.utils.DispatchersProvider
+import com.spaceapps.myapplication.core.utils.MoshiConverters
+import com.squareup.moshi.Moshi
 import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.newSingleThreadContext
-import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
-import okhttp3.ResponseBody.Companion.toResponseBody
+import okhttp3.mockwebserver.MockResponse
+import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
-import retrofit2.Response
+import org.junit.runner.RunWith
+import org.mockito.Mock
+import org.mockito.Mockito
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.times
+import org.mockito.junit.MockitoJUnitRunner
 import retrofit2.Retrofit
-import retrofit2.mock.MockRetrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
 import java.time.LocalDateTime
 
 @SmallTest
+@RunWith(MockitoJUnitRunner::class)
 @OptIn(ExperimentalCoroutinesApi::class, DelicateCoroutinesApi::class)
 class AuthRepositoryTest {
 
-    private val mainThreadSurrogate = newSingleThreadContext("UI thread")
+    private val authTokenResponse = AuthTokenResponse(
+        accessToken = "accessToken",
+        accessTokenExp = LocalDateTime.now(),
+        refreshToken = "refreshToken",
+        refreshTokenExp = LocalDateTime.now()
+    )
+
+    private val dispatcher = StandardTestDispatcher()
+
+    @get:Rule
+    val mainCoroutineRule = MainCoroutineRule(dispatcher)
+
+    private lateinit var repository: AuthRepository
+
+    private lateinit var calls: AuthorizationCalls
+
+    private val mockWebServer = MockWebServer()
+
+    @Mock
+    lateinit var dataStoreManager: DataStoreManager
+
+    @Mock
+    lateinit var deviceInfoProvider: DeviceInfoProvider
 
     @Before
-    fun setUp() {
-        Dispatchers.setMain(mainThreadSurrogate)
+    fun setUp() = runBlocking {
+        mockWebServer.start()
+        mockDeviceInfoProvider()
+        repository = AuthRepositoryImpl(
+            calls = mockAuthorizationCalls(),
+            dataStoreManager = dataStoreManager,
+            dispatchersProvider = object : DispatchersProvider {
+                override val Main = dispatcher
+                override val IO = dispatcher
+                override val Default = dispatcher
+                override val Unconfined = dispatcher
+            },
+            deviceInfoProvider = deviceInfoProvider
+        )
     }
 
     @After
     fun tearDown() {
-        Dispatchers.resetMain()
-        mainThreadSurrogate.close()
+        mockWebServer.shutdown()
     }
 
     @Test
     fun `Sign-In Success`() = runTest {
-        val response = provideSuccessAuthTokenResponse()
-        val repository = provideRepository(response)
+        mockWebServer.enqueue(provideAuthTokenResponse())
         val result = repository.signIn("", "")
-        assertThat(result).isInstanceOf(SignInResult.Success::class)
+        assertThat(result).isEqualTo(SignInResult.Success)
     }
 
     @Test
     fun `Sign-In Failure`() = runTest {
-        val response: Response<AuthTokenResponse> = provideEmptyErrorResponse(400)
-        val repository = provideRepository(response)
+        mockWebServer.enqueue(provideErrorResponse())
         val result = repository.signIn("", "")
-        assertThat(result).isInstanceOf(SignInResult.Failure::class)
+        assertThat(result).isEqualTo(SignInResult.Failure)
+    }
+
+    @Test
+    fun `On Sign-In success tokens are saved`() = runTest {
+        mockWebServer.enqueue(provideAuthTokenResponse())
+        repository.signIn("", "")
+        Mockito.verify(dataStoreManager, times(1)).storeTokens(authTokenResponse)
     }
 
     @Test
     fun `Sign-Up Success`() = runTest {
-        val response = provideSuccessAuthTokenResponse()
-        val repository = provideRepository(response)
+        mockWebServer.enqueue(provideAuthTokenResponse())
         val result = repository.signUp("", "")
-        assertThat(result).isInstanceOf(SignUpResult.Success::class)
+        assertThat(result).isEqualTo(SignUpResult.Success)
     }
 
     @Test
     fun `Sign-Up Failure`() = runTest {
-        val response: Response<AuthTokenResponse> = provideEmptyErrorResponse(400)
-        val repository = provideRepository(response)
+        mockWebServer.enqueue(provideErrorResponse())
         val result = repository.signUp("", "")
-        assertThat(result).isInstanceOf(SignUpResult.Failure::class)
+        assertThat(result).isEqualTo(SignUpResult.Failure)
+    }
+
+    @Test
+    fun `On Sign-Up success tokens are saved`() = runTest {
+        mockWebServer.enqueue(provideAuthTokenResponse())
+        repository.signUp("", "")
+        Mockito.verify(dataStoreManager, times(1)).storeTokens(authTokenResponse)
     }
 
     @Test
     fun `Sign-In with Google Success`() = runTest {
-        val response = provideSuccessAuthTokenResponse()
-        val repository = provideRepository(response)
+        mockWebServer.enqueue(provideAuthTokenResponse())
         val result = repository.signInWithGoogle("")
-        assertThat(result).isInstanceOf(SocialSignInResult.Success::class)
+        assertThat(result).isEqualTo(SocialSignInResult.Success)
     }
 
     @Test
     fun `Sign-In with Google Failure`() = runTest {
-        val response: Response<AuthTokenResponse> = provideEmptyErrorResponse(400)
-        val repository = provideRepository(response)
+        mockWebServer.enqueue(provideErrorResponse())
         val result = repository.signInWithGoogle("")
-        assertThat(result).isInstanceOf(SocialSignInResult.Failure::class)
+        assertThat(result).isEqualTo(SocialSignInResult.Failure)
+    }
+
+    @Test
+    fun `On Google Sign-In success tokens are saved`() = runTest {
+        mockWebServer.enqueue(provideAuthTokenResponse())
+        repository.signInWithGoogle("")
+        Mockito.verify(dataStoreManager, times(1)).storeTokens(authTokenResponse)
     }
 
     @Test
     fun `Sign-In with Facebook Success`() = runTest {
-        val response = provideSuccessAuthTokenResponse()
-        val repository = provideRepository(response)
+        mockWebServer.enqueue(provideAuthTokenResponse())
         val result = repository.signInWithFacebook("")
-        assertThat(result).isInstanceOf(SocialSignInResult.Success::class)
+        assertThat(result).isEqualTo(SocialSignInResult.Success)
     }
 
     @Test
     fun `Sign-In with Facebook Failure`() = runTest {
-        val response: Response<AuthTokenResponse> = provideEmptyErrorResponse(400)
-        val repository = provideRepository(response)
-        val result = repository.signInWithGoogle("")
-        assertThat(result).isInstanceOf(SocialSignInResult.Failure::class)
+        mockWebServer.enqueue(provideErrorResponse())
+        val result = repository.signInWithFacebook("")
+        assertThat(result).isEqualTo(SocialSignInResult.Failure)
+    }
+
+    @Test
+    fun `On Facebook Sign-In success tokens are saved`() = runTest {
+        mockWebServer.enqueue(provideAuthTokenResponse())
+        repository.signInWithFacebook("")
+        Mockito.verify(dataStoreManager, times(1)).storeTokens(authTokenResponse)
     }
 
     @Test
     fun `Sign-In with Apple Success`() = runTest {
-        val response = provideSuccessAuthTokenResponse()
-        val repository = provideRepository(response)
+        mockWebServer.enqueue(provideAuthTokenResponse())
         val result = repository.signInWithApple("")
-        assertThat(result).isInstanceOf(SocialSignInResult.Success::class)
+        assertThat(result).isEqualTo(SocialSignInResult.Success)
     }
 
     @Test
     fun `Sign-In with Apple Failure`() = runTest {
-        val response: Response<AuthTokenResponse> = provideEmptyErrorResponse(400)
-        val repository = provideRepository(response)
-        val result = repository.signInWithGoogle("")
-        assertThat(result).isInstanceOf(SocialSignInResult.Failure::class)
+        mockWebServer.enqueue(provideErrorResponse())
+        val result = repository.signInWithApple("")
+        assertThat(result).isEqualTo(SocialSignInResult.Failure)
+    }
+
+    @Test
+    fun `On Apple Sign-In success tokens are saved`() = runTest {
+        mockWebServer.enqueue(provideAuthTokenResponse())
+        repository.signInWithApple("")
+        Mockito.verify(dataStoreManager, times(1)).storeTokens(authTokenResponse)
     }
 
     @Test
     fun `Send reset code Success`() = runTest {
-        val response: Response<Unit> = provideEmptySuccessResponse(200)
-        val repository = provideRepository(response)
+        mockWebServer.enqueue(provideSuccessResponse())
         val result = repository.sendResetCode("")
-        assertThat(result).isInstanceOf(SendResetCodeResult.Success::class)
+        assertThat(result).isEqualTo(SendResetCodeResult.Success)
     }
 
     @Test
     fun `Send reset code Failure`() = runTest {
-        val response: Response<Unit> = provideEmptyErrorResponse(400)
-        val repository = provideRepository(response)
+        mockWebServer.enqueue(provideErrorResponse())
         val result = repository.sendResetCode("")
-        assertThat(result).isInstanceOf(SendResetCodeResult.Failure::class)
+        assertThat(result).isEqualTo(SendResetCodeResult.Failure)
     }
 
     @Test
     fun `Verify reset code Success`() = runTest {
-        val response: Response<Unit> = provideEmptySuccessResponse(200)
-        val repository = provideRepository(response)
+        mockWebServer.enqueue(provideSuccessResponse())
         val result = repository.verifyResetCode("", "")
-        assertThat(result).isInstanceOf(VerifyResetCodeResult.Success::class)
+        assertThat(result).isEqualTo(VerifyResetCodeResult.Success)
     }
 
     @Test
     fun `Verify reset code Failure`() = runTest {
-        val response: Response<Unit> = provideEmptyErrorResponse(400)
-        val repository = provideRepository(response)
+        mockWebServer.enqueue(provideErrorResponse())
         val result = repository.verifyResetCode("", "")
-        assertThat(result).isInstanceOf(VerifyResetCodeResult.Failure::class)
+        assertThat(result).isEqualTo(VerifyResetCodeResult.Failure)
     }
 
     @Test
     fun `Reset password Success`() = runTest {
-        val response: Response<Unit> = provideEmptySuccessResponse(200)
-        val repository = provideRepository(response)
+        mockWebServer.enqueue(provideSuccessResponse())
         val result = repository.resetPassword("", "", "")
-        assertThat(result).isInstanceOf(ResetPasswordResult.Success::class)
+        assertThat(result).isEqualTo(ResetPasswordResult.Success)
     }
 
     @Test
     fun `Reset password Failure`() = runTest {
-        val response: Response<Unit> = provideEmptyErrorResponse(400)
-        val repository = provideRepository(response)
+        mockWebServer.enqueue(provideErrorResponse())
         val result = repository.resetPassword("", "", "")
-        assertThat(result).isInstanceOf(ResetPasswordResult.Failure::class)
+        assertThat(result).isEqualTo(ResetPasswordResult.Failure)
     }
 
     @Test
     fun `Log out Success`() = runTest {
-        val response: Response<Unit> = provideEmptySuccessResponse(200)
-        val repository = provideRepository(response)
+        mockWebServer.enqueue(provideSuccessResponse())
         val result = repository.logOut()
-        assertThat(result).isInstanceOf(LogOutResult.Success::class)
+        assertThat(result).isEqualTo(LogOutResult.Success)
     }
 
     @Test
     fun `Log out Failure`() = runTest {
-        val response: Response<Unit> = provideEmptyErrorResponse(400)
-        val repository = provideRepository(response)
+        mockWebServer.enqueue(provideErrorResponse())
         val result = repository.logOut()
-        assertThat(result).isInstanceOf(LogOutResult.Failure::class)
+        assertThat(result).isEqualTo(LogOutResult.Failure)
     }
 
     @Test
     fun `Add device Success`() = runTest {
-        val response: Response<Unit> = provideEmptySuccessResponse(200)
-        val repository = provideRepository(response)
+        mockWebServer.enqueue(provideSuccessResponse())
         val result = repository.addDevice("")
-        assertThat(result).isInstanceOf(AddDeviceResult.Success::class)
+        assertThat(result).isEqualTo(AddDeviceResult.Success)
     }
 
     @Test
     fun `Add device Failure`() = runTest {
-        val response: Response<Unit> = provideEmptyErrorResponse(400)
-        val repository = provideRepository(response)
+        mockWebServer.enqueue(provideErrorResponse())
         val result = repository.addDevice("")
-        assertThat(result).isInstanceOf(AddDeviceResult.Failure::class)
+        assertThat(result).isEqualTo(AddDeviceResult.Failure)
     }
 
-    private fun provideRepository(response: Any?): AuthRepository {
-        return AuthRepositoryImpl(
-            calls = provideAuthCalls(response),
-            dataStoreManager = TestDataStoreManager(),
-            dispatchersProvider = TestDispatchersProvider(),
-            deviceInfoProvider = TestDeviceInfoProvider()
-        )
+    private fun mockDeviceInfoProvider() = runBlocking {
+        `when`(deviceInfoProvider.getFirebaseInstallationId()).thenReturn("")
+        `when`(deviceInfoProvider.getFirebaseMessagingToken()).thenReturn("")
+        `when`(deviceInfoProvider.provideManufacturer()).thenReturn("")
+        `when`(deviceInfoProvider.provideModel()).thenReturn("")
+        `when`(deviceInfoProvider.provideOsVersion()).thenReturn("")
     }
 
-    private fun provideAuthCalls(response: Any?): AuthorizationCalls {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BuildConfig.SERVER_URL)
+    private fun mockAuthorizationCalls(): AuthorizationCalls {
+        val moshi = Moshi.Builder()
+            .add(MoshiConverters())
             .build()
-        val mock = MockRetrofit.Builder(retrofit)
+        return Retrofit.Builder()
+            .baseUrl(mockWebServer.url("/"))
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
-        return mock.create(AuthorizationCalls::class.java).returningResponse(response)
+            .create(AuthorizationCalls::class.java)
     }
 
-    private fun provideSuccessAuthTokenResponse() = AuthTokenResponse(
-        accessToken = "",
-        accessTokenExp = LocalDateTime.now(),
-        refreshToken = "",
-        refreshTokenExp = LocalDateTime.now()
-    )
+    private fun provideAuthTokenResponse(): MockResponse {
+        val body = Moshi.Builder()
+            .add(MoshiConverters())
+            .build().adapter(AuthTokenResponse::class.java)
+            .toJson(authTokenResponse)
+        return MockResponse()
+            .setResponseCode(200)
+            .setBody(body)
+    }
 
-    private fun <T> provideEmptyErrorResponse(code: Int) = Response.error<T>(code, "".toResponseBody())
+    private fun provideErrorResponse(): MockResponse {
+        return MockResponse()
+            .setResponseCode(400)
+    }
 
-    private fun <T> provideEmptySuccessResponse(code: Int) = Response.success<T>(code, null)
+    private fun provideSuccessResponse():MockResponse {
+        return  MockResponse()
+            .setResponseCode(200)
+    }
 }

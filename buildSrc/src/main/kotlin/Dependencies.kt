@@ -219,7 +219,6 @@ object SquareUp {
         private const val RetrofitVersion = "2.9.0"
         const val Retrofit = "com.squareup.retrofit2:retrofit:$RetrofitVersion"
         const val MoshiConverter = "com.squareup.retrofit2:converter-moshi:$RetrofitVersion"
-        const val Mock = "com.squareup.retrofit2:retrofit-mock:$RetrofitVersion"
     }
 
     object OkHttp {
@@ -227,10 +226,25 @@ object SquareUp {
         const val Bom = "com.squareup.okhttp3:okhttp-bom:$OkHttpVersion"
         const val OkHttp = "com.squareup.okhttp3:okhttp"
         const val LoggingInterceptor = "com.squareup.okhttp3:logging-interceptor"
+        const val MockWebServer = "com.squareup.okhttp3:mockwebserver"
     }
 }
 
+object Mockito {
+    private const val MockitoVersion = "4.3.1"
+    const val Core = "org.mockito:mockito-core:$MockitoVersion"
+}
+
 object Jetbrains {
+    object Dokka {
+        const val Plugin = "org.jetbrains.dokka"
+    }
+
+    object Kover {
+        const val Version = "0.5.0"
+        const val Plugin = "org.jetbrains.kotlinx.kover"
+    }
+
     object Kotlin {
         const val GradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$KotlinVersion"
         const val Bom = "org.jetbrains.kotlin:kotlin-bom:$KotlinVersion"
