@@ -84,6 +84,7 @@ dependencies {
     implementation(platform(Jetbrains.Kotlin.Bom))
     implementation(Jetbrains.Kotlin.StdLib)
     coreLibraryDesugaring(Android.Tools.Desugar)
+
     implementation(project(":core"))
 //    Accompanist
     implementation(Google.Accompanist.DrawablePainter)
@@ -116,8 +117,7 @@ dependencies {
     implementation(Google.Android.PlayServices.Auth)
     implementation(Google.Android.PlayServices.Maps)
     implementation(Google.Android.PlayServices.Wallet)
-    implementation(Google.Maps.Maps)
-    implementation(Google.Maps.Utils)
+    implementation(Google.Maps.Compose)
 //    AndroidX
     implementation(AndroidX.Core.Ktx)
     implementation(AndroidX.Emoji2.Emoji2)
@@ -187,5 +187,5 @@ dependencies {
     releaseImplementation(Venom.NoOps)
 
     debugImplementation(AndroidX.Compose.UiTooling)
-    debugImplementation(Jetbrains.Kotlin.Reflect)
+    debugImplementation(kotlin("reflect"))
 }

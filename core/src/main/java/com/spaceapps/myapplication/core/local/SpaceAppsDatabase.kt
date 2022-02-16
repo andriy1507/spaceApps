@@ -28,11 +28,11 @@ abstract class SpaceAppsDatabase : RoomDatabase() {
 
     abstract fun getLocationsDao(): LocationsDao
 
-    abstract fun getLocationsRemoteKeyDao(): LocationsRemoteKeysDao
+    abstract fun getLocationsRemoteKeysDao(): LocationsRemoteKeysDao
 
     abstract fun getNotificationsDao(): NotificationsDao
 
-    abstract fun getNotificationsRemoteKeyDao(): NotificationsRemoteKeysDao
+    abstract fun getNotificationsRemoteKeysDao(): NotificationsRemoteKeysDao
 
     abstract fun getDevicesDao(): DevicesDao
 

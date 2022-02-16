@@ -30,20 +30,18 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionRequired
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
-import com.google.maps.android.ktx.model.cameraPosition
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.rememberCameraPositionState
 import com.spaceapps.myapplication.R
 import com.spaceapps.myapplication.core.*
 import com.spaceapps.myapplication.features.location.map.GeolocationMapAction.*
 import com.spaceapps.myapplication.ui.*
-import com.spaceapps.myapplication.ui.views.GoogleMap
 import gov.nasa.worldwind.geom.Angle
 import gov.nasa.worldwind.geom.coords.UTMCoord
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 
 @OptIn(
     ExperimentalMaterialApi::class,
@@ -81,9 +79,7 @@ fun GeolocationMapScreen(viewModel: GeolocationMapViewModel) {
             }
         }
     ) {
-        LaunchedEffect(Unit) {
-            viewModel.submitAction(TrackLocation)
-        }
+        LaunchedEffect(Unit) { viewModel.submitAction(TrackLocation) }
         BottomSheetScaffold(
             sheetContent = {
                 BottomSheetContent(
@@ -102,17 +98,26 @@ fun GeolocationMapScreen(viewModel: GeolocationMapViewModel) {
                 )
             },
             content = {
-                val scope = rememberCoroutineScope()
                 Box(Modifier.fillMaxSize()) {
+                    val location = state.location
+                    val cameraPositionState = rememberCameraPositionState()
+                    LaunchedEffect(state) {
+                        if (state.isFocusMode && location != null) {
+                            val cameraUpdate = CameraUpdateFactory.newLatLngZoom(
+                                LatLng(location.latitude, location.longitude),
+                                DEFAULT_MAP_ZOOM
+                            )
+                            cameraPositionState.animate(cameraUpdate)
+                        }
+                    }
                     GoogleMap(
                         modifier = Modifier.fillMaxSize(),
-                        onMapLoaded = { map ->
-                            map.setOnCameraMoveStartedListener { reason ->
-                                viewModel.submitAction(CameraMoved(reason))
-                            }
-                            scope.launch { observeCurrentLocation(viewModel, map) }
+                        cameraPositionState = cameraPositionState
+                    ) {
+                        if (location != null) {
+                            Marker(position = LatLng(location.latitude, location.longitude))
                         }
-                    )
+                    }
                     Button(
                         modifier = Modifier
                             .statusBarsPadding()
@@ -136,32 +141,6 @@ fun GeolocationMapScreen(viewModel: GeolocationMapViewModel) {
                 bottomStart = CornerSize(SPACING_0)
             )
         )
-    }
-}
-
-private suspend fun observeCurrentLocation(
-    viewModel: GeolocationMapViewModel,
-    map: GoogleMap
-) {
-    viewModel.state.collect { state ->
-        val location = state.location
-        if (location != null) {
-            val latLng = LatLng(location.latitude, location.longitude)
-            val marker = MarkerOptions().position(latLng)
-            map.clear()
-            map.addMarker(marker)
-            if (state.isFocusMode) {
-                val position = cameraPosition {
-                    target(latLng)
-                    zoom(DEFAULT_MAP_ZOOM)
-                }
-                map.animateCamera(
-                    CameraUpdateFactory.newCameraPosition(
-                        position
-                    )
-                )
-            }
-        }
     }
 }
 
@@ -190,7 +169,10 @@ fun MapMultiActionFab(
     onListClick: OnClick,
     onAddClick: OnClick
 ) {
-    Column(horizontalAlignment = Alignment.End) {
+    Column(
+        horizontalAlignment = Alignment.End,
+        verticalArrangement = Arrangement.spacedBy(SPACING_8)
+    ) {
         AnimatedVisibility(visible = !isLocationVisible, enter = fadeIn(), exit = fadeOut()) {
             FloatingActionButton(onClick = onFocusClick) {
                 Icon(
@@ -199,15 +181,13 @@ fun MapMultiActionFab(
                 )
             }
         }
-        Spacer(modifier = Modifier.height(SPACING_8))
-        Row {
+        Row(horizontalArrangement = Arrangement.spacedBy(SPACING_8)) {
             FloatingActionButton(onClick = onListClick) {
                 Icon(
                     imageVector = Icons.Filled.List,
                     contentDescription = null
                 )
             }
-            Spacer(modifier = Modifier.width(SPACING_8))
             FloatingActionButton(onClick = onAddClick) {
                 Icon(
                     imageVector = Icons.Filled.Create,
