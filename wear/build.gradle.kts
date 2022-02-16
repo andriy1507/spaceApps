@@ -74,9 +74,12 @@ detekt {
 }
 
 dependencies {
+    //    Kotlin
     implementation(platform(Jetbrains.Kotlin.Bom))
     implementation(Jetbrains.Kotlin.StdLib)
+
     coreLibraryDesugaring(Android.Tools.Desugar)
+
     implementation(project(":core"))
 
     //    AndroidX

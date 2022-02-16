@@ -115,7 +115,7 @@ object AndroidX {
 object Android {
     object Tools {
         const val Desugar = "com.android.tools:desugar_jdk_libs:1.1.5"
-        const val GradlePlugin = "com.android.tools.build:gradle:7.1.0-rc01"
+        const val GradlePlugin = "com.android.tools.build:gradle:7.1.1"
     }
 }
 
@@ -176,6 +176,7 @@ object Google {
         private const val MapsVersion = "3.3.0"
         const val Maps = "com.google.maps.android:maps-ktx:$MapsVersion"
         const val Utils = "com.google.maps.android:maps-utils-ktx:$MapsVersion"
+        const val Compose = "com.google.maps.android:maps-compose:1.0.0"
     }
 }
 
