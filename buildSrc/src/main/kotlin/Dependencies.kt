@@ -189,6 +189,7 @@ object Google {
         private const val MapsVersion = "3.3.0"
         const val Maps = "com.google.maps.android:maps-ktx:$MapsVersion"
         const val Utils = "com.google.maps.android:maps-utils-ktx:$MapsVersion"
+        const val Compose = "com.google.maps.android:maps-compose:1.0.0"
     }
     object Truth {
         private const val TruthVersion = "1.1.3"
