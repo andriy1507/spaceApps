@@ -1,6 +1,5 @@
 package com.spaceapps.myapplication.core.repositories.auth
 
-import com.google.firebase.installations.FirebaseInstallations
 import com.spaceapps.myapplication.core.local.DataStoreManager
 import com.spaceapps.myapplication.core.models.remote.auth.AuthRequest
 import com.spaceapps.myapplication.core.models.remote.auth.DeviceRequest
@@ -9,7 +8,6 @@ import com.spaceapps.myapplication.core.models.remote.auth.SocialSignInRequest
 import com.spaceapps.myapplication.core.network.calls.AuthorizationCalls
 import com.spaceapps.myapplication.core.repositories.auth.results.*
 import com.spaceapps.myapplication.core.utils.*
-import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -19,7 +17,7 @@ class AuthRepositoryImpl @Inject constructor(
     private val calls: AuthorizationCalls,
     private val dataStoreManager: DataStoreManager,
     private val dispatchersProvider: DispatchersProvider,
-    private val firebaseProvider: FirebaseProvider
+    private val deviceInfoProvider: DeviceInfoProvider
 ) : AuthRepository {
 
     override suspend fun signIn(email: String, password: String): SignInResult =
@@ -136,7 +134,7 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun logOut(): LogOutResult = withContext(dispatchersProvider.IO) {
         val response = request {
-            calls.logOut(installationId = FirebaseInstallations.getInstance().id.await())
+            calls.logOut(installationId = deviceInfoProvider.getFirebaseInstallationId())
         }
         when (response) {
             is Success -> LogOutResult.Success
@@ -145,10 +143,7 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override suspend fun addDevice(token: String): AddDeviceResult {
-        val device = DeviceRequest(
-            token = token,
-            installationId = FirebaseInstallations.getInstance().id.await()
-        )
+        val device = provideDeviceModel().copy(token = token)
         return when (request { calls.addDevice(device = device) }) {
             is Success -> AddDeviceResult.Success
             is Error -> AddDeviceResult.Failure
@@ -156,7 +151,10 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     private suspend fun provideDeviceModel() = DeviceRequest(
-        token = firebaseProvider.getFirebaseMessagingToken(),
-        installationId = firebaseProvider.getFirebaseInstallationId()
+        token = deviceInfoProvider.getFirebaseMessagingToken(),
+        installationId = deviceInfoProvider.getFirebaseInstallationId(),
+        manufacturer = deviceInfoProvider.provideManufacturer(),
+        model = deviceInfoProvider.provideModel(),
+        osVersion = deviceInfoProvider.provideOsVersion()
     )
 }

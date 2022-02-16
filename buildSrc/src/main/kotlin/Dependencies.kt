@@ -167,6 +167,7 @@ object Google {
     object Dagger {
         private const val DaggerVersion = "2.40.5"
         const val HiltAndroid = "com.google.dagger:hilt-android:$DaggerVersion"
+        const val Testing = "com.google.dagger:hilt-android-testing:$DaggerVersion"
         const val HiltAndroidCompiler = "com.google.dagger:hilt-android-compiler:$DaggerVersion"
         const val GradlePlugin = "com.google.dagger:hilt-android-gradle-plugin:$DaggerVersion"
     }
@@ -218,6 +219,7 @@ object SquareUp {
         private const val RetrofitVersion = "2.9.0"
         const val Retrofit = "com.squareup.retrofit2:retrofit:$RetrofitVersion"
         const val MoshiConverter = "com.squareup.retrofit2:converter-moshi:$RetrofitVersion"
+        const val Mock = "com.squareup.retrofit2:retrofit-mock:$RetrofitVersion"
     }
 
     object OkHttp {
@@ -244,6 +246,7 @@ object Jetbrains {
             const val Android = "org.jetbrains.kotlinx:kotlinx-coroutines-android"
             const val PlayServices = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services"
             const val Rx2 = "org.jetbrains.kotlinx:kotlinx-coroutines-rx2"
+            const val Test = "org.jetbrains.kotlinx:kotlinx-coroutines-test"
         }
     }
 }

@@ -122,4 +122,10 @@ dependencies {
     implementation(Google.Firebase.Installations)
     //    Google play services
     implementation(Google.Android.PlayServices.Location)
+
+    //    Testing
+    testImplementation(AndroidX.Test.Core)
+    testImplementation(AndroidX.Test.Rules)
+    testImplementation(SquareUp.Retrofit.Mock)
+    testImplementation(Jetbrains.KotlinX.Coroutines.Test)
 }
