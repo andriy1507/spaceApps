@@ -40,7 +40,7 @@ object RoomModule {
     @Provides
     @Singleton
     fun provideLocationsRemoteKeyDao(db: SpaceAppsDatabase): LocationsRemoteKeysDao =
-        db.getLocationsRemoteKeyDao()
+        db.getLocationsRemoteKeysDao()
 
     @Provides
     @Singleton
@@ -49,7 +49,7 @@ object RoomModule {
     @Provides
     @Singleton
     fun provideNotificationsRemoteKeyDao(db: SpaceAppsDatabase): NotificationsRemoteKeysDao =
-        db.getNotificationsRemoteKeyDao()
+        db.getNotificationsRemoteKeysDao()
 
     @Provides
     @Singleton
