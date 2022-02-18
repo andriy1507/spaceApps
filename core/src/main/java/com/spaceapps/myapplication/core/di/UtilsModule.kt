@@ -11,9 +11,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.spaceapps.myapplication.core.PREFERENCES_DATA_STORE
 import com.spaceapps.myapplication.core.local.*
-import com.spaceapps.myapplication.core.utils.DispatchersProvider
-import com.spaceapps.myapplication.core.utils.DispatchersProviderImpl
-import com.spaceapps.myapplication.core.utils.MoshiConverters
+import com.spaceapps.myapplication.core.utils.*
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
@@ -67,4 +65,8 @@ object UtilsModule {
     fun provideDataStoreManager(dataStore: DataStore<Preferences>): DataStoreManager {
         return DataStoreManagerImpl(dataStore)
     }
+
+    @Provides
+    @Singleton
+    fun provideDeviceInfoProvider(): DeviceInfoProvider = DeviceInfoProviderImpl()
 }

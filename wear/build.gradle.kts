@@ -8,6 +8,7 @@ plugins {
     id("com.google.firebase.crashlytics")
     id(Ktlint.Plugin) version Ktlint.Version
     id(Detekt.Plugin) version Detekt.Version
+    id(Jetbrains.Dokka.Plugin) version KotlinVersion
 }
 
 android {
@@ -74,9 +75,12 @@ detekt {
 }
 
 dependencies {
+    //    Kotlin
     implementation(platform(Jetbrains.Kotlin.Bom))
     implementation(Jetbrains.Kotlin.StdLib)
+
     coreLibraryDesugaring(Android.Tools.Desugar)
+
     implementation(project(":core"))
 
     //    AndroidX
