@@ -162,7 +162,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun provideStartDestination() = runBlocking {
         when (dataStoreManager.getAccessToken()) {
-            null -> Auth.route
+            null -> if (dataStoreManager.getOnBoardingPassed()) Auth.route else OnBoarding.route
             else -> GeolocationMap.route
         }
     }

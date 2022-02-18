@@ -29,6 +29,7 @@ sealed class Screens(val route: String) {
     }
     object Devices : Screens("devices")
     object Player : Screens("player")
+    object OnBoarding : Screens("onBoarding")
 }
 
 sealed class DeepLinks(val uri: String, val args: List<NamedNavArgument>) {

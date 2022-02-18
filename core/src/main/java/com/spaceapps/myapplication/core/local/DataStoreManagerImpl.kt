@@ -2,6 +2,7 @@ package com.spaceapps.myapplication.core.local
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.spaceapps.myapplication.core.DEGREES_DMS
@@ -51,6 +52,14 @@ class DataStoreManagerImpl(private val dataStore: DataStore<Preferences>) : Data
         dataStore.edit { it.clear() }
     }
 
+    override suspend fun setOnBoardingPassed(passed: Boolean) {
+        dataStore.edit { it[ON_BOARDING_PASSED] = passed }
+    }
+
+    override suspend fun getOnBoardingPassed(): Boolean {
+        return dataStore.data.first()[ON_BOARDING_PASSED] ?: false
+    }
+
     companion object {
         private val ACCESS_TOKEN = stringPreferencesKey("ACCESS_TOKEN")
         private val REFRESH_TOKEN = stringPreferencesKey("REFRESH_TOKEN")
@@ -58,5 +67,6 @@ class DataStoreManagerImpl(private val dataStore: DataStore<Preferences>) : Data
         private val REFRESH_TOKEN_EXP = stringPreferencesKey("REFRESH_TOKEN_EXP")
         private val COORD_SYSTEM = stringPreferencesKey("COORD_SYSTEM")
         private val DEGREES_FORMAT = stringPreferencesKey("DEGREES_FORMAT")
+        private val ON_BOARDING_PASSED = booleanPreferencesKey("ON_BOARDING_PASSED")
     }
 }
