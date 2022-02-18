@@ -68,5 +68,5 @@ object UtilsModule {
 
     @Provides
     @Singleton
-    fun provideFirebaseProvider(): DeviceInfoProvider = DeviceInfoProviderImpl()
+    fun provideDeviceInfoProvider(): DeviceInfoProvider = DeviceInfoProviderImpl()
 }

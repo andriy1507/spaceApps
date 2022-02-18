@@ -49,6 +49,8 @@ class AuthRepositoryTest {
     @get:Rule
     val mainCoroutineRule = MainCoroutineRule(dispatcher)
 
+    private lateinit var dispatchersProvider: DispatchersProvider
+
     private lateinit var repository: AuthRepository
 
     private lateinit var calls: AuthorizationCalls
@@ -65,15 +67,12 @@ class AuthRepositoryTest {
     fun setUp() = runBlocking {
         mockWebServer.start()
         mockDeviceInfoProvider()
+        mockAuthorizationCalls()
+        mockDispatchersProvider()
         repository = AuthRepositoryImpl(
-            calls = mockAuthorizationCalls(),
+            calls = calls,
             dataStoreManager = dataStoreManager,
-            dispatchersProvider = object : DispatchersProvider {
-                override val Main = dispatcher
-                override val IO = dispatcher
-                override val Default = dispatcher
-                override val Unconfined = dispatcher
-            },
+            dispatchersProvider = dispatchersProvider,
             deviceInfoProvider = deviceInfoProvider
         )
     }
@@ -266,15 +265,24 @@ class AuthRepositoryTest {
         `when`(deviceInfoProvider.provideOsVersion()).thenReturn("")
     }
 
-    private fun mockAuthorizationCalls(): AuthorizationCalls {
+    private fun mockAuthorizationCalls() {
         val moshi = Moshi.Builder()
             .add(MoshiConverters())
             .build()
-        return Retrofit.Builder()
+        calls = Retrofit.Builder()
             .baseUrl(mockWebServer.url("/"))
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
             .create(AuthorizationCalls::class.java)
+    }
+
+    private fun mockDispatchersProvider() {
+        dispatchersProvider = object : DispatchersProvider {
+            override val Main = dispatcher
+            override val IO = dispatcher
+            override val Default = dispatcher
+            override val Unconfined = dispatcher
+        }
     }
 
     private fun provideAuthTokenResponse(): MockResponse {
