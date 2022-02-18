@@ -1,0 +1,194 @@
+{
+  "ConstraintSets": {
+    "cs1": {
+      "obj": {
+        "top": [
+          "parent",
+          "top",
+          100
+        ],
+        "start": [
+          "parent",
+          "start",
+          100
+        ],
+        "rotationZ": 315
+      },
+      "obj1": {
+        "top": [
+          "parent",
+          "top"
+        ],
+        "bottom": [
+          "parent",
+          "bottom"
+        ],
+        "start": [
+          "parent",
+          "start"
+        ]
+      },
+      "obj2": {
+        "top": ["parent","top"],
+        "bottom": ["parent","bottom"],
+        "start": ["parent","start"],
+        "end": ["parent","end"],
+        "custom": {
+          "backgroundColor": "#ff0000"
+        }
+      }
+    },
+    "cs2": {
+      "obj": {
+        "top": [
+          "parent",
+          "top",
+          100
+        ],
+        "end": [
+          "parent",
+          "end",
+          100
+        ],
+        "rotationZ": 45
+      },
+      "obj1": {
+        "top": [
+          "parent",
+          "top"
+        ],
+        "end": [
+          "parent",
+          "end"
+        ],
+        "start": [
+          "parent",
+          "start"
+        ]
+      },
+      "obj2": {
+        "top": ["parent","top"],
+        "bottom": ["parent","bottom"],
+        "start": ["parent","start"],
+        "end": ["parent","end"],
+        "custom": {
+          "backgroundColor": "#ffff00"
+        }
+      }
+    },
+    "cs3": {
+      "obj": {
+        "bottom": [
+          "parent",
+          "bottom",
+          100
+        ],
+        "end": [
+          "parent",
+          "end",
+          100
+        ],
+        "rotationZ": 135
+      },
+      "obj1": {
+        "top": [
+          "parent",
+          "top"
+        ],
+        "bottom": [
+          "parent",
+          "bottom"
+        ],
+        "end": [
+          "parent",
+          "end"
+        ]
+      },
+      "obj2": {
+        "top": ["parent","top"],
+        "bottom": ["parent","bottom"],
+        "start": ["parent","start"],
+        "end": ["parent","end"],
+        "custom": {
+          "backgroundColor": "#ffffff"
+        }
+      }
+    },
+    "cs4": {
+      "obj": {
+        "bottom": [
+          "parent",
+          "bottom",
+          100
+        ],
+        "start": [
+          "parent",
+          "start",
+          100
+        ],
+        "rotationZ": 225
+      },
+      "obj1": {
+        "end": [
+          "parent",
+          "end"
+        ],
+        "bottom": [
+          "parent",
+          "bottom"
+        ],
+        "start": [
+          "parent",
+          "start"
+        ]
+      },
+      "obj2": {
+        "top": ["parent","top"],
+        "bottom": ["parent","bottom"],
+        "start": ["parent","start"],
+        "end": ["parent","end"],
+        "custom": {
+          "backgroundColor": "#00ffff"
+        }
+      }
+    },
+    "cs5": {
+      "obj": {
+        "top": [
+          "parent",
+          "top",
+          100
+        ],
+        "start": [
+          "parent",
+          "start",
+          100
+        ],
+        "rotationZ": -45
+      },
+      "obj1": {
+        "top": [
+          "parent",
+          "top"
+        ],
+        "bottom": [
+          "parent",
+          "bottom"
+        ],
+        "start": [
+          "parent",
+          "start"
+        ]
+      },
+      "obj2": {
+        "top": ["parent","top"],
+        "bottom": ["parent","bottom"],
+        "start": ["parent","start"],
+        "end": ["parent","end"],
+        "custom": {
+          "backgroundColor": "#ff0000"
+        }
+      }
+    }
+  }
+}

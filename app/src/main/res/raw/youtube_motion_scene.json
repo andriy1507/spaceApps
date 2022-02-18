@@ -1,0 +1,63 @@
+{
+  "ConstraintSets": {
+    "expanded": {
+      "image": {
+        "height": 300,
+        "width": "spread",
+        "start": [
+          "parent",
+          "start"
+        ],
+        "end": [
+          "parent",
+          "end"
+        ],
+        "top": [
+          "parent",
+          "top"
+        ]
+      },
+      "title": {
+        "start": [
+          "parent",
+          "start",
+          16
+        ],
+        "top": [
+          "image",
+          "bottom",
+          16
+        ]
+      }
+    },
+    "collapsed": {
+      "image": {
+        "height": 50,
+        "width": 150,
+        "start": [
+          "parent",
+          "start"
+        ],
+        "bottom": [
+          "parent",
+          "bottom"
+        ]
+      },
+      "title": {
+        "start": [
+          "image",
+          "end",
+          8
+        ],
+        "bottom": [
+          "image",
+          "bottom"
+        ],
+        "top": [
+          "image",
+          "top"
+        ]
+      }
+    }
+  }
+}

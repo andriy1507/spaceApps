@@ -39,6 +39,11 @@ object AndroidX {
         }
     }
 
+    object ConstraintLayout {
+        private const val Version = "1.0.0"
+        const val ConstraintLayout = "androidx.constraintlayout:constraintlayout-compose:$Version"
+    }
+
     object Navigation {
         const val Compose = "androidx.navigation:navigation-compose:2.4.0-rc01"
     }
