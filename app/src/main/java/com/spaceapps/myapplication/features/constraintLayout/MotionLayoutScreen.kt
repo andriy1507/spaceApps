@@ -26,6 +26,7 @@ import com.spaceapps.myapplication.ui.SPACING_48
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
+@Suppress("MagicNumber")
 @OptIn(ExperimentalMotionApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun MotionLayoutScreen() {
