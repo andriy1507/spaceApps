@@ -1,6 +1,5 @@
 package com.spaceapps.myapplication.core.repositories.auth
 
-import com.google.firebase.installations.FirebaseInstallations
 import com.spaceapps.myapplication.core.local.DataStoreManager
 import com.spaceapps.myapplication.core.models.remote.auth.AuthRequest
 import com.spaceapps.myapplication.core.models.remote.auth.DeviceRequest
@@ -9,19 +8,34 @@ import com.spaceapps.myapplication.core.models.remote.auth.SocialSignInRequest
 import com.spaceapps.myapplication.core.network.calls.AuthorizationCalls
 import com.spaceapps.myapplication.core.repositories.auth.results.*
 import com.spaceapps.myapplication.core.utils.*
-import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * Repository responsible for all authentication logic.
+ * @property [calls] Executes network operations.
+ * @property [dataStoreManager] Stores authentication data.
+ * @property [dispatchersProvider] Provides coroutines dispatchers.
+ * @property [deviceInfoProvider] Provides information about device.
+ * @constructor Creates instance of repository.
+ */
 @Singleton
 class AuthRepositoryImpl @Inject constructor(
     private val calls: AuthorizationCalls,
     private val dataStoreManager: DataStoreManager,
     private val dispatchersProvider: DispatchersProvider,
-    private val firebaseProvider: FirebaseProvider
+    private val deviceInfoProvider: DeviceInfoProvider
 ) : AuthRepository {
 
+    /**
+     * Authenticates already registered user.
+     * @param [email] Email used during registration.
+     * @param [password] Current user's password.
+     * @return Sealed class [SignInResult].
+     * On successful authentication [SignInResult.Success] is returned.
+     * On failed authentication [SignInResult.Failure] is returned.
+     */
     override suspend fun signIn(email: String, password: String): SignInResult =
         withContext(dispatchersProvider.IO) {
             val request = AuthRequest(
@@ -38,6 +52,14 @@ class AuthRepositoryImpl @Inject constructor(
             }
         }
 
+    /**
+     * Registers and authenticates non-registered user.
+     * @param [email] Email of new user.
+     * @param [password] Password of new user.
+     * @return Sealed class [SignUpResult].
+     * On successful registration and authentication [SignUpResult.Success] is returned.
+     * On failed registration or authentication [SignUpResult.Failure] is returned.
+     */
     override suspend fun signUp(email: String, password: String): SignUpResult =
         withContext(dispatchersProvider.IO) {
             val request = AuthRequest(
@@ -54,6 +76,13 @@ class AuthRepositoryImpl @Inject constructor(
             }
         }
 
+    /**
+     * Authenticates registered or non-registered user with Google [accessToken].
+     * @param [accessToken] Google access token.
+     * @return Sealed class [SocialSignInResult].
+     * On successful authentication [SocialSignInResult.Success] is returned.
+     * On failed authentication [SocialSignInResult.Failure] is returned.
+     */
     override suspend fun signInWithGoogle(accessToken: String): SocialSignInResult =
         withContext(dispatchersProvider.IO) {
             val request = SocialSignInRequest(
@@ -72,6 +101,13 @@ class AuthRepositoryImpl @Inject constructor(
             }
         }
 
+    /**
+     * Authenticates registered or non-registered user with Facebook [accessToken].
+     * @param [accessToken] Facebook access token.
+     * @return Sealed class [SocialSignInResult].
+     * On successful authentication [SocialSignInResult.Success] is returned.
+     * On failed authentication [SocialSignInResult.Failure] is returned.
+     */
     override suspend fun signInWithFacebook(accessToken: String): SocialSignInResult =
         withContext(dispatchersProvider.IO) {
             val request = SocialSignInRequest(
@@ -90,6 +126,13 @@ class AuthRepositoryImpl @Inject constructor(
             }
         }
 
+    /**
+     * Authenticates registered or non-registered user with Apple [accessToken].
+     * @param [accessToken] Apple access token.
+     * @return Sealed class [SocialSignInResult].
+     * On successful authentication [SocialSignInResult.Success] is returned.
+     * On failed authentication [SocialSignInResult.Failure] is returned.
+     */
     override suspend fun signInWithApple(accessToken: String): SocialSignInResult =
         withContext(dispatchersProvider.IO) {
             val request = SocialSignInRequest(
@@ -136,7 +179,7 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun logOut(): LogOutResult = withContext(dispatchersProvider.IO) {
         val response = request {
-            calls.logOut(installationId = FirebaseInstallations.getInstance().id.await())
+            calls.logOut(installationId = deviceInfoProvider.getFirebaseInstallationId())
         }
         when (response) {
             is Success -> LogOutResult.Success
@@ -145,10 +188,7 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override suspend fun addDevice(token: String): AddDeviceResult {
-        val device = DeviceRequest(
-            token = token,
-            installationId = FirebaseInstallations.getInstance().id.await()
-        )
+        val device = provideDeviceModel().copy(token = token)
         return when (request { calls.addDevice(device = device) }) {
             is Success -> AddDeviceResult.Success
             is Error -> AddDeviceResult.Failure
@@ -156,7 +196,10 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     private suspend fun provideDeviceModel() = DeviceRequest(
-        token = firebaseProvider.getFirebaseMessagingToken(),
-        installationId = firebaseProvider.getFirebaseInstallationId()
+        token = deviceInfoProvider.getFirebaseMessagingToken(),
+        installationId = deviceInfoProvider.getFirebaseInstallationId(),
+        manufacturer = deviceInfoProvider.provideManufacturer(),
+        model = deviceInfoProvider.provideModel(),
+        osVersion = deviceInfoProvider.provideOsVersion()
     )
 }

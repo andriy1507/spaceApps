@@ -1,0 +1,56 @@
+name: Android Dokka Kover
+
+on:
+  workflow_run:
+    workflows:
+      - Android CD Internal
+      - Android CD Release
+  repository_dispatch:
+  workflow_dispatch:
+jobs:
+  generate-documentation:
+    name: Dokka
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Restore Cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Change gradle permission
+        run: chmod +x ./gradlew
+      - name: Generate documentation
+        run: ./gradlew dokkaHtmlMultiModule
+  check-code-coverage:
+    name: Kover
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Restore Cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Change gradle permission
+        run: chmod +x ./gradlew
+      - name: Check code test coverage
+        run: ./gradlew koverMergedHtmlReport

@@ -8,6 +8,7 @@ plugins {
     id("com.google.firebase.crashlytics")
     id(Ktlint.Plugin) version Ktlint.Version
     id(Detekt.Plugin) version Detekt.Version
+    id(Jetbrains.Dokka.Plugin) version KotlinVersion
 }
 
 android {
@@ -18,6 +19,7 @@ android {
         targetSdk = 31
         versionCode = 1
         versionName = "1.0"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -187,5 +189,14 @@ dependencies {
     releaseImplementation(Venom.NoOps)
 
     debugImplementation(AndroidX.Compose.UiTooling)
-    debugImplementation(kotlin("reflect"))
+    debugImplementation(Jetbrains.Kotlin.Reflect)
+
+//    Test
+    androidTestImplementation(AndroidX.Test.Core)
+    androidTestImplementation(AndroidX.Test.Runner)
+    androidTestImplementation(AndroidX.Test.Rules)
+    androidTestImplementation(AndroidX.Compose.Test.JUnit4)
+    androidTestImplementation(AndroidX.Compose.Test.Test)
+    debugImplementation(AndroidX.Compose.Test.Manifest)
+    androidTestImplementation(Google.Truth.Truth)
 }
