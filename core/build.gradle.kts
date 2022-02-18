@@ -128,7 +128,7 @@ dependencies {
     testImplementation(AndroidX.Test.Core)
     testImplementation(AndroidX.Test.Rules)
     testImplementation(Google.Truth.Truth)
-    testImplementation (Mockito.Core)
-    testImplementation (SquareUp.OkHttp.MockWebServer)
+    testImplementation(Mockito.Core)
+    testImplementation(SquareUp.OkHttp.MockWebServer)
     testImplementation(Jetbrains.KotlinX.Coroutines.Test)
 }

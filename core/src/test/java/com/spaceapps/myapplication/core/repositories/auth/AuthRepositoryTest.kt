@@ -292,8 +292,8 @@ class AuthRepositoryTest {
             .setResponseCode(400)
     }
 
-    private fun provideSuccessResponse():MockResponse {
-        return  MockResponse()
+    private fun provideSuccessResponse(): MockResponse {
+        return MockResponse()
             .setResponseCode(200)
     }
 }
