@@ -28,8 +28,8 @@ import com.google.accompanist.navigation.material.bottomSheet
 import com.spaceapps.myapplication.app.DeepLinks
 import com.spaceapps.myapplication.app.Screens
 import com.spaceapps.myapplication.features.about.AboutScreen
+import com.spaceapps.myapplication.features.auth.AuthScreen
 import com.spaceapps.myapplication.features.auth.AuthViewModel
-import com.spaceapps.myapplication.features.constraintLayout.YoutubeAnimationScreen
 import com.spaceapps.myapplication.features.devices.DevicesScreen
 import com.spaceapps.myapplication.features.forgotPassword.ForgotPasswordScreen
 import com.spaceapps.myapplication.features.location.locationsList.LocationsListScreen
@@ -83,12 +83,11 @@ private fun NavGraphBuilder.authScreens() {
         val events = remember(viewModel.events, lifecycleOwner) {
             viewModel.events.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.RESUMED)
         }
-//        AuthScreen(
-//            state = viewState,
-//            onActionSubmit = viewModel::submitAction,
-//            events = events
-//        )
-        YoutubeAnimationScreen()
+        AuthScreen(
+            state = viewState,
+            onActionSubmit = viewModel::submitAction,
+            events = events
+        )
     }
     composable(route = Screens.ForgotPassword.route) {
         ForgotPasswordScreen(hiltViewModel(it))
