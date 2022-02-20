@@ -105,8 +105,6 @@ dependencies {
     //    Datastore
     implementation(AndroidX.DataStore.DataStore)
     implementation(AndroidX.DataStore.Preferences)
-    //    SignalR
-    implementation(Microsoft.SignalR.SignalR)
     //    Moshi
     implementation(SquareUp.Moshi.Moshi)
     ksp(SquareUp.Moshi.CodeGen)
