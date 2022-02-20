@@ -5,6 +5,8 @@ on:
     workflows:
       - Android CD Internal
       - Android CD Release
+    types:
+      - completed
   repository_dispatch:
   workflow_dispatch:
 jobs:
