@@ -1,22 +1,12 @@
 package com.spaceapps.myapplication.core.utils
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.channels.Channel.Factory.UNLIMITED
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.launch
-import javax.inject.Inject
-import javax.inject.Singleton
-import kotlin.coroutines.EmptyCoroutineContext
+import kotlinx.coroutines.flow.SharedFlow
 
-@Singleton
-class AuthDispatcher @Inject constructor() {
+interface AuthDispatcher {
 
-    val emitter get() = _emitter.asSharedFlow()
-    private val _emitter = MutableSharedFlow<Boolean>(extraBufferCapacity = UNLIMITED)
-    private val coroutineScope = CoroutineScope(EmptyCoroutineContext)
+    val emitter: SharedFlow<Boolean>
 
-    fun requestLogOut() = coroutineScope.launch { _emitter.emit(true) }
+    fun requestLogOut()
 
-    fun requestRestart() = coroutineScope.launch { _emitter.emit(false) }
+    fun requestRestart()
 }

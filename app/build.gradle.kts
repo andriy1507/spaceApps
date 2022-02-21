@@ -89,6 +89,7 @@ dependencies {
 
     implementation(project(":core"))
     implementation(project(":navigation"))
+    implementation(project(":utils"))
 //    Accompanist
     implementation(Google.Accompanist.DrawablePainter)
     implementation(Google.Accompanist.Insets)

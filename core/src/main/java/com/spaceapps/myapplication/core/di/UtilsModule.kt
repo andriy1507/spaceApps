@@ -11,7 +11,8 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.spaceapps.myapplication.core.PREFERENCES_DATA_STORE
 import com.spaceapps.myapplication.core.local.*
-import com.spaceapps.myapplication.core.utils.*
+import com.spaceapps.myapplication.core.utils.DispatchersProvider
+import com.spaceapps.myapplication.core.utils.MoshiConverters
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
@@ -37,10 +38,6 @@ object UtilsModule {
 
     @Provides
     @Singleton
-    fun provideDispatchersProvider(): DispatchersProvider = DispatchersProviderImpl
-
-    @Provides
-    @Singleton
     fun provideDatabaseManager(db: SpaceAppsDatabase): DatabaseManager {
         return DatabaseManagerImpl(db)
     }
@@ -52,9 +49,7 @@ object UtilsModule {
         dispatchersProvider: DispatchersProvider
     ): DataStore<Preferences> {
         return PreferenceDataStoreFactory.create(
-            corruptionHandler = ReplaceFileCorruptionHandler(
-                produceNewData = { emptyPreferences() }
-            ),
+            corruptionHandler = ReplaceFileCorruptionHandler(produceNewData = { emptyPreferences() }),
             scope = CoroutineScope(dispatchersProvider.IO + SupervisorJob()),
             produceFile = { context.preferencesDataStoreFile(PREFERENCES_DATA_STORE) }
         )
@@ -65,8 +60,4 @@ object UtilsModule {
     fun provideDataStoreManager(dataStore: DataStore<Preferences>): DataStoreManager {
         return DataStoreManagerImpl(dataStore)
     }
-
-    @Provides
-    @Singleton
-    fun provideDeviceInfoProvider(): DeviceInfoProvider = DeviceInfoProviderImpl()
 }

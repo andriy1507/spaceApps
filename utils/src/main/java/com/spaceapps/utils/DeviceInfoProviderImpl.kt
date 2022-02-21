@@ -1,8 +1,9 @@
-package com.spaceapps.myapplication.core.utils
+package com.spaceapps.utils
 
 import android.os.Build
 import com.google.firebase.installations.FirebaseInstallations
 import com.google.firebase.messaging.FirebaseMessaging
+import com.spaceapps.myapplication.core.utils.DeviceInfoProvider
 import kotlinx.coroutines.tasks.await
 
 class DeviceInfoProviderImpl : DeviceInfoProvider {
