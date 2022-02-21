@@ -1,27 +1,28 @@
-package com.spaceapps.myapplication.app
+package com.spaceapps.navigation
 
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
-import com.spaceapps.myapplication.core.DEEP_LINK_URI
+
+const val DEEP_LINK_URI = "https://spaceapps.com"
 
 sealed class Screens(val route: String) {
-//    Authorization
+    //    Authorization
     object Auth : Screens("auth")
     object ForgotPassword : Screens("forgotPassword")
     object ResetPassword : Screens("resetPassword?email={email}&code={code}") {
         fun createRoute(email: String, code: String) = "resetPassword?email=$email&code=$code"
     }
     object SocialAuth : Screens("socialAuth")
-//    Geolocation
+    //    Geolocation
     object GeolocationMap : Screens("geolocationMap")
     object MapSettings : Screens("mapSettings")
     object SaveLocation : Screens("saveLocation")
     object LocationsList : Screens("locationsList")
-//    About
+    //    About
     object About : Screens("about")
     object TermsPolicy : Screens("termsPolicy")
-//    Profile
+    //    Profile
     object Profile : Screens("profile")
     object Notifications : Screens("notifications")
     object NotificationView : Screens("notificationView/{notificationId}/{title}") {

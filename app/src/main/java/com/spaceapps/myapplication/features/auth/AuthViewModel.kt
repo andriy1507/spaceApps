@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.spaceapps.myapplication.R
-import com.spaceapps.myapplication.app.Screens.*
+import com.spaceapps.navigation.Screens.*
 import com.spaceapps.myapplication.core.models.InputWrapper
 import com.spaceapps.myapplication.core.repositories.auth.AuthRepository
 import com.spaceapps.myapplication.core.repositories.auth.results.SignInResult
@@ -13,7 +13,7 @@ import com.spaceapps.myapplication.core.utils.combine
 import com.spaceapps.myapplication.core.utils.getStateFlow
 import com.spaceapps.myapplication.core.utils.isEmail
 import com.spaceapps.myapplication.core.utils.isPassword
-import com.spaceapps.myapplication.utils.NavigationDispatcher
+import com.spaceapps.navigation.Navigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -25,7 +25,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val repository: AuthRepository,
-    private val navigationDispatcher: NavigationDispatcher,
+    private val navigator: Navigator,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -154,10 +154,10 @@ class AuthViewModel @Inject constructor(
     }
 
     private fun onSignInWithSocialClick() =
-        navigationDispatcher.emit { it.navigate(SocialAuth.route) }
+        navigator.emit { it.navigate(SocialAuth.route) }
 
     private fun onForgotPasswordClick() =
-        navigationDispatcher.emit { it.navigate(ForgotPassword.route) }
+        navigator.emit { it.navigate(ForgotPassword.route) }
 
     private fun onAuthClick() = when (screenState.value) {
         AuthViewState.ScreenState.SignIn -> signIn()
@@ -186,7 +186,7 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    private fun goGeolocationScreen() = navigationDispatcher.emit {
+    private fun goGeolocationScreen() = navigator.emit {
         it.navigate(GeolocationMap.route) {
             launchSingleTop = true
             popUpTo(Auth.route) {

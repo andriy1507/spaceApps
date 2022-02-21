@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import com.spaceapps.myapplication.core.repositories.locations.LocationsRepository
-import com.spaceapps.myapplication.utils.NavigationDispatcher
 import com.spaceapps.myapplication.core.utils.getStateFlow
+import com.spaceapps.navigation.Navigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -17,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LocationsListViewModel @Inject constructor(
     private val repository: LocationsRepository,
-    private val navigationDispatcher: NavigationDispatcher,
+    private val navigator: Navigator,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -38,7 +38,7 @@ class LocationsListViewModel @Inject constructor(
         repository.deleteLocation(id)
     }
 
-    fun goBack() = navigationDispatcher.emit { it.navigateUp() }
+    fun goBack() = navigator.emit { it.navigateUp() }
 
     fun onCloseSearchClicked() = viewModelScope.launch {
         searchQuery.postValue(null)

@@ -6,7 +6,7 @@ import com.spaceapps.myapplication.core.DEGREES_DMS
 import com.spaceapps.myapplication.core.SYSTEM_GEO
 import com.spaceapps.myapplication.core.local.DataStoreManager
 import com.spaceapps.myapplication.core.utils.DispatchersProvider
-import com.spaceapps.myapplication.utils.NavigationDispatcher
+import com.spaceapps.navigation.Navigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
@@ -17,7 +17,7 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
     private val dataStoreManager: DataStoreManager,
     private val dispatchersProvider: DispatchersProvider,
-    private val navigationDispatcher: NavigationDispatcher
+    private val navigator: Navigator
 ) : ViewModel() {
 
     val format = dataStoreManager.observeDegreesFormat()
@@ -32,5 +32,5 @@ class SettingsViewModel @Inject constructor(
     fun onSystemClick(system: String) = viewModelScope.launch(dispatchersProvider.IO) {
         dataStoreManager.setCoordinatesSystem(system)
     }
-    fun goBack() = navigationDispatcher.emit { it.navigateUp() }
+    fun goBack() = navigator.emit { it.navigateUp() }
 }

@@ -25,8 +25,8 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.bottomSheet
-import com.spaceapps.myapplication.app.DeepLinks
-import com.spaceapps.myapplication.app.Screens
+import com.spaceapps.navigation.DeepLinks
+import com.spaceapps.navigation.Screens
 import com.spaceapps.myapplication.features.about.AboutScreen
 import com.spaceapps.myapplication.features.auth.AuthScreen
 import com.spaceapps.myapplication.features.auth.AuthViewModel

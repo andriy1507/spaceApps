@@ -9,7 +9,7 @@ import com.spaceapps.myapplication.core.repositories.auth.AuthRepository
 import com.spaceapps.myapplication.core.repositories.auth.results.SendResetCodeResult
 import com.spaceapps.myapplication.core.utils.getStateFlow
 import com.spaceapps.myapplication.core.utils.isEmail
-import com.spaceapps.myapplication.utils.NavigationDispatcher
+import com.spaceapps.navigation.Navigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -19,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ForgotPasswordViewModel @Inject constructor(
     private val repository: AuthRepository,
-    private val navigationDispatcher: NavigationDispatcher,
+    private val navigator: Navigator,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 

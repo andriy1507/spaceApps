@@ -25,5 +25,3 @@ const val NOTIFICATION_NEW_LOGIN = "new_login"
 const val NOTIFICATION_DEVICE_MANUFACTURER = "device_manufacturer"
 const val NOTIFICATION_DEVICE_MODEL = "device_model"
 const val NOTIFICATION_DEVICE_OS_VERSION = "device_os_version"
-
-const val DEEP_LINK_URI = "https://spaceapps.com"
