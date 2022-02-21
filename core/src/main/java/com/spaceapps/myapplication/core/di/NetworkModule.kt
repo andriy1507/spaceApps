@@ -4,7 +4,6 @@ import com.spaceapps.myapplication.core.BuildConfig
 import com.spaceapps.myapplication.core.network.AuthInterceptor
 import com.spaceapps.myapplication.core.network.SpaceAppsAuthenticator
 import com.spaceapps.myapplication.core.network.calls.*
-import com.spaceapps.myapplication.core.utils.QueryEnumConverterFactory
 import com.squareup.moshi.Moshi
 import dagger.Lazy
 import dagger.Module
@@ -50,7 +49,6 @@ object NetworkModule {
     ): Retrofit = Retrofit.Builder().apply {
         baseUrl(BuildConfig.SERVER_URL)
         addConverterFactory(MoshiConverterFactory.create(moshi))
-        addConverterFactory(QueryEnumConverterFactory)
         callFactory { client.get().newCall(it) }
     }.build()
 
