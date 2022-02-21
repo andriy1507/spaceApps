@@ -9,13 +9,13 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.gms.location.*
 import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.maps.GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE
-import com.spaceapps.myapplication.app.Screens.*
+import com.spaceapps.navigation.Screens.*
 import com.spaceapps.myapplication.core.DEGREES_DMS
 import com.spaceapps.myapplication.core.SYSTEM_GEO
 import com.spaceapps.myapplication.core.local.DataStoreManager
 import com.spaceapps.myapplication.core.utils.getStateFlow
 import com.spaceapps.myapplication.features.location.map.GeolocationMapAction.*
-import com.spaceapps.myapplication.utils.NavigationDispatcher
+import com.spaceapps.navigation.Navigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -24,7 +24,7 @@ import javax.inject.Inject
 @HiltViewModel
 class GeolocationMapViewModel @Inject constructor(
     private val locationClient: FusedLocationProviderClient,
-    private val navigationDispatcher: NavigationDispatcher,
+    private val navigator: Navigator,
     savedStateHandle: SavedStateHandle,
     dataStoreManager: DataStoreManager
 ) : ViewModel() {
@@ -112,12 +112,12 @@ class GeolocationMapViewModel @Inject constructor(
     }
 
     private fun goToSettings() =
-        navigationDispatcher.emit { it.navigate(MapSettings.route) }
+        navigator.emit { it.navigate(MapSettings.route) }
 
     private fun goLocationsList() =
-        navigationDispatcher.emit { it.navigate(LocationsList.route) }
+        navigator.emit { it.navigate(LocationsList.route) }
 
     private fun addLocation(location: Location?) = viewModelScope.launch {
-        navigationDispatcher.emit { it.navigate(SaveLocation.route) }
+        navigator.emit { it.navigate(SaveLocation.route) }
     }
 }

@@ -30,12 +30,12 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import com.spaceapps.myapplication.R
-import com.spaceapps.myapplication.app.Screens.*
+import com.spaceapps.navigation.Screens.*
 import com.spaceapps.myapplication.core.local.DataStoreManager
 import com.spaceapps.myapplication.core.local.DatabaseManager
 import com.spaceapps.myapplication.core.utils.AuthDispatcher
-import com.spaceapps.myapplication.utils.NavigationCommand
-import com.spaceapps.myapplication.utils.NavigationDispatcher
+import com.spaceapps.navigation.NavCommand
+import com.spaceapps.navigation.Navigator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var authDispatcher: AuthDispatcher
 
     @Inject
-    lateinit var navDispatcher: NavigationDispatcher
+    lateinit var navigator: Navigator
 
     @Inject
     lateinit var databaseManager: DatabaseManager
@@ -125,7 +125,7 @@ class MainActivity : AppCompatActivity() {
         intent ?: return
         Firebase.dynamicLinks.getDynamicLink(intent).addOnSuccessListener { data ->
             val link = data.link ?: return@addOnSuccessListener
-            navDispatcher.emit { it.navigate(link) }
+            navigator.emit { it.navigate(link) }
         }
     }
 
@@ -168,9 +168,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     @Composable
-    private fun rememberNavigationEmitter(lifecycleOwner: LifecycleOwner): Flow<NavigationCommand> {
-        return remember(navDispatcher.emitter, lifecycleOwner) {
-            navDispatcher.emitter.flowWithLifecycle(
+    private fun rememberNavigationEmitter(lifecycleOwner: LifecycleOwner): Flow<NavCommand> {
+        return remember(navigator.emitter, lifecycleOwner) {
+            navigator.emitter.flowWithLifecycle(
                 lifecycleOwner.lifecycle,
                 Lifecycle.State.STARTED
             )

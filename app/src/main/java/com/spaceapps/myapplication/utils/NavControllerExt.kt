@@ -5,7 +5,7 @@ import androidx.lifecycle.asFlow
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigator
-import com.spaceapps.myapplication.app.Screens.*
+import com.spaceapps.navigation.Screens.*
 
 // sets value to previous savedStateHandle unless route is specified
 fun <T> NavController.setNavigationResult(route: String? = null, key: String, result: T) {

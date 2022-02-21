@@ -88,6 +88,7 @@ dependencies {
     coreLibraryDesugaring(Android.Tools.Desugar)
 
     implementation(project(":core"))
+    implementation(project(":navigation"))
 //    Accompanist
     implementation(Google.Accompanist.DrawablePainter)
     implementation(Google.Accompanist.Insets)

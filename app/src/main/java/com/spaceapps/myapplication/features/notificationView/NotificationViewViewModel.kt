@@ -7,7 +7,7 @@ import com.spaceapps.myapplication.R
 import com.spaceapps.myapplication.core.models.remote.notifications.NotificationFullResponse
 import com.spaceapps.myapplication.core.repositories.notifications.NotificationsRepository
 import com.spaceapps.myapplication.core.repositories.notifications.results.GetNotificationResult
-import com.spaceapps.myapplication.utils.NavigationDispatcher
+import com.spaceapps.navigation.Navigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NotificationViewViewModel @Inject constructor(
-    private val navigationDispatcher: NavigationDispatcher,
+    private val navigator: Navigator,
     private val repository: NotificationsRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
@@ -40,7 +40,7 @@ class NotificationViewViewModel @Inject constructor(
         }
     }
 
-    fun goBack() = navigationDispatcher.emit { it.navigateUp() }
+    fun goBack() = navigator.emit { it.navigateUp() }
 
     fun refresh() = getNotification()
 }
