@@ -20,6 +20,11 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = true
+            buildConfigField(
+                "String",
+                "SERVER_URL",
+                "\"http://spaceapps.xyz\""
+            )
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -27,6 +32,11 @@ android {
         }
         debug {
             isMinifyEnabled = false
+            buildConfigField(
+                "String",
+                "SERVER_URL",
+                "\"http://spaceapps.xyz\""
+            )
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -63,7 +73,6 @@ detekt {
 }
 
 dependencies {
-    implementation(project(":core"))
     //    Kotlin
     implementation(platform(Jetbrains.Kotlin.Bom))
     implementation(Jetbrains.Kotlin.StdLib)
@@ -71,12 +80,13 @@ dependencies {
     // Dagger-Hilt
     implementation(Google.Dagger.HiltAndroid)
     kapt(Google.Dagger.HiltAndroidCompiler)
-    //    Coroutines
-    implementation(platform(Jetbrains.KotlinX.Coroutines.Bom))
-    implementation(Jetbrains.KotlinX.Coroutines.Core)
-    implementation(Jetbrains.KotlinX.Coroutines.PlayServices)
-    //    Firebase
-    implementation(platform(Google.Firebase.Bom))
-    implementation(Google.Firebase.Messaging)
-    implementation(Google.Firebase.Installations)
+    //    Retrofit
+    implementation(SquareUp.Retrofit.Retrofit)
+    implementation(SquareUp.Retrofit.MoshiConverter)
+    //    OkHttp client
+    implementation(platform(SquareUp.OkHttp.Bom))
+    implementation(SquareUp.OkHttp.OkHttp)
+    implementation(SquareUp.OkHttp.LoggingInterceptor)
+    //    Timber logging
+    implementation(Timber.Timber)
 }

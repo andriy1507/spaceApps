@@ -1,6 +1,6 @@
 plugins {
     id(Jetbrains.Kover.Plugin) version Jetbrains.Kover.Version
-    id(Jetbrains.Dokka.Plugin) version KotlinVersion
+    id(Jetbrains.Dokka.Plugin) version Jetbrains.Dokka.Version
 }
 buildscript {
     repositories {

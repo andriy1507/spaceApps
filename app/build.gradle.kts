@@ -8,7 +8,7 @@ plugins {
     id("com.google.firebase.crashlytics")
     id(Ktlint.Plugin) version Ktlint.Version
     id(Detekt.Plugin) version Detekt.Version
-    id(Jetbrains.Dokka.Plugin) version KotlinVersion
+    id(Jetbrains.Dokka.Plugin) version Jetbrains.Dokka.Version
 }
 
 android {

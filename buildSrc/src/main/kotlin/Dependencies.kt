@@ -1,5 +1,5 @@
-const val KotlinVersion = "1.6.10"
-const val ComposeVersion = "1.1.0"
+const val KotlinVersion = "1.7.0"
+const val ComposeVersion = "1.1.1"
 
 object AndroidX {
     object Wear {
@@ -40,16 +40,16 @@ object AndroidX {
     }
 
     object ConstraintLayout {
-        private const val Version = "1.0.0"
+        private const val Version = "1.0.1"
         const val ConstraintLayout = "androidx.constraintlayout:constraintlayout-compose:$Version"
     }
 
     object Navigation {
-        const val Compose = "androidx.navigation:navigation-compose:2.4.0-rc01"
+        const val Compose = "androidx.navigation:navigation-compose:2.4.2"
     }
 
     object Room {
-        private const val RoomVersion = "2.4.1"
+        private const val RoomVersion = "2.4.2"
         const val Runtime = "androidx.room:room-runtime:$RoomVersion"
         const val Ktx = "androidx.room:room-ktx:$RoomVersion"
         const val Paging = "androidx.room:room-paging:$RoomVersion"
@@ -57,7 +57,7 @@ object AndroidX {
     }
 
     object Emoji2 {
-        private const val Emoji2Version = "1.0.1"
+        private const val Emoji2Version = "1.1.0"
         const val Emoji2 = "androidx.emoji2:emoji2:$Emoji2Version"
     }
 
@@ -76,8 +76,8 @@ object AndroidX {
     }
 
     object Paging {
-        const val Runtime = "androidx.paging:paging-runtime-ktx:3.1.0"
-        const val Compose = "androidx.paging:paging-compose:1.0.0-alpha14"
+        const val Runtime = "androidx.paging:paging-runtime-ktx:3.1.1"
+        const val Compose = "androidx.paging:paging-compose:1.0.0-alpha15"
     }
 
     object Work {
@@ -85,12 +85,12 @@ object AndroidX {
     }
 
     object Core {
-        const val Ktx = "androidx.core:core-ktx:1.7.0"
-        const val SplashScreen = "androidx.core:core-splashscreen:1.0.0-beta01"
+        const val Ktx = "androidx.core:core-ktx:1.8.0"
+        const val SplashScreen = "androidx.core:core-splashscreen:1.0.0-rc01"
     }
 
     object AppCompat {
-        const val AppCompat = "androidx.appcompat:appcompat:1.4.1"
+        const val AppCompat = "androidx.appcompat:appcompat:1.4.2"
     }
 
     object Activity {
@@ -100,7 +100,7 @@ object AndroidX {
     }
 
     object StartUp {
-        const val Runtime = "androidx.startup:startup-runtime:1.1.0"
+        const val Runtime = "androidx.startup:startup-runtime:1.1.1"
     }
 
     object Browser {
@@ -108,7 +108,7 @@ object AndroidX {
     }
 
     object Lifecycle {
-        private const val LifecycleVersion = "2.4.0"
+        private const val LifecycleVersion = "2.4.1"
         const val ViewModelCompose =
             "androidx.lifecycle:lifecycle-viewmodel-compose:$LifecycleVersion"
         const val LiveData = "androidx.lifecycle:lifecycle-livedata-ktx:$LifecycleVersion"
@@ -116,7 +116,7 @@ object AndroidX {
     }
 
     object Media3 {
-        private const val Media3Version = "1.0.0-alpha01"
+        private const val Media3Version = "1.0.0-alpha03"
         const val Ui = "androidx.media3:media3-ui:$Media3Version"
         const val Sessions = "androidx.media3:media3-session:$Media3Version"
         const val ExoPlayer = "androidx.media3:media3-exoplayer:$Media3Version"
@@ -133,7 +133,7 @@ object AndroidX {
 object Android {
     object Tools {
         const val Desugar = "com.android.tools:desugar_jdk_libs:1.1.5"
-        const val GradlePlugin = "com.android.tools.build:gradle:7.1.1"
+        const val GradlePlugin = "com.android.tools.build:gradle:7.2.1"
     }
 }
 
@@ -149,7 +149,7 @@ object Google {
     }
 
     object Accompanist {
-        private const val AccompanistVersion = "0.22.1-rc"
+        private const val AccompanistVersion = "0.24.10-beta"
         const val DrawablePainter =
             "com.google.accompanist:accompanist-drawablepainter:$AccompanistVersion"
         const val Insets = "com.google.accompanist:accompanist-insets:$AccompanistVersion"
@@ -170,7 +170,7 @@ object Google {
     }
 
     object Dagger {
-        private const val DaggerVersion = "2.40.5"
+        private const val DaggerVersion = "2.42"
         const val HiltAndroid = "com.google.dagger:hilt-android:$DaggerVersion"
         const val Testing = "com.google.dagger:hilt-android-testing:$DaggerVersion"
         const val HiltAndroidCompiler = "com.google.dagger:hilt-android-compiler:$DaggerVersion"
@@ -183,7 +183,7 @@ object Google {
 
     object Firebase {
         const val CrashlyticsGradlePlugin = "com.google.firebase:firebase-crashlytics-gradle:2.8.1"
-        const val Bom = "com.google.firebase:firebase-bom:29.0.4"
+        const val Bom = "com.google.firebase:firebase-bom:30.1.0"
         const val Crashlytics = "com.google.firebase:firebase-crashlytics-ktx"
         const val Analytics = "com.google.firebase:firebase-analytics-ktx"
         const val Messaging = "com.google.firebase:firebase-messaging-ktx"
@@ -204,7 +204,7 @@ object Google {
 }
 
 object Coil {
-    private const val CoilVersion = "2.0.0-alpha07"
+    private const val CoilVersion = "2.1.0"
     const val Bom = "io.coil-kt:coil-bom:$CoilVersion"
     const val Coil = "io.coil-kt:coil"
     const val Compose = "io.coil-kt:coil-compose"
@@ -242,6 +242,7 @@ object Mockito {
 
 object Jetbrains {
     object Dokka {
+        const val Version = "1.6.21"
         const val Plugin = "org.jetbrains.dokka"
     }
 
@@ -259,7 +260,7 @@ object Jetbrains {
 
     object KotlinX {
         object Coroutines {
-            private const val CoroutinesVersion = "1.6.0"
+            private const val CoroutinesVersion = "1.6.2"
             const val Bom = "org.jetbrains.kotlinx:kotlinx-coroutines-bom:$CoroutinesVersion"
             const val Core = "org.jetbrains.kotlinx:kotlinx-coroutines-core"
             const val Android = "org.jetbrains.kotlinx:kotlinx-coroutines-android"
@@ -320,6 +321,6 @@ object Detekt {
 }
 
 object Ksp {
-    const val Version = "1.6.10-1.0.2"
+    const val Version = "1.7.0-1.0.6"
     const val Plugin = "com.google.devtools.ksp"
 }

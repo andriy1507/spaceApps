@@ -7,7 +7,7 @@ plugins {
     id(Ktlint.Plugin) version Ktlint.Version
     id(Detekt.Plugin) version Detekt.Version
     id(Ksp.Plugin) version Ksp.Version
-    id(Jetbrains.Dokka.Plugin) version KotlinVersion
+    id(Jetbrains.Dokka.Plugin) version Jetbrains.Dokka.Version
 }
 
 android {
