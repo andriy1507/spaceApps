@@ -36,6 +36,7 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.spaceapps.myapplication.R
 import com.spaceapps.myapplication.core.*
+import com.spaceapps.myapplication.coreui.*
 import com.spaceapps.myapplication.features.location.map.GeolocationMapAction.*
 import com.spaceapps.myapplication.ui.*
 import gov.nasa.worldwind.geom.Angle

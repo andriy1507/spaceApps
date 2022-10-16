@@ -39,13 +39,12 @@ import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.spaceapps.myapplication.R
 import com.spaceapps.myapplication.core.models.local.notifications.NotificationEntity
-import com.spaceapps.myapplication.ui.OnClick
-import com.spaceapps.myapplication.ui.SPACING_128
-import com.spaceapps.myapplication.ui.SPACING_16
-import com.spaceapps.myapplication.ui.SPACING_4
+import com.spaceapps.myapplication.coreui.OnClick
+import com.spaceapps.myapplication.coreui.SPACING_128
+import com.spaceapps.myapplication.coreui.SPACING_16
+import com.spaceapps.myapplication.coreui.SPACING_4
 import com.spaceapps.myapplication.utils.plus
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 
 @Composable
 fun NotificationsScreen(viewModel: NotificationsViewModel) {

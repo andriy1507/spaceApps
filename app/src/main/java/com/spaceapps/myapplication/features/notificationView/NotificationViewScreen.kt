@@ -35,8 +35,8 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.spaceapps.myapplication.core.models.remote.notifications.NotificationBodyItem
-import com.spaceapps.myapplication.ui.SPACING_16
-import com.spaceapps.myapplication.ui.SPACING_8
+import com.spaceapps.myapplication.coreui.SPACING_16
+import com.spaceapps.myapplication.coreui.SPACING_8
 import com.spaceapps.myapplication.utils.plus
 
 @Composable

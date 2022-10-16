@@ -23,10 +23,9 @@ import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.spaceapps.myapplication.R
-import com.spaceapps.myapplication.ui.OnClick
-import com.spaceapps.myapplication.ui.SPACING_16
+import com.spaceapps.myapplication.coreui.OnClick
+import com.spaceapps.myapplication.coreui.SPACING_16
 import com.spaceapps.myapplication.utils.autofill
-import kotlinx.coroutines.flow.collect
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable

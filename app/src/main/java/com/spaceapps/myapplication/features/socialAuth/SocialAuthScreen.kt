@@ -7,7 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.spaceapps.myapplication.R
-import com.spaceapps.myapplication.ui.*
+import com.spaceapps.myapplication.coreui.*
 
 @Composable
 fun SocialAuthScreen() {

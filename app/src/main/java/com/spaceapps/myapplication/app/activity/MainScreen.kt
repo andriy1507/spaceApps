@@ -14,8 +14,8 @@ import androidx.navigation.NavHostController
 import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.insets.navigationBarsPadding
 import com.spaceapps.navigation.Screens
-import com.spaceapps.myapplication.ui.ACTION_BAR_SIZE
-import com.spaceapps.myapplication.ui.SpaceAppsTheme
+import com.spaceapps.myapplication.coreui.ACTION_BAR_SIZE
+import com.spaceapps.myapplication.coreui.SpaceAppsTheme
 import com.spaceapps.myapplication.utils.navigateToRootDestination
 
 @Composable

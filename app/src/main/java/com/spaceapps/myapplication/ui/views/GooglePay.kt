@@ -15,7 +15,7 @@ import com.google.android.gms.wallet.PaymentsClient
 import com.google.android.gms.wallet.Wallet
 import com.google.android.gms.wallet.WalletConstants
 import com.spaceapps.myapplication.R
-import com.spaceapps.myapplication.ui.SPACING_8
+import com.spaceapps.myapplication.coreui.SPACING_8
 
 @Composable
 fun GooglePayButton(

@@ -29,10 +29,10 @@ import androidx.compose.ui.text.input.VisualTransformation
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.statusBarsPadding
 import com.spaceapps.myapplication.R
-import com.spaceapps.myapplication.ui.FONT_35
-import com.spaceapps.myapplication.ui.SPACING_16
-import com.spaceapps.myapplication.ui.SPACING_64
-import com.spaceapps.myapplication.ui.SPACING_8
+import com.spaceapps.myapplication.coreui.FONT_35
+import com.spaceapps.myapplication.coreui.SPACING_16
+import com.spaceapps.myapplication.coreui.SPACING_64
+import com.spaceapps.myapplication.coreui.SPACING_8
 import com.spaceapps.myapplication.utils.autofill
 import kotlinx.coroutines.flow.Flow
 

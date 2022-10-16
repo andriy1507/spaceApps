@@ -34,8 +34,8 @@ import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.spaceapps.myapplication.R
 import com.spaceapps.myapplication.core.models.remote.profile.Platform
-import com.spaceapps.myapplication.ui.OnClick
-import com.spaceapps.myapplication.ui.SPACING_16
+import com.spaceapps.myapplication.coreui.OnClick
+import com.spaceapps.myapplication.coreui.SPACING_16
 import com.spaceapps.myapplication.utils.plus
 
 @Composable

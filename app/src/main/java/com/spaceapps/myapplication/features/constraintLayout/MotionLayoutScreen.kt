@@ -21,8 +21,8 @@ import androidx.constraintlayout.compose.MotionLayout
 import androidx.constraintlayout.compose.MotionScene
 import com.google.accompanist.insets.navigationBarsPadding
 import com.spaceapps.myapplication.R
-import com.spaceapps.myapplication.ui.SPACING_16
-import com.spaceapps.myapplication.ui.SPACING_48
+import com.spaceapps.myapplication.coreui.SPACING_16
+import com.spaceapps.myapplication.coreui.SPACING_48
 import java.io.BufferedReader
 import java.io.InputStreamReader
 

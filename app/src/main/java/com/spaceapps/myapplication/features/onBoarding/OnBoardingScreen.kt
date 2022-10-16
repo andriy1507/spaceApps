@@ -22,8 +22,8 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.spaceapps.myapplication.R
 import com.spaceapps.myapplication.features.onBoarding.model.OnBoardingPageModel
-import com.spaceapps.myapplication.ui.SPACING_16
-import com.spaceapps.myapplication.ui.SPACING_24
+import com.spaceapps.myapplication.coreui.SPACING_16
+import com.spaceapps.myapplication.coreui.SPACING_24
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
